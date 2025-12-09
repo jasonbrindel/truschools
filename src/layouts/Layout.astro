@@ -1,0 +1,202 @@
+---
+import '@/styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  ogImage?: string;
+  noIndex?: boolean;
+}
+
+const {
+  title,
+  description = "TrueSchools provides comprehensive information on every college, university and K-12 school in the United States.",
+  ogImage = "/og-image.svg",
+  noIndex = false
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const fullOgImage = new URL(ogImage, Astro.site);
+const currentYear = new Date().getFullYear();
+
+// Navigation items matching original site structure
+const mainNav = [
+  { label: 'Preschools', href: '/preschools' },
+  { label: 'Kindergartens', href: '/kindergartens' },
+  { label: 'Elementary', href: '/elementary-schools' },
+  { label: 'Middle Schools', href: '/middle-schools' },
+  { label: 'High Schools', href: '/high-schools' },
+  { label: 'Colleges', href: '/colleges' },
+];
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content={description} />
+  {noIndex && <meta name="robots" content="noindex, nofollow" />}
+  <title>{title} | TrueSchools</title>
+
+  <!-- Canonical -->
+  <link rel="canonical" href={canonicalURL} />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content={`${title} | TrueSchools`} />
+  <meta property="og:description" content={description} />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="TrueSchools" />
+  <meta property="og:url" content={canonicalURL} />
+  <meta property="og:image" content={fullOgImage} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={`${title} | TrueSchools`} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={fullOgImage} />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+</head>
+<body class="min-h-screen flex flex-col">
+  <!-- Skip to content link -->
+  <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-brand-blue text-white px-4 py-2 rounded z-50">
+    Skip to content
+  </a>
+
+  <!-- Header with Logo -->
+  <header class="bg-white">
+    <div class="container py-3">
+      <div class="flex items-center justify-between">
+        <!-- Logo -->
+        <a href="/" class="flex items-center no-underline hover:no-underline">
+          <span class="text-[28px] font-bold text-brand-green">True</span><span class="text-[28px] font-bold text-brand-blue">Schools</span>
+        </a>
+
+        <!-- Tagline (desktop only) -->
+        <div class="hidden md:block text-sm text-gray-500">
+          Guides & Directories to Schools, Colleges & Universities
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Menu - Blue Bar -->
+    <nav class="bg-brand-blue">
+      <div class="container">
+        <div class="flex items-center justify-between">
+          <!-- Main Navigation -->
+          <ul class="hidden md:flex items-center m-0 p-0 list-none">
+            <li>
+              <a href="/" class="block px-4 py-3 text-white font-semibold no-underline hover:bg-[#0877cb] hover:no-underline transition-colors">
+                Home
+              </a>
+            </li>
+            {mainNav.map((item) => (
+              <li class="border-l border-[#3fa9f5]">
+                <a href={item.href} class="block px-4 py-3 text-white font-semibold no-underline hover:bg-[#0877cb] hover:no-underline transition-colors">
+                  {item.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+
+          <!-- Mobile menu button -->
+          <button type="button" class="md:hidden p-3 text-white" aria-label="Open menu" id="mobile-menu-btn">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+
+          <!-- Right side links -->
+          <div class="hidden md:flex items-center gap-2">
+            <a href="/resources" class="px-3 py-1 text-white text-sm no-underline hover:bg-brand-blue-dark hover:no-underline rounded transition-colors">
+              Resources
+            </a>
+            <a href="/search" class="px-3 py-1 bg-white text-brand-green-text text-sm font-medium no-underline hover:bg-brand-green hover:text-white hover:no-underline rounded transition-colors">
+              Search
+            </a>
+          </div>
+        </div>
+
+        <!-- Mobile Navigation -->
+        <div class="md:hidden hidden py-4 border-t border-[#3fa9f5]" id="mobile-menu">
+          <div class="flex flex-col">
+            <a href="/" class="py-2 text-white no-underline hover:no-underline">Home</a>
+            {mainNav.map((item) => (
+              <a href={item.href} class="py-2 text-white no-underline hover:no-underline border-t border-[#3fa9f5]">
+                {item.label}
+              </a>
+            ))}
+            <a href="/resources" class="py-2 text-white no-underline hover:no-underline border-t border-[#3fa9f5]">Resources</a>
+            <a href="/search" class="py-2 text-white no-underline hover:no-underline border-t border-[#3fa9f5]">Search</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Main content -->
+  <main id="main-content" class="flex-grow">
+    <slot />
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-[#333] text-gray-300 mt-auto">
+    <div class="container py-8">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <!-- About -->
+        <div class="md:col-span-2">
+          <div class="mb-4">
+            <span class="text-xl font-bold text-brand-green-light">True</span><span class="text-xl font-bold text-brand-blue-light">Schools</span>
+          </div>
+          <p class="text-gray-400 text-sm mb-0">
+            Your comprehensive guide to finding and comparing schools across the United States.
+            From preschool to college, we help families make informed education decisions.
+          </p>
+        </div>
+
+        <!-- Browse Schools -->
+        <div>
+          <h4 class="text-white mb-4">Browse Schools</h4>
+          <ul class="list-none m-0 p-0 space-y-2 text-sm">
+            <li><a href="/preschools" class="text-gray-400 hover:text-white">Preschools</a></li>
+            <li><a href="/kindergartens" class="text-gray-400 hover:text-white">Kindergartens</a></li>
+            <li><a href="/elementary-schools" class="text-gray-400 hover:text-white">Elementary Schools</a></li>
+            <li><a href="/middle-schools" class="text-gray-400 hover:text-white">Middle Schools</a></li>
+            <li><a href="/high-schools" class="text-gray-400 hover:text-white">High Schools</a></li>
+            <li><a href="/colleges" class="text-gray-400 hover:text-white">Colleges & Universities</a></li>
+          </ul>
+        </div>
+
+        <!-- Company -->
+        <div>
+          <h4 class="text-white mb-4">Company</h4>
+          <ul class="list-none m-0 p-0 space-y-2 text-sm">
+            <li><a href="/about" class="text-gray-400 hover:text-white">About Us</a></li>
+            <li><a href="/privacy-policy" class="text-gray-400 hover:text-white">Privacy Policy</a></li>
+            <li><a href="/terms-of-use" class="text-gray-400 hover:text-white">Terms of Use</a></li>
+            <li><a href="/sitemap" class="text-gray-400 hover:text-white">Sitemap</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="border-t border-gray-600 mt-8 pt-6 text-sm text-gray-500">
+        <p class="mb-0">&copy; {currentYear} TrueSchools. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Mobile menu script -->
+  <script>
+    const menuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    menuBtn?.addEventListener('click', () => {
+      mobileMenu?.classList.toggle('hidden');
+    });
+  </script>
+</body>
+</html>

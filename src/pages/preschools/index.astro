@@ -1,0 +1,147 @@
+---
+import Layout from '@/layouts/Layout.astro';
+
+// All US states
+const states = [
+  { name: 'Alabama', slug: 'alabama', abbr: 'AL' },
+  { name: 'Alaska', slug: 'alaska', abbr: 'AK' },
+  { name: 'Arizona', slug: 'arizona', abbr: 'AZ' },
+  { name: 'Arkansas', slug: 'arkansas', abbr: 'AR' },
+  { name: 'California', slug: 'california', abbr: 'CA' },
+  { name: 'Colorado', slug: 'colorado', abbr: 'CO' },
+  { name: 'Connecticut', slug: 'connecticut', abbr: 'CT' },
+  { name: 'Delaware', slug: 'delaware', abbr: 'DE' },
+  { name: 'District of Columbia', slug: 'district-of-columbia', abbr: 'DC' },
+  { name: 'Florida', slug: 'florida', abbr: 'FL' },
+  { name: 'Georgia', slug: 'georgia', abbr: 'GA' },
+  { name: 'Hawaii', slug: 'hawaii', abbr: 'HI' },
+  { name: 'Idaho', slug: 'idaho', abbr: 'ID' },
+  { name: 'Illinois', slug: 'illinois', abbr: 'IL' },
+  { name: 'Indiana', slug: 'indiana', abbr: 'IN' },
+  { name: 'Iowa', slug: 'iowa', abbr: 'IA' },
+  { name: 'Kansas', slug: 'kansas', abbr: 'KS' },
+  { name: 'Kentucky', slug: 'kentucky', abbr: 'KY' },
+  { name: 'Louisiana', slug: 'louisiana', abbr: 'LA' },
+  { name: 'Maine', slug: 'maine', abbr: 'ME' },
+  { name: 'Maryland', slug: 'maryland', abbr: 'MD' },
+  { name: 'Massachusetts', slug: 'massachusetts', abbr: 'MA' },
+  { name: 'Michigan', slug: 'michigan', abbr: 'MI' },
+  { name: 'Minnesota', slug: 'minnesota', abbr: 'MN' },
+  { name: 'Mississippi', slug: 'mississippi', abbr: 'MS' },
+  { name: 'Missouri', slug: 'missouri', abbr: 'MO' },
+  { name: 'Montana', slug: 'montana', abbr: 'MT' },
+  { name: 'Nebraska', slug: 'nebraska', abbr: 'NE' },
+  { name: 'Nevada', slug: 'nevada', abbr: 'NV' },
+  { name: 'New Hampshire', slug: 'new-hampshire', abbr: 'NH' },
+  { name: 'New Jersey', slug: 'new-jersey', abbr: 'NJ' },
+  { name: 'New Mexico', slug: 'new-mexico', abbr: 'NM' },
+  { name: 'New York', slug: 'new-york', abbr: 'NY' },
+  { name: 'North Carolina', slug: 'north-carolina', abbr: 'NC' },
+  { name: 'North Dakota', slug: 'north-dakota', abbr: 'ND' },
+  { name: 'Ohio', slug: 'ohio', abbr: 'OH' },
+  { name: 'Oklahoma', slug: 'oklahoma', abbr: 'OK' },
+  { name: 'Oregon', slug: 'oregon', abbr: 'OR' },
+  { name: 'Pennsylvania', slug: 'pennsylvania', abbr: 'PA' },
+  { name: 'Puerto Rico', slug: 'puerto-rico', abbr: 'PR' },
+  { name: 'Rhode Island', slug: 'rhode-island', abbr: 'RI' },
+  { name: 'South Carolina', slug: 'south-carolina', abbr: 'SC' },
+  { name: 'South Dakota', slug: 'south-dakota', abbr: 'SD' },
+  { name: 'Tennessee', slug: 'tennessee', abbr: 'TN' },
+  { name: 'Texas', slug: 'texas', abbr: 'TX' },
+  { name: 'Utah', slug: 'utah', abbr: 'UT' },
+  { name: 'Vermont', slug: 'vermont', abbr: 'VT' },
+  { name: 'Virginia', slug: 'virginia', abbr: 'VA' },
+  { name: 'Washington', slug: 'washington', abbr: 'WA' },
+  { name: 'West Virginia', slug: 'west-virginia', abbr: 'WV' },
+  { name: 'Wisconsin', slug: 'wisconsin', abbr: 'WI' },
+  { name: 'Wyoming', slug: 'wyoming', abbr: 'WY' },
+];
+---
+
+<Layout title="Preschools in the United States" description="Find preschools across the United States. Browse comprehensive listings of public and private preschools by state.">
+  <div class="container">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb py-3">
+      <a href="/">Home</a>
+      <span class="breadcrumb-separator">&gt;</span>
+      <span>Preschools</span>
+    </nav>
+
+    <h1 class="text-brand-green-text mb-2">Preschools in the United States</h1>
+    <p class="fs-14 text-gray-500 mb-5">Select a state below to view preschools in that state.</p>
+  </div>
+
+  <div class="container py-5">
+    <div class="flex flex-col lg:flex-row gap-5">
+      <!-- Main Content -->
+      <div class="lg:w-2/3">
+        <div class="box-rounded">
+          <h2 class="text-brand-blue mb-4">Browse Preschools by State</h2>
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-0">
+            {states.map((state, index) => (
+              <div class={`p-3 ${index < states.length - 3 ? 'border-b border-dotted border-[#c1c1c1]' : ''}`}>
+                <a href={`/preschools/${state.slug}`} class="flex items-center gap-2">
+                  <span class="text-brand-blue font-bold">{state.abbr}</span>
+                  <span>{state.name}</span>
+                </a>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <!-- About Preschools -->
+        <div class="box-rounded mt-5">
+          <h2 class="text-brand-blue mb-4">About Preschools</h2>
+          <p>
+            Preschools, also known as pre-kindergarten or nursery schools, provide early childhood education
+            to children typically between the ages of 3 and 5. These programs focus on social, emotional,
+            and cognitive development through play-based learning and structured activities.
+          </p>
+          <p>
+            Choosing the right preschool for your child is an important decision. Consider factors such as
+            curriculum, teacher qualifications, class size, location, and cost when making your choice.
+          </p>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="lg:w-1/3">
+        <div class="box-rounded bg-lt-blue">
+          <h3 class="text-brand-blue mb-3">Quick Jump</h3>
+          <select
+            class="input w-full"
+            onchange="if(this.value) window.location.href=this.value"
+          >
+            <option value="">-- Select a State --</option>
+            {states.map((state) => (
+              <option value={`/preschools/${state.slug}`}>
+                {state.name} Preschools
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div class="box-rounded mt-4">
+          <h3 class="text-brand-blue mb-3">Other School Types</h3>
+          <ul class="list-none m-0 p-0 fs-13">
+            <li class="py-2 border-b border-dotted border-[#c1c1c1]">
+              <a href="/kindergartens">Kindergartens</a>
+            </li>
+            <li class="py-2 border-b border-dotted border-[#c1c1c1]">
+              <a href="/elementary-schools">Elementary Schools</a>
+            </li>
+            <li class="py-2 border-b border-dotted border-[#c1c1c1]">
+              <a href="/middle-schools">Middle Schools</a>
+            </li>
+            <li class="py-2 border-b border-dotted border-[#c1c1c1]">
+              <a href="/high-schools">High Schools</a>
+            </li>
+            <li class="py-2">
+              <a href="/colleges">Colleges & Universities</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>

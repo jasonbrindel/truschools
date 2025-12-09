@@ -1,0 +1,243 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* TrueSchools - Using system fonts like original site */
+
+@layer base {
+  html {
+    @apply antialiased;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply font-sans text-body bg-white text-[15px] leading-[18px];
+  }
+
+  h1 {
+    @apply text-[30px] font-normal text-body mb-0;
+  }
+
+  h2 {
+    @apply text-[24px] font-bold text-body mb-2.5;
+  }
+
+  h3 {
+    @apply text-base font-bold mb-2.5;
+  }
+
+  h4 {
+    @apply text-[17px] font-bold text-black mb-2.5;
+  }
+
+  h5 {
+    @apply text-sm font-bold mb-0;
+  }
+
+  p {
+    @apply mb-5;
+  }
+
+  a {
+    @apply text-link no-underline;
+  }
+
+  a:hover {
+    @apply text-link-hover underline;
+  }
+
+  strong {
+    @apply font-bold;
+  }
+
+  em {
+    @apply italic;
+  }
+}
+
+@layer components {
+  /* Main container - slightly wider than original 960px */
+  .container {
+    @apply max-w-container mx-auto px-5;
+  }
+
+  .container-body {
+    @apply max-w-[1080px] mx-auto px-5;
+  }
+
+  /* Box with rounded borders like original */
+  .box-rounded {
+    @apply border border-[#e5e5e5] rounded-box p-2.5 mb-5;
+  }
+
+  /* Line separators */
+  .line-dotted {
+    @apply border-b border-dotted border-[#c1c1c1];
+  }
+
+  .line-grey {
+    @apply border-b border-[#e1e1e1];
+  }
+
+  /* Background colors from original */
+  .bg-lt-grey {
+    @apply bg-[#FAFAFA];
+  }
+
+  .bg-lt-blue {
+    @apply bg-[#e9f4fc];
+  }
+
+  .bg-lt-green {
+    @apply bg-[#EAFBEA];
+  }
+
+  /* Buttons - Original TrueSchools style */
+  .btn-blue {
+    @apply inline-block px-4 py-2.5 bg-brand-blue text-white text-base rounded
+           border border-[#20538D] shadow-[inset_0_1px_0_rgba(255,255,255,0.4),0_1px_1px_rgba(0,0,0,0.2)]
+           transition-all duration-200 cursor-pointer select-none no-underline;
+  }
+
+  .btn-blue:hover {
+    @apply bg-[#356094] border-[#2A4E77] no-underline text-white;
+  }
+
+  .btn-blue:active {
+    @apply bg-[#2E5481] border-[#203E5F] shadow-[inset_0_1px_4px_rgba(0,0,0,0.6)];
+  }
+
+  .btn-green {
+    @apply inline-block px-4 py-2.5 bg-brand-green text-white text-base rounded
+           border border-brand-green-dark shadow-[inset_0_1px_0_rgba(255,255,255,0.4),0_1px_1px_rgba(0,0,0,0.2)]
+           transition-all duration-200 cursor-pointer select-none no-underline;
+  }
+
+  .btn-green:hover {
+    @apply bg-brand-green-dark no-underline text-white;
+  }
+
+  /* Form inputs */
+  .input {
+    @apply font-sans text-[15px] leading-5 text-black p-1 border border-gray-300 rounded;
+  }
+
+  .select {
+    @apply input bg-white;
+  }
+
+  /* Cards */
+  .card {
+    @apply bg-white border border-[#e5e5e5] rounded-box p-4;
+  }
+
+  .card-hover {
+    @apply card transition-shadow hover:shadow-md;
+  }
+
+  /* School listing item */
+  .school-item {
+    @apply flex gap-4 py-3 border-b border-dotted border-[#c1c1c1];
+  }
+
+  .school-item:last-child {
+    @apply border-b-0;
+  }
+
+  .school-item img {
+    @apply w-[120px] h-[90px] object-cover flex-shrink-0;
+  }
+
+  /* Data tables */
+  .data-table {
+    @apply w-full border-collapse;
+  }
+
+  .data-table th {
+    @apply text-left font-medium text-gray-600 pb-2 border-b border-gray-200 bg-[#FAFAFA] px-3 py-2;
+  }
+
+  .data-table td {
+    @apply px-3 py-2 border-b border-gray-100;
+  }
+
+  .data-table tr:hover td {
+    @apply bg-[#FAFAFA];
+  }
+
+  /* Breadcrumb */
+  .breadcrumb {
+    @apply flex items-center gap-2 text-sm text-gray-500 mb-4;
+  }
+
+  .breadcrumb a {
+    @apply text-link hover:text-link-hover;
+  }
+
+  .breadcrumb-separator {
+    @apply text-gray-400;
+  }
+
+  /* Badge styles */
+  .badge {
+    @apply inline-flex items-center px-2 py-0.5 rounded text-xs font-medium;
+  }
+
+  .badge-blue {
+    @apply bg-brand-blue-lighter text-brand-blue-dark;
+  }
+
+  .badge-green {
+    @apply bg-brand-green-lighter text-brand-green-dark;
+  }
+
+  /* State dropdown select */
+  .state-select {
+    @apply w-40 h-[18px] p-0 text-[10px];
+  }
+}
+
+@layer utilities {
+  /* Text colors from original */
+  .text-blue {
+    @apply text-brand-blue;
+  }
+
+  .text-green {
+    @apply text-brand-green-text;
+  }
+
+  .text-red {
+    @apply text-[#CA0000];
+  }
+
+  /* Font sizes */
+  .fs-10 { font-size: 10px; }
+  .fs-11 { font-size: 11px; }
+  .fs-12 { font-size: 12px; }
+  .fs-13 { font-size: 13px; }
+  .fs-14 { font-size: 14px; }
+  .fs-16 { font-size: 16px; }
+  .fs-18 { font-size: 18px; }
+  .fs-20 { font-size: 20px; }
+  .fs-24 { font-size: 24px; }
+  .fs-30 { font-size: 30px; }
+
+  /* Spacing utilities from original */
+  .space-5 { margin-bottom: 5px; }
+  .space-10 { margin-bottom: 10px; }
+  .space-15 { margin-bottom: 15px; }
+  .space-20 { margin-bottom: 20px; }
+  .space-30 { margin-bottom: 30px; }
+
+  .space-top-5 { margin-top: 5px; }
+  .space-top-10 { margin-top: 10px; }
+  .space-top-20 { margin-top: 20px; }
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}

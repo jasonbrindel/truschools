@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" fill="none">
+  <rect width="1200" height="630" fill="#1e40af"/>
+  <rect x="0" y="0" width="1200" height="630" fill="url(#gradient)"/>
+  <defs>
+    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2563eb"/>
+      <stop offset="100%" style="stop-color:#1e40af"/>
+    </linearGradient>
+  </defs>
+  <!-- Logo -->
+  <g transform="translate(100, 200)">
+    <path d="M60 10L10 40L60 70L110 40L60 10Z" fill="white" opacity="0.3"/>
+    <path d="M60 10L10 40L60 70L110 40L60 10Z" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M10 70L60 100L110 70" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M10 55L60 85L110 55" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <!-- Text -->
+  <text x="240" y="280" font-family="system-ui, sans-serif" font-size="72" font-weight="700" fill="white">TrueSchools</text>
+  <text x="100" y="380" font-family="system-ui, sans-serif" font-size="32" fill="white" opacity="0.9">Find and compare schools across the United States</text>
+  <text x="100" y="430" font-family="system-ui, sans-serif" font-size="24" fill="white" opacity="0.7">Preschools  |  Elementary  |  Middle  |  High Schools  |  Colleges</text>
+</svg>

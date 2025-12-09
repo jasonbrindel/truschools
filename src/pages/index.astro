@@ -1,0 +1,259 @@
+---
+import Layout from '@/layouts/Layout.astro';
+
+const db = Astro.locals.runtime?.env?.DB;
+
+// Get stats for homepage
+let stats = {
+  totalSchools: 0,
+  totalColleges: 0,
+};
+
+if (db) {
+  try {
+    const schoolCount = await db.prepare('SELECT COUNT(*) as count FROM schools WHERE active = 1').first();
+    const collegeCount = await db.prepare('SELECT COUNT(*) as count FROM colleges WHERE active = 1').first();
+    stats.totalSchools = schoolCount?.count || 0;
+    stats.totalColleges = collegeCount?.count || 0;
+  } catch (e) {
+    // Database not yet set up
+  }
+}
+
+// All US states for dropdowns
+const states = [
+  { name: 'Alabama', slug: 'alabama' },
+  { name: 'Alaska', slug: 'alaska' },
+  { name: 'Arizona', slug: 'arizona' },
+  { name: 'Arkansas', slug: 'arkansas' },
+  { name: 'California', slug: 'california' },
+  { name: 'Colorado', slug: 'colorado' },
+  { name: 'Connecticut', slug: 'connecticut' },
+  { name: 'Delaware', slug: 'delaware' },
+  { name: 'District of Columbia', slug: 'district-of-columbia' },
+  { name: 'Florida', slug: 'florida' },
+  { name: 'Georgia', slug: 'georgia' },
+  { name: 'Hawaii', slug: 'hawaii' },
+  { name: 'Idaho', slug: 'idaho' },
+  { name: 'Illinois', slug: 'illinois' },
+  { name: 'Indiana', slug: 'indiana' },
+  { name: 'Iowa', slug: 'iowa' },
+  { name: 'Kansas', slug: 'kansas' },
+  { name: 'Kentucky', slug: 'kentucky' },
+  { name: 'Louisiana', slug: 'louisiana' },
+  { name: 'Maine', slug: 'maine' },
+  { name: 'Maryland', slug: 'maryland' },
+  { name: 'Massachusetts', slug: 'massachusetts' },
+  { name: 'Michigan', slug: 'michigan' },
+  { name: 'Minnesota', slug: 'minnesota' },
+  { name: 'Mississippi', slug: 'mississippi' },
+  { name: 'Missouri', slug: 'missouri' },
+  { name: 'Montana', slug: 'montana' },
+  { name: 'Nebraska', slug: 'nebraska' },
+  { name: 'Nevada', slug: 'nevada' },
+  { name: 'New Hampshire', slug: 'new-hampshire' },
+  { name: 'New Jersey', slug: 'new-jersey' },
+  { name: 'New Mexico', slug: 'new-mexico' },
+  { name: 'New York', slug: 'new-york' },
+  { name: 'North Carolina', slug: 'north-carolina' },
+  { name: 'North Dakota', slug: 'north-dakota' },
+  { name: 'Ohio', slug: 'ohio' },
+  { name: 'Oklahoma', slug: 'oklahoma' },
+  { name: 'Oregon', slug: 'oregon' },
+  { name: 'Pennsylvania', slug: 'pennsylvania' },
+  { name: 'Puerto Rico', slug: 'puerto-rico' },
+  { name: 'Rhode Island', slug: 'rhode-island' },
+  { name: 'South Carolina', slug: 'south-carolina' },
+  { name: 'South Dakota', slug: 'south-dakota' },
+  { name: 'Tennessee', slug: 'tennessee' },
+  { name: 'Texas', slug: 'texas' },
+  { name: 'Utah', slug: 'utah' },
+  { name: 'Vermont', slug: 'vermont' },
+  { name: 'Virginia', slug: 'virginia' },
+  { name: 'Washington', slug: 'washington' },
+  { name: 'West Virginia', slug: 'west-virginia' },
+  { name: 'Wisconsin', slug: 'wisconsin' },
+  { name: 'Wyoming', slug: 'wyoming' },
+];
+
+// School types - matching original site layout
+const schoolTypes = [
+  {
+    title: 'Preschools',
+    href: '/preschools',
+    description: 'Comprehensive listings of all public and private preschools plus articles and other helpful information.',
+    image: '/images/preschool-sm.jpg',
+  },
+  {
+    title: 'Elementary Schools',
+    href: '/elementary-schools',
+    description: 'Comprehensive listings of all public & private elementary schools plus articles and other helpful information.',
+    image: '/images/elementary-school-sm.jpg',
+  },
+  {
+    title: 'High Schools',
+    href: '/high-schools',
+    description: 'Comprehensive listings of all public and private high schools plus articles and other helpful information.',
+    image: '/images/high-school-sm.jpg',
+  },
+  {
+    title: 'Kindergartens',
+    href: '/kindergartens',
+    description: 'Listings of all public and private kindergartens plus articles and other helpful information.',
+    image: '/images/kindergarten-sm.jpg',
+  },
+  {
+    title: 'Middle Schools',
+    href: '/middle-schools',
+    description: 'Comprehensive listings of all public and private middle schools plus articles and other helpful information.',
+    image: '/images/middle-school-sm.jpg',
+  },
+  {
+    title: 'Colleges & Universities',
+    href: '/colleges',
+    description: 'Listings of all colleges and universities plus articles and other helpful information.',
+    image: '/images/college-sm.jpg',
+  },
+];
+---
+
+<Layout title="Information on Colleges, Universities & K-12 Schools in U.S.">
+  <div class="container">
+    <!-- Page Header -->
+    <h1 class="space-top-10 text-brand-green-text">
+      TrueSchools <span class="fs-14 text-body font-normal">| Guides & Directories to Schools, Colleges & Universities Plus Helpful Information Concerning All Things Education.</span>
+    </h1>
+  </div>
+
+  <div class="container py-5">
+    <!-- Two Column Layout like original -->
+    <div class="flex flex-col lg:flex-row gap-5">
+      <!-- Left Column - Main Content -->
+      <div class="lg:w-2/3">
+        <!-- Featured Article Box -->
+        <div class="box-rounded">
+          <a href="/resources/find-schools/how-to-find-right-school-for-your-child">
+            <img src="/images/featured-article.jpg" alt="Finding & Evaluating Schools for Your Child" class="w-full h-auto mb-4" />
+          </a>
+          <h2 class="space-0">
+            <a href="/resources/find-schools/how-to-find-right-school-for-your-child">Finding & Evaluating Schools for Your Child</a>
+          </h2>
+          <p class="space-0">
+            Choosing the right school for your child is one of the most important decisions you will make when it comes to your child's future. Follow these tips to help you choose wisely...
+            <a href="/resources/find-schools/how-to-find-right-school-for-your-child">&gt;&gt; Read more</a>
+          </p>
+        </div>
+
+        <!-- School Types Grid -->
+        <div class="box-rounded">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-0">
+            {schoolTypes.map((type, index) => (
+              <div class={`p-3 ${index < schoolTypes.length - 2 ? 'line-dotted' : ''}`}>
+                <div class="flex gap-3">
+                  <a href={type.href}>
+                    <div class="w-[120px] h-[90px] bg-gray-200 flex-shrink-0 flex items-center justify-center text-gray-400 text-xs">
+                      [Image]
+                    </div>
+                  </a>
+                  <div class="fs-13">
+                    <h3 class="space-5">
+                      <a href={type.href}>{type.title}</a>
+                    </h3>
+                    <p class="mb-2">{type.description}</p>
+                    <p class="fs-12 space-0 text-brand-green-text">
+                      View schools by state:
+                      <select
+                        class="state-select ml-1"
+                        onchange={`if(this.value) window.location.href=this.value`}
+                      >
+                        <option value="">-- Select Your State --</option>
+                        {states.map((state) => (
+                          <option value={`${type.href}/${state.slug}`}>
+                            {state.name} {type.title}
+                          </option>
+                        ))}
+                      </select>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column - Sidebar -->
+      <div class="lg:w-1/3">
+        <!-- Search Box -->
+        <div class="box-rounded bg-lt-blue">
+          <h3 class="text-brand-blue mb-3">Search Schools</h3>
+          <form action="/search" method="GET">
+            <input
+              type="text"
+              name="q"
+              placeholder="School name, city, or ZIP..."
+              class="input w-full mb-2"
+            />
+            <button type="submit" class="btn-blue w-full">
+              Search
+            </button>
+          </form>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="box-rounded">
+          <h3 class="text-brand-blue mb-3">Site Statistics</h3>
+          <ul class="list-none m-0 p-0 fs-13">
+            <li class="py-2 line-dotted">
+              <strong class="text-brand-blue">{stats.totalSchools > 0 ? stats.totalSchools.toLocaleString() : '130,000+'}</strong> K-12 Schools
+            </li>
+            <li class="py-2 line-dotted">
+              <strong class="text-brand-blue">{stats.totalColleges > 0 ? stats.totalColleges.toLocaleString() : '7,000+'}</strong> Colleges & Universities
+            </li>
+            <li class="py-2 line-dotted">
+              <strong class="text-brand-blue">50+</strong> States & Territories
+            </li>
+            <li class="py-2">
+              <strong class="text-brand-green">Free</strong> to use - always!
+            </li>
+          </ul>
+        </div>
+
+        <!-- Special School Types -->
+        <div class="box-rounded">
+          <h3 class="text-brand-blue mb-3">School Types</h3>
+          <ul class="list-none m-0 p-0 fs-13">
+            <li class="py-1">
+              <a href="/charter-schools">Charter Schools</a>
+            </li>
+            <li class="py-1">
+              <a href="/magnet-schools">Magnet Schools</a>
+            </li>
+            <li class="py-1">
+              <a href="/private-schools">Private Schools</a>
+            </li>
+            <li class="py-1">
+              <a href="/public-schools">Public Schools</a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Resources -->
+        <div class="box-rounded bg-lt-green">
+          <h3 class="text-brand-green-dark mb-3">Resources</h3>
+          <ul class="list-none m-0 p-0 fs-13">
+            <li class="py-1">
+              <a href="/resources/financial-aid">Financial Aid Information</a>
+            </li>
+            <li class="py-1">
+              <a href="/resources/school-choice">School Choice Guide</a>
+            </li>
+            <li class="py-1">
+              <a href="/resources/special-education">Special Education</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>

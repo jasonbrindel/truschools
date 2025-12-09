@@ -1,0 +1,161 @@
+---
+import Layout from '@/layouts/Layout.astro';
+
+const query = Astro.url.searchParams.get('q') || '';
+const db = Astro.locals.runtime?.env?.DB;
+
+let schools: any[] = [];
+let colleges: any[] = [];
+let searchPerformed = false;
+
+if (query && db) {
+  searchPerformed = true;
+  try {
+    // Search schools
+    const schoolResults = await db
+      .prepare(`
+        SELECT id, school_name, city, state_abbr, school_level, is_public, is_charter, is_magnet
+        FROM schools
+        WHERE active = 1 AND (
+          school_name LIKE ? OR
+          city LIKE ? OR
+          zip LIKE ?
+        )
+        LIMIT 20
+      `)
+      .bind(`%${query}%`, `%${query}%`, `${query}%`)
+      .all();
+    schools = schoolResults?.results || [];
+
+    // Search colleges
+    const collegeResults = await db
+      .prepare(`
+        SELECT id, institution_name, city, state_abbr, sector
+        FROM colleges
+        WHERE active = 1 AND (
+          institution_name LIKE ? OR
+          city LIKE ?
+        )
+        LIMIT 10
+      `)
+      .bind(`%${query}%`, `%${query}%`)
+      .all();
+    colleges = collegeResults?.results || [];
+  } catch (e) {
+    // Database not yet set up
+  }
+}
+---
+
+<Layout title={query ? `Search Results for "${query}"` : 'Search Schools'}>
+  <div class="container">
+    <h1 class="space-top-10 text-brand-green-text">Search Schools</h1>
+  </div>
+
+  <div class="container py-5">
+    <!-- Search Form -->
+    <div class="box-rounded bg-lt-blue mb-5">
+      <form action="/search" method="GET" class="flex flex-col md:flex-row gap-3">
+        <input
+          type="text"
+          name="q"
+          value={query}
+          placeholder="Enter school name, city, or ZIP code..."
+          class="input flex-grow"
+        />
+        <button type="submit" class="btn-blue">
+          Search
+        </button>
+      </form>
+    </div>
+
+    {searchPerformed && (
+      <div>
+        <p class="mb-5">
+          Found <strong class="text-brand-blue">{schools.length}</strong> schools
+          and <strong class="text-brand-blue">{colleges.length}</strong> colleges
+          matching "<strong>{query}</strong>"
+        </p>
+
+        {schools.length > 0 && (
+          <div class="box-rounded mb-5">
+            <h2 class="text-brand-blue mb-4">K-12 Schools</h2>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>School Name</th>
+                  <th>City</th>
+                  <th>State</th>
+                  <th>Type</th>
+                </tr>
+              </thead>
+              <tbody>
+                {schools.map((school) => (
+                  <tr>
+                    <td>
+                      <a href={`/schools/${school.state_abbr?.toLowerCase()}/${school.city?.toLowerCase().replace(/\s+/g, '-')}/${school.id}`}>
+                        {school.school_name}
+                      </a>
+                    </td>
+                    <td>{school.city}</td>
+                    <td>{school.state_abbr}</td>
+                    <td>
+                      {school.is_charter ? 'Charter' : school.is_magnet ? 'Magnet' : school.is_public ? 'Public' : 'Private'}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        {colleges.length > 0 && (
+          <div class="box-rounded">
+            <h2 class="text-brand-blue mb-4">Colleges & Universities</h2>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Institution Name</th>
+                  <th>City</th>
+                  <th>State</th>
+                </tr>
+              </thead>
+              <tbody>
+                {colleges.map((college) => (
+                  <tr>
+                    <td>
+                      <a href={`/colleges/${college.state_abbr?.toLowerCase()}/${college.id}`}>
+                        {college.institution_name}
+                      </a>
+                    </td>
+                    <td>{college.city}</td>
+                    <td>{college.state_abbr}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        {schools.length === 0 && colleges.length === 0 && (
+          <div class="box-rounded text-center py-10">
+            <p class="text-gray-500 mb-4">No results found for "{query}"</p>
+            <p class="fs-13">Try searching with a different term or browse by school type above.</p>
+          </div>
+        )}
+      </div>
+    )}
+
+    {!searchPerformed && (
+      <div class="box-rounded">
+        <h2 class="text-brand-blue mb-4">Search Tips</h2>
+        <ul class="list-disc ml-8 fs-13">
+          <li class="mb-2">Search by school name (e.g., "Lincoln Elementary")</li>
+          <li class="mb-2">Search by city (e.g., "Austin")</li>
+          <li class="mb-2">Search by ZIP code (e.g., "90210")</li>
+          <li class="mb-2">For best results, try different variations of the school name</li>
+        </ul>
+      </div>
+    )}
+  </div>
+</Layout>
