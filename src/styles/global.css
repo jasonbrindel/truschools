@@ -43,7 +43,7 @@
   }
 
   a:hover {
-    @apply text-link-hover underline;
+    @apply text-brand-green underline;
   }
 
   strong {

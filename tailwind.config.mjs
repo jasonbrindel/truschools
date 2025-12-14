@@ -19,7 +19,7 @@ export default {
         // Link colors
         link: {
           DEFAULT: '#0036FF',
-          hover: '#FC9501',
+          hover: '#65920f',
         },
         // Text colors
         body: '#444',
@@ -28,7 +28,7 @@ export default {
         sans: ['Arial', 'Helvetica', 'sans-serif'],
       },
       maxWidth: {
-        'container': '1100px',
+        'container': '1124px',
         'container-lg': '1200px',
       },
       borderRadius: {

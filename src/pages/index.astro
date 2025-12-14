@@ -121,15 +121,25 @@ const schoolTypes = [
   <div class="container">
     <!-- Page Header -->
     <h1 class="space-top-10 text-brand-green-text">
-      TrueSchools <span class="fs-14 text-body font-normal">| Guides & Directories to Schools, Colleges & Universities Plus Helpful Information Concerning All Things Education.</span>
+      TruSchools <span class="fs-14 text-body font-normal">| Guides & Directories to Schools, Colleges & Universities Plus Helpful Information Concerning All Things Education.</span>
     </h1>
   </div>
 
   <div class="container py-5">
     <!-- Two Column Layout like original -->
     <div class="flex flex-col lg:flex-row gap-5">
-      <!-- Left Column - Main Content -->
-      <div class="lg:w-2/3">
+      <!-- Left Column - Main Content (728px for ad compatibility) -->
+      <div class="lg:w-[728px] lg:flex-shrink-0">
+        <!-- Main Content Ad -->
+        <div class="mb-5">
+          <div class="bg-gray-200 border-2 border-dashed border-gray-400 flex items-center justify-center text-gray-500 text-sm font-medium w-full h-[90px] hidden md:flex">
+            Leaderboard Ad (728x90)
+          </div>
+          <div class="bg-gray-200 border-2 border-dashed border-gray-400 flex items-center justify-center text-gray-500 text-sm font-medium w-[320px] h-[50px] md:hidden mx-auto">
+            Mobile Leaderboard (320x50)
+          </div>
+        </div>
+
         <!-- Featured Article Box -->
         <div class="box-rounded">
           <a href="/resources/find-schools/how-to-find-right-school-for-your-child">
@@ -182,8 +192,15 @@ const schoolTypes = [
         </div>
       </div>
 
-      <!-- Right Column - Sidebar -->
-      <div class="lg:w-1/3">
+      <!-- Right Column - Sidebar (fills remaining space) -->
+      <div class="lg:flex-shrink-0 lg:w-[336px]">
+        <!-- Sidebar Ad 1 -->
+        <div class="mb-5 flex justify-center">
+          <div class="bg-gray-200 border-2 border-dashed border-gray-400 flex items-center justify-center text-gray-500 text-sm font-medium w-[336px] h-[280px]">
+            Sidebar Ad 1 (336x280)
+          </div>
+        </div>
+
         <!-- Search Box -->
         <div class="box-rounded bg-lt-blue">
           <h3 class="text-brand-blue mb-3">Search Schools</h3>
@@ -252,6 +269,13 @@ const schoolTypes = [
               <a href="/resources/special-education">Special Education</a>
             </li>
           </ul>
+        </div>
+
+        <!-- Sidebar Ad 2 -->
+        <div class="mt-5 flex justify-center">
+          <div class="bg-gray-200 border-2 border-dashed border-gray-400 flex items-center justify-center text-gray-500 text-sm font-medium w-[336px] h-[280px]">
+            Sidebar Ad 2 (336x280)
+          </div>
         </div>
       </div>
     </div>

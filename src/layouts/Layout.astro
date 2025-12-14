@@ -1,5 +1,9 @@
 ---
 import '@/styles/global.css';
+import logoUp from '@/images/logo-truschools-up.png';
+import logoOver from '@/images/logo-truschools-over.png';
+import logoWhiteUp from '@/images/logo-truschools-white-up.png';
+import logoWhiteOver from '@/images/logo-truschools-white-over.png';
 
 interface Props {
   title: string;
@@ -10,7 +14,7 @@ interface Props {
 
 const {
   title,
-  description = "TrueSchools provides comprehensive information on every college, university and K-12 school in the United States.",
+  description = "TruSchools provides comprehensive information on every college, university and K-12 school in the United States.",
   ogImage = "/og-image.svg",
   noIndex = false
 } = Astro.props;
@@ -21,12 +25,14 @@ const currentYear = new Date().getFullYear();
 
 // Navigation items matching original site structure
 const mainNav = [
-  { label: 'Preschools', href: '/preschools' },
-  { label: 'Kindergartens', href: '/kindergartens' },
-  { label: 'Elementary', href: '/elementary-schools' },
-  { label: 'Middle Schools', href: '/middle-schools' },
-  { label: 'High Schools', href: '/high-schools' },
-  { label: 'Colleges', href: '/colleges' },
+  { label: 'K-12 Schools', href: '/schools' },
+  { label: 'Colleges & Universities', href: '/colleges' },
+  { label: 'Free Classes', href: '/free-classes' },
+];
+
+const rightNav = [
+  { label: 'Financial Aid', href: '/financial-aid' },
+  { label: 'Degrees', href: '/degrees' },
 ];
 ---
 
@@ -37,16 +43,16 @@ const mainNav = [
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content={description} />
   {noIndex && <meta name="robots" content="noindex, nofollow" />}
-  <title>{title} | TrueSchools</title>
+  <title>{title} | TruSchools</title>
 
   <!-- Canonical -->
   <link rel="canonical" href={canonicalURL} />
 
   <!-- Open Graph -->
-  <meta property="og:title" content={`${title} | TrueSchools`} />
+  <meta property="og:title" content={`${title} | TruSchools`} />
   <meta property="og:description" content={description} />
   <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="TrueSchools" />
+  <meta property="og:site_name" content="TruSchools" />
   <meta property="og:url" content={canonicalURL} />
   <meta property="og:image" content={fullOgImage} />
   <meta property="og:image:width" content="1200" />
@@ -54,12 +60,17 @@ const mainNav = [
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content={`${title} | TrueSchools`} />
+  <meta name="twitter:title" content={`${title} | TruSchools`} />
   <meta name="twitter:description" content={description} />
   <meta name="twitter:image" content={fullOgImage} />
 
   <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico?v=2" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=2" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=2" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta name="theme-color" content="#0d83dd" />
 </head>
 <body class="min-h-screen flex flex-col">
   <!-- Skip to content link -->
@@ -67,36 +78,52 @@ const mainNav = [
     Skip to content
   </a>
 
-  <!-- Header with Logo -->
+  <!-- Header with Logo and Search -->
   <header class="bg-white">
-    <div class="container py-3">
-      <div class="flex items-center justify-between">
-        <!-- Logo -->
-        <a href="/" class="flex items-center no-underline hover:no-underline">
-          <span class="text-[28px] font-bold text-brand-green">True</span><span class="text-[28px] font-bold text-brand-blue">Schools</span>
-        </a>
+    <div class="container py-4">
+      <div class="flex flex-col lg:flex-row lg:items-end gap-4 lg:gap-5">
+        <!-- Logo - matches main content width -->
+        <div class="lg:w-[728px] lg:flex-shrink-0">
+          <a href="/" class="block no-underline hover:no-underline group pl-[5px]">
+            <img
+              src={logoUp.src}
+              alt="TruSchools"
+              class="h-[55px] group-hover:hidden"
+            />
+            <img
+              src={logoOver.src}
+              alt="TruSchools"
+              class="h-[55px] hidden group-hover:block"
+            />
+          </a>
+        </div>
 
-        <!-- Tagline (desktop only) -->
-        <div class="hidden md:block text-sm text-gray-500">
-          Guides & Directories to Schools, Colleges & Universities
+        <!-- Search Box - matches sidebar width -->
+        <div class="lg:w-[336px] lg:flex-shrink-0">
+          <form action="/search" method="GET" class="flex gap-2">
+            <input
+              type="text"
+              name="q"
+              placeholder="Search by school, city or zip"
+              class="input flex-1 text-sm"
+            />
+            <button type="submit" class="btn-green text-sm px-5">
+              Search
+            </button>
+          </form>
         </div>
       </div>
     </div>
 
     <!-- Navigation Menu - Blue Bar -->
-    <nav class="bg-brand-blue">
-      <div class="container">
+    <div class="container">
+      <nav class="bg-brand-blue w-full lg:w-[1084px] rounded-box">
         <div class="flex items-center justify-between">
-          <!-- Main Navigation -->
+          <!-- Main Navigation (Left) -->
           <ul class="hidden md:flex items-center m-0 p-0 list-none">
-            <li>
-              <a href="/" class="block px-4 py-3 text-white font-semibold no-underline hover:bg-[#0877cb] hover:no-underline transition-colors">
-                Home
-              </a>
-            </li>
-            {mainNav.map((item) => (
-              <li class="border-l border-[#3fa9f5]">
-                <a href={item.href} class="block px-4 py-3 text-white font-semibold no-underline hover:bg-[#0877cb] hover:no-underline transition-colors">
+            {mainNav.map((item, index) => (
+              <li class={index > 0 ? 'border-l border-[#3fa9f5]' : ''}>
+                <a href={item.href} class={`block px-5 py-3 text-white font-semibold no-underline hover:bg-[#0a6fc2] hover:no-underline transition-colors ${index === 0 ? 'rounded-tl-box rounded-bl-box' : ''}`}>
                   {item.label}
                 </a>
               </li>
@@ -110,32 +137,59 @@ const mainNav = [
             </svg>
           </button>
 
-          <!-- Right side links -->
-          <div class="hidden md:flex items-center gap-2">
-            <a href="/resources" class="px-3 py-1 text-white text-sm no-underline hover:bg-brand-blue-dark hover:no-underline rounded transition-colors">
-              Resources
-            </a>
-            <a href="/search" class="px-3 py-1 bg-white text-brand-green-text text-sm font-medium no-underline hover:bg-brand-green hover:text-white hover:no-underline rounded transition-colors">
-              Search
+          <!-- Right Navigation -->
+          <div class="hidden md:flex items-center">
+            {rightNav.map((item) => (
+              <a href={item.href} class="px-4 py-3 text-white no-underline hover:bg-[#0a6fc2] hover:no-underline transition-colors">
+                {item.label}
+              </a>
+            ))}
+            <!-- Schools Dropdown -->
+            <div class="relative group">
+              <button class="flex items-center gap-1 px-4 py-3 text-white hover:bg-[#0a6fc2] transition-colors">
+                Schools
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              <div class="absolute right-0 top-full hidden group-hover:block bg-white shadow-lg rounded-b min-w-[180px] z-50">
+                <a href="/preschools" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 no-underline">Preschools</a>
+                <a href="/kindergartens" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 no-underline">Kindergartens</a>
+                <a href="/elementary-schools" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 no-underline">Elementary Schools</a>
+                <a href="/middle-schools" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 no-underline">Middle Schools</a>
+                <a href="/high-schools" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 no-underline">High Schools</a>
+              </div>
+            </div>
+            <!-- Login Button -->
+            <a href="/login" class="ml-2 mr-3 px-4 py-1.5 bg-white text-brand-green-text text-sm font-medium no-underline hover:bg-brand-green hover:text-white hover:no-underline rounded transition-colors">
+              Login
             </a>
           </div>
         </div>
 
         <!-- Mobile Navigation -->
-        <div class="md:hidden hidden py-4 border-t border-[#3fa9f5]" id="mobile-menu">
+        <div class="md:hidden hidden py-4 px-5 border-t border-[#3fa9f5]" id="mobile-menu">
           <div class="flex flex-col">
-            <a href="/" class="py-2 text-white no-underline hover:no-underline">Home</a>
             {mainNav.map((item) => (
-              <a href={item.href} class="py-2 text-white no-underline hover:no-underline border-t border-[#3fa9f5]">
+              <a href={item.href} class="py-2 text-white no-underline hover:no-underline border-b border-[#3fa9f5]">
                 {item.label}
               </a>
             ))}
-            <a href="/resources" class="py-2 text-white no-underline hover:no-underline border-t border-[#3fa9f5]">Resources</a>
-            <a href="/search" class="py-2 text-white no-underline hover:no-underline border-t border-[#3fa9f5]">Search</a>
+            {rightNav.map((item) => (
+              <a href={item.href} class="py-2 text-white no-underline hover:no-underline border-b border-[#3fa9f5]">
+                {item.label}
+              </a>
+            ))}
+            <a href="/preschools" class="py-2 text-white no-underline hover:no-underline border-b border-[#3fa9f5]">Preschools</a>
+            <a href="/kindergartens" class="py-2 text-white no-underline hover:no-underline border-b border-[#3fa9f5]">Kindergartens</a>
+            <a href="/elementary-schools" class="py-2 text-white no-underline hover:no-underline border-b border-[#3fa9f5]">Elementary Schools</a>
+            <a href="/middle-schools" class="py-2 text-white no-underline hover:no-underline border-b border-[#3fa9f5]">Middle Schools</a>
+            <a href="/high-schools" class="py-2 text-white no-underline hover:no-underline border-b border-[#3fa9f5]">High Schools</a>
+            <a href="/login" class="py-2 text-white no-underline hover:no-underline">Login</a>
           </div>
         </div>
-      </div>
-    </nav>
+      </nav>
+    </div>
   </header>
 
   <!-- Main content -->
@@ -144,15 +198,24 @@ const mainNav = [
   </main>
 
   <!-- Footer -->
-  <footer class="bg-[#333] text-gray-300 mt-auto">
+  <footer class="bg-brand-blue text-white mt-auto">
     <div class="container py-8">
       <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
         <!-- About -->
         <div class="md:col-span-2">
-          <div class="mb-4">
-            <span class="text-xl font-bold text-brand-green-light">True</span><span class="text-xl font-bold text-brand-blue-light">Schools</span>
-          </div>
-          <p class="text-gray-400 text-sm mb-0">
+          <a href="/" class="block no-underline hover:no-underline group mb-4">
+            <img
+              src={logoWhiteUp.src}
+              alt="TruSchools"
+              class="h-[45px] group-hover:hidden"
+            />
+            <img
+              src={logoWhiteOver.src}
+              alt="TruSchools"
+              class="h-[45px] hidden group-hover:block"
+            />
+          </a>
+          <p class="text-white text-sm mb-0">
             Your comprehensive guide to finding and comparing schools across the United States.
             From preschool to college, we help families make informed education decisions.
           </p>
@@ -162,12 +225,12 @@ const mainNav = [
         <div>
           <h4 class="text-white mb-4">Browse Schools</h4>
           <ul class="list-none m-0 p-0 space-y-2 text-sm">
-            <li><a href="/preschools" class="text-gray-400 hover:text-white">Preschools</a></li>
-            <li><a href="/kindergartens" class="text-gray-400 hover:text-white">Kindergartens</a></li>
-            <li><a href="/elementary-schools" class="text-gray-400 hover:text-white">Elementary Schools</a></li>
-            <li><a href="/middle-schools" class="text-gray-400 hover:text-white">Middle Schools</a></li>
-            <li><a href="/high-schools" class="text-gray-400 hover:text-white">High Schools</a></li>
-            <li><a href="/colleges" class="text-gray-400 hover:text-white">Colleges & Universities</a></li>
+            <li><a href="/preschools" class="text-white hover:underline">Preschools</a></li>
+            <li><a href="/kindergartens" class="text-white hover:underline">Kindergartens</a></li>
+            <li><a href="/elementary-schools" class="text-white hover:underline">Elementary Schools</a></li>
+            <li><a href="/middle-schools" class="text-white hover:underline">Middle Schools</a></li>
+            <li><a href="/high-schools" class="text-white hover:underline">High Schools</a></li>
+            <li><a href="/colleges" class="text-white hover:underline">Colleges & Universities</a></li>
           </ul>
         </div>
 
@@ -175,16 +238,16 @@ const mainNav = [
         <div>
           <h4 class="text-white mb-4">Company</h4>
           <ul class="list-none m-0 p-0 space-y-2 text-sm">
-            <li><a href="/about" class="text-gray-400 hover:text-white">About Us</a></li>
-            <li><a href="/privacy-policy" class="text-gray-400 hover:text-white">Privacy Policy</a></li>
-            <li><a href="/terms-of-use" class="text-gray-400 hover:text-white">Terms of Use</a></li>
-            <li><a href="/sitemap" class="text-gray-400 hover:text-white">Sitemap</a></li>
+            <li><a href="/about" class="text-white hover:underline">About Us</a></li>
+            <li><a href="/privacy-policy" class="text-white hover:underline">Privacy Policy</a></li>
+            <li><a href="/terms-of-use" class="text-white hover:underline">Terms of Use</a></li>
+            <li><a href="/sitemap" class="text-white hover:underline">Sitemap</a></li>
           </ul>
         </div>
       </div>
 
-      <div class="border-t border-gray-600 mt-8 pt-6 text-sm text-gray-500">
-        <p class="mb-0">&copy; {currentYear} TrueSchools. All rights reserved.</p>
+      <div class="border-t border-white/30 mt-8 pt-6 text-sm text-white">
+        <p class="mb-0">&copy; 2011-{currentYear} TruSchools. All rights reserved.</p>
       </div>
     </div>
   </footer>
