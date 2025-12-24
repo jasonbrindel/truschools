@@ -56,6 +56,110 @@ const states = [
   { name: 'Wisconsin', slug: 'wisconsin', abbr: 'WI' },
   { name: 'Wyoming', slug: 'wyoming', abbr: 'WY' },
 ];
+
+// Major cities for the "by city" section
+const majorCities = [
+  { name: 'Albuquerque', state: 'new-mexico' },
+  { name: 'Atlanta', state: 'georgia' },
+  { name: 'Austin', state: 'texas' },
+  { name: 'Baltimore', state: 'maryland' },
+  { name: 'Boston', state: 'massachusetts' },
+  { name: 'Charlotte', state: 'north-carolina' },
+  { name: 'Chicago', state: 'illinois' },
+  { name: 'Cleveland', state: 'ohio' },
+  { name: 'Columbus', state: 'ohio' },
+  { name: 'Dallas', state: 'texas' },
+  { name: 'Denver', state: 'colorado' },
+  { name: 'Detroit', state: 'michigan' },
+  { name: 'El Paso', state: 'texas' },
+  { name: 'Fort Worth', state: 'texas' },
+  { name: 'Fresno', state: 'california' },
+  { name: 'Houston', state: 'texas' },
+  { name: 'Indianapolis', state: 'indiana' },
+  { name: 'Jacksonville', state: 'florida' },
+  { name: 'Kansas City', state: 'missouri' },
+  { name: 'Las Vegas', state: 'nevada' },
+  { name: 'Long Beach', state: 'california' },
+  { name: 'Los Angeles', state: 'california' },
+  { name: 'Louisville', state: 'kentucky' },
+  { name: 'Memphis', state: 'tennessee' },
+  { name: 'Mesa', state: 'arizona' },
+  { name: 'Miami', state: 'florida' },
+  { name: 'Milwaukee', state: 'wisconsin' },
+  { name: 'Minneapolis', state: 'minnesota' },
+  { name: 'Nashville', state: 'tennessee' },
+  { name: 'New Orleans', state: 'louisiana' },
+  { name: 'New York', state: 'new-york' },
+  { name: 'Oakland', state: 'california' },
+  { name: 'Oklahoma City', state: 'oklahoma' },
+  { name: 'Omaha', state: 'nebraska' },
+  { name: 'Philadelphia', state: 'pennsylvania' },
+  { name: 'Phoenix', state: 'arizona' },
+  { name: 'Pittsburgh', state: 'pennsylvania' },
+  { name: 'Portland', state: 'oregon' },
+  { name: 'Raleigh', state: 'north-carolina' },
+  { name: 'Sacramento', state: 'california' },
+  { name: 'San Antonio', state: 'texas' },
+  { name: 'San Diego', state: 'california' },
+  { name: 'San Francisco', state: 'california' },
+  { name: 'San Jose', state: 'california' },
+  { name: 'Seattle', state: 'washington' },
+  { name: 'Tampa', state: 'florida' },
+  { name: 'Tucson', state: 'arizona' },
+  { name: 'Virginia Beach', state: 'virginia' },
+  { name: 'Washington', state: 'district-of-columbia' },
+  { name: 'Wichita', state: 'kansas' },
+];
+
+function slugify(text: string): string {
+  return text.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+}
+
+// Topic categories with placeholder articles
+const topics = [
+  {
+    title: 'Learning for Preschoolers',
+    articles: [
+      { title: '14 Homework Tips for Parents', url: '#' },
+      { title: 'Early Reading Activities', url: '#' },
+    ]
+  },
+  {
+    title: 'Activities & Games',
+    articles: [
+      { title: 'Fun Activities for Kids', url: '#' },
+      { title: 'Educational Games for Toddlers', url: '#' },
+    ]
+  },
+  {
+    title: 'Physical Health',
+    articles: [
+      { title: 'Preventing Childhood Obesity', url: '#' },
+      { title: 'Healthy Snacks for Preschoolers', url: '#' },
+    ]
+  },
+  {
+    title: 'Finding a Preschool',
+    articles: [
+      { title: 'Finding & Evaluating Schools for Your Child', url: '#' },
+      { title: 'Questions to Ask When Touring Preschools', url: '#' },
+    ]
+  },
+  {
+    title: 'Parenting a Preschooler',
+    articles: [
+      { title: 'Parenting Styles: What\'s Your Style?', url: '#' },
+      { title: 'Building Independence in Young Children', url: '#' },
+    ]
+  },
+  {
+    title: 'Behavior & Social Health',
+    articles: [
+      { title: 'Helping Your Child Deal with Bullying', url: '#' },
+      { title: 'Teaching Social Skills to Preschoolers', url: '#' },
+    ]
+  },
+];
 ---
 
 <Layout title="Preschools in the United States" description="Find preschools across the United States. Browse comprehensive listings of public and private preschools by state.">
@@ -68,14 +172,68 @@ const states = [
     </nav>
 
     <h1 class="text-brand-green-text mb-2">Preschools in the United States</h1>
-    <p class="fs-14 text-gray-500 mb-5">Select a state below to view preschools in that state.</p>
+    <p class="fs-14 text-gray-500 mb-5">Find preschools and early childhood education programs across the country.</p>
   </div>
 
   <div class="container py-5">
     <div class="flex flex-col lg:flex-row gap-5">
       <!-- Main Content -->
       <div class="lg:w-2/3">
-        <div class="box-rounded">
+        <!-- Featured Article -->
+        <div class="box-rounded mb-5">
+          <div class="flex flex-col md:flex-row gap-4">
+            <div class="md:w-1/3">
+              <div class="bg-gray-200 aspect-video rounded flex items-center justify-center text-gray-400">
+                Featured Image
+              </div>
+            </div>
+            <div class="md:w-2/3">
+              <h2 class="text-brand-blue text-xl mb-2">
+                <a href="#" class="hover:underline">Discover Fun Activities for Kids</a>
+              </h2>
+              <p class="text-gray-600 fs-14">
+                Looking for ways to keep your preschooler engaged and learning? Explore our collection of
+                fun, educational activities perfect for young children.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Topic Categories -->
+        <div class="box-rounded mb-5">
+          <h2 class="text-brand-blue text-xl mb-4">Preschool Topics</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {topics.map((topic) => (
+              <div class="border border-gray-200 rounded p-4">
+                <h3 class="text-brand-green-text font-bold mb-2 fs-14">{topic.title}</h3>
+                <ul class="space-y-1 fs-13">
+                  {topic.articles.map((article) => (
+                    <li>
+                      <a href={article.url} class="text-brand-blue hover:underline">{article.title}</a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <!-- Q&A Section -->
+        <div class="box-rounded mb-5 bg-lt-blue">
+          <h2 class="text-brand-blue text-lg mb-3">Preschool Q&A</h2>
+          <p class="text-gray-700 fs-14 mb-3">
+            <strong>Question:</strong> What do you look for when choosing a preschool for your child?
+          </p>
+          <div class="flex gap-2 flex-wrap">
+            <button class="px-3 py-1 bg-white border border-gray-300 rounded text-sm hover:bg-gray-50">Location</button>
+            <button class="px-3 py-1 bg-white border border-gray-300 rounded text-sm hover:bg-gray-50">Curriculum</button>
+            <button class="px-3 py-1 bg-white border border-gray-300 rounded text-sm hover:bg-gray-50">Cost</button>
+            <button class="px-3 py-1 bg-white border border-gray-300 rounded text-sm hover:bg-gray-50">Teacher Quality</button>
+          </div>
+        </div>
+
+        <!-- Browse by State -->
+        <div class="box-rounded mb-5">
           <h2 class="text-brand-blue mb-4">Browse Preschools by State</h2>
           <div class="grid grid-cols-2 md:grid-cols-3 gap-0">
             {states.map((state, index) => (
@@ -89,24 +247,22 @@ const states = [
           </div>
         </div>
 
-        <!-- About Preschools -->
-        <div class="box-rounded mt-5">
-          <h2 class="text-brand-blue mb-4">About Preschools</h2>
-          <p>
-            Preschools, also known as pre-kindergarten or nursery schools, provide early childhood education
-            to children typically between the ages of 3 and 5. These programs focus on social, emotional,
-            and cognitive development through play-based learning and structured activities.
-          </p>
-          <p>
-            Choosing the right preschool for your child is an important decision. Consider factors such as
-            curriculum, teacher qualifications, class size, location, and cost when making your choice.
-          </p>
+        <!-- Browse by City -->
+        <div class="box-rounded mb-5">
+          <h2 class="text-brand-blue mb-4">Preschools by City</h2>
+          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 fs-13">
+            {majorCities.map((city) => (
+              <a href={`/preschools/${city.state}/${slugify(city.name)}`} class="text-brand-blue hover:underline">
+                {city.name}
+              </a>
+            ))}
+          </div>
         </div>
       </div>
 
       <!-- Sidebar -->
       <div class="lg:w-1/3">
-        <div class="box-rounded bg-lt-blue">
+        <div class="box-rounded bg-lt-blue mb-4">
           <h3 class="text-brand-blue mb-3">Quick Jump</h3>
           <select
             class="input w-full"
@@ -121,7 +277,14 @@ const states = [
           </select>
         </div>
 
-        <div class="box-rounded mt-4">
+        <!-- Ad Placeholder -->
+        <div class="box-rounded mb-4">
+          <div class="bg-gray-100 h-[280px] flex items-center justify-center text-gray-400 fs-13">
+            Advertisement
+          </div>
+        </div>
+
+        <div class="box-rounded mb-4">
           <h3 class="text-brand-blue mb-3">Other School Types</h3>
           <ul class="list-none m-0 p-0 fs-13">
             <li class="py-2 border-b border-dotted border-[#c1c1c1]">
@@ -140,6 +303,14 @@ const states = [
               <a href="/colleges">Colleges & Universities</a>
             </li>
           </ul>
+        </div>
+
+        <!-- Newsletter Signup -->
+        <div class="box-rounded">
+          <h3 class="text-brand-blue mb-3">Newsletter Signup</h3>
+          <p class="fs-13 text-gray-600 mb-3">Get the latest preschool news and tips delivered to your inbox.</p>
+          <input type="email" placeholder="Your email address" class="input w-full mb-2" />
+          <button class="btn btn-primary w-full">Subscribe</button>
         </div>
       </div>
     </div>

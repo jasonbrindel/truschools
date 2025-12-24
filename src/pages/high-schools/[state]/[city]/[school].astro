@@ -1,0 +1,878 @@
+---
+import Layout from '@/layouts/Layout.astro';
+
+const { state, city, school } = Astro.params;
+
+// Get database connection
+const db = Astro.locals.runtime.env.DB;
+
+// Get state info
+const stateResult = await db.prepare(
+  'SELECT * FROM states WHERE slug = ?'
+).bind(state).first();
+
+if (!stateResult) {
+  return Astro.redirect('/404');
+}
+
+// Slugify function to match city
+function slugify(text: string): string {
+  return text.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+}
+
+// Find the school - match by page_name or construct from params
+const schoolResult = await db.prepare(`
+  SELECT s.*, st.name as state_name, st.slug as state_slug
+  FROM schools s
+  JOIN states st ON s.state = st.abbr
+  WHERE s.is_high_school = 1
+    AND st.slug = ?
+    AND (
+      s.page_name = ?
+      OR s.page_name LIKE ?
+    )
+  LIMIT 1
+`).bind(state, school, `${school}%`).first();
+
+if (!schoolResult) {
+  return Astro.redirect('/404');
+}
+
+// Type the school data
+const schoolData = schoolResult as any;
+
+// Format phone number
+function formatPhone(phone: string | null): string {
+  if (!phone) return '';
+  const cleaned = phone.replace(/\D/g, '');
+  if (cleaned.length === 10) {
+    return `(${cleaned.slice(0, 3)}) ${cleaned.slice(3, 6)}-${cleaned.slice(6)}`;
+  }
+  return phone;
+}
+
+// Format grade range
+function formatGradeRange(low: string | null, high: string | null): string {
+  if (!low && !high) return 'N/A';
+
+  const formatGrade = (g: string) => {
+    if (g === 'PK') return 'Pre-K';
+    if (g === 'KG' || g === 'K') return 'Kindergarten';
+    if (g === '01' || g === '1') return '1st Grade';
+    if (g === '02' || g === '2') return '2nd Grade';
+    if (g === '03' || g === '3') return '3rd Grade';
+    const num = parseInt(g);
+    if (!isNaN(num)) return `${num}th Grade`;
+    return g;
+  };
+
+  if (low === high) return formatGrade(low!);
+  return `${formatGrade(low!)} - ${formatGrade(high!)}`;
+}
+
+// Get school type label
+function getSchoolType(school: any): string {
+  const types = [];
+  if (school.is_public) {
+    types.push(school.is_charter ? 'Charter School' : 'Public School');
+  } else {
+    types.push('Private School');
+  }
+  if (school.is_magnet) types.push('Magnet');
+  return types.join(' | ');
+}
+
+// Get locale description from NCES locale code
+function getLocaleDescription(locale: string | null): string {
+  if (!locale) return 'N/A';
+  const localeMap: Record<string, string> = {
+    '11': 'City - Large',
+    '12': 'City - Midsize',
+    '13': 'City - Small',
+    '21': 'Suburban - Large',
+    '22': 'Suburban - Midsize',
+    '23': 'Suburban - Small',
+    '31': 'Town - Fringe',
+    '32': 'Town - Distant',
+    '33': 'Town - Remote',
+    '41': 'Rural - Fringe',
+    '42': 'Rural - Distant',
+    '43': 'Rural - Remote'
+  };
+  return localeMap[locale] || locale;
+}
+
+// Format number with commas
+function formatNumber(num: number | null): string {
+  if (num === null || num === undefined) return 'N/A';
+  return num.toLocaleString();
+}
+
+// City name formatted
+const cityName = schoolData.city.split(' ').map((w: string) =>
+  w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()
+).join(' ');
+
+// Get nearby schools
+const nearbySchools = await db.prepare(`
+  SELECT school_name, page_name, city, is_elementary, is_middle_school, is_high_school, is_preschool, is_kindergarten
+  FROM schools
+  WHERE state = ?
+    AND LOWER(city) = LOWER(?)
+    AND id != ?
+    AND active = 1
+  LIMIT 5
+`).bind(schoolData.state, schoolData.city, schoolData.id).all();
+
+// Get census data for community section
+const zipCode = schoolData.zip?.substring(0, 5);
+let censusEconomic = null;
+let censusPopulation = null;
+let censusSocial = null;
+let censusHousing = null;
+
+if (zipCode) {
+  const [econ, pop, social, housing] = await Promise.all([
+    db.prepare('SELECT * FROM census_economic WHERE zcta = ?').bind(zipCode).first(),
+    db.prepare('SELECT * FROM census_population WHERE zcta = ?').bind(zipCode).first(),
+    db.prepare('SELECT * FROM census_social WHERE zcta = ?').bind(zipCode).first(),
+    db.prepare('SELECT * FROM census_housing WHERE zcta = ?').bind(zipCode).first()
+  ]);
+  censusEconomic = econ as any;
+  censusPopulation = pop as any;
+  censusSocial = social as any;
+  censusHousing = housing as any;
+}
+
+// Format currency
+function formatCurrency(num: number | null): string {
+  if (num === null || num === undefined) return 'N/A';
+  return '$' + num.toLocaleString();
+}
+
+// Format percentage
+function formatPercent(num: number | null): string {
+  if (num === null || num === undefined) return 'N/A';
+  return num.toFixed(1) + '%';
+}
+
+// Build page title and description
+const pageTitle = `${schoolData.school_name} - ${cityName}, ${schoolData.state_name}`;
+const pageDescription = `${schoolData.school_name} is a ${getSchoolType(schoolData).toLowerCase()} in ${cityName}, ${schoolData.state_name}. View contact info, enrollment, grades, and more.`;
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <div class="container">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb py-3">
+      <a href="/">Home</a>
+      <span class="breadcrumb-separator">&gt;</span>
+      <a href="/high-schools">High Schools</a>
+      <span class="breadcrumb-separator">&gt;</span>
+      <a href={`/high-schools/${state}`}>{schoolData.state_name}</a>
+      <span class="breadcrumb-separator">&gt;</span>
+      <a href={`/high-schools/${state}/${city}`}>{cityName}</a>
+      <span class="breadcrumb-separator">&gt;</span>
+      <span>{schoolData.school_name}</span>
+    </nav>
+  </div>
+
+  <div class="container py-5">
+    <div class="flex flex-col lg:flex-row gap-5">
+      <!-- Main Content -->
+      <div class="lg:w-[728px] lg:flex-shrink-0">
+        <!-- School Header -->
+        <div class="box-rounded mb-5">
+          <h1 class="text-brand-green-text text-2xl mb-2">{schoolData.school_name}</h1>
+          <p class="text-gray-600 fs-14 mb-4">
+            {getSchoolType(schoolData)} | {formatGradeRange(schoolData.low_grade, schoolData.high_grade)} | {formatNumber(schoolData.total_students)} students
+          </p>
+
+          <!-- Contact Info -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+              <h3 class="text-brand-blue fs-14 font-bold mb-1">Address</h3>
+              <p class="fs-13 mb-0">
+                {schoolData.address}<br />
+                {cityName}, {schoolData.state} {schoolData.zip}
+              </p>
+            </div>
+            <div>
+              {schoolData.phone && (
+                <div class="mb-3">
+                  <h3 class="text-brand-blue fs-14 font-bold mb-1">Phone</h3>
+                  <p class="fs-13 mb-0">
+                    <a href={`tel:${schoolData.phone.replace(/\D/g, '')}`}>{formatPhone(schoolData.phone)}</a>
+                  </p>
+                </div>
+              )}
+              {schoolData.website && (
+                <div>
+                  <h3 class="text-brand-blue fs-14 font-bold mb-1">Website</h3>
+                  <p class="fs-13 mb-0">
+                    <a href={schoolData.website.startsWith('http') ? schoolData.website : `https://${schoolData.website}`} target="_blank" rel="noopener noreferrer">
+                      Visit Website
+                    </a>
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {schoolData.district_name && (
+            <div class="border-t border-dotted border-[#c1c1c1] pt-3">
+              <h3 class="text-brand-blue fs-14 font-bold mb-1">School District</h3>
+              <p class="fs-13 mb-0">{schoolData.district_name}</p>
+            </div>
+          )}
+        </div>
+
+        <!-- School Details -->
+        <div class="box-rounded mb-5">
+          <h2 class="text-brand-blue mb-4">School Details</h2>
+
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <div class="p-3 bg-lt-blue rounded">
+              <p class="fs-12 text-gray-500 mb-1">Total Students</p>
+              <p class="text-lg font-bold text-brand-green-text mb-0">{formatNumber(schoolData.total_students)}</p>
+            </div>
+            <div class="p-3 bg-lt-blue rounded">
+              <p class="fs-12 text-gray-500 mb-1">Grades</p>
+              <p class="text-lg font-bold text-brand-green-text mb-0">{formatGradeRange(schoolData.low_grade, schoolData.high_grade)}</p>
+            </div>
+            <div class="p-3 bg-lt-blue rounded">
+              <p class="fs-12 text-gray-500 mb-1">Student-Teacher Ratio</p>
+              <p class="text-lg font-bold text-brand-green-text mb-0">
+                {schoolData.pupil_teacher_ratio ? `${schoolData.pupil_teacher_ratio.toFixed(1)}:1` : 'N/A'}
+              </p>
+            </div>
+            <div class="p-3 bg-lt-blue rounded">
+              <p class="fs-12 text-gray-500 mb-1">Teachers (FTE)</p>
+              <p class="text-lg font-bold text-brand-green-text mb-0">{schoolData.fte_teachers ? Math.round(schoolData.fte_teachers) : 'N/A'}</p>
+            </div>
+            <div class="p-3 bg-lt-blue rounded">
+              <p class="fs-12 text-gray-500 mb-1">School Type</p>
+              <p class="text-lg font-bold text-brand-green-text mb-0">{schoolData.is_public ? 'Public' : 'Private'}</p>
+            </div>
+            <div class="p-3 bg-lt-blue rounded">
+              <p class="fs-12 text-gray-500 mb-1">Locale</p>
+              <p class="text-lg font-bold text-brand-green-text mb-0">{getLocaleDescription(schoolData.locale)}</p>
+            </div>
+            {schoolData.county && (
+              <div class="p-3 bg-lt-blue rounded">
+                <p class="fs-12 text-gray-500 mb-1">County</p>
+                <p class="text-lg font-bold text-brand-green-text mb-0">{schoolData.county}</p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <!-- Free/Reduced Lunch -->
+        {(schoolData.free_lunch_students || schoolData.reduced_lunch_students) && (
+          <div class="box-rounded mb-5">
+            <h2 class="text-brand-blue mb-4">Free & Reduced Lunch Program</h2>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <p class="fs-13 mb-1">Free Lunch Eligible</p>
+                <p class="text-lg font-bold text-brand-green-text">
+                  {formatNumber(schoolData.free_lunch_students)}
+                  {schoolData.total_students && schoolData.free_lunch_students && (
+                    <span class="text-sm font-normal text-gray-500 ml-1">
+                      ({((schoolData.free_lunch_students / schoolData.total_students) * 100).toFixed(1)}%)
+                    </span>
+                  )}
+                </p>
+              </div>
+              <div>
+                <p class="fs-13 mb-1">Reduced Lunch Eligible</p>
+                <p class="text-lg font-bold text-brand-green-text">
+                  {formatNumber(schoolData.reduced_lunch_students)}
+                  {schoolData.total_students && schoolData.reduced_lunch_students && (
+                    <span class="text-sm font-normal text-gray-500 ml-1">
+                      ({((schoolData.reduced_lunch_students / schoolData.total_students) * 100).toFixed(1)}%)
+                    </span>
+                  )}
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <!-- School IDs -->
+        <div class="box-rounded mb-5">
+          <h2 class="text-brand-blue mb-4">School Identifiers</h2>
+          <div class="grid grid-cols-2 gap-4 fs-13">
+            <div>
+              <p class="text-gray-500 mb-1">NCES School ID</p>
+              <p class="font-mono">{schoolData.nces_id || 'N/A'}</p>
+            </div>
+            <div>
+              <p class="text-gray-500 mb-1">District NCES ID</p>
+              <p class="font-mono">{schoolData.district_nces_id || 'N/A'}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Community Data -->
+        {(censusEconomic || censusPopulation || censusSocial || censusHousing) && (
+          <div id="community">
+            <div class="box-rounded mb-5">
+              <h2 class="text-brand-blue mb-2">Community Profile ({zipCode})</h2>
+              <p class="text-gray-600 fs-13 mb-4">Demographic and economic data for the {zipCode} ZIP code area where {schoolData.school_name} is located.</p>
+
+              <!-- Population Overview -->
+              {censusPopulation && (
+                <div class="mb-5">
+                  <h3 class="text-brand-green-text fs-16 font-bold mb-3">Population Overview</h3>
+                  <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    {censusPopulation.pop_total && (
+                      <div class="p-3 bg-lt-blue rounded">
+                        <p class="fs-11 text-gray-500 mb-1">Total Population</p>
+                        <p class="text-lg font-bold text-brand-green-text mb-0">{formatNumber(censusPopulation.pop_total)}</p>
+                      </div>
+                    )}
+                    {censusPopulation.pop_median_age && (
+                      <div class="p-3 bg-lt-blue rounded">
+                        <p class="fs-11 text-gray-500 mb-1">Median Age</p>
+                        <p class="text-lg font-bold text-brand-green-text mb-0">{censusPopulation.pop_median_age}</p>
+                      </div>
+                    )}
+                    {censusPopulation.pop_male && censusPopulation.pop_total && (
+                      <div class="p-3 bg-lt-blue rounded">
+                        <p class="fs-11 text-gray-500 mb-1">Male</p>
+                        <p class="text-lg font-bold text-brand-green-text mb-0">{formatPercent((censusPopulation.pop_male / censusPopulation.pop_total) * 100)}</p>
+                      </div>
+                    )}
+                    {censusPopulation.pop_female && censusPopulation.pop_total && (
+                      <div class="p-3 bg-lt-blue rounded">
+                        <p class="fs-11 text-gray-500 mb-1">Female</p>
+                        <p class="text-lg font-bold text-brand-green-text mb-0">{formatPercent((censusPopulation.pop_female / censusPopulation.pop_total) * 100)}</p>
+                      </div>
+                    )}
+                  </div>
+
+                  <!-- Age Distribution -->
+                  {censusPopulation.pop_total && (
+                    <div class="mt-3">
+                      <p class="fs-12 text-gray-600 mb-2 font-medium">Age Distribution</p>
+                      <div class="grid grid-cols-3 md:grid-cols-6 gap-2 fs-12">
+                        {censusPopulation.pop_under_5 && (
+                          <div class="text-center p-2 bg-gray-50 rounded">
+                            <p class="text-gray-500 mb-0">Under 5</p>
+                            <p class="font-bold text-brand-green-text mb-0">{formatPercent((censusPopulation.pop_under_5 / censusPopulation.pop_total) * 100)}</p>
+                          </div>
+                        )}
+                        {censusPopulation.pop_5_to_9 && (
+                          <div class="text-center p-2 bg-gray-50 rounded">
+                            <p class="text-gray-500 mb-0">5-9</p>
+                            <p class="font-bold text-brand-green-text mb-0">{formatPercent((censusPopulation.pop_5_to_9 / censusPopulation.pop_total) * 100)}</p>
+                          </div>
+                        )}
+                        {censusPopulation.pop_10_to_14 && (
+                          <div class="text-center p-2 bg-gray-50 rounded">
+                            <p class="text-gray-500 mb-0">10-14</p>
+                            <p class="font-bold text-brand-green-text mb-0">{formatPercent((censusPopulation.pop_10_to_14 / censusPopulation.pop_total) * 100)}</p>
+                          </div>
+                        )}
+                        {censusPopulation.pop_15_to_19 && (
+                          <div class="text-center p-2 bg-gray-50 rounded">
+                            <p class="text-gray-500 mb-0">15-19</p>
+                            <p class="font-bold text-brand-green-text mb-0">{formatPercent((censusPopulation.pop_15_to_19 / censusPopulation.pop_total) * 100)}</p>
+                          </div>
+                        )}
+                        {censusPopulation.pop_under_18 && (
+                          <div class="text-center p-2 bg-gray-50 rounded">
+                            <p class="text-gray-500 mb-0">Under 18</p>
+                            <p class="font-bold text-brand-green-text mb-0">{formatPercent((censusPopulation.pop_under_18 / censusPopulation.pop_total) * 100)}</p>
+                          </div>
+                        )}
+                        {censusPopulation.pop_65_plus && (
+                          <div class="text-center p-2 bg-gray-50 rounded">
+                            <p class="text-gray-500 mb-0">65+</p>
+                            <p class="font-bold text-brand-green-text mb-0">{formatPercent((censusPopulation.pop_65_plus / censusPopulation.pop_total) * 100)}</p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              <!-- Race & Ethnicity -->
+              {censusPopulation && censusPopulation.pop_total && (censusPopulation.race_white || censusPopulation.race_black || censusPopulation.race_asian) && (
+                <div class="mb-5">
+                  <h3 class="text-brand-green-text fs-16 font-bold mb-3">Race & Ethnicity</h3>
+                  <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    {censusPopulation.race_white && (
+                      <div class="p-3 bg-lt-blue rounded">
+                        <p class="fs-11 text-gray-500 mb-1">White</p>
+                        <p class="text-lg font-bold text-brand-green-text mb-0">{formatPercent((censusPopulation.race_white / censusPopulation.pop_total) * 100)}</p>
+                      </div>
+                    )}
+                    {censusPopulation.race_black && (
+                      <div class="p-3 bg-lt-blue rounded">
+                        <p class="fs-11 text-gray-500 mb-1">Black/African American</p>
+                        <p class="text-lg font-bold text-brand-green-text mb-0">{formatPercent((censusPopulation.race_black / censusPopulation.pop_total) * 100)}</p>
+                      </div>
+                    )}
+                    {censusPopulation.race_asian && (
+                      <div class="p-3 bg-lt-blue rounded">
+                        <p class="fs-11 text-gray-500 mb-1">Asian</p>
+                        <p class="text-lg font-bold text-brand-green-text mb-0">{formatPercent((censusPopulation.race_asian / censusPopulation.pop_total) * 100)}</p>
+                      </div>
+                    )}
+                    {censusPopulation.race_native && (
+                      <div class="p-3 bg-lt-blue rounded">
+                        <p class="fs-11 text-gray-500 mb-1">Native American</p>
+                        <p class="text-lg font-bold text-brand-green-text mb-0">{formatPercent((censusPopulation.race_native / censusPopulation.pop_total) * 100)}</p>
+                      </div>
+                    )}
+                    {censusPopulation.race_two_or_more && (
+                      <div class="p-3 bg-lt-blue rounded">
+                        <p class="fs-11 text-gray-500 mb-1">Two or More Races</p>
+                        <p class="text-lg font-bold text-brand-green-text mb-0">{formatPercent((censusPopulation.race_two_or_more / censusPopulation.pop_total) * 100)}</p>
+                      </div>
+                    )}
+                    {censusPopulation.hispanic_total && (
+                      <div class="p-3 bg-lt-blue rounded">
+                        <p class="fs-11 text-gray-500 mb-1">Hispanic/Latino</p>
+                        <p class="text-lg font-bold text-brand-green-text mb-0">{formatPercent((censusPopulation.hispanic_total / censusPopulation.pop_total) * 100)}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              <!-- Income & Economy -->
+              {censusEconomic && (
+                <div class="mb-5">
+                  <h3 class="text-brand-green-text fs-16 font-bold mb-3">Income & Economy</h3>
+                  <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    {censusEconomic.income_median_household && (
+                      <div class="p-3 bg-lt-blue rounded">
+                        <p class="fs-11 text-gray-500 mb-1">Median Household Income</p>
+                        <p class="text-lg font-bold text-brand-green-text mb-0">{formatCurrency(censusEconomic.income_median_household)}</p>
+                      </div>
+                    )}
+                    {censusEconomic.income_mean_household && (
+                      <div class="p-3 bg-lt-blue rounded">
+                        <p class="fs-11 text-gray-500 mb-1">Mean Household Income</p>
+                        <p class="text-lg font-bold text-brand-green-text mb-0">{formatCurrency(censusEconomic.income_mean_household)}</p>
+                      </div>
+                    )}
+                    {censusEconomic.income_per_capita && (
+                      <div class="p-3 bg-lt-blue rounded">
+                        <p class="fs-11 text-gray-500 mb-1">Per Capita Income</p>
+                        <p class="text-lg font-bold text-brand-green-text mb-0">{formatCurrency(censusEconomic.income_per_capita)}</p>
+                      </div>
+                    )}
+                    {censusEconomic.income_median_family && (
+                      <div class="p-3 bg-lt-blue rounded">
+                        <p class="fs-11 text-gray-500 mb-1">Median Family Income</p>
+                        <p class="text-lg font-bold text-brand-green-text mb-0">{formatCurrency(censusEconomic.income_median_family)}</p>
+                      </div>
+                    )}
+                    {censusEconomic.poverty_rate && censusEconomic.poverty_rate > 0 && (
+                      <div class="p-3 bg-lt-blue rounded">
+                        <p class="fs-11 text-gray-500 mb-1">Poverty Rate</p>
+                        <p class="text-lg font-bold text-brand-green-text mb-0">{formatPercent(censusEconomic.poverty_rate)}</p>
+                      </div>
+                    )}
+                    {censusEconomic.unemployment_rate && (
+                      <div class="p-3 bg-lt-blue rounded">
+                        <p class="fs-11 text-gray-500 mb-1">Unemployment Rate</p>
+                        <p class="text-lg font-bold text-brand-green-text mb-0">{formatPercent(censusEconomic.unemployment_rate)}</p>
+                      </div>
+                    )}
+                    {censusEconomic.households_with_snap && censusEconomic.labor_force_total && (
+                      <div class="p-3 bg-lt-blue rounded">
+                        <p class="fs-11 text-gray-500 mb-1">Households on SNAP</p>
+                        <p class="text-lg font-bold text-brand-green-text mb-0">{formatNumber(censusEconomic.households_with_snap)}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              <!-- Employment & Commute -->
+              {censusEconomic && (censusEconomic.employed || censusEconomic.commute_mean_time) && (
+                <div class="mb-5">
+                  <h3 class="text-brand-green-text fs-16 font-bold mb-3">Employment & Commute</h3>
+                  <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    {censusEconomic.employed && (
+                      <div class="p-3 bg-lt-blue rounded">
+                        <p class="fs-11 text-gray-500 mb-1">Employed</p>
+                        <p class="text-lg font-bold text-brand-green-text mb-0">{formatNumber(censusEconomic.employed)}</p>
+                      </div>
+                    )}
+                    {censusEconomic.commute_mean_time && (
+                      <div class="p-3 bg-lt-blue rounded">
+                        <p class="fs-11 text-gray-500 mb-1">Avg. Commute Time</p>
+                        <p class="text-lg font-bold text-brand-green-text mb-0">{censusEconomic.commute_mean_time} min</p>
+                      </div>
+                    )}
+                    {censusEconomic.commute_work_from_home && censusEconomic.employed && (
+                      <div class="p-3 bg-lt-blue rounded">
+                        <p class="fs-11 text-gray-500 mb-1">Work From Home</p>
+                        <p class="text-lg font-bold text-brand-green-text mb-0">{formatPercent((censusEconomic.commute_work_from_home / censusEconomic.employed) * 100)}</p>
+                      </div>
+                    )}
+                    {censusEconomic.commute_drove_alone && censusEconomic.employed && (
+                      <div class="p-3 bg-lt-blue rounded">
+                        <p class="fs-11 text-gray-500 mb-1">Drive Alone</p>
+                        <p class="text-lg font-bold text-brand-green-text mb-0">{formatPercent((censusEconomic.commute_drove_alone / censusEconomic.employed) * 100)}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <!-- Education -->
+            {censusSocial && (
+              <div class="box-rounded mb-5">
+                <h3 class="text-brand-green-text fs-16 font-bold mb-3">Education</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+                  {censusSocial.edu_hs_or_higher_pct && (
+                    <div class="p-3 bg-lt-blue rounded">
+                      <p class="fs-11 text-gray-500 mb-1">High School or Higher</p>
+                      <p class="text-lg font-bold text-brand-green-text mb-0">{formatPercent(censusSocial.edu_hs_or_higher_pct)}</p>
+                    </div>
+                  )}
+                  {censusSocial.edu_bachelors_or_higher_pct && (
+                    <div class="p-3 bg-lt-blue rounded">
+                      <p class="fs-11 text-gray-500 mb-1">Bachelor's or Higher</p>
+                      <p class="text-lg font-bold text-brand-green-text mb-0">{formatPercent(censusSocial.edu_bachelors_or_higher_pct)}</p>
+                    </div>
+                  )}
+                  {censusSocial.edu_graduate && censusSocial.edu_pop_25_plus && (
+                    <div class="p-3 bg-lt-blue rounded">
+                      <p class="fs-11 text-gray-500 mb-1">Graduate Degree</p>
+                      <p class="text-lg font-bold text-brand-green-text mb-0">{formatPercent((censusSocial.edu_graduate / censusSocial.edu_pop_25_plus) * 100)}</p>
+                    </div>
+                  )}
+                  {censusSocial.school_enrolled && (
+                    <div class="p-3 bg-lt-blue rounded">
+                      <p class="fs-11 text-gray-500 mb-1">Enrolled in School</p>
+                      <p class="text-lg font-bold text-brand-green-text mb-0">{formatNumber(censusSocial.school_enrolled)}</p>
+                    </div>
+                  )}
+                </div>
+
+                <!-- School Enrollment Breakdown -->
+                {censusSocial.school_enrolled && (
+                  <div>
+                    <p class="fs-12 text-gray-600 mb-2 font-medium">School Enrollment by Level</p>
+                    <div class="grid grid-cols-2 md:grid-cols-5 gap-2 fs-12">
+                      {censusSocial.school_preschool && (
+                        <div class="text-center p-2 bg-gray-50 rounded">
+                          <p class="text-gray-500 mb-0">Preschool</p>
+                          <p class="font-bold text-brand-green-text mb-0">{formatNumber(censusSocial.school_preschool)}</p>
+                        </div>
+                      )}
+                      {censusSocial.school_kindergarten && (
+                        <div class="text-center p-2 bg-gray-50 rounded">
+                          <p class="text-gray-500 mb-0">Kindergarten</p>
+                          <p class="font-bold text-brand-green-text mb-0">{formatNumber(censusSocial.school_kindergarten)}</p>
+                        </div>
+                      )}
+                      {censusSocial.school_elementary && (
+                        <div class="text-center p-2 bg-gray-50 rounded">
+                          <p class="text-gray-500 mb-0">Elementary</p>
+                          <p class="font-bold text-brand-green-text mb-0">{formatNumber(censusSocial.school_elementary)}</p>
+                        </div>
+                      )}
+                      {censusSocial.school_high_school && (
+                        <div class="text-center p-2 bg-gray-50 rounded">
+                          <p class="text-gray-500 mb-0">High School</p>
+                          <p class="font-bold text-brand-green-text mb-0">{formatNumber(censusSocial.school_high_school)}</p>
+                        </div>
+                      )}
+                      {censusSocial.school_college && (
+                        <div class="text-center p-2 bg-gray-50 rounded">
+                          <p class="text-gray-500 mb-0">College</p>
+                          <p class="font-bold text-brand-green-text mb-0">{formatNumber(censusSocial.school_college)}</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            <!-- Housing -->
+            {censusHousing && (
+              <div class="box-rounded mb-5">
+                <h3 class="text-brand-green-text fs-16 font-bold mb-3">Housing</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+                  {censusHousing.housing_median_value && (
+                    <div class="p-3 bg-lt-blue rounded">
+                      <p class="fs-11 text-gray-500 mb-1">Median Home Value</p>
+                      <p class="text-lg font-bold text-brand-green-text mb-0">{formatCurrency(censusHousing.housing_median_value)}</p>
+                    </div>
+                  )}
+                  {censusHousing.housing_median_rent && (
+                    <div class="p-3 bg-lt-blue rounded">
+                      <p class="fs-11 text-gray-500 mb-1">Median Rent</p>
+                      <p class="text-lg font-bold text-brand-green-text mb-0">{formatCurrency(censusHousing.housing_median_rent)}</p>
+                    </div>
+                  )}
+                  {censusHousing.housing_total && (
+                    <div class="p-3 bg-lt-blue rounded">
+                      <p class="fs-11 text-gray-500 mb-1">Total Housing Units</p>
+                      <p class="text-lg font-bold text-brand-green-text mb-0">{formatNumber(censusHousing.housing_total)}</p>
+                    </div>
+                  )}
+                  {censusHousing.housing_owner_occupied && censusHousing.housing_occupied && (
+                    <div class="p-3 bg-lt-blue rounded">
+                      <p class="fs-11 text-gray-500 mb-1">Owner Occupied</p>
+                      <p class="text-lg font-bold text-brand-green-text mb-0">{formatPercent((censusHousing.housing_owner_occupied / censusHousing.housing_occupied) * 100)}</p>
+                    </div>
+                  )}
+                  {censusHousing.housing_renter_occupied && censusHousing.housing_occupied && (
+                    <div class="p-3 bg-lt-blue rounded">
+                      <p class="fs-11 text-gray-500 mb-1">Renter Occupied</p>
+                      <p class="text-lg font-bold text-brand-green-text mb-0">{formatPercent((censusHousing.housing_renter_occupied / censusHousing.housing_occupied) * 100)}</p>
+                    </div>
+                  )}
+                  {censusHousing.housing_median_rooms && (
+                    <div class="p-3 bg-lt-blue rounded">
+                      <p class="fs-11 text-gray-500 mb-1">Median Rooms</p>
+                      <p class="text-lg font-bold text-brand-green-text mb-0">{censusHousing.housing_median_rooms}</p>
+                    </div>
+                  )}
+                  {censusHousing.housing_median_owner_costs_mortgage && (
+                    <div class="p-3 bg-lt-blue rounded">
+                      <p class="fs-11 text-gray-500 mb-1">Monthly Owner Costs (w/ Mortgage)</p>
+                      <p class="text-lg font-bold text-brand-green-text mb-0">{formatCurrency(censusHousing.housing_median_owner_costs_mortgage)}</p>
+                    </div>
+                  )}
+                  {censusHousing.housing_avg_household_size_owner && (
+                    <div class="p-3 bg-lt-blue rounded">
+                      <p class="fs-11 text-gray-500 mb-1">Avg. Household Size</p>
+                      <p class="text-lg font-bold text-brand-green-text mb-0">{censusHousing.housing_avg_household_size_owner}</p>
+                    </div>
+                  )}
+                </div>
+
+                <!-- Home Value Distribution -->
+                {censusHousing.housing_owner_occupied && (
+                  <div>
+                    <p class="fs-12 text-gray-600 mb-2 font-medium">Home Value Distribution</p>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-2 fs-12">
+                      {censusHousing.value_under_50k !== undefined && (
+                        <div class="text-center p-2 bg-gray-50 rounded">
+                          <p class="text-gray-500 mb-0">Under $50K</p>
+                          <p class="font-bold text-brand-green-text mb-0">{formatNumber(censusHousing.value_under_50k)}</p>
+                        </div>
+                      )}
+                      {censusHousing.value_100k_150k !== undefined && (
+                        <div class="text-center p-2 bg-gray-50 rounded">
+                          <p class="text-gray-500 mb-0">$100K-$150K</p>
+                          <p class="font-bold text-brand-green-text mb-0">{formatNumber(censusHousing.value_100k_150k)}</p>
+                        </div>
+                      )}
+                      {censusHousing.value_200k_300k !== undefined && (
+                        <div class="text-center p-2 bg-gray-50 rounded">
+                          <p class="text-gray-500 mb-0">$200K-$300K</p>
+                          <p class="font-bold text-brand-green-text mb-0">{formatNumber(censusHousing.value_200k_300k)}</p>
+                        </div>
+                      )}
+                      {censusHousing.value_500k_1m !== undefined && (
+                        <div class="text-center p-2 bg-gray-50 rounded">
+                          <p class="text-gray-500 mb-0">$500K-$1M</p>
+                          <p class="font-bold text-brand-green-text mb-0">{formatNumber(censusHousing.value_500k_1m)}</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            <!-- Households & Families -->
+            {censusSocial && (
+              <div class="box-rounded mb-5">
+                <h3 class="text-brand-green-text fs-16 font-bold mb-3">Households & Families</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  {censusSocial.households_total && (
+                    <div class="p-3 bg-lt-blue rounded">
+                      <p class="fs-11 text-gray-500 mb-1">Total Households</p>
+                      <p class="text-lg font-bold text-brand-green-text mb-0">{formatNumber(censusSocial.households_total)}</p>
+                    </div>
+                  )}
+                  {censusSocial.avg_household_size && (
+                    <div class="p-3 bg-lt-blue rounded">
+                      <p class="fs-11 text-gray-500 mb-1">Avg. Household Size</p>
+                      <p class="text-lg font-bold text-brand-green-text mb-0">{censusSocial.avg_household_size}</p>
+                    </div>
+                  )}
+                  {censusSocial.avg_family_size && (
+                    <div class="p-3 bg-lt-blue rounded">
+                      <p class="fs-11 text-gray-500 mb-1">Avg. Family Size</p>
+                      <p class="text-lg font-bold text-brand-green-text mb-0">{censusSocial.avg_family_size}</p>
+                    </div>
+                  )}
+                  {censusSocial.households_married && censusSocial.households_total && (
+                    <div class="p-3 bg-lt-blue rounded">
+                      <p class="fs-11 text-gray-500 mb-1">Married Couples</p>
+                      <p class="text-lg font-bold text-brand-green-text mb-0">{formatPercent((censusSocial.households_married / censusSocial.households_total) * 100)}</p>
+                    </div>
+                  )}
+                  {censusSocial.households_living_alone && censusSocial.households_total && (
+                    <div class="p-3 bg-lt-blue rounded">
+                      <p class="fs-11 text-gray-500 mb-1">Living Alone</p>
+                      <p class="text-lg font-bold text-brand-green-text mb-0">{formatPercent((censusSocial.households_living_alone / censusSocial.households_total) * 100)}</p>
+                    </div>
+                  )}
+                  {censusSocial.computers_has_broadband && censusSocial.households_total && (
+                    <div class="p-3 bg-lt-blue rounded">
+                      <p class="fs-11 text-gray-500 mb-1">Broadband Internet</p>
+                      <p class="text-lg font-bold text-brand-green-text mb-0">{formatPercent((censusSocial.computers_has_broadband / censusSocial.households_total) * 100)}</p>
+                    </div>
+                  )}
+                  {censusSocial.veterans && (
+                    <div class="p-3 bg-lt-blue rounded">
+                      <p class="fs-11 text-gray-500 mb-1">Veterans</p>
+                      <p class="text-lg font-bold text-brand-green-text mb-0">{formatNumber(censusSocial.veterans)}</p>
+                    </div>
+                  )}
+                  {censusSocial.foreign_born && (
+                    <div class="p-3 bg-lt-blue rounded">
+                      <p class="fs-11 text-gray-500 mb-1">Foreign Born</p>
+                      <p class="text-lg font-bold text-brand-green-text mb-0">{formatNumber(censusSocial.foreign_born)}</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            <!-- Health Insurance -->
+            {censusEconomic && (censusEconomic.health_insured || censusEconomic.health_uninsured) && (
+              <div class="box-rounded">
+                <h3 class="text-brand-green-text fs-16 font-bold mb-3">Health Insurance</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  {censusEconomic.health_insured && (
+                    <div class="p-3 bg-lt-blue rounded">
+                      <p class="fs-11 text-gray-500 mb-1">Insured</p>
+                      <p class="text-lg font-bold text-brand-green-text mb-0">{formatNumber(censusEconomic.health_insured)}</p>
+                    </div>
+                  )}
+                  {censusEconomic.health_uninsured && (
+                    <div class="p-3 bg-lt-blue rounded">
+                      <p class="fs-11 text-gray-500 mb-1">Uninsured</p>
+                      <p class="text-lg font-bold text-brand-green-text mb-0">{formatNumber(censusEconomic.health_uninsured)}</p>
+                    </div>
+                  )}
+                  {censusEconomic.health_private && (
+                    <div class="p-3 bg-lt-blue rounded">
+                      <p class="fs-11 text-gray-500 mb-1">Private Insurance</p>
+                      <p class="text-lg font-bold text-brand-green-text mb-0">{formatNumber(censusEconomic.health_private)}</p>
+                    </div>
+                  )}
+                  {censusEconomic.health_public && (
+                    <div class="p-3 bg-lt-blue rounded">
+                      <p class="fs-11 text-gray-500 mb-1">Public Insurance</p>
+                      <p class="text-lg font-bold text-brand-green-text mb-0">{formatNumber(censusEconomic.health_public)}</p>
+                    </div>
+                  )}
+                </div>
+                <p class="text-gray-400 fs-11 mt-4 mb-0">Source: U.S. Census Bureau American Community Survey</p>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+
+      <!-- Sidebar -->
+      <div class="lg:flex-shrink-0 lg:w-[336px]">
+        <!-- Map -->
+        <div class="box-rounded mb-4" id="map">
+          <h3 class="text-brand-blue mb-3">Location</h3>
+          {schoolData.lat && schoolData.lng ? (
+            <>
+              <div id="school-map" class="h-[250px] rounded mb-2"></div>
+              <p class="text-center text-gray-600 fs-13 mb-3">{cityName}, {schoolData.state} {schoolData.zip}</p>
+              <div class="flex justify-center gap-4 fs-13">
+                <a href={`https://www.google.com/maps/search/?api=1&query=${schoolData.lat},${schoolData.lng}`} target="_blank" rel="noopener noreferrer">
+                  Open in Google Maps
+                </a>
+                <span class="text-gray-400">|</span>
+                <a href={`https://maps.apple.com/?ll=${schoolData.lat},${schoolData.lng}&q=${encodeURIComponent(schoolData.school_name)}`} target="_blank" rel="noopener noreferrer">
+                  Open in Apple Maps
+                </a>
+              </div>
+              <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+              <script is:inline src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+              <script is:inline define:vars={{ lat: schoolData.lat, lng: schoolData.lng, schoolName: schoolData.school_name }}>
+                document.addEventListener('DOMContentLoaded', function() {
+                  const map = L.map('school-map').setView([lat, lng], 14);
+                  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 19,
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                  }).addTo(map);
+                  L.marker([lat, lng]).addTo(map).bindPopup(schoolName);
+                });
+              </script>
+            </>
+          ) : (
+            <p class="text-gray-500 fs-13">Location data not available</p>
+          )}
+        </div>
+
+        <!-- Nearby Schools -->
+        {nearbySchools.results && nearbySchools.results.length > 0 && (
+          <div class="box-rounded mb-4">
+            <h3 class="text-brand-blue mb-3">Other Schools in {cityName}</h3>
+            <ul class="list-none m-0 p-0 fs-13">
+              {nearbySchools.results.map((nearby: any, index: number) => {
+                // Determine school type for URL
+                let schoolType = 'elementary-schools';
+                if (nearby.is_high_school) schoolType = 'high-schools';
+                else if (nearby.is_middle_school) schoolType = 'middle-schools';
+                else if (nearby.is_preschool) schoolType = 'preschools';
+                else if (nearby.is_kindergarten) schoolType = 'kindergartens';
+
+                const citySlug = slugify(nearby.city);
+
+                return (
+                  <li class={`py-2 ${index < nearbySchools.results.length - 1 ? 'border-b border-dotted border-[#c1c1c1]' : ''}`}>
+                    <a href={`/${schoolType}/${state}/${citySlug}/${nearby.page_name}`}>
+                      {nearby.school_name}
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        )}
+
+        <!-- Sidebar Ad -->
+        <div class="mb-4 flex justify-center">
+          <div class="bg-gray-200 border-2 border-dashed border-gray-400 flex items-center justify-center text-gray-500 text-sm font-medium w-[336px] h-[280px]">
+            Sidebar Ad (336x280)
+          </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="box-rounded">
+          <h3 class="text-brand-blue mb-3">Browse More Schools</h3>
+          <ul class="list-none m-0 p-0 fs-13">
+            <li class="py-2 border-b border-dotted border-[#c1c1c1]">
+              <a href={`/elementary-schools/${state}`}>Elementary Schools in {schoolData.state_name}</a>
+            </li>
+            <li class="py-2 border-b border-dotted border-[#c1c1c1]">
+              <a href={`/middle-schools/${state}`}>Middle Schools in {schoolData.state_name}</a>
+            </li>
+            <li class="py-2 border-b border-dotted border-[#c1c1c1]">
+              <a href={`/high-schools/${state}`}>High Schools in {schoolData.state_name}</a>
+            </li>
+            <li class="py-2">
+              <a href={`/colleges/${state}`}>Colleges in {schoolData.state_name}</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>

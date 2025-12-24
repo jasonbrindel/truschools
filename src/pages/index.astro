@@ -1,5 +1,12 @@
 ---
 import Layout from '@/layouts/Layout.astro';
+import featuredImage from '@/images/teaching-middle-school-1.jpg';
+import kindergartenImage from '@/images/kindergarten-2.jpg';
+import elementaryImage from '@/images/elementary-school-2.jpg';
+import highSchoolImage from '@/images/high-school-1.jpg';
+import collegeImage from '@/images/college-1.jpg';
+import preschoolImage from '@/images/preschool-1.jpg';
+import middleSchoolImage from '@/images/middle-school-1.jpg';
 
 const db = Astro.locals.runtime?.env?.DB;
 
@@ -82,37 +89,37 @@ const schoolTypes = [
     title: 'Preschools',
     href: '/preschools',
     description: 'Comprehensive listings of all public and private preschools plus articles and other helpful information.',
-    image: '/images/preschool-sm.jpg',
+    image: preschoolImage.src,
   },
   {
     title: 'Elementary Schools',
     href: '/elementary-schools',
     description: 'Comprehensive listings of all public & private elementary schools plus articles and other helpful information.',
-    image: '/images/elementary-school-sm.jpg',
+    image: elementaryImage.src,
   },
   {
     title: 'High Schools',
     href: '/high-schools',
     description: 'Comprehensive listings of all public and private high schools plus articles and other helpful information.',
-    image: '/images/high-school-sm.jpg',
+    image: highSchoolImage.src,
   },
   {
     title: 'Kindergartens',
     href: '/kindergartens',
     description: 'Listings of all public and private kindergartens plus articles and other helpful information.',
-    image: '/images/kindergarten-sm.jpg',
+    image: kindergartenImage.src,
   },
   {
     title: 'Middle Schools',
     href: '/middle-schools',
     description: 'Comprehensive listings of all public and private middle schools plus articles and other helpful information.',
-    image: '/images/middle-school-sm.jpg',
+    image: middleSchoolImage.src,
   },
   {
     title: 'Colleges & Universities',
     href: '/colleges',
     description: 'Listings of all colleges and universities plus articles and other helpful information.',
-    image: '/images/college-sm.jpg',
+    image: collegeImage.src,
   },
 ];
 ---
@@ -143,7 +150,7 @@ const schoolTypes = [
         <!-- Featured Article Box -->
         <div class="box-rounded">
           <a href="/resources/find-schools/how-to-find-right-school-for-your-child">
-            <img src="/images/featured-article.jpg" alt="Finding & Evaluating Schools for Your Child" class="w-full h-auto mb-4" />
+            <img src={featuredImage.src} alt="Finding & Evaluating Schools for Your Child" class="w-full h-auto mb-4 rounded-box" />
           </a>
           <h2 class="space-0">
             <a href="/resources/find-schools/how-to-find-right-school-for-your-child">Finding & Evaluating Schools for Your Child</a>
@@ -161,9 +168,7 @@ const schoolTypes = [
               <div class={`p-3 ${index < schoolTypes.length - 2 ? 'line-dotted' : ''}`}>
                 <div class="flex gap-3">
                   <a href={type.href}>
-                    <div class="w-[120px] h-[90px] bg-gray-200 flex-shrink-0 flex items-center justify-center text-gray-400 text-xs">
-                      [Image]
-                    </div>
+                    <img src={type.image} alt={type.title} class="w-[110px] h-[110px] min-w-[110px] min-h-[110px] object-cover flex-shrink-0 rounded" />
                   </a>
                   <div class="fs-13">
                     <h3 class="space-5">
@@ -189,6 +194,32 @@ const schoolTypes = [
               </div>
             ))}
           </div>
+        </div>
+
+        <!-- Education Q&A Section -->
+        <div class="box-rounded bg-lt-green">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="text-brand-green-dark text-xl">❓</span>
+            <h3 class="text-brand-green-dark mb-0 font-bold">Education Q&A</h3>
+          </div>
+          <div class="line-dotted mb-3"></div>
+          <p class="text-brand-green-text italic fs-13 mb-3">
+            Q: What number one tip would you give to other parents to help them find the right school?
+          </p>
+          <form action="/qa/submit" method="POST">
+            <label class="block text-brand-green-text font-bold fs-13 mb-1">Your Answer:</label>
+            <textarea
+              name="answer"
+              rows="3"
+              class="input w-full mb-2 resize-none"
+              placeholder="Share your advice..."
+            ></textarea>
+            <div class="flex justify-end">
+              <button type="submit" class="btn-green text-sm px-4 py-1.5">
+                Submit
+              </button>
+            </div>
+          </form>
         </div>
       </div>
 

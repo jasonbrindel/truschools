@@ -18,7 +18,7 @@ export default {
         },
         // Link colors
         link: {
-          DEFAULT: '#0036FF',
+          DEFAULT: '#0d83dd',
           hover: '#65920f',
         },
         // Text colors

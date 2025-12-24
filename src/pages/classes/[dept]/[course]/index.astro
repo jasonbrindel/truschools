@@ -1,0 +1,195 @@
+---
+import Layout from '@/layouts/Layout.astro';
+
+const { dept, course } = Astro.params;
+const db = Astro.locals.runtime.env.DB;
+
+// Get course info
+const courseInfo = await db.prepare(`
+  SELECT DISTINCT dept, dept_page, course, course_page
+  FROM class_videos
+  WHERE dept_page = ? AND course_page = ?
+`).bind(dept, course).first();
+
+if (!courseInfo) {
+  return Astro.redirect('/404');
+}
+
+// Get all videos in this course
+const videosResult = await db.prepare(`
+  SELECT class_id, class, class_page, class_order, class_tagline, class_description, embed_url, author, author_tagline
+  FROM class_videos
+  WHERE dept_page = ? AND course_page = ?
+  ORDER BY class_order
+`).bind(dept, course).all();
+
+const videos = videosResult.results;
+
+// Get other courses in same department
+const otherCoursesResult = await db.prepare(`
+  SELECT DISTINCT course, course_page, COUNT(*) as video_count
+  FROM class_videos
+  WHERE dept_page = ? AND course_page != ?
+  GROUP BY course, course_page
+  ORDER BY course
+  LIMIT 10
+`).bind(dept, course).all();
+
+const otherCourses = otherCoursesResult.results;
+
+// Helper to extract YouTube video ID from old embed URL format
+function getYoutubeId(embedUrl: string): string {
+  if (!embedUrl) return '';
+  const match = embedUrl.match(/youtube\.com\/v\/([^?]+)/);
+  return match ? match[1] : '';
+}
+
+// Get first video for featured display
+const firstVideo = videos.length > 0 ? videos[0] : null;
+---
+
+<Layout title={`${courseInfo.course} - Free Video Tutorials`} description={`Free ${courseInfo.course} video tutorials. ${videos.length} lessons available for self-paced learning.`}>
+  <div class="container">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb py-3">
+      <a href="/">Home</a>
+      <span class="breadcrumb-separator">&gt;</span>
+      <a href="/free-classes">Free Classes</a>
+      <span class="breadcrumb-separator">&gt;</span>
+      <a href={`/classes/${dept}`}>{courseInfo.dept}</a>
+      <span class="breadcrumb-separator">&gt;</span>
+      <span>{courseInfo.course}</span>
+    </nav>
+
+    <h1 class="text-brand-green-text mb-2">{courseInfo.course}</h1>
+    <p class="fs-14 text-gray-500 mb-5">{videos.length} video lesson{videos.length !== 1 ? 's' : ''} available</p>
+  </div>
+
+  <div class="container py-5">
+    <div class="flex flex-col lg:flex-row gap-5">
+      <!-- Main Content -->
+      <div class="lg:w-2/3">
+        <!-- Featured Video -->
+        {firstVideo && (
+          <div class="box-rounded mb-5">
+            <div class="aspect-video mb-4">
+              <iframe
+                class="w-full h-full rounded"
+                src={`https://www.youtube.com/embed/${getYoutubeId(firstVideo.embed_url)}`}
+                title={firstVideo.class}
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen
+              ></iframe>
+            </div>
+            <h2 class="text-brand-blue text-xl mb-2">
+              <a href={`/classes/${dept}/${course}/${firstVideo.class_page}`} class="hover:underline">
+                {firstVideo.class}
+              </a>
+            </h2>
+            {firstVideo.class_tagline && (
+              <p class="text-gray-600 fs-14 mb-2">{firstVideo.class_tagline}</p>
+            )}
+            {firstVideo.class_description && (
+              <p class="text-gray-600 fs-14">{firstVideo.class_description}</p>
+            )}
+            <p class="text-gray-500 fs-13 mt-3">
+              Source: {firstVideo.author} - {firstVideo.author_tagline}
+            </p>
+          </div>
+        )}
+
+        <!-- All Videos List -->
+        <div class="box-rounded mb-5">
+          <h2 class="text-brand-blue text-xl mb-4">All Lessons in This Course</h2>
+          <div class="space-y-3">
+            {videos.map((video, index) => (
+              <a href={`/classes/${dept}/${course}/${video.class_page}`} class="block p-4 border border-gray-200 rounded hover:border-brand-blue hover:bg-gray-50 transition-colors">
+                <div class="flex items-start gap-4">
+                  <div class="flex-shrink-0 w-8 h-8 bg-brand-blue text-white rounded-full flex items-center justify-center fs-13 font-bold">
+                    {index + 1}
+                  </div>
+                  <div class="flex-1">
+                    <h3 class="text-brand-blue font-medium">{video.class}</h3>
+                    {video.class_tagline && (
+                      <p class="text-gray-500 fs-13 mt-1">{video.class_tagline}</p>
+                    )}
+                  </div>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="lg:w-1/3">
+        <div class="box-rounded bg-lt-blue mb-4">
+          <h3 class="text-brand-blue mb-3">Jump to Lesson</h3>
+          <select
+            class="input w-full"
+            onchange="if(this.value) window.location.href=this.value"
+          >
+            <option value="">-- Select a Lesson --</option>
+            {videos.map((video, index) => (
+              <option value={`/classes/${dept}/${course}/${video.class_page}`}>
+                {index + 1}. {video.class}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <!-- Ad Placeholder -->
+        <div class="box-rounded mb-4">
+          <div class="bg-gray-100 h-[280px] flex items-center justify-center text-gray-400 fs-13">
+            Advertisement
+          </div>
+        </div>
+
+        {otherCourses.length > 0 && (
+          <div class="box-rounded mb-4">
+            <h3 class="text-brand-blue mb-3">More {courseInfo.dept} Courses</h3>
+            <ul class="list-none m-0 p-0 fs-13">
+              {otherCourses.map((c, index) => (
+                <li class={`py-2 ${index < otherCourses.length - 1 ? 'border-b border-dotted border-[#c1c1c1]' : ''}`}>
+                  <a href={`/classes/${dept}/${c.course_page}`} class="text-brand-blue hover:underline">
+                    {c.course}
+                  </a>
+                  <span class="text-gray-400 fs-12 ml-1">({c.video_count})</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        <div class="box-rounded mb-4">
+          <h3 class="text-brand-blue mb-3">Other Subjects</h3>
+          <ul class="list-none m-0 p-0 fs-13">
+            <li class="py-2 border-b border-dotted border-[#c1c1c1]">
+              <a href="/classes/math">Math</a>
+            </li>
+            <li class="py-2 border-b border-dotted border-[#c1c1c1]">
+              <a href="/classes/science">Science</a>
+            </li>
+            <li class="py-2 border-b border-dotted border-[#c1c1c1]">
+              <a href="/classes/history">History</a>
+            </li>
+            <li class="py-2 border-b border-dotted border-[#c1c1c1]">
+              <a href="/classes/economics">Economics</a>
+            </li>
+            <li class="py-2">
+              <a href="/classes/sat-prep">SAT Prep</a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="box-rounded">
+          <h3 class="text-brand-blue mb-3">Newsletter Signup</h3>
+          <p class="fs-13 text-gray-600 mb-3">Get notified when we add new classes and tutorials.</p>
+          <input type="email" placeholder="Your email address" class="input w-full mb-2" />
+          <button class="btn btn-primary w-full">Subscribe</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>

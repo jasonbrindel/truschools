@@ -1,0 +1,242 @@
+---
+import Layout from '@/layouts/Layout.astro';
+
+interface Department {
+  dept: string;
+  dept_page: string;
+  course_count: number;
+  video_count: number;
+}
+
+interface Course {
+  dept: string;
+  dept_page: string;
+  course: string;
+  course_page: string;
+  video_count: number;
+}
+
+interface Video {
+  class_id: number;
+  dept: string;
+  dept_page: string;
+  course: string;
+  course_page: string;
+  class: string;
+  class_page: string;
+  class_tagline: string | null;
+  embed_url: string;
+  author: string;
+  author_tagline: string;
+}
+
+const db = Astro.locals.runtime.env.DB;
+
+// Get all departments with course counts
+const deptsResult = await db.prepare(`
+  SELECT dept, dept_page, COUNT(DISTINCT course_page) as course_count, COUNT(*) as video_count
+  FROM class_videos
+  GROUP BY dept, dept_page
+  ORDER BY dept
+`).all<Department>();
+
+const departments = deptsResult.results;
+
+// Get courses grouped by department
+const coursesResult = await db.prepare(`
+  SELECT dept, dept_page, course, course_page, COUNT(*) as video_count
+  FROM class_videos
+  GROUP BY dept, dept_page, course, course_page
+  ORDER BY dept, course
+`).all<Course>();
+
+const coursesByDept: Record<string, Course[]> = {};
+for (const course of coursesResult.results) {
+  if (!coursesByDept[course.dept_page]) {
+    coursesByDept[course.dept_page] = [];
+  }
+  coursesByDept[course.dept_page].push(course);
+}
+
+// Get featured videos (first video from different departments)
+const featuredResult = await db.prepare(`
+  SELECT class_id, dept, dept_page, course, course_page, class, class_page, class_tagline, embed_url, author, author_tagline
+  FROM class_videos
+  WHERE class_order = 1
+  ORDER BY RANDOM()
+  LIMIT 6
+`).all<Video>();
+
+const featuredVideos = featuredResult.results;
+
+// Helper to extract YouTube video ID from old embed URL format
+function getYoutubeId(embedUrl: string): string {
+  if (!embedUrl) return '';
+  const match = embedUrl.match(/youtube\.com\/v\/([^?]+)/);
+  return match ? match[1] : '';
+}
+
+// Department descriptions
+const deptDescriptions: Record<string, string> = {
+  'math': 'Free math tutorials from arithmetic through calculus.',
+  'science': 'Explore biology, chemistry, physics and more.',
+  'history': 'Learn about world history, U.S. history, and historical events.',
+  'economics': 'Financial theory and economics lectures from Yale.',
+  'sat-prep': 'Prepare for the SAT with practice problems and tutorials.',
+  'california-standards-test': 'Practice problems for California Standards Tests.',
+};
+---
+
+<Layout title="Free Online Classes & Video Tutorials" description="Free video tutorials and lessons on math, science, history, economics, and test prep. Learn at your own pace with our growing library of educational content.">
+  <div class="container">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb py-3">
+      <a href="/">Home</a>
+      <span class="breadcrumb-separator">&gt;</span>
+      <span>Free Classes</span>
+    </nav>
+
+    <h1 class="text-brand-green-text mb-2">Free Online Classes & Video Tutorials</h1>
+    <p class="fs-14 text-gray-500 mb-5">A growing number of videos, exercises and lesson plans for self-paced learning.</p>
+  </div>
+
+  <div class="container py-5">
+    <div class="flex flex-col lg:flex-row gap-5">
+      <!-- Main Content -->
+      <div class="lg:w-2/3">
+        <!-- Featured Videos -->
+        <div class="box-rounded mb-5">
+          <h2 class="text-brand-blue text-xl mb-4">Featured Video Lessons</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {featuredVideos.map((video) => (
+              <div class="border border-gray-200 rounded overflow-hidden">
+                <div class="aspect-video">
+                  <iframe
+                    class="w-full h-full"
+                    src={`https://www.youtube.com/embed/${getYoutubeId(video.embed_url)}`}
+                    title={video.class}
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen
+                  ></iframe>
+                </div>
+                <div class="p-3">
+                  <span class="text-xs text-brand-green-text font-medium">{video.dept}</span>
+                  <h3 class="text-brand-blue font-medium fs-14 mt-1">
+                    <a href={`/classes/${video.dept_page}/${video.course_page}/${video.class_page}`} class="hover:underline">
+                      {video.class}
+                    </a>
+                  </h3>
+                  {video.class_tagline && (
+                    <p class="text-gray-600 fs-13 mt-1">{video.class_tagline}</p>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <!-- Class Categories from Database -->
+        {departments.map((dept) => (
+          <div class="box-rounded mb-5">
+            <div class="flex flex-col md:flex-row gap-4 mb-4">
+              <div class="md:w-1/4">
+                <div class="bg-gray-200 aspect-video rounded flex items-center justify-center text-gray-400">
+                  {dept.dept}
+                </div>
+              </div>
+              <div class="md:w-3/4">
+                <h2 class="text-brand-blue text-xl mb-2">
+                  <a href={`/classes/${dept.dept_page}`} class="hover:underline">{dept.dept}</a>
+                </h2>
+                <p class="text-gray-600 fs-14">
+                  {deptDescriptions[dept.dept_page] || `${dept.video_count} free video tutorials in ${dept.dept.toLowerCase()}.`}
+                </p>
+                <p class="text-gray-500 fs-13 mt-1">
+                  {dept.course_count} course{dept.course_count !== 1 ? 's' : ''} &bull; {dept.video_count} video{dept.video_count !== 1 ? 's' : ''}
+                </p>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {coursesByDept[dept.dept_page]?.slice(0, 6).map((course) => (
+                <div class="border-l-2 border-brand-green pl-3">
+                  <h3 class="text-brand-green-text font-bold mb-1 fs-14">
+                    <a href={`/classes/${dept.dept_page}/${course.course_page}`} class="hover:underline">
+                      {course.course}
+                    </a>
+                  </h3>
+                  <p class="text-gray-500 fs-13">{course.video_count} video{course.video_count !== 1 ? 's' : ''}</p>
+                </div>
+              ))}
+            </div>
+
+            {coursesByDept[dept.dept_page]?.length > 6 && (
+              <div class="mt-4 pt-3 border-t border-gray-200">
+                <a href={`/classes/${dept.dept_page}`} class="text-brand-blue hover:underline fs-14">
+                  View all {coursesByDept[dept.dept_page].length} courses in {dept.dept} &rarr;
+                </a>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+
+      <!-- Sidebar -->
+      <div class="lg:w-1/3">
+        <div class="box-rounded bg-lt-blue mb-4">
+          <h3 class="text-brand-blue mb-3">Browse by Subject</h3>
+          <ul class="list-none m-0 p-0 fs-13">
+            {departments.map((dept, index) => (
+              <li class={`py-2 ${index < departments.length - 1 ? 'border-b border-dotted border-[#c1c1c1]' : ''}`}>
+                <a href={`/classes/${dept.dept_page}`} class="text-brand-blue hover:underline">
+                  {dept.dept}
+                </a>
+                <span class="text-gray-400 fs-12 ml-1">({dept.video_count})</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <!-- Ad Placeholder -->
+        <div class="box-rounded mb-4">
+          <div class="bg-gray-100 h-[280px] flex items-center justify-center text-gray-400 fs-13">
+            Advertisement
+          </div>
+        </div>
+
+        <div class="box-rounded mb-4">
+          <h3 class="text-brand-blue mb-3">School Resources</h3>
+          <ul class="list-none m-0 p-0 fs-13">
+            <li class="py-2 border-b border-dotted border-[#c1c1c1]">
+              <a href="/schools">K-12 Schools</a>
+            </li>
+            <li class="py-2 border-b border-dotted border-[#c1c1c1]">
+              <a href="/colleges">Colleges & Universities</a>
+            </li>
+            <li class="py-2 border-b border-dotted border-[#c1c1c1]">
+              <a href="/preschools">Preschools</a>
+            </li>
+            <li class="py-2 border-b border-dotted border-[#c1c1c1]">
+              <a href="/elementary-schools">Elementary Schools</a>
+            </li>
+            <li class="py-2 border-b border-dotted border-[#c1c1c1]">
+              <a href="/middle-schools">Middle Schools</a>
+            </li>
+            <li class="py-2">
+              <a href="/high-schools">High Schools</a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Newsletter Signup -->
+        <div class="box-rounded">
+          <h3 class="text-brand-blue mb-3">Newsletter Signup</h3>
+          <p class="fs-13 text-gray-600 mb-3">Get notified when we add new classes and tutorials.</p>
+          <input type="email" placeholder="Your email address" class="input w-full mb-2" />
+          <button class="btn btn-primary w-full">Subscribe</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>

@@ -1,0 +1,213 @@
+---
+import Layout from '@/layouts/Layout.astro';
+
+const { dept, course, class: classSlug } = Astro.params;
+const db = Astro.locals.runtime.env.DB;
+
+// Get current video info
+const video = await db.prepare(`
+  SELECT *
+  FROM class_videos
+  WHERE dept_page = ? AND course_page = ? AND class_page = ?
+`).bind(dept, course, classSlug).first();
+
+if (!video) {
+  return Astro.redirect('/404');
+}
+
+// Get all videos in this course for navigation
+const allVideosResult = await db.prepare(`
+  SELECT class_id, class, class_page, class_order
+  FROM class_videos
+  WHERE dept_page = ? AND course_page = ?
+  ORDER BY class_order
+`).bind(dept, course).all();
+
+const allVideos = allVideosResult.results;
+
+// Find current index and prev/next videos
+const currentIndex = allVideos.findIndex(v => v.class_page === classSlug);
+const prevVideo = currentIndex > 0 ? allVideos[currentIndex - 1] : null;
+const nextVideo = currentIndex < allVideos.length - 1 ? allVideos[currentIndex + 1] : null;
+
+// Helper to extract YouTube video ID from old embed URL format
+function getYoutubeId(embedUrl: string): string {
+  if (!embedUrl) return '';
+  const match = embedUrl.match(/youtube\.com\/v\/([^?]+)/);
+  return match ? match[1] : '';
+}
+
+const youtubeId = getYoutubeId(video.embed_url);
+---
+
+<Layout title={`${video.class} - ${video.course}`} description={video.class_tagline || video.class_description || `Watch ${video.class} - free video tutorial from ${video.author}.`}>
+  <div class="container">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb py-3">
+      <a href="/">Home</a>
+      <span class="breadcrumb-separator">&gt;</span>
+      <a href="/free-classes">Free Classes</a>
+      <span class="breadcrumb-separator">&gt;</span>
+      <a href={`/classes/${dept}`}>{video.dept}</a>
+      <span class="breadcrumb-separator">&gt;</span>
+      <a href={`/classes/${dept}/${course}`}>{video.course}</a>
+      <span class="breadcrumb-separator">&gt;</span>
+      <span>{video.class}</span>
+    </nav>
+  </div>
+
+  <div class="container py-5">
+    <div class="flex flex-col lg:flex-row gap-5">
+      <!-- Main Content -->
+      <div class="lg:w-2/3">
+        <!-- Video Player -->
+        <div class="box-rounded mb-5">
+          <div class="aspect-video mb-4">
+            <iframe
+              class="w-full h-full rounded"
+              src={`https://www.youtube.com/embed/${youtubeId}`}
+              title={video.class}
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen
+            ></iframe>
+          </div>
+
+          <h1 class="text-brand-blue text-xl mb-2">{video.class}</h1>
+
+          {video.class_tagline && (
+            <p class="text-gray-700 fs-14 mb-3">{video.class_tagline}</p>
+          )}
+
+          {video.class_description && (
+            <div class="text-gray-600 fs-14 mb-4">
+              <p>{video.class_description}</p>
+            </div>
+          )}
+
+          <div class="flex items-center gap-3 pt-3 border-t border-gray-200">
+            <div class="w-10 h-10 bg-brand-green rounded-full flex items-center justify-center text-white font-bold">
+              {video.author?.charAt(0) || 'A'}
+            </div>
+            <div>
+              <p class="font-medium text-gray-800">{video.author}</p>
+              {video.author_tagline && (
+                <p class="text-gray-500 fs-13">
+                  {video.author_web ? (
+                    <a href={video.author_web} target="_blank" rel="noopener noreferrer" class="text-brand-blue hover:underline">
+                      {video.author_tagline}
+                    </a>
+                  ) : video.author_tagline}
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <!-- Prev/Next Navigation -->
+        <div class="flex gap-4 mb-5">
+          {prevVideo ? (
+            <a href={`/classes/${dept}/${course}/${prevVideo.class_page}`} class="flex-1 p-4 border border-gray-200 rounded hover:border-brand-blue hover:bg-gray-50 transition-colors">
+              <span class="text-gray-500 fs-12 block mb-1">&larr; Previous Lesson</span>
+              <span class="text-brand-blue font-medium fs-14">{prevVideo.class}</span>
+            </a>
+          ) : (
+            <div class="flex-1"></div>
+          )}
+
+          {nextVideo ? (
+            <a href={`/classes/${dept}/${course}/${nextVideo.class_page}`} class="flex-1 p-4 border border-gray-200 rounded hover:border-brand-blue hover:bg-gray-50 transition-colors text-right">
+              <span class="text-gray-500 fs-12 block mb-1">Next Lesson &rarr;</span>
+              <span class="text-brand-blue font-medium fs-14">{nextVideo.class}</span>
+            </a>
+          ) : (
+            <div class="flex-1"></div>
+          )}
+        </div>
+
+        <!-- Course Lessons -->
+        <div class="box-rounded">
+          <h2 class="text-brand-blue text-lg mb-4">All Lessons in {video.course}</h2>
+          <div class="space-y-2">
+            {allVideos.map((v, index) => (
+              <a
+                href={`/classes/${dept}/${course}/${v.class_page}`}
+                class={`block p-3 rounded transition-colors ${v.class_page === classSlug ? 'bg-brand-blue text-white' : 'hover:bg-gray-100'}`}
+              >
+                <div class="flex items-center gap-3">
+                  <span class={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center fs-12 font-bold ${v.class_page === classSlug ? 'bg-white text-brand-blue' : 'bg-gray-200 text-gray-600'}`}>
+                    {index + 1}
+                  </span>
+                  <span class="fs-14">{v.class}</span>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="lg:w-1/3">
+        <div class="box-rounded bg-lt-blue mb-4">
+          <h3 class="text-brand-blue mb-3">Jump to Lesson</h3>
+          <select
+            class="input w-full"
+            onchange="if(this.value) window.location.href=this.value"
+          >
+            {allVideos.map((v, index) => (
+              <option value={`/classes/${dept}/${course}/${v.class_page}`} selected={v.class_page === classSlug}>
+                {index + 1}. {v.class}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <!-- Ad Placeholder -->
+        <div class="box-rounded mb-4">
+          <div class="bg-gray-100 h-[280px] flex items-center justify-center text-gray-400 fs-13">
+            Advertisement
+          </div>
+        </div>
+
+        <div class="box-rounded mb-4">
+          <h3 class="text-brand-blue mb-3">More {video.dept} Courses</h3>
+          <ul class="list-none m-0 p-0 fs-13">
+            <li class="py-2 border-b border-dotted border-[#c1c1c1]">
+              <a href={`/classes/${dept}`} class="text-brand-blue hover:underline">
+                View All {video.dept} Courses &rarr;
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="box-rounded mb-4">
+          <h3 class="text-brand-blue mb-3">Other Subjects</h3>
+          <ul class="list-none m-0 p-0 fs-13">
+            <li class="py-2 border-b border-dotted border-[#c1c1c1]">
+              <a href="/classes/math">Math</a>
+            </li>
+            <li class="py-2 border-b border-dotted border-[#c1c1c1]">
+              <a href="/classes/science">Science</a>
+            </li>
+            <li class="py-2 border-b border-dotted border-[#c1c1c1]">
+              <a href="/classes/history">History</a>
+            </li>
+            <li class="py-2 border-b border-dotted border-[#c1c1c1]">
+              <a href="/classes/economics">Economics</a>
+            </li>
+            <li class="py-2">
+              <a href="/classes/sat-prep">SAT Prep</a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="box-rounded">
+          <h3 class="text-brand-blue mb-3">Newsletter Signup</h3>
+          <p class="fs-13 text-gray-600 mb-3">Get notified when we add new classes and tutorials.</p>
+          <input type="email" placeholder="Your email address" class="input w-full mb-2" />
+          <button class="btn btn-primary w-full">Subscribe</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>

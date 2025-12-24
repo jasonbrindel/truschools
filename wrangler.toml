@@ -2,11 +2,10 @@ name = "trueschools"
 compatibility_date = "2024-12-01"
 pages_build_output_dir = "./dist"
 
-# D1 Database - uncomment after creating the database
-# [[d1_databases]]
-# binding = "DB"
-# database_name = "trueschools-db"
-# database_id = "YOUR_DATABASE_ID_HERE"
+[[d1_databases]]
+binding = "DB"
+database_name = "trueschools-db"
+database_id = "e458b930-5925-41b1-9307-ebf6996e34ea"
 
 [vars]
 ENVIRONMENT = "production"

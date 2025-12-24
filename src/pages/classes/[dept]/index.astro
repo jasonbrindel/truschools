@@ -1,0 +1,170 @@
+---
+import Layout from '@/layouts/Layout.astro';
+
+const { dept } = Astro.params;
+const db = Astro.locals.runtime.env.DB;
+
+// Get department info and courses
+const deptInfo = await db.prepare(`
+  SELECT DISTINCT dept, dept_page
+  FROM class_videos
+  WHERE dept_page = ?
+`).bind(dept).first();
+
+if (!deptInfo) {
+  return Astro.redirect('/404');
+}
+
+// Get all courses in this department
+const coursesResult = await db.prepare(`
+  SELECT DISTINCT course, course_page, COUNT(*) as video_count
+  FROM class_videos
+  WHERE dept_page = ?
+  GROUP BY course, course_page
+  ORDER BY course
+`).bind(dept).all();
+
+const courses = coursesResult.results;
+
+// Get featured videos from this department (first video from each course)
+const featuredResult = await db.prepare(`
+  SELECT class_id, class, class_page, course_page, class_tagline, embed_url, author, author_tagline
+  FROM class_videos
+  WHERE dept_page = ? AND class_order = 1
+  ORDER BY course
+  LIMIT 6
+`).bind(dept).all();
+
+const featuredVideos = featuredResult.results;
+
+// Helper to extract YouTube video ID from old embed URL format
+function getYoutubeId(embedUrl: string): string {
+  if (!embedUrl) return '';
+  const match = embedUrl.match(/youtube\.com\/v\/([^?]+)/);
+  return match ? match[1] : '';
+}
+---
+
+<Layout title={`${deptInfo.dept} Classes & Video Tutorials`} description={`Free ${deptInfo.dept.toLowerCase()} video tutorials and lessons. Learn at your own pace with our library of educational content.`}>
+  <div class="container">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb py-3">
+      <a href="/">Home</a>
+      <span class="breadcrumb-separator">&gt;</span>
+      <a href="/free-classes">Free Classes</a>
+      <span class="breadcrumb-separator">&gt;</span>
+      <span>{deptInfo.dept}</span>
+    </nav>
+
+    <h1 class="text-brand-green-text mb-2">{deptInfo.dept} Classes</h1>
+    <p class="fs-14 text-gray-500 mb-5">Free video tutorials and lessons in {deptInfo.dept.toLowerCase()}.</p>
+  </div>
+
+  <div class="container py-5">
+    <div class="flex flex-col lg:flex-row gap-5">
+      <!-- Main Content -->
+      <div class="lg:w-2/3">
+        <!-- Featured Videos -->
+        {featuredVideos.length > 0 && (
+          <div class="box-rounded mb-5">
+            <h2 class="text-brand-blue text-xl mb-4">Featured Videos</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {featuredVideos.map((video) => (
+                <div class="border border-gray-200 rounded overflow-hidden">
+                  <div class="aspect-video">
+                    <iframe
+                      class="w-full h-full"
+                      src={`https://www.youtube.com/embed/${getYoutubeId(video.embed_url)}`}
+                      title={video.class}
+                      frameborder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowfullscreen
+                    ></iframe>
+                  </div>
+                  <div class="p-3">
+                    <h3 class="text-brand-blue font-medium fs-14">
+                      <a href={`/classes/${dept}/${video.course_page}/${video.class_page}`} class="hover:underline">
+                        {video.class}
+                      </a>
+                    </h3>
+                    {video.class_tagline && (
+                      <p class="text-gray-600 fs-13 mt-1">{video.class_tagline}</p>
+                    )}
+                    <p class="text-gray-500 fs-12 mt-2">{video.author} - {video.author_tagline}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <!-- Courses -->
+        <div class="box-rounded mb-5">
+          <h2 class="text-brand-blue text-xl mb-4">{deptInfo.dept} Courses</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {courses.map((course) => (
+              <a href={`/classes/${dept}/${course.course_page}`} class="block p-4 border border-gray-200 rounded hover:border-brand-blue hover:bg-gray-50 transition-colors">
+                <h3 class="text-brand-blue font-medium">{course.course}</h3>
+                <p class="text-gray-500 fs-13 mt-1">{course.video_count} video{course.video_count !== 1 ? 's' : ''}</p>
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="lg:w-1/3">
+        <div class="box-rounded bg-lt-blue mb-4">
+          <h3 class="text-brand-blue mb-3">Browse Courses</h3>
+          <ul class="list-none m-0 p-0 fs-13">
+            {courses.map((course, index) => (
+              <li class={`py-2 ${index < courses.length - 1 ? 'border-b border-dotted border-[#c1c1c1]' : ''}`}>
+                <a href={`/classes/${dept}/${course.course_page}`} class="text-brand-blue hover:underline">
+                  {course.course}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <!-- Ad Placeholder -->
+        <div class="box-rounded mb-4">
+          <div class="bg-gray-100 h-[280px] flex items-center justify-center text-gray-400 fs-13">
+            Advertisement
+          </div>
+        </div>
+
+        <div class="box-rounded mb-4">
+          <h3 class="text-brand-blue mb-3">Other Subjects</h3>
+          <ul class="list-none m-0 p-0 fs-13">
+            <li class="py-2 border-b border-dotted border-[#c1c1c1]">
+              <a href="/classes/math">Math</a>
+            </li>
+            <li class="py-2 border-b border-dotted border-[#c1c1c1]">
+              <a href="/classes/science">Science</a>
+            </li>
+            <li class="py-2 border-b border-dotted border-[#c1c1c1]">
+              <a href="/classes/history">History</a>
+            </li>
+            <li class="py-2 border-b border-dotted border-[#c1c1c1]">
+              <a href="/classes/economics">Economics</a>
+            </li>
+            <li class="py-2 border-b border-dotted border-[#c1c1c1]">
+              <a href="/classes/sat-prep">SAT Prep</a>
+            </li>
+            <li class="py-2">
+              <a href="/classes/california-standards-test">California Standards Test</a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="box-rounded">
+          <h3 class="text-brand-blue mb-3">Newsletter Signup</h3>
+          <p class="fs-13 text-gray-600 mb-3">Get notified when we add new classes and tutorials.</p>
+          <input type="email" placeholder="Your email address" class="input w-full mb-2" />
+          <button class="btn btn-primary w-full">Subscribe</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>

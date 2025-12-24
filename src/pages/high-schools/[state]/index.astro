@@ -1,0 +1,186 @@
+---
+import Layout from '@/layouts/Layout.astro';
+
+const { state } = Astro.params;
+
+// Get database connection
+const db = Astro.locals.runtime.env.DB;
+
+// Get state info
+const stateResult = await db.prepare(
+  'SELECT * FROM states WHERE slug = ?'
+).bind(state).first();
+
+if (!stateResult) {
+  return Astro.redirect('/404');
+}
+
+const stateData = stateResult as any;
+
+// Slugify function
+function slugify(text: string): string {
+  return text.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+}
+
+// Title case function
+function toTitleCase(str: string): string {
+  return str.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
+}
+
+// Get all high schools in this state and extract unique cities
+const schoolsResult = await db.prepare(`
+  SELECT DISTINCT s.city
+  FROM schools s
+  JOIN states st ON s.state = st.abbr
+  WHERE s.is_high_school = 1
+    AND st.slug = ?
+  ORDER BY s.city
+`).bind(state).all();
+
+const cities = (schoolsResult.results || [])
+  .map((r: any) => r.city)
+  .filter((c: string | null) => c && c.trim() !== '')
+  .map((c: string) => ({
+    name: toTitleCase(c),
+    slug: slugify(c)
+  }));
+
+// Get total school count
+const countResult = await db.prepare(`
+  SELECT COUNT(*) as count
+  FROM schools s
+  JOIN states st ON s.state = st.abbr
+  WHERE s.is_high_school = 1
+    AND st.slug = ?
+`).bind(state).first() as any;
+
+const totalSchools = countResult?.count || 0;
+
+// Group cities by first letter
+const citiesByLetter: Record<string, typeof cities> = {};
+const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+
+cities.forEach(city => {
+  const firstLetter = city.name.charAt(0).toUpperCase();
+  if (!citiesByLetter[firstLetter]) {
+    citiesByLetter[firstLetter] = [];
+  }
+  citiesByLetter[firstLetter].push(city);
+});
+
+// Get letters that have cities
+const activeLetters = alphabet.filter(letter => citiesByLetter[letter]?.length > 0);
+
+const pageTitle = `${stateData.name} High Schools - Directory of High Schools in ${stateData.name}`;
+const pageDescription = `Find and compare ${totalSchools} high schools in ${stateData.name}. Browse ${cities.length} cities with high schools.`;
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <div class="container py-5">
+    <!-- Breadcrumb -->
+    <nav class="text-sm mb-4">
+      <ol class="flex flex-wrap items-center gap-2 text-gray-600">
+        <li><a href="/" class="hover:text-brand-blue">Home</a></li>
+        <li class="text-gray-400">/</li>
+        <li><a href="/high-schools" class="hover:text-brand-blue">High Schools</a></li>
+        <li class="text-gray-400">/</li>
+        <li class="text-gray-900 font-medium">{stateData.name}</li>
+      </ol>
+    </nav>
+
+    <div class="flex flex-col lg:flex-row gap-6">
+      <!-- Main Content -->
+      <div class="flex-1">
+        <div class="box-rounded mb-5">
+          <h1 class="text-brand-blue text-2xl mb-2">{stateData.name} High Schools</h1>
+          <p class="text-gray-600 mb-4">Directory of High Schools in {stateData.name} ({stateData.abbr})</p>
+          <p class="text-brand-green-text font-bold">Total Schools Listed: {totalSchools.toLocaleString()}</p>
+        </div>
+
+        <!-- Alphabet Jump Links -->
+        <div class="box-rounded mb-5">
+          <div class="flex flex-wrap gap-2">
+            {alphabet.map(letter => (
+              activeLetters.includes(letter) ? (
+                <a href={`#${letter}`} class="w-8 h-8 flex items-center justify-center bg-brand-blue text-white rounded hover:bg-brand-blue-dark transition-colors font-medium">
+                  {letter}
+                </a>
+              ) : (
+                <span class="w-8 h-8 flex items-center justify-center bg-gray-100 text-gray-400 rounded font-medium">
+                  {letter}
+                </span>
+              )
+            ))}
+          </div>
+        </div>
+
+        <!-- Cities by Letter -->
+        <div class="space-y-6">
+          {activeLetters.map(letter => (
+            <div id={letter} class="box-rounded scroll-mt-4">
+              <h2 class="text-brand-green-text font-bold text-xl mb-3 border-b pb-2">{letter}</h2>
+              <ul class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 fs-13">
+                {citiesByLetter[letter].map(city => (
+                  <li>
+                    <a href={`/high-schools/${state}/${city.slug}`} class="text-brand-blue hover:underline">
+                      {city.name}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="lg:flex-shrink-0 lg:w-[336px]">
+        <!-- State Stats -->
+        <div class="box-rounded mb-4">
+          <h3 class="text-brand-green-text font-bold mb-3">{stateData.name} at a Glance</h3>
+          <div class="space-y-3 fs-13">
+            <div class="flex justify-between">
+              <span class="text-gray-600">Total High Schools</span>
+              <span class="font-medium">{totalSchools.toLocaleString()}</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-600">Cities with Schools</span>
+              <span class="font-medium">{cities.length.toLocaleString()}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ad Placeholder -->
+        <div class="box-rounded mb-4">
+          <div class="bg-gray-100 h-[280px] flex items-center justify-center text-gray-400 fs-13">
+            Advertisement
+          </div>
+        </div>
+
+        <!-- Other School Types -->
+        <div class="box-rounded mb-4">
+          <h3 class="text-brand-green-text font-bold mb-3">More Schools in {stateData.name}</h3>
+          <ul class="space-y-2 fs-13">
+            <li><a href={`/preschools/${state}`} class="text-brand-blue hover:underline">Preschools in {stateData.name}</a></li>
+            <li><a href={`/kindergartens/${state}`} class="text-brand-blue hover:underline">Kindergartens in {stateData.name}</a></li>
+            <li><a href={`/elementary-schools/${state}`} class="text-brand-blue hover:underline">Elementary Schools in {stateData.name}</a></li>
+            <li><a href={`/middle-schools/${state}`} class="text-brand-blue hover:underline">Middle Schools in {stateData.name}</a></li>
+            <li><a href={`/colleges/${state}`} class="text-brand-blue hover:underline">Colleges in {stateData.name}</a></li>
+          </ul>
+        </div>
+
+        <!-- Browse All States -->
+        <div class="box-rounded">
+          <h3 class="text-brand-green-text font-bold mb-3">Browse by State</h3>
+          <ul class="space-y-2 fs-13">
+            <li>
+              <a href="/high-schools" class="text-brand-blue hover:underline">
+                All States
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
