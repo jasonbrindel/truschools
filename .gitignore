@@ -29,3 +29,16 @@ pnpm-debug.log*
 # Wrangler
 .wrangler/
 .dev.vars
+
+# Large data files (use Git LFS or download separately)
+data/*.csv
+data/*.zip
+data/*.sql
+data/college-scorecard/*.csv
+data/college-scorecard/*.zip
+data/college-scorecard/College_Scorecard_Raw_Data_05192025/
+data/college-scorecard/d1-import/
+data/college-scorecard/hybrid-import/
+data/college-scorecard/priority-import/
+data/college-scorecard/slim-import/
+data/college-scorecard/vocational-batch-*

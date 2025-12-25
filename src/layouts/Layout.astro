@@ -27,10 +27,22 @@ const currentYear = new Date().getFullYear();
 const mainNav = [
   { label: 'K-12 Schools', href: '/schools' },
   { label: 'Colleges & Universities', href: '/colleges' },
-  { label: 'Free Classes', href: '/free-classes' },
+  { label: 'Vocational Schools', href: '/vocational-schools' },
 ];
 
-const rightNav = [
+// Vocational schools dropdown items
+const vocationalDropdown = [
+  { label: 'All Vocational Schools', href: '/vocational-schools' },
+  { label: 'Beauty Schools', href: '/beauty-schools' },
+  { label: 'Trade Schools', href: '/trade-schools' },
+  { label: 'Healthcare Schools', href: '/healthcare-schools' },
+  { label: 'Technology Schools', href: '/technology-schools' },
+  { label: 'Culinary Schools', href: '/culinary-schools' },
+];
+
+// Resources dropdown items
+const resourcesDropdown = [
+  { label: 'Free Classes', href: '/classes' },
   { label: 'Financial Aid', href: '/financial-aid' },
   { label: 'Degrees', href: '/degrees' },
 ];
@@ -122,10 +134,28 @@ const rightNav = [
           <!-- Main Navigation (Left) -->
           <ul class="hidden md:flex items-center m-0 p-0 list-none">
             {mainNav.map((item, index) => (
-              <li class={index > 0 ? 'border-l border-[#3fa9f5]' : ''}>
-                <a href={item.href} class={`block px-5 py-3 text-white font-semibold no-underline hover:bg-[#0a6fc2] hover:no-underline transition-colors ${index === 0 ? 'rounded-tl-box rounded-bl-box' : ''}`}>
-                  {item.label}
-                </a>
+              <li class={`${index > 0 ? 'border-l border-[#3fa9f5]' : ''} ${item.label === 'Vocational Schools' ? 'relative group' : ''}`}>
+                {item.label === 'Vocational Schools' ? (
+                  <>
+                    <a href={item.href} class="flex items-center gap-1 px-5 py-3 text-white font-semibold no-underline hover:bg-[#0a6fc2] hover:no-underline transition-colors">
+                      {item.label}
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </a>
+                    <div class="absolute left-0 top-full hidden group-hover:block bg-white shadow-lg rounded-b min-w-[200px] z-50">
+                      {vocationalDropdown.map((subItem) => (
+                        <a href={subItem.href} class="block px-4 py-2 text-gray-700 hover:bg-gray-100 no-underline">
+                          {subItem.label}
+                        </a>
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <a href={item.href} class={`block px-5 py-3 text-white font-semibold no-underline hover:bg-[#0a6fc2] hover:no-underline transition-colors ${index === 0 ? 'rounded-tl-box rounded-bl-box' : ''}`}>
+                    {item.label}
+                  </a>
+                )}
               </li>
             ))}
           </ul>
@@ -139,11 +169,22 @@ const rightNav = [
 
           <!-- Right Navigation -->
           <div class="hidden md:flex items-center">
-            {rightNav.map((item) => (
-              <a href={item.href} class="px-4 py-3 text-white no-underline hover:bg-[#0a6fc2] hover:no-underline transition-colors">
-                {item.label}
-              </a>
-            ))}
+            <!-- Resources Dropdown -->
+            <div class="relative group">
+              <button class="flex items-center gap-1 px-4 py-3 text-white hover:bg-[#0a6fc2] transition-colors">
+                Resources
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              <div class="absolute right-0 top-full hidden group-hover:block bg-white shadow-lg rounded-b min-w-[180px] z-50">
+                {resourcesDropdown.map((item) => (
+                  <a href={item.href} class="block px-4 py-2 text-gray-700 hover:bg-gray-100 no-underline">
+                    {item.label}
+                  </a>
+                ))}
+              </div>
+            </div>
             <!-- Schools Dropdown -->
             <div class="relative group">
               <button class="flex items-center gap-1 px-4 py-3 text-white hover:bg-[#0a6fc2] transition-colors">
@@ -175,16 +216,18 @@ const rightNav = [
                 {item.label}
               </a>
             ))}
-            {rightNav.map((item) => (
-              <a href={item.href} class="py-2 text-white no-underline hover:no-underline border-b border-[#3fa9f5]">
+            <span class="py-2 text-white/70 text-sm border-b border-[#3fa9f5]">Resources</span>
+            {resourcesDropdown.map((item) => (
+              <a href={item.href} class="py-2 pl-4 text-white no-underline hover:no-underline border-b border-[#3fa9f5]">
                 {item.label}
               </a>
             ))}
-            <a href="/preschools" class="py-2 text-white no-underline hover:no-underline border-b border-[#3fa9f5]">Preschools</a>
-            <a href="/kindergartens" class="py-2 text-white no-underline hover:no-underline border-b border-[#3fa9f5]">Kindergartens</a>
-            <a href="/elementary-schools" class="py-2 text-white no-underline hover:no-underline border-b border-[#3fa9f5]">Elementary Schools</a>
-            <a href="/middle-schools" class="py-2 text-white no-underline hover:no-underline border-b border-[#3fa9f5]">Middle Schools</a>
-            <a href="/high-schools" class="py-2 text-white no-underline hover:no-underline border-b border-[#3fa9f5]">High Schools</a>
+            <span class="py-2 text-white/70 text-sm border-b border-[#3fa9f5]">K-12 Schools</span>
+            <a href="/preschools" class="py-2 pl-4 text-white no-underline hover:no-underline border-b border-[#3fa9f5]">Preschools</a>
+            <a href="/kindergartens" class="py-2 pl-4 text-white no-underline hover:no-underline border-b border-[#3fa9f5]">Kindergartens</a>
+            <a href="/elementary-schools" class="py-2 pl-4 text-white no-underline hover:no-underline border-b border-[#3fa9f5]">Elementary Schools</a>
+            <a href="/middle-schools" class="py-2 pl-4 text-white no-underline hover:no-underline border-b border-[#3fa9f5]">Middle Schools</a>
+            <a href="/high-schools" class="py-2 pl-4 text-white no-underline hover:no-underline border-b border-[#3fa9f5]">High Schools</a>
             <a href="/login" class="py-2 text-white no-underline hover:no-underline">Login</a>
           </div>
         </div>

@@ -1,0 +1,208 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import heroImage from '@/images/teaching-middle-school-1.jpg';
+
+const title = "The Comeback of Vocational Schools";
+const subtitle = "America is facing a skilled labor crisis—and a generation of young people is discovering that trade careers offer something a college degree often can't: stable work, good pay, and freedom from crushing debt.";
+const description = "How Gen Z is embracing vocational schools and skilled trades as an alternative to college, amid a growing labor shortage and changing attitudes about career paths.";
+---
+
+<Layout title={title} description={description}>
+  <!-- Breadcrumbs -->
+  <div class="container">
+    <nav class="breadcrumb py-3">
+      <a href="/">Home</a>
+      <span class="breadcrumb-separator">&gt;</span>
+      <a href="/vocational-schools">Vocational Schools</a>
+      <span class="breadcrumb-separator">&gt;</span>
+      <span>{title}</span>
+    </nav>
+  </div>
+
+  <!-- Header - Centered, Narrow -->
+  <header class="max-w-[680px] mx-auto px-5 pt-4 md:pt-8">
+    <p class="text-sm font-semibold tracking-wide text-brand-green-text uppercase mb-4">Career & Technical Education</p>
+    <h1 class="text-4xl md:text-5xl font-bold text-gray-900 leading-tight mb-5">
+      {title}
+    </h1>
+    <p class="text-xl md:text-2xl text-gray-600 italic mb-6">
+      {subtitle}
+    </p>
+    <p class="text-base text-gray-500 mb-10">By TruSchools Staff</p>
+  </header>
+
+  <!-- Hero Image - Container Width -->
+  <div class="container">
+    <img
+      src={heroImage.src}
+      alt="Students in vocational training"
+      class="w-full h-[400px] md:h-[500px] object-cover"
+    />
+  </div>
+
+  <!-- Article Container - Centered, Narrow -->
+  <article class="max-w-[680px] mx-auto px-5 py-10 md:py-16">
+    <!-- Article Body -->
+    <div class="article-body text-lg leading-relaxed text-gray-800">
+      <!-- Opening with drop cap -->
+      <p class="first-letter:text-6xl first-letter:font-bold first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:text-gray-900 mb-6">
+        Roughly 400,000 skilled trade jobs are unfilled in America right now. By 2033, according to projections from Deloitte and the Manufacturing Institute, that number could swell to nearly two million. These aren't low-paying dead-end positions—they're electricians, plumbers, HVAC technicians, welders, and machinists, jobs that form the backbone of an economy that needs roads repaired, homes built, and data centers kept humming.
+      </p>
+
+      <p class="mb-6">
+        The Bureau of Labor Statistics reports that electricians earn a median salary of $62,350, plumbers $62,970, and HVAC technicians $59,810. The top ten percent of electricians earn over $106,000 annually. For comparison, the median wage across all U.S. occupations is $49,500.
+      </p>
+
+      <p class="mb-6">
+        And yet, for a generation, American culture treated vocational education as a second-class option—something for students who couldn't cut it academically. High schools dismantled their shop classes. Guidance counselors steered everyone toward four-year universities. The message was clear: college was the only respectable path to the middle class.
+      </p>
+
+      <p class="mb-10">
+        That message is changing, and fast. Enrollment in vocational-focused community colleges jumped 16 percent from 2022 to 2023, according to the National Student Clearinghouse, even as overall college enrollment continued to decline. A 2025 Resume Builder survey found that 42 percent of Gen Z adults are now working in or pursuing blue-collar or skilled trade careers—including 37 percent of those who already hold bachelor's degrees. Some observers have started calling them the "toolbelt generation," and the name seems to fit.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Why the Skilled Trades Are Starving for Workers</h2>
+
+      <p class="mb-6">
+        The roots of today's shortage stretch back decades. When manufacturing jobs began migrating overseas in the 1970s and 1980s, vocational education fell out of favor. Schools cut programs. Parents pushed children toward college. The trades developed an image problem—dirty, low-status work that smart kids should avoid.
+      </p>
+
+      <p class="mb-6">
+        The workers who stayed in the trades aged. According to McKinsey, an estimated 30 percent of union electricians will reach retirement age in the next decade. The National Electrical Contractors Association reports that 70 percent of supervisors in the electrical industry are baby boomers. Similar dynamics play out across plumbing, welding, and manufacturing. Every year, roughly 10,000 electricians retire or leave the field, while only about 7,000 new ones enter it.
+      </p>
+
+      <p class="mb-6">
+        The COVID-19 pandemic made things worse. Hands-on training programs couldn't pivot to Zoom the way college lectures could. Enrollment in apprenticeships and trade schools plummeted. Meanwhile, unlike previous recessions that delayed retirements, the pandemic triggered a wave of early departures from the workforce. Workers who might have stuck around another five years decided they were done.
+      </p>
+
+      <p class="mb-10">
+        At the same time, demand surged. Construction openings jumped more than 50 percent from February 2019 to February 2024, from 287,000 unfilled positions to 441,000. Manufacturing job openings rose 20 percent. The Associated Builders and Contractors estimated that the construction industry needed to attract half a million new workers in 2024 alone just to keep pace with demand.
+      </p>
+
+      <!-- Pull Quote -->
+      <blockquote class="border-l-4 border-gray-300 pl-6 my-10 text-xl italic text-gray-700">
+        "The consequences are already visible. Homeowners report longer wait times for plumbers and electricians. Project timelines stretch. Labor costs rise. In some regions, the shortage threatens to slow the buildout of everything from housing developments to the data centers that power artificial intelligence."
+      </blockquote>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">The Economics of Choosing a Trade</h2>
+
+      <p class="mb-6">
+        For many young people, the calculation has become straightforward. The average cost of a four-year college education now exceeds $100,000 when you factor in tuition, room and board, and other expenses. Student loan debt in America has surpassed $1.7 trillion, spread across more than 40 million borrowers carrying an average balance around $37,000. Meanwhile, trade school programs typically cost between $5,000 and $20,000 total, and most can be completed in two years or less.
+      </p>
+
+      <p class="mb-6">
+        But the real financial advantage often lies in apprenticeships—structured programs, frequently run through unions, that let workers earn money while they learn. An electrical apprentice might start at 50 percent of a journeyman's wage and receive scheduled raises every six months as their skills develop. After four or five years, they emerge as fully licensed professionals with no student debt, years of work experience, and wages that often match or exceed what their college-educated peers are earning.
+      </p>
+
+      <p class="mb-6">
+        A first-year welding graduate who completed a nine-month certification program can start at $50,000 to $60,000 annually. Some electricians and plumbers in high-demand markets earn six figures.
+      </p>
+
+      <p class="mb-10">
+        The financial picture looks even more favorable when you consider time. A student who enters a trade program after high school might be earning full journeyman wages by age 23. Their college-bound counterpart, at the same age, is just graduating—often into an entry-level position that pays less than the tradesperson already earns, while carrying tens of thousands of dollars in debt. The college graduate may eventually out-earn the tradesperson over a lifetime, but the math is closer than many assume, and the early years matter enormously for building savings, buying a home, and starting a family.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">How Vocational Education Is Reinventing Itself</h2>
+
+      <p class="mb-6">
+        The vocational programs of today bear little resemblance to the shop classes your grandparents might remember. Modern career and technical education—the preferred term now—blends traditional hands-on training with advanced technology and, increasingly, academic rigor.
+      </p>
+
+      <p class="mb-6">
+        Consider what an electrician actually does in 2025. They're not just pulling wire; they're installing smart home systems, programming building automation controls, and wiring electric vehicle charging stations. HVAC technicians work with computerized diagnostic equipment and networked climate systems. Manufacturing workers operate CNC machines—computer-controlled tools that require both mechanical skill and digital literacy. Solar panel installers and wind turbine technicians are among the fastest-growing occupations in the country, with employment projected to grow by 22 percent and 45 percent respectively over the next decade.
+      </p>
+
+      <p class="mb-6">
+        Career and technical education programs have responded by modernizing their curricula. According to data from the National Center for Education Statistics, more than 80 percent of public high school graduates now complete at least one CTE course. States like Florida reported that over 235,000 students earned industry certifications before high school graduation in 2023. Arizona's Future48 initiative aims to produce more than 2,500 healthcare professionals annually through similar programs.
+      </p>
+
+      <p class="mb-10">
+        The stigma hasn't entirely disappeared, but it's eroding. CTE students in many states now graduate at rates approaching 99 percent—often higher than their non-CTE peers. Research from the American Institutes for Research found that students who participated in career and technical education were more likely to be employed after high school and showed positive effects on academic achievement and college readiness. A generation ago, CTE had a reputation as a track for students with limited options; today, it's increasingly seen as a strategic choice.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Infrastructure Investments and the Demand Ahead</h2>
+
+      <p class="mb-6">
+        Several forces are converging to make the skilled trades even more essential in the years ahead. The 2021 Bipartisan Infrastructure Law committed $1.2 trillion to rebuilding roads, bridges, transit systems, and broadband networks—all projects that require workers with technical skills. The Inflation Reduction Act of 2022 added another $370 billion in climate-related investments, spurring demand for electricians, solar installers, and workers who can build and maintain clean energy infrastructure.
+      </p>
+
+      <p class="mb-6">
+        The clean energy sector employed more than 3.1 million Americans as of 2023, and the Department of Energy found that clean energy job growth outpaced overall employment growth by nearly a percentage point. The Bureau of Labor Statistics projects that wind turbine service technicians will be the fastest-growing occupation through 2032. Solar photovoltaic installers rank among the top fifteen. These aren't future jobs—they're jobs that exist now, often going unfilled because there aren't enough trained workers to do them.
+      </p>
+
+      <p class="mb-10">
+        Meanwhile, the boom in artificial intelligence has triggered a building spree of data centers that require massive electrical infrastructure. A single large data center might need as much power as a small city, and someone has to wire it. The same AI systems that threaten to automate white-collar work are generating enormous demand for the electricians, HVAC technicians, and construction workers who build and maintain the physical infrastructure on which digital technology depends.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">What Still Needs to Change</h2>
+
+      <p class="mb-6">
+        Despite the momentum, significant obstacles remain. Training capacity hasn't kept pace with demand. The National Center for Education Statistics reports that 31 percent of public schools had difficulty filling CTE teaching positions in 2020-21, a shortage that's particularly acute in rural areas where schools struggle to find instructors with relevant industry experience.
+      </p>
+
+      <p class="mb-6">
+        The pipeline from training to employment also remains slower than ideal. Becoming a licensed electrician or plumber takes four to five years. Apprenticeship programs for HVAC technicians run three to five years. As one industry observer put it, "The infrastructure to train somebody in a skilled trade has never really left the nineteenth century. You need a very long lead time in order to ramp up capacity."
+      </p>
+
+      <p class="mb-10">
+        There's also the question of who gets access. While the trades have become more diverse, women still make up only about 14 percent of apprentices, and they remain dramatically underrepresented in most skilled occupations. Programs that help underrepresented groups enter the trades exist, but scaling them takes resources and intentional effort. And cultural attitudes, while shifting, haven't fully caught up. Almost 80 percent of respondents in one survey said their parents wanted them to go to college. Many high schools still treat CTE as a fallback rather than a first choice. The "college for all" message may be fading, but it hasn't disappeared.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">What This Means for Students and Families</h2>
+
+      <p class="mb-6">
+        For a young person trying to figure out what comes after high school, the takeaway isn't that trades are better than college or vice versa—it's that they're a legitimate option in a way that wasn't always acknowledged. A student who learns well through hands-on work, who wants to see tangible results at the end of the day, who prefers earning money to accumulating debt, might thrive in an apprenticeship or trade school in ways they never would in a lecture hall.
+      </p>
+
+      <p class="mb-6">
+        The numbers suggest that many young people are already making this calculation. Apprenticeship enrollments grew by more than 11 percent in 2024. Construction and skilled trades saw a 17 percent spike in job applications from 18-to-24-year-olds. When asked why they're choosing this path, they cite predictable reasons: good pay, job security, meaningful work, and the ability to start adult life without crippling debt.
+      </p>
+
+      <p class="mb-10">
+        The skilled labor shortage won't be solved overnight. Training pipelines are slow, cultural attitudes shift gradually, and the scale of investment needed to fully address the gap is substantial. But something is clearly changing. A generation of young Americans is looking at their options and reaching a conclusion that would have seemed countercultural not long ago: maybe the path to a good life runs through a toolbelt after all.
+      </p>
+
+      <!-- Sources -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
+
+      <ul class="text-sm text-gray-600 space-y-2 mb-10">
+        <li>Bureau of Labor Statistics, Occupational Outlook Handbook: Electricians, Plumbers, HVAC Technicians (May 2024 data)</li>
+        <li>CBS News, "Data center demand is booming. Can the supply of trade workers keep up?" (August 2025)</li>
+        <li>Deloitte and Manufacturing Institute, "Creating Pathways for Tomorrow's Workforce Today" (2024)</li>
+        <li>National Student Clearinghouse Research Center, Current Term Enrollment Estimates (2023)</li>
+        <li>Resume Builder, "4 in 10 Gen Z College Grads Are Turning to Blue-Collar Work for Job Security" (May 2025)</li>
+        <li>NPR, "Many in Gen Z ditch colleges for trade schools. Meet the 'toolbelt generation'" (April 2024)</li>
+        <li>CNBC, "Gen Z workers increasingly opt out of college and into the trades" (April 2025)</li>
+        <li>The Wall Street Journal, "How Gen Z Is Becoming the Toolbelt Generation" (April 2024)</li>
+        <li>McKinsey & Company, "Tradespeople Wanted: The need for critical trade skills in the U.S." (April 2024)</li>
+        <li>Associated Builders and Contractors, Construction Industry Workforce Report (2024)</li>
+        <li>The Hill/NewsNation, "Why is there a shortage of plumbers and electricians?" (April 2024)</li>
+        <li>White House Council of Economic Advisers, "All Aboard the ApprenticeSHIP" (November 2024)</li>
+        <li>American Institutes for Research, "What We Know About the Impact of Career and Technical Education" (2024)</li>
+        <li>National Center for Education Statistics, Career and Technical Education Statistics (2024)</li>
+        <li>World Resources Institute, "5 Insights on the State of US Clean Energy Jobs" (2025)</li>
+        <li>U.S. Department of Energy, Infrastructure Investment and Jobs Act Implementation Reports</li>
+        <li>Angi Research, "Skilled Trades Report" (2024)</li>
+        <li>Education Data Initiative, Average Cost of College and Student Loan Debt Statistics (2024)</li>
+      </ul>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-16 pt-8 border-t border-gray-200">
+      <p class="text-sm text-gray-500 italic">
+        This article is provided by TruSchools as an educational resource for students and families.
+      </p>
+      <div class="mt-6">
+        <a href="/vocational-schools" class="text-brand-blue hover:underline font-medium">
+          Browse Vocational Schools by State &rarr;
+        </a>
+      </div>
+    </footer>
+  </article>
+</Layout>

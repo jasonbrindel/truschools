@@ -30,5 +30,13 @@ export const onRequest = defineMiddleware(async (context, next) => {
     }
   }
 
-  return next();
+  const response = await next();
+
+  // Add caching headers for HTML pages (not API or assets)
+  if (response.headers.get('content-type')?.includes('text/html')) {
+    // Cache for 1 hour at edge, allow stale content for 1 day while revalidating
+    response.headers.set('Cache-Control', 'public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400');
+  }
+
+  return response;
 });

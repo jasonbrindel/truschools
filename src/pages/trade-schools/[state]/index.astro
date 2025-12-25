@@ -1,0 +1,153 @@
+---
+import Layout from '@/layouts/Layout.astro';
+
+const { state } = Astro.params;
+const db = Astro.locals.runtime.env.DB;
+
+// State mappings
+const stateMap: Record<string, string> = {
+  'alabama': 'AL', 'alaska': 'AK', 'arizona': 'AZ', 'arkansas': 'AR',
+  'california': 'CA', 'colorado': 'CO', 'connecticut': 'CT', 'delaware': 'DE',
+  'district-of-columbia': 'DC', 'florida': 'FL', 'georgia': 'GA', 'hawaii': 'HI',
+  'idaho': 'ID', 'illinois': 'IL', 'indiana': 'IN', 'iowa': 'IA',
+  'kansas': 'KS', 'kentucky': 'KY', 'louisiana': 'LA', 'maine': 'ME',
+  'maryland': 'MD', 'massachusetts': 'MA', 'michigan': 'MI', 'minnesota': 'MN',
+  'mississippi': 'MS', 'missouri': 'MO', 'montana': 'MT', 'nebraska': 'NE',
+  'nevada': 'NV', 'new-hampshire': 'NH', 'new-jersey': 'NJ', 'new-mexico': 'NM',
+  'new-york': 'NY', 'north-carolina': 'NC', 'north-dakota': 'ND', 'ohio': 'OH',
+  'oklahoma': 'OK', 'oregon': 'OR', 'pennsylvania': 'PA', 'puerto-rico': 'PR',
+  'rhode-island': 'RI', 'south-carolina': 'SC', 'south-dakota': 'SD',
+  'tennessee': 'TN', 'texas': 'TX', 'utah': 'UT', 'vermont': 'VT',
+  'virginia': 'VA', 'washington': 'WA', 'west-virginia': 'WV',
+  'wisconsin': 'WI', 'wyoming': 'WY'
+};
+
+const stateNames: Record<string, string> = {
+  'AL': 'Alabama', 'AK': 'Alaska', 'AZ': 'Arizona', 'AR': 'Arkansas',
+  'CA': 'California', 'CO': 'Colorado', 'CT': 'Connecticut', 'DE': 'Delaware',
+  'DC': 'District of Columbia', 'FL': 'Florida', 'GA': 'Georgia', 'HI': 'Hawaii',
+  'ID': 'Idaho', 'IL': 'Illinois', 'IN': 'Indiana', 'IA': 'Iowa',
+  'KS': 'Kansas', 'KY': 'Kentucky', 'LA': 'Louisiana', 'ME': 'Maine',
+  'MD': 'Maryland', 'MA': 'Massachusetts', 'MI': 'Michigan', 'MN': 'Minnesota',
+  'MS': 'Mississippi', 'MO': 'Missouri', 'MT': 'Montana', 'NE': 'Nebraska',
+  'NV': 'Nevada', 'NH': 'New Hampshire', 'NJ': 'New Jersey', 'NM': 'New Mexico',
+  'NY': 'New York', 'NC': 'North Carolina', 'ND': 'North Dakota', 'OH': 'Ohio',
+  'OK': 'Oklahoma', 'OR': 'Oregon', 'PA': 'Pennsylvania', 'PR': 'Puerto Rico',
+  'RI': 'Rhode Island', 'SC': 'South Carolina', 'SD': 'South Dakota',
+  'TN': 'Tennessee', 'TX': 'Texas', 'UT': 'Utah', 'VT': 'Vermont',
+  'VA': 'Virginia', 'WA': 'Washington', 'WV': 'West Virginia',
+  'WI': 'Wisconsin', 'WY': 'Wyoming'
+};
+
+const stateAbbr = stateMap[state || ''] || state?.toUpperCase();
+const stateName = stateNames[stateAbbr || ''] || state;
+
+if (!stateAbbr || !stateNames[stateAbbr]) {
+  return Astro.redirect('/404');
+}
+
+// Get schools in this state
+const schoolsResult = await db.prepare(`
+  SELECT id, institution_name, page_name, city, total_enrollment, tuition_in_state
+  FROM colleges
+  WHERE state_abbr = ? AND institution_category = 'vocational' AND vocational_type = 'trade' AND active = 1
+  ORDER BY city, institution_name
+`).bind(stateAbbr).all();
+
+const schools = schoolsResult.results;
+
+// Group by city
+const schoolsByCity = schools.reduce((acc: Record<string, any[]>, school: any) => {
+  const city = school.city || 'Other';
+  if (!acc[city]) acc[city] = [];
+  acc[city].push(school);
+  return acc;
+}, {});
+
+const cities = Object.keys(schoolsByCity).sort();
+---
+
+<Layout title={`Trade Schools in ${stateName}`} description={`Find ${schools.length} accredited trade schools in ${stateName}. Compare HVAC, welding, electrical, plumbing, and automotive programs.`}>
+  <div class="container">
+    <nav class="breadcrumb py-3">
+      <a href="/">Home</a>
+      <span class="breadcrumb-separator">&gt;</span>
+      <a href="/vocational-schools">Vocational Schools</a>
+      <span class="breadcrumb-separator">&gt;</span>
+      <a href="/trade-schools">Trade Schools</a>
+      <span class="breadcrumb-separator">&gt;</span>
+      <span>{stateName}</span>
+    </nav>
+
+    <h1 class="text-brand-green-text mb-2">Trade Schools in {stateName}</h1>
+    <p class="fs-14 text-gray-500 mb-5">{schools.length} accredited trade school{schools.length !== 1 ? 's' : ''}</p>
+  </div>
+
+  <div class="container py-5">
+    <div class="flex flex-col lg:flex-row gap-5">
+      <div class="lg:w-2/3">
+        {schools.length === 0 ? (
+          <div class="box-rounded text-center py-8">
+            <p class="text-gray-600 mb-4">No trade schools found in {stateName}.</p>
+            <a href="/trade-schools" class="btn btn-primary">Browse All Trade Schools</a>
+          </div>
+        ) : (
+          cities.map((city) => (
+            <div class="mb-6">
+              <h2 class="text-brand-blue mb-3 fs-18">{city}</h2>
+              <div class="space-y-3">
+                {schoolsByCity[city].map((school: any) => (
+                  <a href={`/trade-schools/${state}/${school.page_name}`}
+                     class="block box-rounded hover:border-brand-blue transition-colors no-underline">
+                    <div class="flex justify-between items-start">
+                      <div>
+                        <h3 class="text-brand-blue mb-1 fs-15">{school.institution_name}</h3>
+                        <p class="text-gray-600 fs-13 mb-0">{school.city}, {stateName}</p>
+                      </div>
+                      <div class="text-right">
+                        {school.total_enrollment && (
+                          <div class="text-brand-green-text font-medium fs-13">{school.total_enrollment.toLocaleString()} students</div>
+                        )}
+                        {school.tuition_in_state && (
+                          <div class="text-gray-500 fs-12">${school.tuition_in_state.toLocaleString()} tuition</div>
+                        )}
+                      </div>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+
+      <div class="lg:w-1/3">
+        <div class="box-rounded bg-lt-blue mb-4">
+          <h3 class="text-brand-blue mb-3">Program Types</h3>
+          <ul class="list-none m-0 p-0 space-y-2 fs-14">
+            <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-brand-green"></span>HVAC / Refrigeration</li>
+            <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-brand-green"></span>Welding</li>
+            <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-brand-green"></span>Electrical</li>
+            <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-brand-green"></span>Plumbing</li>
+            <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-brand-green"></span>Automotive</li>
+            <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-brand-green"></span>Construction</li>
+          </ul>
+        </div>
+
+        <div class="box-rounded mb-4">
+          <div class="bg-gray-100 h-[280px] flex items-center justify-center text-gray-400 fs-13">Advertisement</div>
+        </div>
+
+        <div class="box-rounded">
+          <h3 class="text-brand-blue mb-3">Related Links</h3>
+          <ul class="list-none m-0 p-0 space-y-2 fs-14">
+            <li><a href="/trade-schools" class="text-brand-blue hover:underline">All Trade Schools</a></li>
+            <li><a href={`/technology-schools/${state}`} class="text-brand-blue hover:underline">Technology Schools in {stateName}</a></li>
+            <li><a href={`/healthcare-schools/${state}`} class="text-brand-blue hover:underline">Healthcare Schools in {stateName}</a></li>
+            <li><a href="/vocational-schools" class="text-brand-blue hover:underline">All Vocational Schools</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>

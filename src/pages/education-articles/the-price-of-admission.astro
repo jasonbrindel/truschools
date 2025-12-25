@@ -1,0 +1,285 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import heroImage from '@/images/college-1.jpg';
+
+const title = "The Price of Admission";
+const subtitle = "Financial 101 for College-Bound Families";
+const description = "For millions of American families, the path to college has become a labyrinth of forms, formulas, and financial gambles. A guide to navigating the maze.";
+---
+
+<Layout title={`${title}: ${subtitle}`} description={description}>
+  <!-- Breadcrumbs -->
+  <div class="container">
+    <nav class="breadcrumb py-3">
+      <a href="/">Home</a>
+      <span class="breadcrumb-separator">&gt;</span>
+      <a href="/colleges">Colleges</a>
+      <span class="breadcrumb-separator">&gt;</span>
+      <span>{title}</span>
+    </nav>
+  </div>
+
+  <!-- Header - Centered, Narrow -->
+  <header class="max-w-[680px] mx-auto px-5 pt-4 md:pt-8">
+    <p class="text-sm font-semibold tracking-wide text-brand-green-text uppercase mb-4">A Special Report</p>
+    <h1 class="text-4xl md:text-5xl font-bold text-gray-900 leading-tight mb-5">
+      {title}
+    </h1>
+    <p class="text-xl md:text-2xl text-gray-600 italic mb-6">
+      For millions of American families, the path to college has become a labyrinth of forms, formulas, and financial gambles. A guide to navigating the maze.
+    </p>
+    <p class="text-base text-gray-500 mb-10">By TruSchools Staff</p>
+  </header>
+
+  <!-- Hero Image - Container Width -->
+  <div class="container">
+    <img
+      src={heroImage.src}
+      alt="College campus"
+      class="w-full h-[400px] md:h-[500px] object-cover"
+    />
+  </div>
+
+  <!-- Article Container - Centered, Narrow -->
+  <article class="max-w-[680px] mx-auto px-5 py-10 md:py-16">
+    <!-- Article Body -->
+    <div class="article-body text-lg leading-relaxed text-gray-800">
+      <!-- Opening with drop cap -->
+      <p class="first-letter:text-6xl first-letter:font-bold first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:text-gray-900 mb-6">
+        Maria Gonzalez sits at her kitchen table in El Paso, Texas, at eleven o'clock on a Tuesday night in late February, her laptop glowing in the dark. Her daughter Elena, a high school senior with a 3.8 GPA and dreams of studying nursing, has gone to bed. Maria cannot sleep. She has been staring at the same screen for forty minutes—the federal government's Free Application for Federal Student Aid, the FAFSA—and the form will not let her proceed. She clicks the same button again. The wheel spins. Nothing happens.
+      </p>
+
+      <p class="mb-6">
+        It is the winter of 2024, and Maria Gonzalez is one of millions of Americans trapped in what higher education officials would later call a "rolling catastrophe." The Department of Education had spent three years and hundreds of millions of dollars redesigning the FAFSA, promising to cut the form from 108 questions to as few as 18, to make the application simpler and more accessible, to open the doors of higher education wider than ever before. Instead, the new form launched three months late, riddled with technical failures. Students born in the year 2000 were mysteriously locked out for 69 days. The call center meant to help families went unanswered three out of every four times someone dialed. By April, FAFSA completion rates among high school seniors had dropped by more than 30 percent compared to the previous year.
+      </p>
+
+      <p class="mb-10">
+        Maria does not know any of this. She knows only that her daughter's future feels like it is slipping through her fingers, one frozen webpage at a time. She does not know that on the other side of this bureaucratic failure, Elena might be eligible for a Pell Grant worth up to $7,395—money that would never need to be repaid. She does not know that the high school class of 2023 left more than four billion dollars in Pell Grants unclaimed simply because students never completed the FAFSA. She knows only that it is late, and she is tired, and she has to be at work at seven in the morning, and her daughter deserves better than this.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">What College Costs Today</h2>
+
+      <p class="mb-6">
+        Here is what college costs in America today: The average student at a public four-year university, living on campus and paying in-state tuition, will spend roughly $27,000 per year. At a private nonprofit institution, that figure climbs to nearly $59,000. These numbers include tuition, fees, room, and board—but not the textbooks, the laptop, the gas money, the countless small expenses that accumulate like snow on a winter roof. According to the College Board's annual survey of college pricing, published in late 2025, average in-state tuition and fees at public four-year institutions reached $11,950, a 2.9 percent increase from the previous year. Out-of-state students faced average tuition of $31,880. Private nonprofit colleges charged an average of $45,000.
+      </p>
+
+      <p class="mb-6">
+        Multiply these figures by four years—or five, or six, as is increasingly common—and the numbers become almost too large to comprehend. A bachelor's degree from a public university might cost a family $108,000 in direct expenses alone. Factor in student loan interest, opportunity costs, and the wages lost while sitting in classrooms instead of working, and some economists calculate the true cost of a bachelor's degree can exceed half a million dollars.
+      </p>
+
+      <p class="mb-10">
+        Against this backdrop, Americans now carry more than $1.8 trillion in student loan debt. That is trillion, with a T—a sum larger than the entire gross domestic product of Australia. The debt is spread across roughly 43 million borrowers, with an average balance of nearly $40,000 per person. Perhaps more troubling than the aggregate is the distribution: borrowers between the ages of 50 and 61 now carry higher average student loan balances than any other age group, suggesting that for millions of Americans, the debt incurred in their youth has become a lifelong companion, following them into middle age and beyond.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">The FAFSA Disaster</h2>
+
+      <p class="mb-6">
+        The disaster that greeted Maria Gonzalez on her laptop screen was not supposed to happen. In 2020, Congress passed the FAFSA Simplification Act with bipartisan support, recognizing what families had complained about for years: the federal financial aid application was too long, too complicated, and too intimidating. The law mandated that the Department of Education create a shorter, simpler form that would pull tax information directly from the IRS, eliminating hours of data entry and the errors that came with it. The legislation promised to expand Pell Grant eligibility to an additional 2.1 million students. It was supposed to be, in the words of one education advocate, "a game-changer for college access."
+      </p>
+
+      <p class="mb-6">
+        Instead, the Department of Education missed deadline after deadline. The form that typically opens on October 1 did not launch until December 30, 2023—and even then, only in limited bursts. Students could access the application for a few hours at a time before it went offline again. When it was available, glitches abounded. Some students found their information had been calculated incorrectly after the department failed to adjust its formulas for inflation, a mistake that affected hundreds of thousands of applications. Others discovered that the system could not accommodate families with mixed immigration statuses—a particularly cruel irony for a reform meant to expand access to marginalized communities.
+      </p>
+
+      <!-- Pull Quote -->
+      <blockquote class="border-l-4 border-gray-300 pl-6 my-10 text-xl italic text-gray-700">
+        "This is a rolling catastrophe. It's particularly not fair to low-income first-generation students, for whom this is a decision of monumental proportions for them, for their families, and for their communities."
+        <cite class="block text-base not-italic text-gray-500 mt-2">— Ted Mitchell, president of the American Council on Education</cite>
+      </blockquote>
+
+      <p class="mb-10">
+        The data bore this out. When preliminary enrollment figures arrived in late 2024, they showed that first-year student enrollment had dropped by 5 to 8 percent at four-year institutions—the steepest decline since the COVID-19 pandemic. At colleges serving the highest proportions of low-income students, first-year enrollment fell by more than 10 percent. The students who needed financial aid the most were the ones most likely to give up on getting it.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Understanding the System</h2>
+
+      <p class="mb-6">
+        To understand how to navigate the college financing maze, it helps to understand its architecture. The FAFSA—for all its flaws—remains the gateway to federal financial aid, and filling it out is non-negotiable for any family seeking help. The form calculates something called the Student Aid Index, which replaced the old Expected Family Contribution in the 2024-25 academic year. This index is not what a family is expected to pay for college; it is a formula-derived number that schools use to determine how much need-based aid a student can receive.
+      </p>
+
+      <p class="mb-6">
+        At its simplest, financial need equals the cost of attendance minus the Student Aid Index. A school that costs $50,000 per year, serving a student with an SAI of $5,000, would calculate that student's need at $45,000. Whether the school actually meets that need—and with what combination of grants, loans, and work-study—is another matter entirely. Many institutions "gap" students, offering aid packages that fall short of demonstrated need and leaving families to cover the difference however they can.
+      </p>
+
+      <p class="mb-10">
+        The federal Pell Grant program provides the foundation of need-based aid. For the 2024-25 academic year, the maximum Pell Grant was $7,395, available to students from families with the lowest incomes. The grant does not need to be repaid, making it the purest form of federal assistance. Yet despite its importance, billions of dollars in Pell Grant funding go unclaimed each year because eligible students do not complete the FAFSA. The National College Attainment Network estimated that the high school class of 2023 alone left more than $4 billion in Pell Grants on the table.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Federal Loans: Subsidized vs. Unsubsidized</h2>
+
+      <p class="mb-10">
+        Beyond the Pell Grant, the federal government offers subsidized and unsubsidized student loans. Subsidized loans, available only to undergraduates with demonstrated need, carry a significant benefit: the government pays the interest while the student is enrolled at least half-time. Unsubsidized loans begin accruing interest immediately. Both types currently carry interest rates in the mid-single digits for undergraduates, though rates change annually. Parent PLUS loans, which allow parents to borrow up to the full cost of attendance minus other aid, carry higher rates and fewer protections—and have contributed to the growing phenomenon of parents carrying student debt into their sixties and beyond.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">529 Plans: A Tax-Advantaged Savings Tool</h2>
+
+      <p class="mb-6">
+        For families who can afford to plan ahead, the 529 college savings plan represents one of the few genuine tax advantages available to the middle class. Named for Section 529 of the Internal Revenue Code, these state-sponsored investment accounts allow earnings to grow tax-free when used for qualified education expenses. More than 30 states offer additional incentives—state tax deductions or credits on contributions—making 529 plans doubly advantageous for residents who use their home state's plan.
+      </p>
+
+      <p class="mb-6">
+        The mechanics are straightforward. A parent or grandparent opens an account and designates a beneficiary, typically a child. Contributions are invested in portfolios offered by the plan, ranging from aggressive growth options to conservative bond funds. As the child approaches college age, many plans automatically shift toward more conservative allocations—what the industry calls an "age-based" portfolio. When it comes time to pay for school, withdrawals for qualified expenses—tuition, fees, books, room and board, even certain computer costs—escape federal taxation entirely.
+      </p>
+
+      <p class="mb-10">
+        The SECURE 2.0 Act, passed in late 2022, added a new wrinkle that has financial planners buzzing. Beginning in 2024, families can roll up to $35,000 in unused 529 funds into a Roth IRA for the beneficiary—a backdoor way to jumpstart retirement savings with education money that went unspent. The catch: the 529 account must have been open for at least 15 years, and contributions from the prior five years cannot be rolled over. The rollover is also limited to the annual Roth IRA contribution cap, currently $7,000 for most taxpayers, meaning the full $35,000 transfer would take at least five years to complete.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">The Scholarship Myth</h2>
+
+      <p class="mb-6">
+        The mythology of scholarships is both true and deeply misleading. Every year, the United States Department of Education distributes roughly $46 billion in grant and scholarship money. Private sources—corporations, foundations, community organizations—add another $8 billion or more. The National Scholarship Providers Association reports that scholarship awards have increased by more than 45 percent over the past decade. And yet, according to various estimates, somewhere around $100 million in private scholarships go unclaimed annually, simply because no one applies.
+      </p>
+
+      <p class="mb-6">
+        The reality is more complicated than the myth of free money waiting to be claimed. Only about one in eight college students receives a private scholarship. Among those who do, 97 percent receive awards of $2,500 or less—helpful, certainly, but hardly life-changing when tuition bills run into the tens of thousands. The mega-scholarships that promise full rides to deserving students are real but rare, awarded through fiercely competitive national programs that attract thousands of applicants for each slot.
+      </p>
+
+      <p class="mb-10">
+        The most productive strategy, financial aid experts advise, is to focus first on the largest sources of aid: the federal government, the state government, and the institution itself. Institutional aid—scholarships and grants offered directly by colleges—now accounts for the majority of grant aid at private nonprofit institutions. A National Association of College and University Business Officers survey found that private colleges discounted tuition by an average of 56.3 percent for first-time full-time students in 2024-25, the highest discount rate on record.
+      </p>
+
+      <!-- Pull Quote -->
+      <blockquote class="border-l-4 border-gray-300 pl-6 my-10 text-xl italic text-gray-700">
+        "The sticker price of college is often a fiction. A private university advertising tuition of $60,000 may, after need-based and merit aid, cost some families less than a public university charging $25,000."
+      </blockquote>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Comparing Financial Aid Offers</h2>
+
+      <p class="mb-6">
+        When the financial aid offers finally arrive—assuming the FAFSA cooperates—families face a paradox of choice. A student admitted to five schools might receive five offers with five different formats, five different ways of categorizing aid, and five different bottom lines. Comparing them requires attention and arithmetic.
+      </p>
+
+      <p class="mb-6">
+        The first step is to calculate the net price for each institution. Start with the cost of attendance, which should include tuition, fees, room, board, books, transportation, and personal expenses. Subtract any grants and scholarships—free money that does not need to be repaid. The result is the net price, the amount the family is actually being asked to contribute. This figure, not the sticker price and not the "total aid package," is the apples-to-apples comparison point.
+      </p>
+
+      <p class="mb-6">
+        Beware the offers that package loans as aid. Federal student loans are not free money; they are debt that must be repaid with interest. While they may be necessary—and federal loans generally offer better terms than private alternatives—they should be considered separately from grants and scholarships. Work-study is similarly distinct: it represents the opportunity to earn money through a campus job, not a check that arrives automatically.
+      </p>
+
+      <p class="mb-10">
+        Financial aid offers typically cover only one year. There are no guarantees about what will happen in year two, or year three, or year four. Some institutions "front-load" merit aid, offering generous packages to attract first-year students that diminish as students progress. Others maintain consistent awards throughout a student's enrollment. Asking the financial aid office about renewal policies—and getting answers in writing—can prevent unpleasant surprises down the road.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Appealing Your Aid Package</h2>
+
+      <p class="mb-10">
+        And sometimes, offers can be appealed. If a family's circumstances have changed since they filed the FAFSA—a job loss, a medical emergency, a divorce—they can request a professional judgment review from the financial aid office. Even without special circumstances, some schools will reconsider offers when presented with more generous packages from comparable institutions. "In my opinion, students should definitely appeal their financial aid package under certain circumstances," one financial counselor advised. "Financial aid offices don't like the word 'negotiate,' but appeals are a legitimate part of the process."
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Start Early</h2>
+
+      <p class="mb-6">
+        The work of financing college does not begin senior year. It begins much earlier, in ways both financial and bureaucratic. The federal government now pulls tax information from two years prior to the academic year in question—meaning that a student entering college in fall 2025 will have their financial aid calculated based on their family's 2023 tax return. This "prior-prior year" methodology gives families earlier clarity about their expected contribution, but it also means that financial decisions made years before a child enrolls can affect their aid eligibility.
+      </p>
+
+      <p class="mb-6">
+        For families with the means to save, the freshman year of high school is not too early to open a 529 account. Contributions made early have the longest time to grow, and the compounding effect over eighteen years can be substantial. For families without savings but with high school students approaching graduation, the priority is simpler: complete the FAFSA as early as possible. The form typically opens on October 1, and while federal aid is not awarded on a first-come-first-served basis, many state aid programs are. Missing state deadlines can cost families thousands of dollars in grants they would otherwise have received.
+      </p>
+
+      <p class="mb-10">
+        The search for scholarships should begin junior year, allowing time to identify opportunities and prepare applications. Many prestigious scholarships have deadlines in the fall of senior year, months before regular college application deadlines. Students from low-income families should also investigate programs like QuestBridge, which matches high-achieving students with full-ride scholarships at partner institutions, and state-specific programs that guarantee free or reduced tuition at public universities.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">The Stakes</h2>
+
+      <p class="mb-6">
+        The consequences of getting this wrong are not abstract. They compound over decades. A student who borrows $30,000 for college at a 6 percent interest rate and makes minimum payments will spend 20 years repaying the debt and pay roughly $40,000 in total—the original principal plus $10,000 in interest. A student who borrows $100,000 for graduate school might face monthly payments exceeding $1,000 for a decade or more, payments that delay home purchases, postpone family formation, and constrain career choices.
+      </p>
+
+      <p class="mb-6">
+        The debt is not distributed equally. Black students, on average, borrow more than their white peers and are more likely to struggle with repayment. First-generation college students, whose families lack experience navigating the system, are more likely to borrow and less likely to graduate—the worst possible combination, leaving them with debt but without the degree that might help them pay it off.
+      </p>
+
+      <p class="mb-10">
+        And yet the alternative—not attending college at all—carries its own costs. According to Georgetown University projections, by 2031 nearly three-quarters of jobs will require some form of postsecondary education. The earnings gap between college graduates and those with only a high school diploma has widened over the past several decades, not narrowed. A bachelor's degree still represents, on average, the most reliable path to economic stability in America. The question is not whether to invest in education but how to do so wisely.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Hope</h2>
+
+      <p class="mb-6">
+        Maria Gonzalez finally submitted her daughter's FAFSA on a Saturday afternoon in late March 2024, after weeks of errors and restarts and late-night sessions at the kitchen table. By then, many of Elena's classmates had already received their financial aid offers. Some had already committed to colleges. Elena's dream school—a mid-sized public university with a well-regarded nursing program—had extended its decision deadline, but Maria didn't know how long that would last.
+      </p>
+
+      <p class="mb-6">
+        When the offer finally came, it was better than Maria had feared but not quite what she had hoped. Elena qualified for the maximum Pell Grant and a state grant that covered most of her remaining tuition. Room and board, textbooks, transportation—these would require loans. Maria crunched the numbers the way she would a household budget, the way she had been taught to stretch every dollar. Four years of college, even with the aid, would cost Elena roughly $20,000 in borrowed money. It was less than the national average but more than Maria had ever saved in her life.
+      </p>
+
+      <p class="mb-6">
+        Elena graduated high school in May. She moved into her dorm in August. Maria drove her to campus, helped her carry boxes up three flights of stairs, and left before she could cry in front of her daughter. On the drive home, alone in her car with the windows down and the West Texas sunset bleeding across the highway, Maria allowed herself to feel something that had been missing for months.
+      </p>
+
+      <p class="mb-6">
+        She felt hope.
+      </p>
+
+      <p class="mb-6">
+        It was a fragile thing, this hope, hedged with debt and paperwork and forms that never seemed to work the way they were supposed to. But it was real. Her daughter was in college. Her daughter was going to be a nurse. The system had nearly broken them, but they had found their way through.
+      </p>
+
+      <p class="mb-10">
+        In two more years, Elena's younger brother would begin the process all over again.
+      </p>
+
+      <!-- Sources -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
+
+      <ul class="text-sm text-gray-600 space-y-2 mb-10">
+        <li>College Board, "Trends in College Pricing Highlights," 2025-26</li>
+        <li>Education Data Initiative, "Student Loan Debt Statistics," 2025</li>
+        <li>Education Data Initiative, "Average Cost of College," 2025</li>
+        <li>U.S. News & World Report, "See the Average College Tuition in 2025-2026," September 2025</li>
+        <li>Federal Reserve, "Report on the Economic Well-Being of U.S. Households," May 2025</li>
+        <li>Federal Student Aid, Department of Education, studentaid.gov</li>
+        <li>U.S. Government Accountability Office, "Botched FAFSA Rollout Leaves Uncertainty for Students," September 2024</li>
+        <li>National Association of Student Financial Aid Administrators (NASFAA), FAFSA Simplification Web Center</li>
+        <li>National College Attainment Network (NCAN), "Unclaimed Pell Grants Report," 2024</li>
+        <li>NPR, "Watchdog sheds light on FAFSA fiasco," September 2024</li>
+        <li>PBS NewsHour, "Troubled rollout of FAFSA overhaul causes major delays," March 2024</li>
+        <li>Inside Higher Ed, "After FAFSA issues, a steep drop in first-year enrollment," October 2024</li>
+        <li>Brookings Institution, "FAFSA rollout means fewer students will enroll," May 2024</li>
+        <li>National Student Clearinghouse Research Center, Enrollment Data, Fall 2024</li>
+        <li>CNBC, "Some students are still struggling to access college aid amid ongoing FAFSA 'disaster'," April 2024</li>
+        <li>NerdWallet, "Student Loan Debt: How Much Do Borrowers Owe in 2025?"</li>
+        <li>BestColleges, "Average Student Loan Debt Statistics," 2025</li>
+        <li>LendingTree, "U.S. Student Loan Debt Statistics," September 2025</li>
+        <li>Fastweb, "Billions in Financial Aid Goes Unclaimed Every Year"</li>
+        <li>National Scholarship Providers Association, Scholarship Statistics</li>
+        <li>Internal Revenue Service, "529 Plans: Questions and Answers"</li>
+        <li>Fidelity, "Understanding 529 rollovers to a Roth IRA," May 2025</li>
+        <li>Kitces.com, "SECURE 2.0 Act's New 529-To-Roth Rollover Rules," February 2025</li>
+        <li>Saving for College, "529 to Roth IRA: Rollover Rules, Conversion Guide," November 2025</li>
+        <li>Congressional Research Service, "The FAFSA Simplification Act"</li>
+        <li>Georgetown University Center on Education and the Workforce, "Recovery: Job Growth and Education Requirements Through 2031"</li>
+        <li>National Association of College and University Business Officers, Tuition Discount Study, 2024-25</li>
+        <li>Higher Education Today (ACE), "Troubled FAFSA Rollout Linked to Sharp Decline in First-Year College Enrollment," November 2024</li>
+        <li>Citizens Bank, "Comparing financial aid offers: How to choose the right college"</li>
+        <li>BigFuture (College Board), "How to Review and Compare Your Financial Aid Awards"</li>
+      </ul>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-16 pt-8 border-t border-gray-200">
+      <p class="text-sm text-gray-500 italic">
+        This article is provided by TruSchools as an educational resource for college-bound families.
+      </p>
+      <div class="mt-6">
+        <a href="/colleges" class="text-brand-blue hover:underline font-medium">
+          Browse Colleges & Universities by State &rarr;
+        </a>
+      </div>
+    </footer>
+  </article>
+</Layout>

@@ -1,0 +1,287 @@
+---
+import Layout from '@/layouts/Layout.astro';
+
+const { state, school: schoolSlug } = Astro.params;
+const db = Astro.locals.runtime.env.DB;
+
+// State mappings
+const stateMap: Record<string, string> = {
+  'alabama': 'AL', 'alaska': 'AK', 'arizona': 'AZ', 'arkansas': 'AR',
+  'california': 'CA', 'colorado': 'CO', 'connecticut': 'CT', 'delaware': 'DE',
+  'district-of-columbia': 'DC', 'florida': 'FL', 'georgia': 'GA', 'hawaii': 'HI',
+  'idaho': 'ID', 'illinois': 'IL', 'indiana': 'IN', 'iowa': 'IA',
+  'kansas': 'KS', 'kentucky': 'KY', 'louisiana': 'LA', 'maine': 'ME',
+  'maryland': 'MD', 'massachusetts': 'MA', 'michigan': 'MI', 'minnesota': 'MN',
+  'mississippi': 'MS', 'missouri': 'MO', 'montana': 'MT', 'nebraska': 'NE',
+  'nevada': 'NV', 'new-hampshire': 'NH', 'new-jersey': 'NJ', 'new-mexico': 'NM',
+  'new-york': 'NY', 'north-carolina': 'NC', 'north-dakota': 'ND', 'ohio': 'OH',
+  'oklahoma': 'OK', 'oregon': 'OR', 'pennsylvania': 'PA', 'puerto-rico': 'PR',
+  'rhode-island': 'RI', 'south-carolina': 'SC', 'south-dakota': 'SD',
+  'tennessee': 'TN', 'texas': 'TX', 'utah': 'UT', 'vermont': 'VT',
+  'virginia': 'VA', 'washington': 'WA', 'west-virginia': 'WV',
+  'wisconsin': 'WI', 'wyoming': 'WY'
+};
+
+const stateNames: Record<string, string> = {
+  'AL': 'Alabama', 'AK': 'Alaska', 'AZ': 'Arizona', 'AR': 'Arkansas',
+  'CA': 'California', 'CO': 'Colorado', 'CT': 'Connecticut', 'DE': 'Delaware',
+  'DC': 'District of Columbia', 'FL': 'Florida', 'GA': 'Georgia', 'HI': 'Hawaii',
+  'ID': 'Idaho', 'IL': 'Illinois', 'IN': 'Indiana', 'IA': 'Iowa',
+  'KS': 'Kansas', 'KY': 'Kentucky', 'LA': 'Louisiana', 'ME': 'Maine',
+  'MD': 'Maryland', 'MA': 'Massachusetts', 'MI': 'Michigan', 'MN': 'Minnesota',
+  'MS': 'Mississippi', 'MO': 'Missouri', 'MT': 'Montana', 'NE': 'Nebraska',
+  'NV': 'Nevada', 'NH': 'New Hampshire', 'NJ': 'New Jersey', 'NM': 'New Mexico',
+  'NY': 'New York', 'NC': 'North Carolina', 'ND': 'North Dakota', 'OH': 'Ohio',
+  'OK': 'Oklahoma', 'OR': 'Oregon', 'PA': 'Pennsylvania', 'PR': 'Puerto Rico',
+  'RI': 'Rhode Island', 'SC': 'South Carolina', 'SD': 'South Dakota',
+  'TN': 'Tennessee', 'TX': 'Texas', 'UT': 'Utah', 'VT': 'Vermont',
+  'VA': 'Virginia', 'WA': 'Washington', 'WV': 'West Virginia',
+  'WI': 'Wisconsin', 'WY': 'Wyoming'
+};
+
+const stateAbbr = stateMap[state || ''] || state?.toUpperCase();
+const stateName = stateNames[stateAbbr || ''] || state;
+
+// Get the school - query by vocational_type only (includes colleges, community colleges, vocational)
+const schoolData = await db.prepare(`
+  SELECT * FROM colleges
+  WHERE page_name = ? AND state_abbr = ? AND vocational_type = 'culinary'
+`).bind(schoolSlug, stateAbbr).first() as any;
+
+if (!schoolData) {
+  return Astro.redirect('/404');
+}
+
+// Get nearby schools in same city or state
+const nearbyResult = await db.prepare(`
+  SELECT id, institution_name, page_name, city
+  FROM colleges
+  WHERE state_abbr = ? AND vocational_type = 'culinary'
+    AND id != ? AND active = 1
+  ORDER BY CASE WHEN city = ? THEN 0 ELSE 1 END, institution_name
+  LIMIT 5
+`).bind(stateAbbr, schoolData.id, schoolData.city).all();
+
+const nearbySchools = nearbyResult.results;
+
+// Format website URL
+function formatWebsite(url: string | null): string | null {
+  if (!url) return null;
+  if (!url.startsWith('http')) {
+    return 'https://' + url;
+  }
+  return url;
+}
+
+// Format phone number
+function formatPhone(phone: string | null): string {
+  if (!phone) return '';
+  const cleaned = phone.replace(/\D/g, '');
+  if (cleaned.length === 10) {
+    return `(${cleaned.slice(0, 3)}) ${cleaned.slice(3, 6)}-${cleaned.slice(6)}`;
+  }
+  return phone;
+}
+
+const websiteUrl = formatWebsite(schoolData.website);
+---
+
+<Layout title={`${schoolData.institution_name} - ${schoolData.city}, ${stateName}`} description={`Learn about ${schoolData.institution_name} in ${schoolData.city}, ${stateName}. Find program info, tuition costs, and admissions details for culinary programs.`}>
+  <div class="container">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb py-3">
+      <a href="/">Home</a>
+      <span class="breadcrumb-separator">&gt;</span>
+      <a href="/vocational-schools">Vocational Schools</a>
+      <span class="breadcrumb-separator">&gt;</span>
+      <a href="/culinary-schools">Culinary Schools</a>
+      <span class="breadcrumb-separator">&gt;</span>
+      <a href={`/culinary-schools/${state}`}>{stateName}</a>
+      <span class="breadcrumb-separator">&gt;</span>
+      <span>{schoolData.institution_name}</span>
+    </nav>
+
+    <h1 class="text-brand-green-text mb-2">{schoolData.institution_name}</h1>
+    <p class="fs-14 text-gray-500 mb-5">{schoolData.city}, {stateName}</p>
+  </div>
+
+  <div class="container py-5">
+    <div class="flex flex-col lg:flex-row gap-5">
+      <!-- Main Content -->
+      <div class="lg:w-2/3">
+        <!-- Overview -->
+        <div class="box-rounded mb-5">
+          <h2 class="text-brand-blue mb-4">School Overview</h2>
+
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
+            {schoolData.total_enrollment && (
+              <div class="text-center p-3 bg-lt-blue rounded">
+                <div class="text-2xl font-bold text-brand-blue">{schoolData.total_enrollment.toLocaleString()}</div>
+                <div class="fs-12 text-gray-600">Students</div>
+              </div>
+            )}
+            {schoolData.tuition_in_state && (
+              <div class="text-center p-3 bg-lt-blue rounded">
+                <div class="text-2xl font-bold text-brand-blue">${schoolData.tuition_in_state.toLocaleString()}</div>
+                <div class="fs-12 text-gray-600">Tuition</div>
+              </div>
+            )}
+            {schoolData.pct_receiving_aid && (
+              <div class="text-center p-3 bg-lt-blue rounded">
+                <div class="text-2xl font-bold text-brand-blue">{schoolData.pct_receiving_aid}%</div>
+                <div class="fs-12 text-gray-600">Receive Aid</div>
+              </div>
+            )}
+          </div>
+
+          <div class="border-t border-gray-200 pt-4">
+            <dl class="grid grid-cols-1 md:grid-cols-2 gap-3 fs-14">
+              <div>
+                <dt class="text-gray-500">School Type</dt>
+                <dd class="font-medium">{schoolData.institution_control || 'Not specified'}</dd>
+              </div>
+              {schoolData.accreditation && (
+                <div>
+                  <dt class="text-gray-500">Accreditation</dt>
+                  <dd class="font-medium">{schoolData.accreditation}</dd>
+                </div>
+              )}
+              {schoolData.website && (
+                <div class="md:col-span-2">
+                  <dt class="text-gray-500">Website</dt>
+                  <dd>
+                    <a href={websiteUrl} target="_blank" rel="noopener noreferrer" class="text-brand-blue hover:underline">
+                      {schoolData.website}
+                    </a>
+                  </dd>
+                </div>
+              )}
+            </dl>
+          </div>
+        </div>
+
+        <!-- Location -->
+        <div class="box-rounded mb-5">
+          <h2 class="text-brand-blue mb-4">Location & Contact</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <h3 class="text-brand-green-text fs-14 mb-2">Address</h3>
+              <p class="text-gray-700 mb-0">
+                {schoolData.address && <span>{schoolData.address}<br /></span>}
+                {schoolData.city}, {stateName} {schoolData.zip}
+              </p>
+            </div>
+            {schoolData.phone && (
+              <div>
+                <h3 class="text-brand-green-text fs-14 mb-2">Phone</h3>
+                <p class="text-gray-700 mb-0">{formatPhone(schoolData.phone)}</p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <!-- Student Demographics -->
+        {(schoolData.pct_female || schoolData.pct_white || schoolData.pct_black || schoolData.pct_hispanic) && (
+          <div class="box-rounded mb-5">
+            <h2 class="text-brand-blue mb-4">Student Demographics</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {schoolData.pct_female && (
+                <div class="text-center">
+                  <div class="text-xl font-bold text-brand-green-text">{schoolData.pct_female}%</div>
+                  <div class="fs-12 text-gray-600">Female</div>
+                </div>
+              )}
+              {schoolData.pct_white && (
+                <div class="text-center">
+                  <div class="text-xl font-bold text-brand-green-text">{schoolData.pct_white}%</div>
+                  <div class="fs-12 text-gray-600">White</div>
+                </div>
+              )}
+              {schoolData.pct_black && (
+                <div class="text-center">
+                  <div class="text-xl font-bold text-brand-green-text">{schoolData.pct_black}%</div>
+                  <div class="fs-12 text-gray-600">Black</div>
+                </div>
+              )}
+              {schoolData.pct_hispanic && (
+                <div class="text-center">
+                  <div class="text-xl font-bold text-brand-green-text">{schoolData.pct_hispanic}%</div>
+                  <div class="fs-12 text-gray-600">Hispanic</div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        <!-- Programs -->
+        <div class="box-rounded">
+          <h2 class="text-brand-blue mb-4">Typical Programs Offered</h2>
+          <p class="text-gray-600 fs-14 mb-3">
+            Culinary schools like {schoolData.institution_name} typically offer programs in:
+          </p>
+          <ul class="list-disc pl-5 space-y-1 fs-14 text-gray-700">
+            <li>Culinary Arts</li>
+            <li>Pastry & Baking Arts</li>
+            <li>Restaurant & Food Service Management</li>
+            <li>Hospitality Management</li>
+            <li>Food & Beverage Operations</li>
+          </ul>
+          <p class="text-gray-500 fs-13 mt-3 mb-0">
+            Contact the school directly for specific program offerings and requirements.
+          </p>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="lg:w-1/3">
+        <!-- Quick Actions -->
+        <div class="box-rounded bg-lt-blue mb-4">
+          <h3 class="text-brand-blue mb-3">Get Started</h3>
+          {websiteUrl && (
+            <a href={websiteUrl} target="_blank" rel="noopener noreferrer"
+               class="btn btn-primary w-full mb-2 text-center">
+              Visit School Website
+            </a>
+          )}
+          <a href={`/culinary-schools/${state}`} class="btn btn-outline w-full text-center">
+            View More Schools in {stateName}
+          </a>
+        </div>
+
+        <!-- Ad Placeholder -->
+        <div class="box-rounded mb-4">
+          <div class="bg-gray-100 h-[280px] flex items-center justify-center text-gray-400 fs-13">
+            Advertisement
+          </div>
+        </div>
+
+        <!-- Nearby Schools -->
+        {nearbySchools.length > 0 && (
+          <div class="box-rounded mb-4">
+            <h3 class="text-brand-blue mb-3">Nearby Culinary Schools</h3>
+            <ul class="list-none m-0 p-0 space-y-2 fs-14">
+              {nearbySchools.map((nearby: any) => (
+                <li>
+                  <a href={`/culinary-schools/${state}/${nearby.page_name}`} class="text-brand-blue hover:underline">
+                    {nearby.institution_name}
+                  </a>
+                  <span class="text-gray-500 fs-12"> - {nearby.city}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        <!-- Related Links -->
+        <div class="box-rounded">
+          <h3 class="text-brand-blue mb-3">Related Links</h3>
+          <ul class="list-none m-0 p-0 space-y-2 fs-14">
+            <li><a href="/culinary-schools" class="text-brand-blue hover:underline">All Culinary Schools</a></li>
+            <li><a href="/vocational-schools" class="text-brand-blue hover:underline">All Vocational Schools</a></li>
+            <li><a href={`/beauty-schools/${state}`} class="text-brand-blue hover:underline">Beauty Schools in {stateName}</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>

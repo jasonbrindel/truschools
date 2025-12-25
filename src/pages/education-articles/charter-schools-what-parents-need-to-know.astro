@@ -1,0 +1,198 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import heroImage from '@/images/elementary-school-1.jpg';
+
+const title = "Charter Schools";
+const subtitle = "What Parents Need to Know";
+const description = "A comprehensive guide for parents considering charter schools, covering how they work, admissions, funding, and tips for evaluation.";
+---
+
+<Layout title={`${title}: ${subtitle}`} description={description}>
+  <!-- Breadcrumbs -->
+  <div class="container">
+    <nav class="breadcrumb py-3">
+      <a href="/">Home</a>
+      <span class="breadcrumb-separator">&gt;</span>
+      <a href="/schools">Schools</a>
+      <span class="breadcrumb-separator">&gt;</span>
+      <span>{title}</span>
+    </nav>
+  </div>
+
+  <!-- Header - Centered, Narrow -->
+  <header class="max-w-[680px] mx-auto px-5 pt-4 md:pt-8">
+    <p class="text-sm font-semibold tracking-wide text-brand-green-text uppercase mb-4">Parent Resource Guide</p>
+    <h1 class="text-4xl md:text-5xl font-bold text-gray-900 leading-tight mb-5">
+      {title}: {subtitle}
+    </h1>
+    <p class="text-xl md:text-2xl text-gray-600 mb-6">
+      A guide to understanding how charter schools work, what makes them different, and how to decide if one is right for your child.
+    </p>
+    <p class="text-base text-gray-500 mb-10">By TruSchools Staff</p>
+  </header>
+
+  <!-- Hero Image - Container Width -->
+  <div class="container">
+    <img
+      src={heroImage.src}
+      alt="Students in a classroom"
+      class="w-full h-[400px] md:h-[500px] object-cover"
+    />
+  </div>
+
+  <!-- Article Container - Centered, Narrow -->
+  <article class="max-w-[680px] mx-auto px-5 py-10 md:py-16">
+    <!-- Article Body -->
+    <div class="article-body text-lg leading-relaxed text-gray-800">
+      <!-- Opening with drop cap -->
+      <p class="first-letter:text-6xl first-letter:font-bold first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:text-gray-900 mb-6">
+        The Johnsons had all but given up. Their son Marcus was bored and restless at his assigned public school, acting out in class and coming home defeated. The gifted program had a two-year waitlist. Private school wasn't financially realistic. Then a neighbor mentioned a charter school opening nearby.
+      </p>
+
+      <p class="mb-6">
+        "I didn't really understand what a charter school was," admits Marcus's mother, Denise. "I thought maybe it was private, or religious, or some kind of alternative school for troubled kids."
+      </p>
+
+      <p class="mb-10">
+        She's not alone. Roughly 3.7 million American students now attend charter schools, but the concept remains fuzzy for many parents. The political debates don't help—depending on who's talking, charters are either saving American education or destroying it. The reality is more interesting than either side admits.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Public Schools, Different Rules</h2>
+
+      <p class="mb-6">
+        Here's the most important thing: charter schools are public schools. They're funded by tax dollars. They can't charge tuition. They can't be religiously affiliated. They can't discriminate in admissions. If you remember nothing else, remember that.
+      </p>
+
+      <p class="mb-6">
+        So what makes them different?
+      </p>
+
+      <p class="mb-6">
+        The "charter" is a contract—a formal agreement between the school's founders and an authorizing body (usually a state agency or local school board). This contract spells out the school's mission, its approach, and the standards it will be held to. In exchange for meeting those standards, the school gets operational freedom that traditional public schools don't have.
+      </p>
+
+      <p class="mb-6">
+        That freedom shows up in different ways. Some charters use it for specialized curricula—Montessori, classical education, STEM, arts integration. Others extend the school day or year. Some experiment with staffing or organizational structures that would be impossible within a traditional district. The theory is that autonomy enables innovation.
+      </p>
+
+      <p class="mb-6">
+        The trade-off is accountability. Charters operate on probation. Their contracts typically last three to five years, after which they must prove they've delivered. Schools that fail academically or financially can be shut down—and are. According to state data, 183 charter schools have closed in Los Angeles County alone since 1999. Supporters call this accountability in action. Critics point out that closures disrupt children's lives and that the bar is often set too low.
+      </p>
+
+      <p class="mb-6">
+        Unlike traditional public schools, where your address determines your school, charters are schools of choice. Parents choose to apply. But because charters are public schools, they can't be selective—if more families apply than there are seats, federal law requires a random lottery. Your child has the same chance whether they're a straight-A student or struggling, whether you're well-connected or working two jobs.
+      </p>
+
+      <p class="mb-6">
+        Many charters give priority to siblings, children of founders, or neighborhood residents. But after priorities are applied, it's random. This is simultaneously egalitarian and maddening—access isn't determined by wealth, but you might not get into your first choice despite doing everything right. Many parents apply to several schools and spend years on waitlists.
+      </p>
+
+      <p class="mb-10">
+        Application timelines vary, but many charters have deadlines in late fall or winter for the following year. Start early.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">The Money</h2>
+
+      <p class="mb-10">
+        You don't pay tuition. Charter schools receive public funding, typically calculated per pupil—when your child attends, the money follows. However, charters generally receive less per student than traditional public schools, by some estimates about a third less. They also rarely get facilities funding, which is why many operate in converted office buildings or strip malls rather than purpose-built schools. Many supplement their budgets with private donations and grants.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">No Two Alike</h2>
+
+      <p class="mb-6">
+        The most common mistake parents make is assuming that if you've seen one charter, you've seen them all.
+      </p>
+
+      <p class="mb-6">
+        Some are highly structured: strict behavioral expectations, uniforms, extended days. Others are progressive and child-directed. Some focus intensively on college prep; others integrate vocational training. There are charters built around classical education, Montessori, language immersion, STEM, the arts, expeditionary learning. There are charters in low-income urban neighborhoods and charters in affluent suburbs.
+      </p>
+
+      <!-- Pull Quote -->
+      <blockquote class="border-l-4 border-gray-300 pl-6 my-10 text-xl italic text-gray-700">
+        "You really can't generalize. I've seen amazing charter schools and terrible ones. You have to evaluate each school on its own merits."
+        <cite class="block text-base not-italic text-gray-500 mt-2">— Jessica Werner, education consultant</cite>
+      </blockquote>
+
+      <p class="mb-10">
+        Quality varies just as widely. Some consistently outperform district schools; others struggle. Some have strong leadership; others churn through administrators.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">The Fight</h2>
+
+      <p class="mb-6">
+        It would be dishonest to write about charter schools without mentioning that they're controversial.
+      </p>
+
+      <p class="mb-6">
+        Teachers' unions have largely opposed them, arguing that charters siphon resources from traditional public schools, are less accountable than they claim, and sometimes engage in practices that wouldn't be tolerated in district schools. Critics point to charters that closed abruptly mid-year, leaving families scrambling, and to scandals involving financial mismanagement or self-dealing.
+      </p>
+
+      <p class="mb-6">
+        Supporters counter that charters provide options for families trapped in failing schools, that competition improves the whole system, and that flexibility enables genuine innovation. They note that charters are disproportionately located in underserved communities where traditional schools have struggled for decades.
+      </p>
+
+      <p class="mb-6">
+        The research is genuinely mixed. Large-scale studies find that urban charters, particularly those serving low-income students, often produce better outcomes than nearby traditional schools. But suburban and rural charters show little advantage, and some underperform. The picture is complicated by selection effects—parents who seek out charters may be more engaged regardless of where their kids end up.
+      </p>
+
+      <p class="mb-10">
+        For parents, the policy debates matter less than the practical question: is this specific school a good fit for my specific child?
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Special Education</h2>
+
+      <p class="mb-10">
+        Charter schools are legally required to serve students with disabilities and cannot reject students who need special education services. But capacity varies significantly. A small charter may not have the staff or resources to support students with intensive needs. If your child has an IEP, ask detailed questions before enrolling: How many special education staff? What experience with your child's specific needs? How are services delivered? What related services are available? Some charters excel at serving students with learning differences. Others aren't equipped to. Ask, verify, and talk to parents of current students with similar needs.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Doing Your Homework</h2>
+
+      <p class="mb-6">
+        Start with the basics. Is the charter in good standing or on probation? What do test scores and graduation rates look like compared to nearby schools serving similar populations? What's the teacher retention rate? High turnover is a warning sign.
+      </p>
+
+      <p class="mb-6">
+        Then go deeper. Visit during a regular school day. Watch how teachers interact with students. Ask about the school's philosophy and make sure you actually understand and agree with it—a school built around strict discipline will be a poor fit for a family that values child-directed learning, and vice versa. Talk to current parents, not just the ones the school points you to. What do they love? What frustrates them? Would they choose it again?
+      </p>
+
+      <p class="mb-10">
+        Don't neglect practical matters. Transportation? Commute time? Extracurriculars? Smaller charters may have fewer sports and clubs than larger traditional schools. For some families that's a worthwhile trade-off. For others, it's a dealbreaker.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">The Right Fit</h2>
+
+      <p class="mb-6">
+        Marcus Johnson ended up thriving at that charter school. The project-based curriculum engaged him in ways traditional instruction never had. He's in high school now, talking about engineering.
+      </p>
+
+      <!-- Pull Quote -->
+      <blockquote class="border-l-4 border-gray-300 pl-6 my-10 text-xl italic text-gray-700">
+        "My daughter is completely different. She likes structure, she likes knowing exactly what's expected. That school would have stressed her out. She's happy at our neighborhood school."
+        <cite class="block text-base not-italic text-gray-500 mt-2">— Denise Johnson</cite>
+      </blockquote>
+
+      <p class="mb-6">
+        That's the thing about charter schools. They're an option, not an answer. They expand the range of choices available to families, which is valuable. But more choices means more research, more decisions, more ways to get it wrong. The best school for your child is the one that fits—their learning style, their needs, their personality. That might be a charter. It might be your neighborhood public school. The label matters less than the match.
+      </p>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-16 pt-8 border-t border-gray-200">
+      <p class="text-sm text-gray-500 italic">
+        This article is provided by TruSchools as an educational resource for parents.
+      </p>
+      <div class="mt-6">
+        <a href="/charter-schools" class="text-brand-blue hover:underline font-medium">
+          Browse Charter Schools by State &rarr;
+        </a>
+      </div>
+    </footer>
+  </article>
+</Layout>

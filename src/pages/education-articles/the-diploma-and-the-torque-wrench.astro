@@ -1,0 +1,269 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import heroImage from '@/images/high-school-1.jpg';
+
+const title = "The Diploma and the Torque Wrench";
+const subtitle = "What is high school for now?";
+const description = "How career and technical education is transforming American high schools, giving students real-world skills and clarity about their futures.";
+---
+
+<Layout title={title} description={description}>
+  <!-- Breadcrumbs -->
+  <div class="container">
+    <nav class="breadcrumb py-3">
+      <a href="/">Home</a>
+      <span class="breadcrumb-separator">&gt;</span>
+      <a href="/high-schools">High Schools</a>
+      <span class="breadcrumb-separator">&gt;</span>
+      <span>{title}</span>
+    </nav>
+  </div>
+
+  <!-- Header - Centered, Narrow -->
+  <header class="max-w-[680px] mx-auto px-5 pt-4 md:pt-8">
+    <p class="text-sm font-semibold tracking-wide text-brand-green-text uppercase mb-4">Career & Technical Education</p>
+    <h1 class="text-4xl md:text-5xl font-bold text-gray-900 leading-tight mb-5">
+      {title}
+    </h1>
+    <p class="text-xl md:text-2xl text-gray-600 italic mb-6">
+      {subtitle}
+    </p>
+    <p class="text-base text-gray-500 mb-10">By TruSchools Staff</p>
+  </header>
+
+  <!-- Hero Image - Container Width -->
+  <div class="container">
+    <img
+      src={heroImage.src}
+      alt="Students in career and technical education"
+      class="w-full h-[400px] md:h-[500px] object-cover"
+    />
+  </div>
+
+  <!-- Article Container - Centered, Narrow -->
+  <article class="max-w-[680px] mx-auto px-5 py-10 md:py-16">
+    <!-- Article Body -->
+    <div class="article-body text-lg leading-relaxed text-gray-800">
+      <!-- Opening with drop cap -->
+      <p class="first-letter:text-6xl first-letter:font-bold first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:text-gray-900 mb-6">
+        By late July, the air in Port Arthur, Texas, has the texture of a damp towel. Inside Allied IT Systems, where the fluorescent lights make everything look slightly more awake than it feels, Clayton Harrison is learning how the building thinks.
+      </p>
+
+      <p class="mb-6">
+        He is seventeen, a senior at Woodrow Wilson Early College High School, and he moves through the office the way you move through a new house you're considering buying: half guest, half future resident. A coil of cable sits like a sleeping snake near a wall plate. A monitor blinks. Somewhere a printer coughs. Clayton's hands are busy in the quiet way of someone who has discovered that competence has its own gravity. He is an intern, one of eleven in a city program that places high school students in paid, eight-week stints across local businesses and agencies. For Clayton, the prize is not the paycheck. It's the feeling, new as a fresh bruise, that the adult world has a door he might actually know how to open.
+      </p>
+
+      <p class="mb-6">
+        "Being here at Allied, they really taught me a lot about different things about getting the real world experience, not working at like a fast food job or something," he says, and then, with a kind of relief, adds the line that makes his summer feel like a hinge in his life: "It really showed me what kind of career field I wanted to go in, because before this, I was really undecided… but it's really cleared everything up."
+      </p>
+
+      <p class="mb-10">
+        He isn't talking about destiny. He's talking about proximity. A future you can touch.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">What Is High School For Now?</h2>
+
+      <p class="mb-6">
+        Outside the building, high school is still high school. Bells. Hall passes. The strange democracy of adolescence, where everyone is equal in their uncertainty. Inside, there are tickets to resolve, documentation to follow, colleagues who talk to you like you belong. Clayton is discovering that "career readiness" is not a slogan so much as a set of moments when a teenager is treated as someone who can be counted on.
+      </p>
+
+      <p class="mb-6">
+        The question hovering behind him, behind the interns at the Port Arthur health department and the insurance agency and the welding academy, is older than the city's refineries and newer than the laptops on Allied's desks: What is high school for now?
+      </p>
+
+      <p class="mb-6">
+        For decades, the dominant American answer was a kind of clean, optimistic simplicity: high school is for college. The phrase "college and career" existed, but "career" often felt like a polite add-on, a second lane painted on the shoulder. Guidance counselors were measured by admissions, not apprenticeships. Parents, understandably, wanted the safest possible story for their children, and for many families that story looked like a campus.
+      </p>
+
+      <p class="mb-10">
+        But the labor market has a way of rewriting the curriculum.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">The Readiness Gap</h2>
+
+      <p class="mb-6">
+        In a 2025 survey conducted for the U.S. Chamber of Commerce and the College Board, 84 percent of hiring managers said most high school students are not prepared to enter the workforce. Nearly all said schools should offer more courses that teach professional skills like communication, collaboration, and critical thinking. This is not the complaint of a single industry or a single region. It is a broad, uneasy consensus: the diploma is arriving, but the readiness isn't always coming with it.
+      </p>
+
+      <!-- Pull Quote -->
+      <blockquote class="border-l-4 border-gray-300 pl-6 my-10 text-xl italic text-gray-700">
+        "Hiring managers were far more likely to view graduates with an industry-recognized credential as prepared (71 percent) than those without one (40 percent). That gap is not about intelligence. It's about translation."
+      </blockquote>
+
+      <p class="mb-10">
+        Credentials, internships, clinical hours, apprenticeships, project portfolios—the kind of proof that lives outside a transcript—are becoming the new grammar of employability. They tell an employer, in a language they already speak, what a student can do. If you listen closely, you can hear the country adjusting.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Career and Technical Education, Reinvented</h2>
+
+      <p class="mb-6">
+        Career and technical education, or CTE, is no longer a back hallway full of dusty shop tools and low expectations. It has been refitted. In 2019, 85 percent of high school graduates had taken at least one CTE course, according to the National Center for Education Statistics. During the 2016–17 school year, 98 percent of public school districts offered CTE programs at the high school level. In other words: the infrastructure is already nearly everywhere. What's changing is what schools are willing to call important.
+      </p>
+
+      <p class="mb-6">
+        This is not only about trades. It's about a shift in the cultural definition of "rigor." Coding classes and cybersecurity pathways sit beside welding bays and health science labs. Marketing students build brands. Nursing assistant students practice bedside skills. Teenagers earn certifications while still learning how to parallel park.
+      </p>
+
+      <p class="mb-6">
+        And then there is the slow arrival of the courses that used to be considered too obvious to teach. Personal finance, once treated as a niche elective, is being pulled into the center. The Council for Economic Education reported in 2024 that 35 states now require students to take a personal finance course to graduate. The message behind those requirements is blunt: we keep sending students into adulthood without teaching them how money behaves.
+      </p>
+
+      <p class="mb-10">
+        High school, in other words, is being asked to do what it has always claimed to do: prepare students for life. The difference now is that people mean it literally.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Building Bridges, Not Just Diplomas</h2>
+
+      <p class="mb-6">
+        In Plainview, Texas, a student named Aden Alarcon stood in front of his school board and talked about what a CTE program had done for him. He described himself as a first-generation student from a limited-income background. Without connections in the medical field, he said, breaking into healthcare can be challenging. "However, this program is changing that."
+      </p>
+
+      <p class="mb-6">
+        The line lands because it captures what the best career readiness programs actually provide: not a job, but a bridge. Not a promise, but an introduction.
+      </p>
+
+      <p class="mb-6">
+        This is where the story gets complicated, because education in America is a patchwork quilt stitched by local taxes, state policies, federal programs, philanthropic pilots, and the improvisations of tired but imaginative teachers. CTE can be a sleek pipeline or a thin brochure. It can widen opportunity or, if designed badly, become a new kind of sorting machine.
+      </p>
+
+      <p class="mb-10">
+        The Congressional Research Service, in a primer on CTE, notes that while 98 percent of districts offered CTE in a nationally representative survey, the delivery models varied widely, and opportunities often varied by geography. The reason isn't mysterious. Some districts can build labs. Some can partner with employers. Some can transport students to regional centers. Some can't.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">The Prestige Pivot</h2>
+
+      <p class="mb-6">
+        The new version of career readiness is also being sold, interestingly, with the language of prestige. The College Board, best known for Advanced Placement courses that once functioned as a kind of academic honors track, is piloting something called AP Career Kickstart: career-oriented AP courses in areas like cybersecurity and business with personal finance, designed to fit into existing CTE programs and lead to college credit and employer-endorsed credentials. AP Cybersecurity and AP Business with Personal Finance are slated to launch in fall 2026.
+      </p>
+
+      <p class="mb-6">
+        It is a quiet cultural reversal. For years, "college level" meant theoretical. Now the country is trying to make it mean applicable.
+      </p>
+
+      <p class="mb-10">
+        A cynical reader might see branding. A pragmatic reader might see a signal: the institutions that set status in American schooling are beginning to treat career preparation as something worth formalizing, standardizing, and measuring.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">What the Best Programs Get Right</h2>
+
+      <p class="mb-6">
+        But measurement brings its own risk. If high school becomes a factory for credentials, students could end up collecting badges the way they collect absences: without meaning, without connection to a real pathway, without the human mentorship that turns skill into identity.
+      </p>
+
+      <p class="mb-6">
+        This is why the best programs tend to look less like course catalogs and more like ecosystems. They braid academic work with practical work. They treat English class as training in clarity and persuasion. They treat math as a tool, not a punishment. They embed internships not as charity, but as curriculum. And they offer something that can't be printed on a transcript: a chance to be seen by adults who are not grading you, but counting on you.
+      </p>
+
+      <p class="mb-6">
+        Back in Port Arthur, the Youth Employment Program is small enough that the city can hold a reception for the interns, take photos, say their names aloud. That scale matters. It turns "workforce readiness" into a room full of people.
+      </p>
+
+      <p class="mb-10">
+        Scott Price, Allied IT's director of IT operations, describes the company's approach in a way that sounds almost old-fashioned: treat interns like regular employees. Train them broadly. Expect things from them. The goal, he says, is to show young people there are good job opportunities in their hometown.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Preparation for Choice</h2>
+
+      <p class="mb-6">
+        For students, the value of these programs is often less about immediate employment than about eliminating fog. Clayton says he had been undecided. Now he wants IT. Another intern at Allied, Lucas Barton, says he got hands-on experience and wants to major in robotics. "I've really enjoyed it," he says. "It's been such a good experience to learn new things for me, and I feel like it's really going to help me in the future with the career that I'm going into."
+      </p>
+
+      <!-- Pull Quote -->
+      <blockquote class="border-l-4 border-gray-300 pl-6 my-10 text-xl italic text-gray-700">
+        "Career readiness, in this sense, is not only preparation for work. It is preparation for choice. It gives students enough information about themselves to make decisions that don't feel like guesses."
+      </blockquote>
+
+      <p class="mb-6">
+        This matters for college-bound students, too. A student who knows they want nursing arrives at college differently than a student who arrives because it was the default. A student who has built a network, literal or social, shows up with less fear. A student who has done clinical hours understands the weight of care. Even if they go on to a bachelor's degree, the pathway is sturdier when it's built from experience, not aspiration alone.
+      </p>
+
+      <p class="mb-10">
+        The old argument about CTE was that it could "track" students, pushing certain kids away from college. The emerging argument is almost the opposite: that career readiness can keep more doors open by giving students proof of ability, income potential, and a clearer map of what further education is actually for. The country is trying, imperfectly, to replace the single story of success with multiple legitimate stories.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">The Costly Cost of Confusion</h2>
+
+      <p class="mb-6">
+        There is a small, unromantic truth at the center of this entire movement: adulthood is expensive, and confusion is costly.
+      </p>
+
+      <p class="mb-6">
+        That's why personal finance has become such a recurring motif in the new curriculum. The U.S. Chamber and College Board survey found that hiring managers ranked financial literacy as especially valuable for early-career employees. Meanwhile, states have begun to write financial education into graduation requirements, with the Council for Economic Education's 2024 survey calling the growth "unprecedented."
+      </p>
+
+      <p class="mb-6">
+        The push for finance courses has the same emotional logic as CTE itself. It's not an argument that literature is unimportant. It's an argument that students should not have to learn taxes and credit scores the way people learn to avoid sharks: through a single terrifying encounter.
+      </p>
+
+      <p class="mb-10">
+        The deeper, more unsettling truth is that the labor market has changed faster than many school schedules. In some communities, there is a mismatch between the jobs that exist and the stories young people are told about their futures. In others, there is a mismatch between the skills employers want and the opportunities schools can realistically provide.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">The Importance of Local</h2>
+
+      <p class="mb-6">
+        This is why the best career readiness efforts tend to be local. They depend on relationships: between schools and hospitals, schools and manufacturers, schools and city governments, schools and small businesses like Allied. They depend on adults willing to mentor teenagers who are still learning how to send an email with a subject line. And they depend on the willingness to treat those relationships as part of education, not a nice extra.
+      </p>
+
+      <p class="mb-6">
+        Near the end of the summer internship, the office at Allied looks a little different to Clayton than it did on the first day. Not because the office has changed, but because his eyes have. He knows where the cables go. He knows which problems can be solved quickly and which ones require patience. He knows, now, that work is often less glamorous than the idea of work, and that the satisfaction comes anyway, sliding in quietly after the task is done.
+      </p>
+
+      <p class="mb-6">
+        In a country that still uses "high school" as shorthand for immaturity, there is something radical about watching a teenager become useful. Not in the sense of being exploited, but in the sense of being trusted.
+      </p>
+
+      <p class="mb-6">
+        Clayton doesn't sound like a policy argument when he speaks. He sounds like a young person who has been given a clean, rare gift: clarity.
+      </p>
+
+      <p class="mb-6">
+        Before this, he says, he was really undecided. Now it's clear.
+      </p>
+
+      <p class="mb-10">
+        Outside, the heat waits. The year waits. Graduation waits. But for the moment, in the hum of the office, the future is not a vague, far-off country. It is a place with an address.
+      </p>
+
+      <!-- Sources -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
+
+      <ul class="text-sm text-gray-600 space-y-2 mb-10">
+        <li>Beaumont Enterprise, "Port Arthur Youth Employment Program offers students paid internships," July 26, 2025</li>
+        <li>National Center for Education Statistics, "Career and Technical Education in the United States" (Condition of Education indicator), accessed December 2025</li>
+        <li>National Center for Education Statistics, "Fast Facts: Career and technical education," accessed December 2025</li>
+        <li>U.S. Chamber of Commerce, "Few Hiring Managers Think High School Graduates Are Ready for the Workforce," September 22, 2025</li>
+        <li>College Board Newsroom, "Business-Backed High School Courses, Credentials, and Skills Launched for Millions of U.S. Students," September 18, 2025</li>
+        <li>Ipsos, "Majority of surveyed hiring managers agree that most high school students are not prepared to enter the workforce," September 19, 2025</li>
+        <li>K-12 Dive, "4 in 5 hiring managers say high schoolers not prepared for workforce," September 22, 2025</li>
+        <li>K-12 Dive, "Career and technical education faces obstacles to meet demand," January 19, 2024</li>
+        <li>Council for Economic Education, "Financial Education Requirements Soar in America's High Schools," February 26, 2024</li>
+        <li>Congressional Research Service, "Career and Technical Education: A Primer," June 21, 2022</li>
+        <li>Education Week, "The State of Career and Technical Education, in Charts," June 3, 2024</li>
+        <li>Plainview Herald, "Plainview students gain real-world skills through CTE programs," February 13, 2025</li>
+        <li>College Board AP Central, "AP Career Kickstart," accessed December 2025</li>
+      </ul>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-16 pt-8 border-t border-gray-200">
+      <p class="text-sm text-gray-500 italic">
+        This article is provided by TruSchools as an educational resource for students and families.
+      </p>
+      <div class="mt-6">
+        <a href="/high-schools" class="text-brand-blue hover:underline font-medium">
+          Browse High Schools by State &rarr;
+        </a>
+      </div>
+    </footer>
+  </article>
+</Layout>

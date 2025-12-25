@@ -1,0 +1,205 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import heroImage from '@/images/elementary-school-1.jpg';
+
+const title = "How to Find the Right School for Your Child";
+const subtitle = "School ratings can tell you a lot—but not everything. Here's what actually matters when choosing where your child will spend the next several years of their life.";
+const description = "A practical guide for parents on evaluating schools, understanding ratings, and finding the best educational fit for their child.";
+---
+
+<Layout title={title} description={description}>
+  <!-- Breadcrumbs -->
+  <div class="container">
+    <nav class="breadcrumb py-3">
+      <a href="/">Home</a>
+      <span class="breadcrumb-separator">&gt;</span>
+      <a href="/schools">Schools</a>
+      <span class="breadcrumb-separator">&gt;</span>
+      <span>{title}</span>
+    </nav>
+  </div>
+
+  <!-- Header - Centered, Narrow -->
+  <header class="max-w-[680px] mx-auto px-5 pt-4 md:pt-8">
+    <p class="text-sm font-semibold tracking-wide text-brand-green-text uppercase mb-4">Parent Resource Guide</p>
+    <h1 class="text-4xl md:text-5xl font-bold text-gray-900 leading-tight mb-5">
+      {title}
+    </h1>
+    <p class="text-xl md:text-2xl text-gray-600 italic mb-6">
+      {subtitle}
+    </p>
+    <p class="text-base text-gray-500 mb-10">By TruSchools Staff</p>
+  </header>
+
+  <!-- Hero Image - Container Width -->
+  <div class="container">
+    <img
+      src={heroImage.src}
+      alt="Students in an elementary school classroom"
+      class="w-full h-[400px] md:h-[500px] object-cover"
+    />
+  </div>
+
+  <!-- Article Container - Centered, Narrow -->
+  <article class="max-w-[680px] mx-auto px-5 py-10 md:py-16">
+    <!-- Article Body -->
+    <div class="article-body text-lg leading-relaxed text-gray-800">
+      <!-- Opening with drop cap -->
+      <p class="first-letter:text-6xl first-letter:font-bold first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:text-gray-900 mb-6">
+        Nearly half of all preK-12 households in the United States research schools online each year, according to GreatSchools.org. They're scrolling through ratings, scanning test scores, and trying to decode what a "7 out of 10" actually means for their kid. With school choice options expanding dramatically—traditional public schools, charter schools, magnet programs, private institutions—families have more alternatives than ever. But more options don't necessarily make the decision easier. If anything, they make a systematic approach more essential.
+      </p>
+
+      <p class="mb-10">
+        The challenge isn't just finding a good school. It's finding the right school for a specific child with specific needs, interests, and ways of learning. That's a harder question than any rating system can answer. But by understanding what data can and can't tell you, knowing what to look for during school visits, and asking the right questions, you can make a decision you'll feel confident about. Here's how to think through it.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">What Your Options Actually Look Like</h2>
+
+      <p class="mb-6">
+        Before evaluating individual schools, it helps to understand the landscape. The main categories—traditional public schools, charter schools, magnet schools, and private schools—each operate under different rules, with different trade-offs.
+      </p>
+
+      <p class="mb-6">
+        <strong>Traditional public schools</strong> remain where the vast majority of American students learn. According to the National Center for Education Statistics, roughly 50 million children attend them. They're funded by local, state, and federal taxes, which means they're free to attend and must accept all students within their designated boundaries. Teachers are required to hold state certification. Schools must provide special education services under federal law. And they're subject to state curriculum standards and standardized testing requirements. The upside is accessibility and accountability; the downside, for some families, is less flexibility.
+      </p>
+
+      <p class="mb-6">
+        <strong>Charter schools</strong> occupy an interesting middle ground. They're publicly funded—meaning no tuition—but they operate independently from traditional district oversight. In exchange for flexibility in curriculum, hiring, and teaching methods, they're supposed to meet the academic goals outlined in their charter agreement; if they don't, the charter can be revoked. Many charter schools specialize in particular approaches, whether STEM-focused, arts-integrated, or language immersion. Because demand often exceeds available seats, most use lottery-based admission. About 3.8 million students now attend roughly 7,800 charter schools nationwide.
+      </p>
+
+      <p class="mb-6">
+        <strong>Magnet schools</strong> are public schools with a twist: they offer specialized curricula designed to draw students from across a district rather than just the surrounding neighborhood. They emerged in the late 1960s as a voluntary desegregation strategy and have since evolved into programs focused on everything from performing arts to International Baccalaureate coursework. They're free to attend, but admission may involve applications, auditions, or entrance exams depending on the program.
+      </p>
+
+      <p class="mb-10">
+        <strong>Private schools</strong> operate outside the public system entirely. They're funded primarily through tuition and can set their own admission criteria, curriculum, and educational philosophy. Many offer religious or faith-based education. Class sizes tend to be smaller. But there's a crucial caveat for families with children who have learning differences: private schools aren't required to provide the same special education services that public schools must offer under federal law. Scholarships may be available, but cost remains a significant factor.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">What School Ratings Actually Measure—And What They Miss</h2>
+
+      <p class="mb-6">
+        Rating websites like GreatSchools and Niche have become essential tools for parents researching schools. They aggregate data, assign scores, and let you compare options at a glance. But education researchers urge caution about taking these numbers at face value.
+      </p>
+
+      <p class="mb-6">
+        GreatSchools uses a 1-10 rating system based on test score proficiency, student progress over time, and college readiness indicators. Ratings of 1-4 indicate below-average performance, 5-6 are average, and 7-10 are above average. Niche combines statistical data with user reviews to generate letter grades across categories like academics, diversity, and teacher quality.
+      </p>
+
+      <!-- Pull Quote -->
+      <blockquote class="border-l-4 border-gray-300 pl-6 my-10 text-xl italic text-gray-700">
+        "The problem is that school ratings correlate heavily with the socioeconomic status of the student body. A school serving a high-poverty population may have lower test scores while still providing excellent instruction and support."
+      </blockquote>
+
+      <p class="mb-6">
+        Standardized test performance—the backbone of most rating systems—reflects not just what happens inside a school, but family income levels, parent education, access to tutoring and enrichment, and countless other factors beyond a school's control. A school in an affluent area may post impressive numbers primarily because students arrive with advantages they bring from home.
+      </p>
+
+      <p class="mb-6">
+        This is why growth metrics matter. Student progress ratings—which measure how much students improve over time rather than where they start—may better reflect what a school is actually contributing. GreatSchools includes growth data, though proficiency scores still carry more weight in the overall rating. When you're researching schools, pay attention to whether students are making gains, not just whether they're meeting arbitrary benchmarks.
+      </p>
+
+      <p class="mb-10">
+        And remember what the numbers can't capture: school culture, the quality of individual teachers, the warmth of the community, how well extracurricular programs match your child's interests, and whether the social-emotional environment will help your kid thrive. These things matter enormously, and no algorithm can quantify them.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Why Visiting Matters More Than Any Rating</h2>
+
+      <p class="mb-6">
+        A school that looks great on paper may not be the right fit for your child. A lower-rated school might surprise you with its warmth, innovation, or particular strengths that align perfectly with what your family needs. The only way to know is to visit.
+      </p>
+
+      <p class="mb-6">
+        Before you go, do your homework. Review test scores and demographics so you know what to expect. Prepare a list of questions based on what matters most to your family. Bring something to take notes—after visiting multiple schools, details blur together. And think specifically about your child: their learning style, their social needs, their interests, any special requirements.
+      </p>
+
+      <p class="mb-6">
+        During your visit, pay attention to more than the formal presentation. Watch the classrooms. Do they look organized and inviting? Is student work displayed, and does it seem appropriately challenging for the grade level? Are teachers asking questions that stimulate thinking, or just lecturing at passive students? Do the kids seem focused and engaged, or distracted and bored?
+      </p>
+
+      <p class="mb-6">
+        Notice how students behave in the hallways, the cafeteria, on the playground. Watch how staff interact with kids—is there warmth and mutual respect, or something more transactional? Does the principal seem present and connected to the school community, or removed? What's the overall energy? Schools have personalities, and you'll feel them if you're paying attention.
+      </p>
+
+      <p class="mb-10">
+        Look at the facilities too. Are they clean and well-maintained? Are there adequate resources—a library with books kids actually want to read, functional technology, spaces for art and music and physical education? Does the building feel safe? Are outdoor spaces inviting? These aren't the most important factors, but they tell you something about priorities and investment.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">The Questions That Actually Reveal What a School Is Like</h2>
+
+      <p class="mb-6">
+        Anyone giving a school tour will emphasize strengths and downplay weaknesses. That's expected. Your job is to ask questions that get past the marketing and reveal how the school actually operates.
+      </p>
+
+      <p class="mb-6">
+        <strong>Start with the academic program.</strong> Ask about the school's educational philosophy and how it shows up in daily learning—not as a slogan, but in practice. Find out what curriculum they use for core subjects. Ask how they support students who are academically advanced and, separately, how they respond when a student is struggling. These two questions together tell you a lot about whether the school differentiates instruction or teaches to the middle. Ask about homework expectations at different grade levels.
+      </p>
+
+      <p class="mb-6">
+        <strong>Then turn to teachers and staff.</strong> What are the qualifications and experience levels of the teaching staff? What's the average class size and student-to-teacher ratio? What professional development do teachers receive? And here's a revealing one: what's the staff turnover rate, and why do teachers tend to leave? High turnover often signals problems that don't show up in test scores.
+      </p>
+
+      <p class="mb-6">
+        <strong>Ask about student support.</strong> What counseling or mental health resources are available? How does the school handle learning differences or special needs? What's the approach to discipline and behavior management? What anti-bullying policies exist, and more importantly, how are they actually enforced? These questions matter for every child, not just those with diagnosed needs.
+      </p>
+
+      <p class="mb-10">
+        <strong>Finally, get a sense of the community.</strong> How engaged are parents? How does the school communicate with families about student progress and school events? How diverse is the student body, and how does the school address that diversity in its programming and culture? Ask about practical logistics too: when does the school day start and end, is before- and after-school care available, what transportation options exist, what extracurricular activities are offered? For private schools, ask about the total cost—not just tuition, but fees, required materials, and additional expenses that can add up.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">What to Look for If Your Child Has Specific Needs</h2>
+
+      <p class="mb-6">
+        If your child has a learning difference, disability, or special need, additional research is essential. Under the Individuals with Disabilities Education Act, public schools and charter schools must provide free appropriate public education to all eligible students, including evaluations and Individualized Education Programs. But the quality and commitment of that support varies enormously from school to school.
+      </p>
+
+      <p class="mb-6">
+        Ask specifically about special education services and programs. Find out whether students with learning differences are integrated into general classrooms or placed in separate settings, and what the philosophy behind that approach is. Ask about the school's experience with your child's specific needs—a school that's excellent for students with dyslexia may have less experience with autism spectrum disorders, or vice versa. Find out how many special education staff the school employs and what their qualifications are. Ask about the process for requesting an evaluation or updating an IEP. If you're considering a private school for a child with special needs, investigate carefully, because private schools aren't required to provide the same services as public schools.
+      </p>
+
+      <p class="mb-10">
+        If your child is academically advanced, look for schools with robust programs to keep them challenged. Does the school offer gifted and talented programs? How do teachers differentiate instruction for advanced learners in regular classrooms? Are acceleration options available, either within subjects or across grade levels? For high school, ask about Advanced Placement courses, International Baccalaureate programs, or dual enrollment opportunities that let students earn college credit.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Making the Decision</h2>
+
+      <p class="mb-6">
+        After researching and visiting schools, you'll need to synthesize everything you've learned. Start by clarifying your priorities. Every family values different things—academic rigor, school culture, extracurricular offerings, location, diversity, specialized support services, cost. Rank what matters most to you before comparing options.
+      </p>
+
+      <p class="mb-6">
+        When age-appropriate, involve your child in the decision. Ask about their impressions from school visits. Consider their personality: would they thrive in a large, bustling environment or a smaller, more intimate setting? Do they need structure or freedom to explore? Your child will spend years at this school, and their sense of fit matters.
+      </p>
+
+      <!-- Pull Quote -->
+      <blockquote class="border-l-4 border-gray-300 pl-6 my-10 text-xl italic text-gray-700">
+        "Trust your instincts. Data and ratings are valuable tools, but they don't tell the whole story. If a school feels right—if you can picture your child happy and thriving there—that's meaningful information."
+      </blockquote>
+
+      <p class="mb-6">
+        Conversely, if something feels off during your visit, even if you can't articulate exactly what, trust that feeling. The best school for your child is one where they'll be known, supported, challenged, and happy.
+      </p>
+
+      <p class="mb-10">
+        Remember that school choice isn't a one-time decision. As your child grows and their needs change, you may revisit this process at transition points. Stay engaged with your child's education, maintain open communication with teachers and administrators, and remain willing to advocate for what your child needs. The right school today may not be the right school in five years—and that's okay.
+      </p>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-16 pt-8 border-t border-gray-200">
+      <p class="text-sm text-gray-500 italic">
+        This article is provided by TruSchools as an educational resource for parents.
+      </p>
+      <div class="mt-6">
+        <a href="/schools" class="text-brand-blue hover:underline font-medium">
+          Browse Schools by State &rarr;
+        </a>
+      </div>
+    </footer>
+  </article>
+</Layout>

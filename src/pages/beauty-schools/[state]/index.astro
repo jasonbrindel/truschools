@@ -1,0 +1,194 @@
+---
+import Layout from '@/layouts/Layout.astro';
+
+const { state } = Astro.params;
+const db = Astro.locals.runtime.env.DB;
+
+// State name to abbreviation mapping
+const stateMap: Record<string, string> = {
+  'alabama': 'AL', 'alaska': 'AK', 'arizona': 'AZ', 'arkansas': 'AR',
+  'california': 'CA', 'colorado': 'CO', 'connecticut': 'CT', 'delaware': 'DE',
+  'district-of-columbia': 'DC', 'florida': 'FL', 'georgia': 'GA', 'hawaii': 'HI',
+  'idaho': 'ID', 'illinois': 'IL', 'indiana': 'IN', 'iowa': 'IA',
+  'kansas': 'KS', 'kentucky': 'KY', 'louisiana': 'LA', 'maine': 'ME',
+  'maryland': 'MD', 'massachusetts': 'MA', 'michigan': 'MI', 'minnesota': 'MN',
+  'mississippi': 'MS', 'missouri': 'MO', 'montana': 'MT', 'nebraska': 'NE',
+  'nevada': 'NV', 'new-hampshire': 'NH', 'new-jersey': 'NJ', 'new-mexico': 'NM',
+  'new-york': 'NY', 'north-carolina': 'NC', 'north-dakota': 'ND', 'ohio': 'OH',
+  'oklahoma': 'OK', 'oregon': 'OR', 'pennsylvania': 'PA', 'puerto-rico': 'PR',
+  'rhode-island': 'RI', 'south-carolina': 'SC', 'south-dakota': 'SD',
+  'tennessee': 'TN', 'texas': 'TX', 'utah': 'UT', 'vermont': 'VT',
+  'virginia': 'VA', 'washington': 'WA', 'west-virginia': 'WV',
+  'wisconsin': 'WI', 'wyoming': 'WY'
+};
+
+const stateAbbr = stateMap[state || ''] || state?.toUpperCase();
+
+// State abbreviation to full name mapping
+const stateNames: Record<string, string> = {
+  'AL': 'Alabama', 'AK': 'Alaska', 'AZ': 'Arizona', 'AR': 'Arkansas',
+  'CA': 'California', 'CO': 'Colorado', 'CT': 'Connecticut', 'DE': 'Delaware',
+  'DC': 'District of Columbia', 'FL': 'Florida', 'GA': 'Georgia', 'HI': 'Hawaii',
+  'ID': 'Idaho', 'IL': 'Illinois', 'IN': 'Indiana', 'IA': 'Iowa',
+  'KS': 'Kansas', 'KY': 'Kentucky', 'LA': 'Louisiana', 'ME': 'Maine',
+  'MD': 'Maryland', 'MA': 'Massachusetts', 'MI': 'Michigan', 'MN': 'Minnesota',
+  'MS': 'Mississippi', 'MO': 'Missouri', 'MT': 'Montana', 'NE': 'Nebraska',
+  'NV': 'Nevada', 'NH': 'New Hampshire', 'NJ': 'New Jersey', 'NM': 'New Mexico',
+  'NY': 'New York', 'NC': 'North Carolina', 'ND': 'North Dakota', 'OH': 'Ohio',
+  'OK': 'Oklahoma', 'OR': 'Oregon', 'PA': 'Pennsylvania', 'PR': 'Puerto Rico',
+  'RI': 'Rhode Island', 'SC': 'South Carolina', 'SD': 'South Dakota',
+  'TN': 'Tennessee', 'TX': 'Texas', 'UT': 'Utah', 'VT': 'Vermont',
+  'VA': 'Virginia', 'WA': 'Washington', 'WV': 'West Virginia',
+  'WI': 'Wisconsin', 'WY': 'Wyoming'
+};
+
+const stateName = stateNames[stateAbbr || ''] || state;
+
+if (!stateAbbr || !stateName) {
+  return Astro.redirect('/404');
+}
+
+// Get all beauty schools in this state
+const schoolsResult = await db.prepare(`
+  SELECT id, institution_name, page_name, city, total_enrollment, tuition_in_state, accreditation
+  FROM colleges
+  WHERE state_abbr = ? AND institution_category = 'vocational' AND vocational_type = 'beauty' AND active = 1
+  ORDER BY institution_name
+`).bind(stateAbbr).all();
+
+const schools = schoolsResult.results;
+
+// Group by city
+const schoolsByCity: Record<string, any[]> = {};
+for (const school of schools) {
+  const city = school.city || 'Other';
+  if (!schoolsByCity[city]) {
+    schoolsByCity[city] = [];
+  }
+  schoolsByCity[city].push(school);
+}
+
+// Sort cities alphabetically
+const sortedCities = Object.keys(schoolsByCity).sort();
+
+// All US states for sidebar
+const allStates = Object.entries(stateNames)
+  .map(([abbr, name]) => ({
+    abbr,
+    name,
+    slug: name.toLowerCase().replace(/\s+/g, '-')
+  }))
+  .sort((a, b) => a.name.localeCompare(b.name));
+---
+
+<Layout title={`Beauty Schools in ${stateName}`} description={`Browse ${schools.length} accredited beauty schools and cosmetology programs in ${stateName}.`}>
+  <div class="container">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb py-3">
+      <a href="/">Home</a>
+      <span class="breadcrumb-separator">&gt;</span>
+      <a href="/vocational-schools">Vocational Schools</a>
+      <span class="breadcrumb-separator">&gt;</span>
+      <a href="/beauty-schools">Beauty Schools</a>
+      <span class="breadcrumb-separator">&gt;</span>
+      <span>{stateName}</span>
+    </nav>
+
+    <h1 class="text-brand-green-text mb-2">Beauty Schools in {stateName}</h1>
+    <p class="fs-14 text-gray-500 mb-5">{schools.length} school{schools.length !== 1 ? 's' : ''} found</p>
+  </div>
+
+  <div class="container py-5">
+    <div class="flex flex-col lg:flex-row gap-5">
+      <!-- Main Content -->
+      <div class="lg:w-2/3">
+        {schools.length === 0 ? (
+          <div class="box-rounded text-center py-8">
+            <p class="text-gray-600 mb-4">No beauty schools found in {stateName}.</p>
+            <a href="/beauty-schools" class="btn btn-primary">Browse All States</a>
+          </div>
+        ) : (
+          <div>
+            {sortedCities.map((city) => (
+              <div class="mb-6">
+                <h2 class="text-brand-blue text-lg mb-3 border-b border-gray-200 pb-2">{city}</h2>
+                <div class="space-y-3">
+                  {schoolsByCity[city].map((school: any) => (
+                    <a href={`/beauty-schools/${state}/${school.page_name}`}
+                       class="block box-rounded hover:border-brand-blue transition-colors no-underline">
+                      <div class="flex justify-between items-start">
+                        <div>
+                          <h3 class="text-brand-blue mb-1">{school.institution_name}</h3>
+                          {school.accreditation && (
+                            <p class="text-gray-500 fs-12 mb-0">{school.accreditation}</p>
+                          )}
+                        </div>
+                        <div class="text-right">
+                          {school.total_enrollment && (
+                            <div class="text-brand-green-text font-bold fs-14">{school.total_enrollment.toLocaleString()} students</div>
+                          )}
+                          {school.tuition_in_state && (
+                            <div class="text-gray-500 fs-13">${school.tuition_in_state.toLocaleString()}</div>
+                          )}
+                        </div>
+                      </div>
+                    </a>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <!-- Sidebar -->
+      <div class="lg:w-1/3">
+        <div class="box-rounded bg-lt-blue mb-4">
+          <h3 class="text-brand-blue mb-3">Quick Jump</h3>
+          <select
+            class="input w-full"
+            onchange="if(this.value) window.location.href=this.value"
+          >
+            <option value="">-- Select a State --</option>
+            {allStates.map((s) => (
+              <option value={`/beauty-schools/${s.slug}`} selected={s.slug === state}>
+                {s.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <!-- Ad Placeholder -->
+        <div class="box-rounded mb-4">
+          <div class="bg-gray-100 h-[280px] flex items-center justify-center text-gray-400 fs-13">
+            Advertisement
+          </div>
+        </div>
+
+        <div class="box-rounded mb-4">
+          <h3 class="text-brand-blue mb-3">Browse Other States</h3>
+          <div class="max-h-[300px] overflow-y-auto fs-13">
+            <ul class="list-none m-0 p-0">
+              {allStates.map((s) => (
+                <li class={`py-1 ${s.slug === state ? 'font-bold' : ''}`}>
+                  <a href={`/beauty-schools/${s.slug}`} class="text-brand-blue hover:underline">
+                    {s.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        <div class="box-rounded">
+          <h3 class="text-brand-blue mb-3">Related Programs</h3>
+          <ul class="list-none m-0 p-0 space-y-2 fs-14">
+            <li><a href="/healthcare-schools" class="text-brand-blue hover:underline">Healthcare Schools</a></li>
+            <li><a href="/trade-schools" class="text-brand-blue hover:underline">Trade Schools</a></li>
+            <li><a href={`/vocational-schools/${state}`} class="text-brand-blue hover:underline">All Vocational Schools in {stateName}</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>

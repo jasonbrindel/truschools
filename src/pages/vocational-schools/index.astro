@@ -1,0 +1,229 @@
+---
+import Layout from '@/layouts/Layout.astro';
+
+const db = Astro.locals.runtime.env.DB;
+
+// Get counts by vocational type
+const countsResult = await db.prepare(`
+  SELECT vocational_type, COUNT(*) as count
+  FROM colleges
+  WHERE institution_category = 'vocational' AND active = 1
+  GROUP BY vocational_type
+  ORDER BY count DESC
+`).all();
+
+const typeCounts = countsResult.results.reduce((acc: Record<string, number>, row: any) => {
+  acc[row.vocational_type] = row.count;
+  return acc;
+}, {});
+
+// Get counts by state
+const stateCountsResult = await db.prepare(`
+  SELECT state_abbr, COUNT(*) as count
+  FROM colleges
+  WHERE institution_category = 'vocational' AND active = 1
+  GROUP BY state_abbr
+  ORDER BY count DESC
+`).all();
+
+const stateCounts = stateCountsResult.results;
+
+// Get total vocational schools
+const totalResult = await db.prepare(`
+  SELECT COUNT(*) as total FROM colleges WHERE institution_category = 'vocational' AND active = 1
+`).first() as { total: number };
+const totalSchools = totalResult?.total || 0;
+
+// Category info for display
+const categories = [
+  {
+    slug: 'beauty-schools',
+    name: 'Beauty Schools',
+    description: 'Cosmetology, esthetics, nail technology, barbering, and salon management programs.',
+    count: typeCounts['beauty'] || 0,
+    icon: '💇'
+  },
+  {
+    slug: 'trade-schools',
+    name: 'Trade Schools',
+    description: 'HVAC, welding, electrical, plumbing, automotive, and construction programs.',
+    count: typeCounts['trade'] || 0,
+    icon: '🔧'
+  },
+  {
+    slug: 'healthcare-schools',
+    name: 'Healthcare Schools',
+    description: 'Medical assisting, dental assisting, phlebotomy, CNA, and nursing programs.',
+    count: typeCounts['healthcare'] || 0,
+    icon: '🏥'
+  },
+  {
+    slug: 'technology-schools',
+    name: 'Technology Schools',
+    description: 'IT, computer networking, cybersecurity, and software development programs.',
+    count: typeCounts['technology'] || 0,
+    icon: '💻'
+  },
+  {
+    slug: 'culinary-schools',
+    name: 'Culinary Schools',
+    description: 'Culinary arts, pastry, baking, and hospitality management programs.',
+    count: typeCounts['culinary'] || 0,
+    icon: '👨‍🍳'
+  }
+];
+
+// State name mapping
+const stateNames: Record<string, string> = {
+  'AL': 'Alabama', 'AK': 'Alaska', 'AZ': 'Arizona', 'AR': 'Arkansas',
+  'CA': 'California', 'CO': 'Colorado', 'CT': 'Connecticut', 'DE': 'Delaware',
+  'DC': 'District of Columbia', 'FL': 'Florida', 'GA': 'Georgia', 'HI': 'Hawaii',
+  'ID': 'Idaho', 'IL': 'Illinois', 'IN': 'Indiana', 'IA': 'Iowa',
+  'KS': 'Kansas', 'KY': 'Kentucky', 'LA': 'Louisiana', 'ME': 'Maine',
+  'MD': 'Maryland', 'MA': 'Massachusetts', 'MI': 'Michigan', 'MN': 'Minnesota',
+  'MS': 'Mississippi', 'MO': 'Missouri', 'MT': 'Montana', 'NE': 'Nebraska',
+  'NV': 'Nevada', 'NH': 'New Hampshire', 'NJ': 'New Jersey', 'NM': 'New Mexico',
+  'NY': 'New York', 'NC': 'North Carolina', 'ND': 'North Dakota', 'OH': 'Ohio',
+  'OK': 'Oklahoma', 'OR': 'Oregon', 'PA': 'Pennsylvania', 'PR': 'Puerto Rico',
+  'RI': 'Rhode Island', 'SC': 'South Carolina', 'SD': 'South Dakota',
+  'TN': 'Tennessee', 'TX': 'Texas', 'UT': 'Utah', 'VT': 'Vermont',
+  'VA': 'Virginia', 'WA': 'Washington', 'WV': 'West Virginia',
+  'WI': 'Wisconsin', 'WY': 'Wyoming'
+};
+
+function getStateSlug(abbr: string): string {
+  const name = stateNames[abbr] || abbr;
+  return name.toLowerCase().replace(/\s+/g, '-');
+}
+---
+
+<Layout title="Vocational & Trade Schools" description={`Browse ${totalSchools.toLocaleString()} vocational schools, trade schools, and certificate programs across the United States.`}>
+  <div class="container">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb py-3">
+      <a href="/">Home</a>
+      <span class="breadcrumb-separator">&gt;</span>
+      <span>Vocational Schools</span>
+    </nav>
+
+    <h1 class="text-brand-green-text mb-2">Vocational & Trade Schools</h1>
+    <p class="fs-14 text-gray-500 mb-5">Find certificate programs and hands-on training in {totalSchools.toLocaleString()} schools nationwide</p>
+  </div>
+
+  <div class="container py-5">
+    <div class="flex flex-col lg:flex-row gap-5">
+      <!-- Main Content -->
+      <div class="lg:w-2/3">
+        <!-- Introduction -->
+        <div class="box-rounded mb-5">
+          <h2 class="text-brand-blue mb-3">Start Your Career with Vocational Training</h2>
+          <p class="text-gray-700 mb-3">
+            Vocational schools offer hands-on training programs that prepare students for specific careers.
+            Unlike traditional four-year colleges, vocational programs typically take weeks to months to complete,
+            allowing you to enter the workforce faster.
+          </p>
+          <p class="text-gray-700 mb-0">
+            Browse our directory of accredited vocational schools to find programs in beauty, healthcare,
+            skilled trades, technology, and more.
+          </p>
+        </div>
+
+        <!-- Browse by Category -->
+        <h2 class="text-brand-blue mb-4">Browse by Category</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          {categories.map((cat) => (
+            <a href={`/${cat.slug}`} class="box-rounded hover:border-brand-blue transition-colors no-underline">
+              <div class="flex items-start gap-3">
+                <span class="text-3xl">{cat.icon}</span>
+                <div>
+                  <h3 class="text-brand-blue mb-1 text-lg">{cat.name}</h3>
+                  <p class="text-gray-600 fs-13 mb-2">{cat.description}</p>
+                  <span class="text-brand-green-text font-bold fs-13">{cat.count.toLocaleString()} schools</span>
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
+
+        <!-- Browse by State -->
+        <h2 class="text-brand-blue mb-4">Browse by State</h2>
+        <div class="box-rounded">
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-2 fs-13">
+            {stateCounts.map((state: any) => (
+              <a href={`/vocational-schools/${getStateSlug(state.state_abbr)}`} class="text-brand-blue hover:underline py-1">
+                {stateNames[state.state_abbr] || state.state_abbr} ({state.count})
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="lg:w-1/3">
+        <!-- Quick Stats -->
+        <div class="box-rounded bg-lt-blue mb-4">
+          <h3 class="text-brand-blue mb-3">Quick Facts</h3>
+          <ul class="list-none m-0 p-0 space-y-2 fs-14">
+            <li class="flex justify-between">
+              <span>Total Schools:</span>
+              <span class="font-bold">{totalSchools.toLocaleString()}</span>
+            </li>
+            <li class="flex justify-between">
+              <span>Beauty Schools:</span>
+              <span class="font-bold">{(typeCounts['beauty'] || 0).toLocaleString()}</span>
+            </li>
+            <li class="flex justify-between">
+              <span>Trade Schools:</span>
+              <span class="font-bold">{(typeCounts['trade'] || 0).toLocaleString()}</span>
+            </li>
+            <li class="flex justify-between">
+              <span>Healthcare Programs:</span>
+              <span class="font-bold">{(typeCounts['healthcare'] || 0).toLocaleString()}</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Ad Placeholder -->
+        <div class="box-rounded mb-4">
+          <div class="bg-gray-100 h-[280px] flex items-center justify-center text-gray-400 fs-13">
+            Advertisement
+          </div>
+        </div>
+
+        <!-- Career Resources -->
+        <div class="box-rounded mb-4">
+          <h3 class="text-brand-blue mb-3">Career Resources</h3>
+          <ul class="list-none m-0 p-0 space-y-2 fs-13">
+            <li>
+              <a href="/education-articles/the-diploma-and-the-torque-wrench" class="text-brand-blue hover:underline">The Diploma and the Torque Wrench</a>
+            </li>
+            <li>
+              <a href="/education-articles/the-comeback-of-vocational-schools" class="text-brand-blue hover:underline">The Comeback of Vocational Schools</a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Why Vocational School -->
+        <div class="box-rounded mb-4">
+          <h3 class="text-brand-blue mb-3">Why Choose Vocational School?</h3>
+          <ul class="list-disc pl-5 space-y-2 fs-13 text-gray-700">
+            <li>Shorter program duration (weeks to months)</li>
+            <li>Lower tuition costs than traditional colleges</li>
+            <li>Hands-on, practical training</li>
+            <li>Direct path to employment</li>
+            <li>Industry-specific certifications</li>
+            <li>Flexible scheduling options</li>
+          </ul>
+        </div>
+
+        <!-- Newsletter -->
+        <div class="box-rounded">
+          <h3 class="text-brand-blue mb-3">Get Career Tips</h3>
+          <p class="fs-13 text-gray-600 mb-3">Subscribe for vocational training news and career advice.</p>
+          <input type="email" placeholder="Your email address" class="input w-full mb-2" />
+          <button class="btn btn-primary w-full">Subscribe</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>

@@ -1,0 +1,238 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import heroImage from '@/images/kindergarten-1.jpg';
+
+const title = "The Stillness Epidemic";
+const subtitle = "How America's children stopped moving—and what it's costing them";
+const description = "An in-depth look at declining physical activity among American children, the health consequences, and what parents and schools can do about it.";
+---
+
+<Layout title={`${title}`} description={description}>
+  <!-- Breadcrumbs -->
+  <div class="container">
+    <nav class="breadcrumb py-3">
+      <a href="/">Home</a>
+      <span class="breadcrumb-separator">&gt;</span>
+      <a href="/schools">Schools</a>
+      <span class="breadcrumb-separator">&gt;</span>
+      <span>{title}</span>
+    </nav>
+  </div>
+
+  <!-- Header - Centered, Narrow -->
+  <header class="max-w-[680px] mx-auto px-5 pt-4 md:pt-8">
+    <p class="text-sm font-semibold tracking-wide text-brand-green-text uppercase mb-4">Children's Health</p>
+    <h1 class="text-4xl md:text-5xl font-bold text-gray-900 leading-tight mb-5">
+      {title}
+    </h1>
+    <p class="text-xl md:text-2xl text-gray-600 italic mb-6">
+      {subtitle}
+    </p>
+    <p class="text-base text-gray-500 mb-10">By TruSchools Staff</p>
+  </header>
+
+  <!-- Hero Image - Container Width -->
+  <div class="container">
+    <img
+      src={heroImage.src}
+      alt="Children at play"
+      class="w-full h-[400px] md:h-[500px] object-cover"
+    />
+  </div>
+
+  <!-- Article Container - Centered, Narrow -->
+  <article class="max-w-[680px] mx-auto px-5 py-10 md:py-16">
+    <!-- Article Body -->
+    <div class="article-body text-lg leading-relaxed text-gray-800">
+      <!-- Opening with drop cap -->
+      <p class="first-letter:text-6xl first-letter:font-bold first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:text-gray-900 mb-6">
+        Christian Glynn is nine years old, and he has brought cardboard to the playground. It's a Saturday afternoon in Charlotte, and the Ballantyne Bowl has all the usual equipment—slides, climbing ropes, the rubberized surfaces that have replaced the bone-breaking asphalt of an earlier era. But Christian and his four-year-old brother Holden aren't interested in any of that. They've spotted a hill covered in artificial turf, and they've arrived with scraps of cardboard and a theory.
+      </p>
+
+      <p class="mb-6">
+        "The plan is to use the cardboard to slide down the fake grass turf, because it is on a hill," Christian explains to a reporter from WFAE, Charlotte's NPR station, with the earnest precision of a child who has thought this through. "So we'll see how that works."
+      </p>
+
+      <p class="mb-6">
+        It works. Soon other kids have joined in, tumbling over each other, improvising, inventing. Their father, Ross Glynn, watches from a bench. He's glad for this—the unstructured chaos, the problem-solving, the physical joy of bodies in motion. He wishes it happened more often.
+      </p>
+
+      <p class="mb-10">
+        Because on Monday through Friday, Christian will return to school, where recess—the only time in his day dedicated to anything resembling this—lasts for roughly fifteen minutes. The official clock says thirty, but by the time kids walk from their classroom, use the bathroom, and eat their snack, the actual time spent in "true, outdoor, unstructured free play," as Ross puts it, has been whittled down to almost nothing.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">The Numbers</h2>
+
+      <p class="mb-6">
+        The numbers, when you assemble them, describe something close to a public health emergency.
+      </p>
+
+      <p class="mb-6">
+        In October 2024, the Physical Activity Alliance released its Report Card on Physical Activity for Children and Youth. The overall grade: D-minus. The same grade the nation received in 2022. According to the report, only 20 to 28 percent of American children ages six to seventeen meet the recommended sixty minutes of daily physical activity. Among teenagers, the number drops to 15 percent. The proportion meeting guidelines has actually declined since 2016, when the data was first collected this way.
+      </p>
+
+      <p class="mb-6">
+        One in five American children now has obesity, according to the Centers for Disease Control and Prevention. CDC data also shows that more than 40 percent of school-age children have at least one chronic health condition. A 2022 study in JAMA Pediatrics found that nearly one in three adolescents met the criteria for prediabetes—a condition that, a generation ago, was essentially unknown in children. Type 2 diabetes, once called "adult-onset" because it was so rare in young people, is surging among kids and teenagers at rates researchers describe as "alarming" and "unprecedented."
+      </p>
+
+      <p class="mb-10">
+        The consequences cascade outward. According to a systematic analysis published in JAMA Pediatrics, children with obesity are 1.4 times more likely to develop prediabetes, 4.4 times more likely to develop high blood pressure, and 26 times more likely to develop fatty liver disease. Depression rates among children with obesity run around 30 percent. The medical costs alone—$1.3 billion annually for childhood obesity in 2019 dollars, per CDC estimates—only hint at the human costs: the joint pain, the breathlessness, the social isolation, the years of life lost.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">How We Got Here</h2>
+
+      <p class="mb-6">
+        In 1969, the U.S. Department of Transportation conducted a survey of how American children got to school. The results seem almost fictional now: 48 percent of children walked or bicycled. Among those who lived within a mile of school, the number was 89 percent. Cars accounted for just 12 percent of school trips.
+      </p>
+
+      <p class="mb-6">
+        By 2009, according to the National Household Travel Survey analyzed by the National Center for Safe Routes to School, those numbers had essentially inverted. Only 13 percent of children walked or biked to school. Private automobiles accounted for 44 percent of school trips. Among children living within a mile—a distance most adults could cover in twenty minutes on foot—only 35 percent walked or biked. The rest were driven.
+      </p>
+
+      <p class="mb-6">
+        What happened? Several things, but they share a common thread: we built a world that made moving dangerous and inconvenient.
+      </p>
+
+      <p class="mb-6">
+        Schools, which were once sited in the centers of communities, migrated to the edges of town where land was cheaper. School funding formulas favored new construction over renovation, and minimum acreage requirements in many states demanded huge tracts of land that could only be found in less developed areas. The percentage of children living within a mile of school dropped from 41 percent in 1969 to 31 percent by 2009, according to the Safe Routes to School National Partnership.
+      </p>
+
+      <p class="mb-10">
+        Inside schools, recess began to disappear. A 2009 study published in Pediatrics found that 30 percent of children surveyed had little to no recess in their school day. A 2008 report from the Center on Education Policy found that between 2001 and 2007, 20 percent of school districts cut recess to make more time for academics, pressured by standardized testing requirements and the relentless drive for measurable achievement. The cuts fell hardest on the children who could least afford them: schools serving low-income populations were four to five times more likely to eliminate recess than affluent ones.
+      </p>
+
+      <!-- Pull Quote -->
+      <blockquote class="border-l-4 border-gray-300 pl-6 my-10 text-xl italic text-gray-700">
+        "Human bodies were designed to move and be active, but modern society has made life more sedentary. We need to reengineer our environments and routines to build activity back in."
+        <cite class="block text-base not-italic text-gray-500 mt-2">— Jordan Carlson, Professor of Pediatrics, Children's Mercy Kansas City</cite>
+      </blockquote>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">And Then Came Screens</h2>
+
+      <p class="mb-6">
+        The research on screen time and children's physical health is, at this point, grimly consistent. A study published in Cureus found that high screen time is associated with poor sleep—children with more than three hours daily showed 75 percent sleep efficiency compared to 90 percent for those under an hour. Multiple studies link excessive screen time to reduced physical activity, higher rates of obesity, elevated blood pressure, and insulin resistance. Research published in the journal Sleep Medicine found that children in 2011 slept, on average, one hour less per night than children in the early twentieth century.
+      </p>
+
+      <p class="mb-6">
+        According to market research cited in the American Journal of Preventive Medicine, the average age for getting a first smartphone is now 10.3 years. By their teen years, 95 percent of American adolescents have phone access, and some surveys estimate they spend an average of ten hours daily on screens when you count all devices. Data from the National Health Interview Survey shows that the steepest declines in physical activity occur between ages 10 and 11—precisely when most children receive their first phone.
+      </p>
+
+      <p class="mb-10">
+        But screens didn't cause this problem so much as accelerate it. They filled the void left by everything else we'd already taken away—the walk to school, the recess, the long summer afternoons of unsupervised outdoor play. They offered a convenient solution to the problem of children's idle time in a world where we'd made idleness seem dangerous and unproductive.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">The Pandemic Revealed the Fragility</h2>
+
+      <p class="mb-6">
+        The pandemic revealed just how much childhood physical activity had come to depend on the infrastructure of school—and how fragile that infrastructure was. When schools closed, rates of weight gain in children nearly doubled, according to a study published in Pediatrics. Organized sports vanished. Sleep schedules collapsed. The damage persisted: a UK study published in The Lancet found that while younger children's BMIs returned to pre-pandemic levels relatively quickly, older children's weight gain proved stubbornly permanent. "Reversing obesity is very challenging in older age groups," the researchers noted, with British understatement.
+      </p>
+
+      <p class="mb-6">
+        Some educators saw the pandemic as a wake-up call. At Marcy Arts Elementary in Minneapolis, as reported by K-12 Dive, teachers noticed when schools reopened that children had "significant gaps in how to interact in a play setting." Fifth graders who had started school as first graders before Covid—who had missed years of uninterrupted recess—didn't know how to initiate games, resolve conflicts, or navigate the basic social mechanics of play. The school partnered with Playworks, a nonprofit, to essentially re-teach children how to play. Their simplest intervention: using Rock, Paper, Scissors to settle playground disputes.
+      </p>
+
+      <p class="mb-10">
+        The LiiNK Project at Texas Christian University has been implementing longer recess periods and tracking results for years. According to their research, the findings are striking: a 40 percent decrease in off-task behaviors and a 10 percent increase in standardized test scores by fourth grade. More recess, it turns out, doesn't detract from academics. It supports them.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">The Policy Gap</h2>
+
+      <p class="mb-6">
+        Yet the policy landscape remains fractured. According to the National Association of State Boards of Education, only nine states require daily recess. Eleven states and Washington, D.C., have laws limiting teachers' ability to withhold recess as punishment—but few have outright bans, and enforcement is rare. A survey cited by the Hechinger Report found that 86 percent of American teachers have decreased or taken away recess as punishment for bad behavior. The irony is brutal: children who are hyperactive and struggling to focus have their only physical outlet removed as a consequence.
+      </p>
+
+      <!-- Pull Quote -->
+      <blockquote class="border-l-4 border-gray-300 pl-6 my-10 text-xl italic text-gray-700">
+        "I don't really believe it's the teacher's intention to damage the children. I think they use it as a threat because it's the time kids want the most. Still, the practice has long been identified as harmful."
+        <cite class="block text-base not-italic text-gray-500 mt-2">— Rebecca London, Professor of Sociology, UC Santa Cruz</cite>
+      </blockquote>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">What Children Actually Need</h2>
+
+      <p class="mb-6">
+        The research on what children actually need is not complicated. The CDC recommends sixty minutes of moderate-to-vigorous physical activity daily for children ages six to seventeen, including aerobic activity, muscle-strengthening, and bone-strengthening activities. For children under five, the World Health Organization recommends 180 minutes of physical activity spread throughout the day, with no sedentary screen time under age two and no more than an hour between ages two and four.
+      </p>
+
+      <p class="mb-6">
+        Meeting all three movement guidelines simultaneously—adequate physical activity, limited screen time, and sufficient sleep—produces health benefits greater than the sum of their parts. A study of more than six thousand children from twelve countries, published in The Lancet Child & Adolescent Health, found that meeting all three recommendations was associated with a 72 percent lower likelihood of obesity, compared to just 55 percent for meeting physical activity guidelines alone.
+      </p>
+
+      <p class="mb-10">
+        But here's the catch: only a tiny fraction of American children meet all three. The systems that once delivered physical activity as a natural byproduct of childhood—the walk to school, the hours of outdoor play, the recess, the active chores—have been systematically dismantled. What remains are interventions: scheduled activities that must be consciously chosen, planned, and defended against competing demands. This is harder for some families than others. Organized sports cost money. Safe outdoor play spaces require either private property or well-maintained public parks. Walkable neighborhoods tend to be expensive. The burdens fall, as they so often do, on families least equipped to bear them: the 2024 Physical Activity Alliance report card found that Black children have the lowest rates of physical activity and the highest rates of sedentary behavior of any demographic group.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Starting Somewhere</h2>
+
+      <p class="mb-6">
+        Back at the Ballantyne Bowl, the Glynn brothers have exhausted the possibilities of cardboard sledding. They've moved on to something involving climbing and hanging and making up rules as they go. Ross Glynn watches them.
+      </p>
+
+      <p class="mb-6">
+        He's glad they're here, on a Saturday, with time and space to move. He's glad they have a playground at all—some new school buildings in Atlanta, according to education researchers, are constructed without playgrounds. He's glad their school hasn't eliminated recess entirely, the way Chicago public schools did for nearly three decades.
+      </p>
+
+      <p class="mb-6">
+        But he's troubled, too. Troubled by the fifteen minutes that pass for playtime in a six-hour school day. Troubled by the sense that his children's bodies—their capacity for movement, for strength, for the simple animal pleasure of physical exertion—are being shaped by systems designed for something other than their wellbeing.
+      </p>
+
+      <p class="mb-6">
+        "So of course, academics—that's always going to be the highest and most important priority," he tells WFAE. "But kids need balance."
+      </p>
+
+      <p class="mb-6">
+        He's started a petition. Nearly five hundred signatures so far, all from parents asking for more recess time. It's a small thing, he knows. It won't reverse fifty years of suburban sprawl or make the roads safe for children to walk or give back the hours lost to screens. But his kids are in school now, today, and he has to start somewhere.
+      </p>
+
+      <p class="mb-6">
+        Holden, the four-year-old, runs over. He's been asked what he likes about recess at his preschool.
+      </p>
+
+      <p class="mb-10">
+        His answer is simple, and it contains everything. "I love to play with my friends every day."
+      </p>
+
+      <!-- Sources -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
+
+      <ul class="text-sm text-gray-600 space-y-2 mb-10">
+        <li>Physical Activity Alliance, "2024 United States Report Card on Physical Activity for Children and Youth," October 2024</li>
+        <li>Centers for Disease Control and Prevention, "Childhood Obesity Facts," April 2024</li>
+        <li>Centers for Disease Control and Prevention, "What Counts for Children and Teens," January 2024</li>
+        <li>U.S. Department of Transportation, "Transportation Characteristics of School Children," Nationwide Personal Transportation Survey, 1972</li>
+        <li>National Center for Safe Routes to School, "How Children Get to School: Patterns from 1969–2009," 2011</li>
+        <li>Safe Routes to School National Partnership, "What Is Safe Routes to School?" fact sheet</li>
+        <li>Center on Education Policy, "Instructional Time in Elementary Schools," 2008</li>
+        <li>Zhang et al., "Global Prevalence of Overweight and Obesity in Children and Adolescents: A Systematic Review and Meta-Analysis," JAMA Pediatrics, 2024</li>
+        <li>Syed et al., "The Impact of Screen Time on Sleep Patterns in School-Aged Children," Cureus, 2024</li>
+        <li>Roman-Viñas et al., "Proportion of children meeting recommendations for 24-hour movement guidelines," The Lancet Child & Adolescent Health, 2016</li>
+        <li>World Health Organization, "To grow up healthy, children need to sit less and play more," April 2019</li>
+        <li>World Health Organization, "Obesity and Overweight," fact sheet, December 2024</li>
+        <li>LiiNK Project, Texas Christian University, research findings on recess interventions</li>
+        <li>London, Rebecca, "Rethinking Recess," Harvard EdCast interview, October 2019</li>
+        <li>Belsha, Kalyn, "Teachers often cancel recess as a punishment," NBC News / The Hechinger Report, May 2022</li>
+        <li>National Association of State Boards of Education, state recess policy data, 2024</li>
+        <li>Dooley, Erin, "The stress of recess: Here's how schools are improving playtime," K-12 Dive, May 2024</li>
+        <li>Farrell, James, "All work and no play: Should kids have longer school recess?" WFAE Charlotte, December 2025</li>
+      </ul>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-16 pt-8 border-t border-gray-200">
+      <p class="text-sm text-gray-500 italic">
+        This article is provided by TruSchools as an educational resource for parents.
+      </p>
+      <div class="mt-6">
+        <a href="/schools" class="text-brand-blue hover:underline font-medium">
+          Browse Schools by State &rarr;
+        </a>
+      </div>
+    </footer>
+  </article>
+</Layout>

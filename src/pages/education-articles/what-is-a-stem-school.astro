@@ -1,0 +1,221 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import heroImage from '@/images/middle-school-1.jpg';
+
+const title = "What Is a STEM School?";
+const subtitle = "And Is One Right for Your Child?";
+const description = "A guide for parents on STEM schools, explaining what they are, how they work, and how to determine if one is right for your child.";
+---
+
+<Layout title={`${title} ${subtitle}`} description={description}>
+  <!-- Breadcrumbs -->
+  <div class="container">
+    <nav class="breadcrumb py-3">
+      <a href="/">Home</a>
+      <span class="breadcrumb-separator">&gt;</span>
+      <a href="/schools">Schools</a>
+      <span class="breadcrumb-separator">&gt;</span>
+      <span>{title}</span>
+    </nav>
+  </div>
+
+  <!-- Header - Centered, Narrow -->
+  <header class="max-w-[680px] mx-auto px-5 pt-4 md:pt-8">
+    <p class="text-sm font-semibold tracking-wide text-brand-green-text uppercase mb-4">Parent Resource Guide</p>
+    <h1 class="text-4xl md:text-5xl font-bold text-gray-900 leading-tight mb-5">
+      {title}
+    </h1>
+    <p class="text-xl md:text-2xl text-gray-600 italic mb-6">
+      {subtitle}
+    </p>
+    <p class="text-base text-gray-500 mb-10">By TruSchools Staff</p>
+  </header>
+
+  <!-- Hero Image - Container Width -->
+  <div class="container">
+    <img
+      src={heroImage.src}
+      alt="Students in a STEM classroom"
+      class="w-full h-[400px] md:h-[500px] object-cover"
+    />
+  </div>
+
+  <!-- Article Container - Centered, Narrow -->
+  <article class="max-w-[680px] mx-auto px-5 py-10 md:py-16">
+    <!-- Article Body -->
+    <div class="article-body text-lg leading-relaxed text-gray-800">
+      <!-- Opening with drop cap -->
+      <p class="first-letter:text-6xl first-letter:font-bold first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:text-gray-900 mb-6">
+        When Sarah Chen's daughter came home from third grade and announced she wanted to build a robot that could feed the family cat, Sarah wasn't sure what to make of it. "I thought maybe she'd seen something on YouTube," Sarah recalls. But it turned out Emma's new STEM magnet school had sparked something. Within weeks, Emma was sketching designs, researching motors, and asking questions Sarah couldn't answer.
+      </p>
+
+      <p class="mb-6">
+        "She'd never shown that kind of initiative with schoolwork before. It was like someone had flipped a switch."
+      </p>
+
+      <p class="mb-6">
+        Stories like Emma's have become common enough that STEM—the integration of science, technology, engineering, and mathematics—has evolved from educational jargon into something approaching a household word. Schools trumpet their STEM credentials. Politicians fund STEM initiatives. Parents dutifully add "STEM toys" to birthday wish lists.
+      </p>
+
+      <p class="mb-10">
+        But for families actually trying to choose a school, the term can feel frustratingly slippery. What exactly makes a school a "STEM school"? Is it just more science classes? Better computers? Something deeper? And the question that keeps parents up at night: does your particular child actually need one, or is this whole thing just marketing?
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Beyond the Acronym</h2>
+
+      <p class="mb-6">
+        The term dates to 2001, when the National Science Foundation coined it to describe an educational approach that would better prepare American students for technical careers. The concern was concrete: U.S. students were trailing behind other developed nations in math and science, while STEM jobs were growing six times faster than other occupations. Something had to change.
+      </p>
+
+      <p class="mb-6">
+        But here's what the acronym doesn't capture: STEM education, done well, isn't just about covering more technical content. It represents a fundamentally different philosophy about how children learn.
+      </p>
+
+      <p class="mb-6">
+        Traditional schooling treats subjects as separate containers. Math lives in one period, science in another, and the two rarely acknowledge each other's existence. A student might learn about velocity in physics class and linear equations in algebra without ever connecting the two—even though they're describing the same relationships.
+      </p>
+
+      <p class="mb-6">
+        STEM education breaks down those walls. A single project might require students to apply physics principles, write computer code, design and build a prototype, and use statistical analysis to evaluate the results. This isn't interdisciplinary learning as a nice-to-have enrichment activity; it's the core of how instruction happens.
+      </p>
+
+      <!-- Pull Quote -->
+      <blockquote class="border-l-4 border-gray-300 pl-6 my-10 text-xl italic text-gray-700">
+        "The real world doesn't hand you problems neatly labeled 'This is a math problem' or 'This is a science problem.' A civil engineer designing a bridge needs physics, materials science, computer modeling, cost analysis, and environmental assessment—all woven together. STEM education tries to reflect that reality from the start."
+        <cite class="block text-base not-italic text-gray-500 mt-2">— Dr. Michael Torres, STEM curriculum director</cite>
+      </blockquote>
+
+      <p class="mb-10">
+        The other defining feature is an emphasis on hands-on, project-based learning. Students don't just read about the engineering design process; they live it. They build things. They test them. They watch them fail. They figure out why, and they try again.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">What About STEAM?</h2>
+
+      <p class="mb-10">
+        You've probably also seen "STEAM"—STEM with Arts added. The distinction matters less than you might think. Proponents argue that creativity and design thinking are essential to innovation (Steve Jobs famously attributed Apple's success to the intersection of technology and liberal arts). But the best STEM programs already incorporate creative problem-solving and design; STEAM just makes that emphasis explicit. Don't get too hung up on the acronym. What matters is what actually happens in the classroom.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Inside a STEM Classroom</h2>
+
+      <p class="mb-6">
+        Walk into a well-run STEM classroom and you probably won't see rows of students silently filling in worksheets. What you're more likely to find is organized chaos: clusters of students huddled around projects, animated debates about design choices, prototypes in various states of completion and failure. The teacher circulates, asking questions more often than providing answers, nudging students toward discoveries rather than delivering them.
+      </p>
+
+      <p class="mb-6">
+        At one middle school program in Virginia, seventh graders spend a semester designing earthquake-resistant structures. They study the underlying physics of seismic waves. They analyze data from actual earthquakes. They build scale models using limited materials and budgets. Then they test their buildings on a shake table—and most of them collapse.
+      </p>
+
+      <p class="mb-6">
+        That's when the real learning starts. Students analyze what went wrong, research solutions, redesign, and test again. By the end of the project, they've internalized concepts that would be abstract and forgettable in a lecture format. More importantly, they've learned something about persistence, iteration, and the productive use of failure.
+      </p>
+
+      <!-- Pull Quote -->
+      <blockquote class="border-l-4 border-gray-300 pl-6 my-10 text-xl italic text-gray-700">
+        "I failed so many times on my bridge project. But each time I learned something. Now I actually like when things don't work because I know I'm about to figure something out."
+        <cite class="block text-base not-italic text-gray-500 mt-2">— Eighth grade student</cite>
+      </blockquote>
+
+      <p class="mb-10">
+        That mindset shift—what psychologist Carol Dweck calls developing a "growth mindset"—may be STEM education's most valuable and least quantifiable outcome.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Where to Find It</h2>
+
+      <p class="mb-6">
+        STEM-focused education comes in several forms. Dedicated STEM magnet schools draw students from across a district, often through lottery admission. Charter schools with STEM missions have multiplied in many states. Traditional public schools increasingly offer STEM "academies" or pathways as options within the larger school. Private schools tout STEM credentials with varying degrees of substance behind the marketing.
+      </p>
+
+      <p class="mb-10">
+        At the high end sit selective programs like Virginia's Thomas Jefferson High School for Science and Technology or the Illinois Mathematics and Science Academy—institutions that consistently rank among the nation's best and feed students into elite universities and research careers. Admission is competitive, sometimes ferociously so. But excellent STEM education doesn't require a competitive admissions gauntlet. Many public STEM magnets use lottery admission and serve students across the achievement spectrum. What matters is what happens after they arrive.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">The Fit Question</h2>
+
+      <p class="mb-6">
+        Here's where parents often trip themselves up: they assume STEM schools are only for kids who already love science and math. That's a misconception—and a consequential one.
+      </p>
+
+      <p class="mb-6">
+        "Some of our most successful students came in saying they hated math," says Dr. Torres. "What they actually hated was worksheets and memorization. When they saw that math could help them build something cool—a game, a robot, a solution to a problem they actually cared about—everything changed. The math became a tool, not a hurdle."
+      </p>
+
+      <p class="mb-6">
+        Research supports this. Studies from the Erikson Institute and the University of Chicago have found that early exposure to quality STEM education improves cognitive flexibility and creativity across domains—not just in technical subjects. Perhaps more surprisingly, early math proficiency turns out to predict later success in reading better than early reading proficiency does. The thinking skills transfer.
+      </p>
+
+      <p class="mb-6">
+        That said, STEM schools aren't for everyone, and pretending otherwise doesn't help anyone. A child whose heart belongs to theater, creative writing, or history might feel constrained in an environment that prioritizes technical subjects—especially if the school treats humanities as an afterthought. Some STEM-focused schools maintain strong arts and humanities programs; others emphatically do not. If your child's passions lie elsewhere, investigate carefully before committing.
+      </p>
+
+      <p class="mb-10">
+        Learning style matters too. STEM education's emphasis on collaboration, open-ended projects, and learning through trial and error energizes many students. But kids who prefer quiet individual work, or who find ambiguity stressful, may struggle—at least initially. This doesn't necessarily mean STEM is wrong for them; developing comfort with uncertainty and collaboration are valuable life skills. But the adjustment takes time and support.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Separating Substance from Marketing</h2>
+
+      <p class="mb-6">
+        "STEM" has become a marketing term, which means not every school that claims the label delivers the real thing. Some schools rename their existing science and math departments, update the website, and call it a transformation. Others invest in expensive robotics equipment that sits in a closet because no one's been trained to use it.
+      </p>
+
+      <p class="mb-6">
+        When evaluating a program, look past the brochure. Ask specifically how subjects are integrated—can they give you concrete examples of projects that span disciplines? Request information about teacher training in STEM pedagogy. Tour the facilities and notice whether the labs and maker spaces show signs of actual use or look like museum exhibits. Most importantly, talk to current families about what the day-to-day experience is actually like.
+      </p>
+
+      <p class="mb-10">
+        Pay attention to who the school serves. The best STEM programs actively work to engage students who might not initially see themselves as "STEM kids"—including girls, students of color, and students who've struggled with traditional instruction. A school that only attracts and retains students who were already high achievers isn't adding much value. And don't forget to ask about everything else. A school that treats English and history as boxes to check is doing students a disservice, no matter how impressive the robotics team's trophy case.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">STEM at Home</h2>
+
+      <p class="mb-6">
+        Whether or not your child attends a specialized school, you can nurture these skills at home—and you don't need an engineering degree to do it. When your child asks how something works, resist the urge to give a quick answer or admit defeat. Explore together. Take things apart. Look it up and then test what you learned. The goal isn't to have all the answers; it's to model curiosity and the process of figuring things out.
+      </p>
+
+      <p class="mb-10">
+        Everyday activities offer more than you might expect. Cooking is applied chemistry and measurement. Building a treehouse is engineering and project management. Even video games can develop computational thinking and strategic reasoning—especially if you talk with your child about the underlying logic. For more structured experiences, look into STEM summer camps, robotics clubs, or coding classes. Many communities now have maker spaces where families can access tools and work on projects. And never underestimate a good science museum—the hands-on exhibits are designed to spark exactly the kind of inquiry that STEM education cultivates.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">The Real Point</h2>
+
+      <p class="mb-6">
+        STEM education, at its best, isn't really about producing future engineers—though it certainly does that. It's about developing people who can analyze problems, weigh evidence, work with others, and keep trying when things don't work the first time. Those capabilities matter whether a student becomes a software developer, a nurse, a lawyer, a chef, or a parent.
+      </p>
+
+      <p class="mb-6">
+        If you're considering a STEM school, look beyond the label. Visit. Watch. Ask uncomfortable questions. The best programs transform how students see themselves and their capacity to understand the world. The worst are just traditional schools with shinier equipment and trendier branding.
+      </p>
+
+      <p class="mb-6">
+        As for Emma Chen, the third grader with the cat-feeding robot? She's in sixth grade now, and the robot still isn't finished. The project keeps evolving as she learns new things.
+      </p>
+
+      <p class="mb-6">
+        "Every time I figure out one part, I realize I could make another part better," she explains, sounding more like an engineer than a middle schooler.
+      </p>
+
+      <p class="mb-10">
+        Her mother sees that as the whole point. "She used to give up if something wasn't perfect the first time," Sarah says. "Now she understands that figuring it out is the actual goal. The robot is almost beside the point." Almost.
+      </p>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-16 pt-8 border-t border-gray-200">
+      <p class="text-sm text-gray-500 italic">
+        This article is provided by TruSchools as an educational resource for parents.
+      </p>
+      <div class="mt-6">
+        <a href="/schools" class="text-brand-blue hover:underline font-medium">
+          Browse Schools by State &rarr;
+        </a>
+      </div>
+    </footer>
+  </article>
+</Layout>

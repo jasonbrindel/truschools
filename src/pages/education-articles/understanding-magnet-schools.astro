@@ -1,0 +1,182 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import heroImage from '@/images/elementary-school-1.jpg';
+
+const title = "Understanding Magnet Schools";
+const subtitle = "Specialized Public Education That Draws Students In";
+const description = "A comprehensive guide for parents on magnet schools, explaining how they work, the types available, admission processes, and how to find the right fit.";
+---
+
+<Layout title={`${title}: ${subtitle}`} description={description}>
+  <!-- Breadcrumbs -->
+  <div class="container">
+    <nav class="breadcrumb py-3">
+      <a href="/">Home</a>
+      <span class="breadcrumb-separator">&gt;</span>
+      <a href="/schools">Schools</a>
+      <span class="breadcrumb-separator">&gt;</span>
+      <span>{title}</span>
+    </nav>
+  </div>
+
+  <!-- Header - Centered, Narrow -->
+  <header class="max-w-[680px] mx-auto px-5 pt-4 md:pt-8">
+    <p class="text-sm font-semibold tracking-wide text-brand-green-text uppercase mb-4">Parent Resource Guide</p>
+    <h1 class="text-4xl md:text-5xl font-bold text-gray-900 leading-tight mb-5">
+      {title}
+    </h1>
+    <p class="text-xl md:text-2xl text-gray-600 italic mb-6">
+      {subtitle}
+    </p>
+    <p class="text-base text-gray-500 mb-10">By TruSchools Staff</p>
+  </header>
+
+  <!-- Hero Image - Container Width -->
+  <div class="container">
+    <img
+      src={heroImage.src}
+      alt="Students in a magnet school classroom"
+      class="w-full h-[400px] md:h-[500px] object-cover"
+    />
+  </div>
+
+  <!-- Article Container - Centered, Narrow -->
+  <article class="max-w-[680px] mx-auto px-5 py-10 md:py-16">
+    <!-- Article Body -->
+    <div class="article-body text-lg leading-relaxed text-gray-800">
+      <!-- Opening with drop cap -->
+      <p class="first-letter:text-6xl first-letter:font-bold first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:text-gray-900 mb-6">
+        In 1971, a high school opened in Dallas that didn't look like anything Texas had seen before. Skyline High School was organized around career pathways—health sciences, business, technology, the arts—and it drew students from across the city: wealthy and poor, Black and white and Hispanic, high achievers and kids who'd been written off.
+      </p>
+
+      <p class="mb-6">
+        An administrator describing the school's pull on enrollment said it worked "like a magnet."
+      </p>
+
+      <p class="mb-10">
+        The name stuck.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Born from Crisis</h2>
+
+      <p class="mb-6">
+        Magnet schools didn't emerge from educational theory. They emerged from politics—specifically, from the painful aftermath of Brown v. Board of Education. By the late 1960s, districts across the country were under court orders to desegregate, but mandatory busing was sparking protests and accelerating white flight. The first magnet school, McCarver Elementary in Tacoma, Washington, opened in 1968 with a different theory: what if you could integrate schools by attraction rather than coercion? What if you created programs so compelling that families of all backgrounds would choose to attend?
+      </p>
+
+      <p class="mb-10">
+        It worked—better than the alternatives, anyway. Specialized programs drew diverse student bodies united by common interests. Parents felt agency rather than compulsion. The federal Magnet Schools Assistance Program, established in 1984, began funding the expansion. Today, while promoting diversity remains part of the mission, modern magnets are just as likely to be justified on educational grounds—offering specialized programs that wouldn't be feasible in every neighborhood school.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">How They Work</h2>
+
+      <p class="mb-6">
+        Unlike charter schools, which operate independently, magnet schools are part of the regular public school district. Same school board, same teachers' union, same basic rules. The difference is specialization. A magnet organizes itself around a theme—students still take English, math, science, and social studies, but instruction is filtered through and enriched by the school's focus area. At a performing arts magnet, history might be taught through the music and theater of the civil rights movement. At a STEM magnet, English class might focus on technical writing.
+      </p>
+
+      <p class="mb-10">
+        The key difference from neighborhood schools is that magnets draw students from beyond the immediate area. Depending on your district, you might apply to programs across the city or even across county lines. Many districts provide transportation, though not all—and schools without busing tend to serve less diverse, more affluent populations.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">The Varieties</h2>
+
+      <p class="mb-6">
+        Walk through a large urban district and you'll find magnets in almost every flavor.
+      </p>
+
+      <p class="mb-6">
+        <strong>STEM magnets</strong> have proliferated in recent years, offering advanced coursework in science, technology, engineering, and math, often with specialized labs, robotics programs, and partnerships with local tech companies. Some focus on specific fields—biotechnology, environmental science, aerospace. The best ones integrate STEM across the curriculum rather than just piling on extra science classes.
+      </p>
+
+      <p class="mb-6">
+        <strong>Performing and visual arts magnets</strong> function almost like conservatories within public schools. Students audition for admission and spend significant time developing skills in music, theater, dance, or visual arts. The academic program is rigorous too—these aren't schools where you trade education for arts training—but the arts are central to the experience.
+      </p>
+
+      <p class="mb-6">
+        <strong>International Baccalaureate magnets</strong> offer the globally recognized IB curriculum, which emphasizes critical thinking, intercultural understanding, and academic rigor. The full IB Diploma Programme is notoriously demanding—more comprehensive than AP—and recognized by universities worldwide.
+      </p>
+
+      <p class="mb-6">
+        <strong>Language immersion magnets</strong> teach core subjects in two languages. Spanish immersion is most common, but programs exist in French, Mandarin, German, Japanese, and others. Research consistently shows cognitive benefits to bilingualism that extend well beyond speaking another language.
+      </p>
+
+      <p class="mb-10">
+        <strong>Career and technical magnets</strong> prepare students for specific industries—healthcare, IT, culinary arts, aviation, law enforcement. Students may earn industry certifications before graduation and participate in internships. These programs have evolved far beyond the "vocational ed" of previous generations. And that's just a sampling. There are magnets focused on Montessori, classical education, environmental studies, gifted education, international studies, communications, entrepreneurship. The variety reflects both the diversity of student interests and the creativity of educators designing these programs.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Getting In</h2>
+
+      <p class="mb-6">
+        Admission varies dramatically. Some magnets are first-come, first-served. Others use lotteries. Still others have competitive admissions with tests or auditions. A STEM magnet might require minimum grades in math and science. A performing arts magnet almost certainly requires an audition. Gifted magnets typically require IQ or achievement test scores. Many have no academic requirements for elementary but become selective in middle and high school.
+      </p>
+
+      <p class="mb-10">
+        The timeline catches families off guard. Application windows often open in the fall for the following school year—you might need to apply in October or November for a program starting next August. Many districts host magnet fairs where families can learn about all available programs; these are worth attending even if you're unsure magnets are right for you. Most districts let you apply to multiple programs, and given the competition, applying broadly is wise. Siblings of current students typically get priority. If selected, you'll have a deadline to accept—don't miss it.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Magnets vs. Charters</h2>
+
+      <p class="mb-10">
+        Parents often confuse them, which is understandable—both are public schools of choice with specialized programs. But magnets are part of the school district (same board, same union, same framework), while charters are independent. Magnets tend to be more stable—they don't close because a charter wasn't renewed. They're more likely to have established sports teams and facilities. But they may have less flexibility to innovate, and they're subject to district policies that may not serve the magnet's mission. Neither is inherently better. They're different tools for similar purposes.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Finding the Right Match</h2>
+
+      <p class="mb-6">
+        Magnet schools work best when there's genuine alignment between the program and the student. A child who lives and breathes music will likely thrive at a performing arts magnet. A kid fascinated by how things work might flourish in STEM. A student who struggles in traditional settings might discover themselves in Montessori or expeditionary learning.
+      </p>
+
+      <!-- Pull Quote -->
+      <blockquote class="border-l-4 border-gray-300 pl-6 my-10 text-xl italic text-gray-700">
+        "But fit matters more than prestige. The most academically rigorous magnet in the district isn't the right choice if your child will be miserable there. A specialized program isn't worth a ninety-minute commute. The goal is an environment where your child thrives, not a box to check."
+      </blockquote>
+
+      <p class="mb-10">
+        Think carefully about how certain your child is about their interests. A kid passionate about theater at 11 might discover a love of biology at 14. Magnet programs offer depth, but they can also constrain. Make sure you understand what opportunities exist—and what might be foreclosed—before committing. And don't forget the neighborhood school. It might be excellent. It might offer things the magnet doesn't—a particular sport, a beloved teacher, friends from the community. The grass isn't always greener across town.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Questions to Ask</h2>
+
+      <p class="mb-10">
+        When you visit, dig beneath the surface. How does the theme actually show up in daily instruction? A STEM magnet where the theme only appears in electives isn't delivering on its promise. Ask about the trajectory—what happens when students move from elementary to middle, or middle to high school? Ask about balance—how much time on theme-related activities versus core academics? How do students who are passionate about the theme but struggle academically fare? What about those who excel academically but lose interest in the specialization? Get practical: commute, transportation, extracurriculars beyond the theme. And talk to current families. They'll tell you things the website won't.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">The Bigger Picture</h2>
+
+      <p class="mb-6">
+        Magnet schools represent one of public education's more successful experiments. Born from the turmoil of desegregation, they've evolved into something broader: a way to offer specialized education within the public system, to let students explore passions without leaving for private school or giving up on school altogether.
+      </p>
+
+      <p class="mb-6">
+        They're not perfect. Competitive admissions can create anxiety. Transportation barriers limit access. The best programs are oversubscribed. And like any schools, individual magnets range from excellent to mediocre.
+      </p>
+
+      <p class="mb-6">
+        But at their best, they do something powerful: they give students permission to be passionate. They create environments where it's not just acceptable but expected to care deeply about science or art or language or technology. For kids who've felt like misfits—too artsy, too nerdy, too intense—that permission can be transformative.
+      </p>
+
+      <p class="mb-10">
+        Whether that's right for your child is a question only you can answer. But knowing the option exists is where good decisions begin.
+      </p>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-16 pt-8 border-t border-gray-200">
+      <p class="text-sm text-gray-500 italic">
+        This article is provided by TruSchools as an educational resource for parents.
+      </p>
+      <div class="mt-6">
+        <a href="/schools" class="text-brand-blue hover:underline font-medium">
+          Browse Schools by State &rarr;
+        </a>
+      </div>
+    </footer>
+  </article>
+</Layout>

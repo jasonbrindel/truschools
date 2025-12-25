@@ -1,0 +1,277 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import heroImage from '@/images/high-school-1.jpg';
+
+const title = "What to Teach When AI Does the Work";
+const subtitle = "How to future-proof your child's education for automation and robotics";
+const description = "A guide for parents on preparing children for a future where AI handles routine tasks, focusing on critical thinking, creativity, and human skills.";
+---
+
+<Layout title={`${title}`} description={description}>
+  <!-- Breadcrumbs -->
+  <div class="container">
+    <nav class="breadcrumb py-3">
+      <a href="/">Home</a>
+      <span class="breadcrumb-separator">&gt;</span>
+      <a href="/schools">Schools</a>
+      <span class="breadcrumb-separator">&gt;</span>
+      <span>{title}</span>
+    </nav>
+  </div>
+
+  <!-- Header - Centered, Narrow -->
+  <header class="max-w-[680px] mx-auto px-5 pt-4 md:pt-8">
+    <p class="text-sm font-semibold tracking-wide text-brand-green-text uppercase mb-4">Parent Resource Guide</p>
+    <h1 class="text-4xl md:text-5xl font-bold text-gray-900 leading-tight mb-5">
+      {title}
+    </h1>
+    <p class="text-xl md:text-2xl text-gray-600 italic mb-6">
+      {subtitle}
+    </p>
+    <p class="text-base text-gray-500 mb-10">By TruSchools Staff</p>
+  </header>
+
+  <!-- Hero Image - Container Width -->
+  <div class="container">
+    <img
+      src={heroImage.src}
+      alt="Students in a classroom"
+      class="w-full h-[400px] md:h-[500px] object-cover"
+    />
+  </div>
+
+  <!-- Article Container - Centered, Narrow -->
+  <article class="max-w-[680px] mx-auto px-5 py-10 md:py-16">
+    <!-- Article Body -->
+    <div class="article-body text-lg leading-relaxed text-gray-800">
+      <!-- Opening with drop cap -->
+      <p class="first-letter:text-6xl first-letter:font-bold first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:text-gray-900 mb-6">
+        On a gray afternoon in Geneva, New York, the light in Room 214 looks like it has been poured through a strainer. Fluorescents buzz. A radiator ticks. George Goga sits at his desk with a stack of essays fanned out in front of him like a hand of cards, each one a small bet placed on the future.
+      </p>
+
+      <p class="mb-6">
+        He reads one paper twice. Then a third time.
+      </p>
+
+      <p class="mb-6">
+        The sentences are polished in a way that makes him suspicious. The vocabulary is ambitious, but the thinking feels weightless, as if someone has ironed the wrinkles out of it. He turns a page and taps the margin with the end of a pen. He is not angry, not exactly. More like he has walked into a room and found the furniture rearranged.
+      </p>
+
+      <p class="mb-6">
+        On his laptop, he opens a chat window and types a prompt, careful with the phrasing. A few seconds later the machine returns a response that has the same tone as the essay, the same symmetrical certainty. He leans back, eyes on the screen, and lets out a short breath. A teacher's version of recognizing a face in a crowd. This, he thinks, is the new problem. And also the new tool.
+      </p>
+
+      <p class="mb-10">
+        Across the room, two seniors, Vivian Hoang and Payce Chu Lustig, both teaching assistants for the course he built, hover near the whiteboard, waiting for him to finish. In a few months, their district will launch what the school believes is the first artificial intelligence literacy course in New York State, a class that Goga designed after watching the debate around AI harden into extremes: savior or saboteur, miracle or menace. He wanted something else. A third posture. Not denial. Not surrender. Literacy.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">The Landscape of Automation</h2>
+
+      <p class="mb-6">
+        In the public imagination, the future tends to arrive as a fleet: robots in warehouses, self-driving trucks on interstates, software that drafts contracts and diagnoses disease, and a quiet, relentless automation of ordinary work. People talk about "jobs" as if they were a set of labeled drawers in a filing cabinet, waiting to be emptied. But technological change, historically, tends to behave more like water. It seeps. It finds the cracks. It changes the shape of tasks before it changes the name of a job.
+      </p>
+
+      <p class="mb-6">
+        Still, the numbers are hard to ignore, even if you treat them as weather forecasts rather than fate. In 2024, the International Monetary Fund argued that artificial intelligence could affect almost 40 percent of jobs globally, replacing some tasks and complementing others, and that advanced economies may see even higher exposure. It was not written as a prophecy so much as a warning label: the same force that boosts productivity can also widen inequality if society is careless about who benefits.
+      </p>
+
+      <p class="mb-6">
+        McKinsey Global Institute, in a 2025 report, described a U.S. economy in which today's technology could, in theory, automate about 57 percent of current work hours, if businesses redesigned workflows around what machines can do. "In theory" is doing a lot of work in that sentence. Implementing automation is expensive, messy, political, and often slower than the hype cycle suggests. But the point is not speed. The point is direction.
+      </p>
+
+      <p class="mb-10">
+        The World Economic Forum, surveying large employers for its Future of Jobs Report 2025, put the emphasis not on disappearance but on churn: employers expect 39 percent of workers' core skills to change by 2030. Not a gentle update. A rewiring.
+      </p>
+
+      <!-- Pull Quote -->
+      <blockquote class="border-l-4 border-gray-300 pl-6 my-10 text-xl italic text-gray-700">
+        "If you are a parent staring at this horizon, the impulse is to ask for a map. Which careers survive? Which majors are safe? The deeper question is more unsettling, because it does not resolve into a single decision."
+      </blockquote>
+
+      <p class="mb-10">
+        What does it mean to raise a child into a world where the baseline for "competence" keeps moving, where machines can do more of what school has traditionally rewarded, and where the most valuable human contributions may be the ones that are hardest to test?
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">The First Shock</h2>
+
+      <p class="mb-6">
+        The first shock of AI in schools was not economic. It was intimate. It arrived as a shortcut.
+      </p>
+
+      <p class="mb-6">
+        When ChatGPT reached the public in late 2022, the initial panic in classrooms had the flavor of an academic integrity crisis: term papers written overnight, algebra steps fabricated with confidence, essays that sounded correct but did not mean anything. Administrators scrambled for policies. Teachers ran paragraphs through detection tools that often behaved like mood rings. Students, unsurprisingly, did what students have always done with new technology: they tried to get away with something.
+      </p>
+
+      <p class="mb-6">
+        Then something shifted. The machine did not go away. The bans did not hold. The reality of the tool seeped through, and schools began to acclimate. A 2025 report from the Center for Democracy and Technology found that in the 2024–2025 school year, 85 percent of teachers and 86 percent of students used AI tools, a scale of adoption that would have been unthinkable a few years earlier. The same report warned about increased risks to students, including privacy and other harms, the sort that tend to accompany any new system introduced at speed.
+      </p>
+
+      <p class="mb-10">
+        In other words, the question is no longer whether students will encounter AI. They already have. The question is what kind of relationship they will form with it, and whether adults will be present enough to shape that relationship into something sturdy. This is where the future stops being abstract. A child who learns to treat a machine's answer as an oracle becomes a different kind of adult than a child who learns to treat it as a fallible assistant. The difference is not technical. It is moral. It is psychological. It is, in the end, about agency.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">What Schools Must Become</h2>
+
+      <p class="mb-6">
+        Every generation gets a story about what it must become fluent in to survive. For some it was the factory, then the office, then the computer. For a long time, the curriculum functioned as a kind of cultural conveyor belt: read and write, do math, learn a canon, prepare to perform tasks that society had already decided were necessary.
+      </p>
+
+      <p class="mb-6">
+        But when machines begin to perform a large share of routine cognition, the question flips. School cannot only be about producing correct answers. Machines do that, or mimic it, with increasing ease. School has to become about producing good questions, and about the human judgments that surround any answer: what counts, what matters, what is true enough to act on, what is worth doing in the first place.
+      </p>
+
+      <p class="mb-6">
+        This is not a mystical claim. It is practical. The OECD's Learning Compass framework, developed with international educators and researchers, argues that thriving in a changing world depends on what it calls "transformative competencies," including creating new value, reconciling tensions and dilemmas, and taking responsibility. Those sound like poster slogans until you notice how poorly machines do them without humans in the loop. A model can generate ten options. It cannot tell you which one you should want.
+      </p>
+
+      <p class="mb-10">
+        In a future saturated with automation, the durable advantage is not memorizing what a machine can retrieve. It is cultivating what a machine cannot easily replicate: the ability to frame problems, to notice what is missing, to coordinate with other humans, to build trust, to care for someone, to make ethical tradeoffs when the correct answer is not the right one.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">The Jobs That Are Growing</h2>
+
+      <p class="mb-6">
+        One way to glimpse the future is to look at the kinds of work that are growing, not shrinking. The Bureau of Labor Statistics projects strong growth through 2034 for home health and personal care aides, a job defined less by information processing than by presence, patience, and physical assistance, with hundreds of thousands of openings each year. It also projects growth for electricians, a trade that sits at the intersection of physical skill, safety judgment, and increasingly complex systems. The work is tangible. The consequences are real. The environment is not a spreadsheet.
+      </p>
+
+      <p class="mb-6">
+        These are not romantic jobs. They are often hard jobs. But they offer a clue: as machines take over more predictable tasks, human labor migrates toward domains where the world resists simplification. Bodies, buildings, relationships. The messy middle.
+      </p>
+
+      <p class="mb-10">
+        At the same time, the jobs that will pay well will not only be those that avoid automation. Many will be the ones that partner with it, where a human directs systems, checks them, improves them, decides when to trust them and when to stop them. The future will contain plenty of highly technical roles, and plenty of roles that look nothing like code but will still be shaped by it. The dividing line is not "tech" versus "non-tech." It is whether a person can think alongside machines without becoming subordinate to them.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Beyond the Labor Market</h2>
+
+      <p class="mb-6">
+        There is another reason AI belongs in conversations about childhood, and it is not the labor market. It is the social world. The same technology that can tutor your child can also humiliate them.
+      </p>
+
+      <p class="mb-6">
+        In late 2025, the Associated Press reported on schools grappling with AI-generated deepfake images used for bullying, including sexually explicit manipulated images involving minors, and on a wave of new state laws aimed at deepfakes. The details are grim, but the underlying lesson is clear: the capacity to fabricate reality is no longer confined to experts with expensive software. It is becoming a consumer feature.
+      </p>
+
+      <p class="mb-10">
+        For parents, this changes what "internet safety" means. The old warnings about strangers and oversharing are still relevant, but incomplete. The new risk is that identity itself can be weaponized, that images and voices can be copied and repurposed, that consent can be violated with a few clicks. Preparing children for an automated future, then, is not only about employability. It is about teaching them to live in a world where information is cheap, attention is contested, and authenticity requires defense. This is not paranoia. It is hygiene.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">What Parents Can Do</h2>
+
+      <p class="mb-6">
+        In Goga's course, the premise is not that students should avoid AI. It is that they should learn to interrogate it. What does it know? What does it not know? How does it speak? What are its incentives? Who trained it? Who profits when it becomes ubiquitous? Where does it fail, and how can you tell?
+      </p>
+
+      <p class="mb-6">
+        He is explicit about the danger of treating the tool as a replacement for thinking. The point is to make students more human, not less. When he talks about the class, he insists that any serious conversation about artificial intelligence in education must balance ethics and philosophy, and not only the mechanics. The sentence sounds lofty until you watch a teenager grapple with a machine that speaks confidently even when it is wrong.
+      </p>
+
+      <p class="mb-6">
+        This is where parents often ask for specifics. What should we do at home? The answer is not a checklist, because childhood is not a product. But there are patterns, visible even now, in the children who seem best equipped for the world that is arriving.
+      </p>
+
+      <p class="mb-6">
+        They have built things. Not only with code, though code helps, but with their hands, with art supplies, with kitchen ingredients, with cardboard and tape. They know the feeling of testing an idea against reality and watching it fail, then trying again. They are not terrified of iteration. They are familiar with friction.
+      </p>
+
+      <p class="mb-6">
+        They have learned to read information as something constructed, not merely consumed. They ask who made this, why, and what was left out. They can fact-check without collapsing into cynicism, the mental posture that says nothing is true so nothing matters. In an AI-saturated world, cynicism becomes a kind of surrender.
+      </p>
+
+      <p class="mb-6">
+        They have practiced being with other people, in the same room, negotiating conflict, repairing it, learning that emotions are data but not directives. The future of work, despite the fantasies of automation, will still be crowded with humans. The ability to collaborate, to lead, to follow, to handle disagreement without breaking, will matter more, not less.
+      </p>
+
+      <p class="mb-10">
+        And they have had adults who model a particular stance toward technology: curiosity tempered by boundaries. Not fear. Not worship. Presence.
+      </p>
+
+      <!-- Pull Quote -->
+      <blockquote class="border-l-4 border-gray-300 pl-6 my-10 text-xl italic text-gray-700">
+        "The difficulty is that this kind of preparation does not feel like 'getting ahead.' It looks like play, conversation, boredom, responsibility, making dinner, showing up for a team, reading a hard book and not understanding it at first. It looks, in other words, like raising a person rather than training a worker."
+      </blockquote>
+
+      <p class="mb-10">
+        The labor market will still be harsh. That is true. But it will be harsher for children who have been shaped into compliance machines, drilled to produce outputs, rewarded for speed over judgment. Because that is exactly what machines are now learning to do.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">The Negotiation Ahead</h2>
+
+      <p class="mb-6">
+        It is tempting to imagine the future as a clean contest: humans versus robots, children versus automation, a race to stay useful. But the more accurate picture is a negotiation. Humans will decide, again and again, what they will hand over to machines and what they will keep for themselves, what they will optimize and what they will honor.
+      </p>
+
+      <p class="mb-6">
+        Those decisions will happen in boardrooms and legislatures, but they will also happen in homes, in the quiet choices of what we praise in children. Do we praise them for being correct, or for being brave enough to revise? Do we praise them for efficiency, or for care? Do we praise them for winning, or for becoming someone others can trust?
+      </p>
+
+      <p class="mb-6">
+        None of this guarantees safety. But it shapes the kind of adult a child becomes in a world where certainty is expensive and adaptability is currency.
+      </p>
+
+      <p class="mb-10">
+        And it gives them something machines do not have. A self.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Back in Room 214</h2>
+
+      <p class="mb-6">
+        Back in Room 214, the radiator keeps ticking. The essay is still on Goga's desk. Vivian and Payce are still waiting.
+      </p>
+
+      <p class="mb-6">
+        He does not call the student a cheater and close the book. He does not declare defeat. He does something more painstaking. He turns the paper into a lesson, not only about integrity but about thinking. He asks what the student was trying to do, what they were trying to avoid, what it feels like to face a blank page when a machine offers to fill it instantly. He asks, in other words, about fear.
+      </p>
+
+      <p class="mb-6">
+        Later, on the PBS program where he described building the course, he said he sat down and asked himself how to prepare students to enter a world where AI is both a tool and a problem. It is an awkward sentence because it refuses to resolve into a slogan. It contains the whole dilemma.
+      </p>
+
+      <p class="mb-6">
+        When the bell finally rings and the room loosens, Goga gathers the papers and slides them into a folder. Vivian and Payce drift toward the door, talking softly about what they want to do after graduation, the usual senior-year mixture of confidence and dread. Outside, the hallway fills with the sound of lockers and laughter, and for a moment the future does not feel like a tidal wave. It feels like what it always was: a crowd of young people walking forward with imperfect maps, hoping the adults have not lied to them too much.
+      </p>
+
+      <p class="mb-6">
+        Goga switches off the desk lamp. The screen goes dark.
+      </p>
+
+      <p class="mb-10">
+        "What we need," he says, almost to himself, "is a critical literacy."
+      </p>
+
+      <!-- Sources -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
+
+      <ul class="text-sm text-gray-600 space-y-2 mb-10">
+        <li>PBS NewsHour, "This high school is teaching students how to use AI—and how to question it," featuring George Goga, Vivian Hoang, and Payce Chu Lustig at Geneva High School, Geneva, New York</li>
+        <li>International Monetary Fund, "AI Will Transform the Global Economy. Let's Make Sure It Benefits Humanity," January 2024</li>
+        <li>McKinsey Global Institute, "A New Future of Work: The Race to Deploy AI and Raise Skills in Europe and Beyond," 2025</li>
+        <li>World Economic Forum, "Future of Jobs Report 2025," January 2025</li>
+        <li>Center for Democracy and Technology, "Navigating AI in Education: 2024–2025 School Year Report," 2025</li>
+        <li>OECD, "OECD Learning Compass 2030: A Series of Concept Notes," 2019</li>
+        <li>U.S. Bureau of Labor Statistics, Occupational Outlook Handbook, projections through 2034</li>
+        <li>Associated Press, reporting on AI-generated deepfakes in schools and state legislation, late 2025</li>
+      </ul>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-16 pt-8 border-t border-gray-200">
+      <p class="text-sm text-gray-500 italic">
+        This article is provided by TruSchools as an educational resource for parents.
+      </p>
+      <div class="mt-6">
+        <a href="/schools" class="text-brand-blue hover:underline font-medium">
+          Browse Schools by State &rarr;
+        </a>
+      </div>
+    </footer>
+  </article>
+</Layout>

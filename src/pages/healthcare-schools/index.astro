@@ -1,0 +1,172 @@
+---
+import Layout from '@/layouts/Layout.astro';
+
+const db = Astro.locals.runtime.env.DB;
+
+const vocationalType = 'healthcare';
+const categoryName = 'Healthcare Schools';
+const categoryDescription = 'Nursing, medical assisting, dental, pharmacy tech, and allied health programs.';
+
+// Get counts by state
+const stateCountsResult = await db.prepare(`
+  SELECT state_abbr, COUNT(*) as count
+  FROM colleges
+  WHERE institution_category = 'vocational' AND vocational_type = ? AND active = 1
+  GROUP BY state_abbr
+  ORDER BY count DESC
+`).bind(vocationalType).all();
+
+const stateCounts = stateCountsResult.results;
+
+// Get total schools
+const totalResult = await db.prepare(`
+  SELECT COUNT(*) as total FROM colleges
+  WHERE institution_category = 'vocational' AND vocational_type = ? AND active = 1
+`).bind(vocationalType).first() as { total: number };
+const totalSchools = totalResult?.total || 0;
+
+// Get featured schools
+const featuredResult = await db.prepare(`
+  SELECT id, institution_name, page_name, city, state_abbr, total_enrollment, tuition_in_state
+  FROM colleges
+  WHERE institution_category = 'vocational' AND vocational_type = ? AND active = 1
+    AND total_enrollment IS NOT NULL
+  ORDER BY total_enrollment DESC
+  LIMIT 10
+`).bind(vocationalType).all();
+
+const featuredSchools = featuredResult.results;
+
+// State name mapping
+const stateNames: Record<string, string> = {
+  'AL': 'Alabama', 'AK': 'Alaska', 'AZ': 'Arizona', 'AR': 'Arkansas',
+  'CA': 'California', 'CO': 'Colorado', 'CT': 'Connecticut', 'DE': 'Delaware',
+  'DC': 'District of Columbia', 'FL': 'Florida', 'GA': 'Georgia', 'HI': 'Hawaii',
+  'ID': 'Idaho', 'IL': 'Illinois', 'IN': 'Indiana', 'IA': 'Iowa',
+  'KS': 'Kansas', 'KY': 'Kentucky', 'LA': 'Louisiana', 'ME': 'Maine',
+  'MD': 'Maryland', 'MA': 'Massachusetts', 'MI': 'Michigan', 'MN': 'Minnesota',
+  'MS': 'Mississippi', 'MO': 'Missouri', 'MT': 'Montana', 'NE': 'Nebraska',
+  'NV': 'Nevada', 'NH': 'New Hampshire', 'NJ': 'New Jersey', 'NM': 'New Mexico',
+  'NY': 'New York', 'NC': 'North Carolina', 'ND': 'North Dakota', 'OH': 'Ohio',
+  'OK': 'Oklahoma', 'OR': 'Oregon', 'PA': 'Pennsylvania', 'PR': 'Puerto Rico',
+  'RI': 'Rhode Island', 'SC': 'South Carolina', 'SD': 'South Dakota',
+  'TN': 'Tennessee', 'TX': 'Texas', 'UT': 'Utah', 'VT': 'Vermont',
+  'VA': 'Virginia', 'WA': 'Washington', 'WV': 'West Virginia',
+  'WI': 'Wisconsin', 'WY': 'Wyoming'
+};
+
+function getStateSlug(abbr: string): string {
+  const name = stateNames[abbr] || abbr;
+  return name.toLowerCase().replace(/\s+/g, '-');
+}
+---
+
+<Layout title={categoryName} description={`Find ${totalSchools.toLocaleString()} accredited healthcare schools and medical training programs across the United States.`}>
+  <div class="container">
+    <nav class="breadcrumb py-3">
+      <a href="/">Home</a>
+      <span class="breadcrumb-separator">&gt;</span>
+      <a href="/vocational-schools">Vocational Schools</a>
+      <span class="breadcrumb-separator">&gt;</span>
+      <span>{categoryName}</span>
+    </nav>
+
+    <h1 class="text-brand-green-text mb-2">{categoryName}</h1>
+    <p class="fs-14 text-gray-500 mb-5">{totalSchools.toLocaleString()} accredited healthcare schools nationwide</p>
+  </div>
+
+  <div class="container py-5">
+    <div class="flex flex-col lg:flex-row gap-5">
+      <div class="lg:w-2/3">
+        <div class="box-rounded mb-5">
+          <h2 class="text-brand-blue mb-3">Start Your Healthcare Career</h2>
+          <p class="text-gray-700 mb-3">
+            Healthcare schools prepare students for essential roles in the medical field. These programs
+            typically take 6 months to 2 years to complete, leading to careers in nursing, medical
+            assisting, dental hygiene, pharmacy technology, and other allied health professions.
+          </p>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4">
+            <div class="text-center p-3 bg-lt-blue rounded">
+              <div class="text-2xl font-bold text-brand-blue">6-24</div>
+              <div class="fs-12 text-gray-600">Months</div>
+            </div>
+            <div class="text-center p-3 bg-lt-blue rounded">
+              <div class="text-2xl font-bold text-brand-blue">$8K-$35K</div>
+              <div class="fs-12 text-gray-600">Tuition</div>
+            </div>
+            <div class="text-center p-3 bg-lt-blue rounded">
+              <div class="text-2xl font-bold text-brand-blue">High</div>
+              <div class="fs-12 text-gray-600">Job Demand</div>
+            </div>
+            <div class="text-center p-3 bg-lt-blue rounded">
+              <div class="text-2xl font-bold text-brand-blue">$40K+</div>
+              <div class="fs-12 text-gray-600">Avg Salary</div>
+            </div>
+          </div>
+        </div>
+
+        {featuredSchools.length > 0 && (
+          <div class="mb-6">
+            <h2 class="text-brand-blue mb-4">Featured Healthcare Schools</h2>
+            <div class="space-y-3">
+              {featuredSchools.map((school: any) => (
+                <a href={`/healthcare-schools/${getStateSlug(school.state_abbr)}/${school.page_name}`}
+                   class="block box-rounded hover:border-brand-blue transition-colors no-underline">
+                  <div class="flex justify-between items-start">
+                    <div>
+                      <h3 class="text-brand-blue mb-1">{school.institution_name}</h3>
+                      <p class="text-gray-600 fs-13 mb-0">{school.city}, {stateNames[school.state_abbr] || school.state_abbr}</p>
+                    </div>
+                    <div class="text-right">
+                      {school.total_enrollment && (
+                        <div class="text-brand-green-text font-bold">{school.total_enrollment.toLocaleString()} students</div>
+                      )}
+                    </div>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <h2 class="text-brand-blue mb-4">Browse by State</h2>
+        <div class="box-rounded">
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-2 fs-13">
+            {stateCounts.map((state: any) => (
+              <a href={`/healthcare-schools/${getStateSlug(state.state_abbr)}`} class="text-brand-blue hover:underline py-1">
+                {stateNames[state.state_abbr] || state.state_abbr} ({state.count})
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div class="lg:w-1/3">
+        <div class="box-rounded bg-lt-blue mb-4">
+          <h3 class="text-brand-blue mb-3">Program Types</h3>
+          <ul class="list-none m-0 p-0 space-y-2 fs-14">
+            <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-brand-green"></span>Nursing (LPN/LVN)</li>
+            <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-brand-green"></span>Medical Assisting</li>
+            <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-brand-green"></span>Dental Assisting</li>
+            <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-brand-green"></span>Pharmacy Technician</li>
+            <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-brand-green"></span>Phlebotomy</li>
+            <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-brand-green"></span>Medical Billing & Coding</li>
+          </ul>
+        </div>
+
+        <div class="box-rounded mb-4">
+          <div class="bg-gray-100 h-[280px] flex items-center justify-center text-gray-400 fs-13">Advertisement</div>
+        </div>
+
+        <div class="box-rounded">
+          <h3 class="text-brand-blue mb-3">Related Programs</h3>
+          <ul class="list-none m-0 p-0 space-y-2 fs-14">
+            <li><a href="/beauty-schools" class="text-brand-blue hover:underline">Beauty Schools</a></li>
+            <li><a href="/technology-schools" class="text-brand-blue hover:underline">Technology Schools</a></li>
+            <li><a href="/vocational-schools" class="text-brand-blue hover:underline">All Vocational Schools</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>

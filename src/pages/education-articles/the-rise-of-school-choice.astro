@@ -1,0 +1,245 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import heroImage from '@/images/elementary-school-2.jpg';
+
+const title = "The Rise of School Choice";
+const subtitle = "Understanding Charter, Magnet, and Private School Options";
+const description = "A comprehensive guide to school choice in America, explaining charter schools, magnet programs, vouchers, and what the research says about their effectiveness.";
+---
+
+<Layout title={`${title}: ${subtitle}`} description={description}>
+  <!-- Breadcrumbs -->
+  <div class="container">
+    <nav class="breadcrumb py-3">
+      <a href="/">Home</a>
+      <span class="breadcrumb-separator">&gt;</span>
+      <a href="/schools">Schools</a>
+      <span class="breadcrumb-separator">&gt;</span>
+      <span>{title}</span>
+    </nav>
+  </div>
+
+  <!-- Header - Centered, Narrow -->
+  <header class="max-w-[680px] mx-auto px-5 pt-4 md:pt-8">
+    <p class="text-sm font-semibold tracking-wide text-brand-green-text uppercase mb-4">Parent Resource Guide</p>
+    <h1 class="text-4xl md:text-5xl font-bold text-gray-900 leading-tight mb-5">
+      {title}
+    </h1>
+    <p class="text-xl md:text-2xl text-gray-600 italic mb-6">
+      {subtitle}
+    </p>
+    <p class="text-base text-gray-500 mb-10">By TruSchools Staff</p>
+  </header>
+
+  <!-- Hero Image - Container Width -->
+  <div class="container">
+    <img
+      src={heroImage.src}
+      alt="Students in a classroom"
+      class="w-full h-[400px] md:h-[500px] object-cover"
+    />
+  </div>
+
+  <!-- Article Container - Centered, Narrow -->
+  <article class="max-w-[680px] mx-auto px-5 py-10 md:py-16">
+    <!-- Article Body -->
+    <div class="article-body text-lg leading-relaxed text-gray-800">
+      <!-- Opening with drop cap -->
+      <p class="first-letter:text-6xl first-letter:font-bold first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:text-gray-900 mb-6">
+        More than a million American students are now using public funds to attend private schools. That milestone, reached in 2024, would have been unthinkable a generation ago. Add in the 3.8 million students enrolled in charter schools and the millions more in magnet programs, and the picture comes into focus: school choice has evolved from a niche reform idea into a defining feature of American education.
+      </p>
+
+      <p class="mb-6">
+        The transformation is accelerating. Texas just approved a $1 billion voucher program. Idaho, Indiana, Tennessee, and Wyoming expanded private school choice this year. Charter schools continue their steady post-pandemic growth, adding 80,000 students in 2023-24 alone—even as traditional public school enrollment flatlines. According to the National Alliance for Public Charter Schools, traditional district schools lost roughly 1.75 million students between 2019 and 2024. Charter schools gained nearly 400,000 over the same period, despite serving a much smaller share of students.
+      </p>
+
+      <p class="mb-10">
+        Parents are weighing their options in ways they never have before. Policymakers are locked in fierce debates about who benefits, who pays, and whether any of this actually helps kids learn. This piece will explain the landscape: what the different school choice options actually are, why they've grown so dramatically, what the research says about their effectiveness, and what questions families should ask when navigating these decisions. The picture that emerges is more complicated than either side of the political debate typically acknowledges.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">What "School Choice" Actually Means</h2>
+
+      <p class="mb-6">
+        The term "school choice" encompasses a sprawling array of programs, each with different funding mechanisms, accountability rules, and educational philosophies. Understanding the differences matters, because a charter school and a voucher-funded private school have almost nothing in common except that parents chose them.
+      </p>
+
+      <p class="mb-6">
+        <strong>Charter schools</strong> are public schools that operate independently under a contract—a "charter"—with a state or local authorizer. They're tuition-free, publicly funded, and open to all students, typically through a lottery if demand exceeds supply. In exchange for flexibility in curriculum, hiring, and operations, charters are supposed to be held accountable for academic results. If they fail to meet performance goals, their charters can be revoked. The first charter school opened in Minnesota in 1992. Today, about 7.5% of public school students—roughly 3.8 million kids—attend one of the nation's approximately 7,800 charter schools.
+      </p>
+
+      <p class="mb-6">
+        <strong>Magnet schools</strong> are something different entirely. They're public schools within traditional school districts that offer specialized curricula—often focused on STEM, performing arts, language immersion, or career-technical education. They emerged in the late 1960s and 1970s as a tool for voluntary desegregation, designed to attract students from across different neighborhoods by offering something their zoned school couldn't. Unlike charter schools, magnets remain part of the district system and follow district employment rules, though they have some flexibility in their programming. They account for about 5% of public school enrollment. Some use competitive admissions through entrance exams or auditions; others use lotteries.
+      </p>
+
+      <p class="mb-6">
+        <strong>Private school vouchers</strong> are the most politically contentious category. These are publicly funded scholarships that allow families to pay tuition at private schools, including religious schools. Unlike charter schools, private schools receiving voucher students typically don't have to follow state curriculum standards, administer state tests, or accept all applicants. Voucher programs vary enormously: some are limited to low-income families or students with disabilities, while a growing number are "universal," available to nearly all students regardless of family income.
+      </p>
+
+      <p class="mb-10">
+        <strong>Education Savings Accounts</strong>, or ESAs, have become the preferred vehicle for new private school choice programs. The state deposits funds into a family's account, which can be spent on tuition, tutoring, textbooks, online courses, therapy services, and other approved educational expenses. About 78% of school choice legislation now focuses on ESAs. Arizona pioneered universal ESAs in 2022; by 2025, twelve states have universal or near-universal programs. When Texas Governor Greg Abbott signed his state's new $1 billion ESA program in May 2025, he called it one of the largest school choice initiatives in the nation. Families will receive roughly $10,000 per child annually—about 85% of what public schools get per student—to spend on private school tuition or other educational costs.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Why Families Are Leaving Traditional Public Schools</h2>
+
+      <p class="mb-6">
+        Several forces have converged to turn school choice from a fringe movement into mainstream policy, but the COVID-19 pandemic may have been the decisive accelerator.
+      </p>
+
+      <p class="mb-6">
+        When traditional public schools went remote in 2020, many parents got their first sustained look at what their children were learning—and some didn't like what they saw. Others simply needed schools that would remain open for in-person instruction. The pandemic prompted families to explore alternatives they'd never considered before, and many never went back. Private schools and charter schools that stayed open, or that returned to in-person instruction faster, gained enrollment they've largely retained.
+      </p>
+
+      <!-- Pull Quote -->
+      <blockquote class="border-l-4 border-gray-300 pl-6 my-10 text-xl italic text-gray-700">
+        "For many families, when you ask them why they're choosing charter schools, the number one thing they will tell you is safety. That happens across demographics. It happens across income, across race. Parents just do not view public schools as safe."
+        <cite class="block text-base not-italic text-gray-500 mt-2">— Starlee Coleman, National Alliance for Public Charter Schools</cite>
+      </blockquote>
+
+      <p class="mb-6">
+        But the pandemic only amplified concerns that predated it. In surveys, parents consistently cite two primary reasons for choosing charter or private schools: safety and academic rigor. According to a 2024 EdChoice survey, 50% of private school parents named "safe environment" as their top reason for choosing their child's school. Academic quality ranked second, at 47%. By contrast, the top factor for parents choosing their traditional district school was simply location—57% cited proximity to home as the main reason.
+      </p>
+
+      <p class="mb-10">
+        These concerns aren't purely about perception. Traditional public schools have struggled with chronic absenteeism, behavioral issues, and academic recovery since the pandemic. National Assessment of Educational Progress scores—the so-called "nation's report card"—have largely stagnated or declined. Parents who might once have accepted their assigned school are now looking for exits.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">What the Research Says—And Doesn't Say</h2>
+
+      <p class="mb-6">
+        Here's where the debate gets genuinely complicated, and where advocates on both sides tend to cherry-pick findings that support their priors.
+      </p>
+
+      <p class="mb-6">
+        The most comprehensive research on charter schools comes from Stanford University's Center for Research on Education Outcomes, known as CREDO, which has produced three major national studies since 2009. The trajectory of its findings is striking. CREDO's first study showed charters underperforming traditional public schools on average. By 2013, the results were roughly even. The 2023 study, examining 1.8 million charter students across 29 states, found that charter students gained the equivalent of 16 additional days of learning in reading and 6 days in math compared to similar students in traditional public schools.
+      </p>
+
+      <p class="mb-6">
+        The gains were particularly pronounced for Black and Hispanic students, English language learners, and students in poverty. Charter management organizations—networks of charter schools that share resources and practices—showed especially strong results, adding 27 days of reading growth and 23 days of math growth compared to traditional public schools. Macke Raymond, CREDO's director, argued that the findings represent "really the only story in U.S. education policy where we've been able to create a set of conditions such that schools actually do get better."
+      </p>
+
+      <p class="mb-6">
+        But context matters enormously. Critics point out that these gains, while statistically significant, are quite small in absolute terms—roughly 0.03 standard deviations in reading and 0.01 in math. A peer review from the National Education Policy Center noted that CREDO itself had previously described differences of this magnitude as "meaningless" when they favored traditional public schools in earlier studies.
+      </p>
+
+      <p class="mb-10">
+        There's also substantial variation within the charter sector that the averages obscure. Virtual charter schools produced "strongly negative outcomes," according to CREDO. Students receiving special education services in charter schools showed weaker growth than their counterparts in traditional public schools. And charter school quality varies enormously by state.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">The Voucher Evidence Problem</h2>
+
+      <p class="mb-6">
+        The evidence on private school vouchers is more troubling, at least when it comes to standardized test scores. Four rigorous studies published between 2015 and 2019, examining programs in Louisiana, Indiana, Ohio, and Washington D.C., reached a consistent conclusion: on average, students using vouchers to attend private schools performed worse on tests than similar students who remained in public schools. The Louisiana results were particularly stark—math scores dropped by 0.4 standard deviations in the first year, an effect comparable to what the COVID-19 pandemic later did to test scores nationally.
+      </p>
+
+      <p class="mb-6">
+        Why would private schools produce worse test results than public schools? Several theories have emerged. In Louisiana, the private schools willing to participate in the voucher program tended to be lower-quality institutions struggling for enrollment; elite private schools weren't interested in accepting the state's testing and accountability requirements along with its students.
+      </p>
+
+      <p class="mb-6">
+        There are reasons to be cautious about drawing sweeping conclusions. Test scores aren't the only measure of educational success, and older voucher studies—from Milwaukee, Cleveland, and Washington D.C.—found positive effects on high school graduation and college enrollment, particularly for Black students. A 2025 Urban Institute study of Ohio's EdChoice program found that voucher students were substantially more likely to enroll in college (64% vs. 48%) and earn a bachelor's degree (23% vs. 15%) than similar students who remained in public schools, even though their test score effects were modest or negative.
+      </p>
+
+      <p class="mb-10">
+        The expansion of vouchers to wealthier families raises a different set of concerns. In Indiana, a 2024 report showed that only 33% of voucher students had previously attended public school—the rest were already enrolled in private schools. The largest increase in voucher usage came from families earning $150,000-$200,000 annually, while participation actually declined among families earning $50,000-$100,000. Critics argue that universal vouchers have become a subsidy for families who would have chosen private schools anyway—not a pathway to new opportunities for disadvantaged students.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">The Fight Over Funding</h2>
+
+      <p class="mb-6">
+        Perhaps no question in the school choice debate generates more heat than whether these programs harm public schools financially. The answer depends heavily on program design and how you define harm.
+      </p>
+
+      <p class="mb-6">
+        The straightforward case for damage runs like this: When students leave public schools for charters or voucher-funded private schools, the funding associated with those students follows them. But schools can't reduce costs proportionally—they still need buildings, administrators, buses, and many of the same teachers. A school that loses 5% of its students doesn't save 5% on costs. Fixed costs remain fixed. The result is that remaining students effectively have fewer resources per capita.
+      </p>
+
+      <p class="mb-6">
+        This dynamic can be acute in districts where choice programs expand rapidly. Arizona's universal ESA program, initially projected to cost $65 million, actually cost more than $700 million in 2023—and an estimated 75% of participants were already enrolled in private schools, meaning the program wasn't drawing students away from public schools but simply subsidizing existing private school families with new state money.
+      </p>
+
+      <p class="mb-10">
+        Defenders of school choice counter that competition improves public schools—that the threat of losing students forces districts to up their game. There's some evidence for this competitive effect. Studies of Florida and Louisiana found that the introduction of private school choice programs led to higher test scores and lower absenteeism among public school students who remained, particularly low-income students. The mechanism isn't entirely clear, but the competitive pressure appears to prompt at least some improvement.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">What Families Should Actually Consider</h2>
+
+      <p class="mb-6">
+        For parents navigating these options, the policy debates matter less than a practical question: What's best for my child? The research suggests several considerations worth weighing.
+      </p>
+
+      <p class="mb-6">
+        Start with the school's actual educational approach and whether it matches your child's learning style. Charter schools and magnets often have specialized philosophies—classical education, project-based learning, STEM immersion, arts integration. A school that produces excellent average results may still be wrong for a particular student. Visiting the school, talking to current parents, and asking specific questions about curriculum and instruction matter more than looking at aggregate data.
+      </p>
+
+      <p class="mb-6">
+        Academic outcomes deserve scrutiny, but so does the fine print. For charter schools, check whether the school has been renewed and what its authorizer says about its performance—schools on probation or facing non-renewal may not be the stable environment a family needs. Private schools often aren't required to report test score data or graduation rates, which makes evaluation harder. Ask what information the school can provide and be wary of those that deflect.
+      </p>
+
+      <p class="mb-6">
+        The question of how a school handles students who struggle is particularly important and often underexplored. Some charter and private schools have been criticized for "counseling out" students who don't fit their model—a practice that inflates their performance numbers while leaving families scrambling mid-year. Ask specifically about support services for students with learning differences, English language learners, and those who fall behind academically.
+      </p>
+
+      <p class="mb-10">
+        Practical logistics matter more than parents sometimes anticipate. Unlike neighborhood public schools, charter and private schools often require transportation. A 30-minute commute may seem manageable in August but exhausting by February, particularly for younger children. Consider the impact on after-school activities, extracurricular participation, and family schedules before committing.
+      </p>
+
+      <!-- Section -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">What Comes Next</h2>
+
+      <p class="mb-6">
+        The school choice landscape will continue to evolve rapidly. The Texas implementation will be closely watched nationally. As potentially the largest day-one ESA program in the country, it will provide important data on how universal choice affects both public schools and participating families. Applications open in early 2026 for the 2026-27 school year, and the program's trajectory will shape the national debate.
+      </p>
+
+      <p class="mb-6">
+        Court challenges are inevitable. Several states face lawsuits arguing that voucher programs violate state constitutional provisions requiring adequate public school funding or prohibiting aid to religious institutions. Wyoming's ESA program already faces a challenge from the state education association. How courts rule will shape the movement's future, potentially creating a patchwork where similar programs are permitted in some states and struck down in others.
+      </p>
+
+      <p class="mb-6">
+        School choice isn't going away. Too many families have voted with their feet, too many states have committed billions in funding, and too much political capital has been spent on both sides. The real question is whether the expanding array of options will serve students—all students—better than the system it's supplementing.
+      </p>
+
+      <p class="mb-10">
+        The evidence so far is genuinely mixed: charter schools appear to be improving and producing modest gains for some populations, while private school voucher programs have shown troubling results on test scores even as some longer-term outcomes look more promising. For individual families, the best school is simply the one that meets their child's specific needs, which may or may not be their neighborhood public school. The rise of school choice has expanded the range of options available, but it hasn't made the work of evaluating them any easier.
+      </p>
+
+      <!-- Sources -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
+
+      <ul class="text-sm text-gray-600 space-y-2 mb-10">
+        <li>National Alliance for Public Charter Schools, "Do You Know Where the Children Are? A Five-Year Analysis of Public School Enrollment," 2024</li>
+        <li>EdChoice, "One Million Students in School Choice Programs," 2024</li>
+        <li>EdChoice, "2025 EdChoice Share: Exploring Where America's Students Are Educated," 2025</li>
+        <li>Stanford University Center for Research on Education Outcomes (CREDO), "As a Matter of Fact: The National Charter School Study III 2023," June 2023</li>
+        <li>Brookings Institution, "More Findings About School Vouchers and Test Scores, and They Are Still Negative," 2018</li>
+        <li>Urban Institute, "The Effects of Ohio's EdChoice Voucher Program on College Enrollment and Graduation," 2025</li>
+        <li>Education Week, "Private School Choice: What the Research Says," 2024</li>
+        <li>The 74 Million, "Charter Schools Continue to See Enrollment Increases Post-Pandemic," October 2024</li>
+        <li>Texas Tribune, "Private School Vouchers Are Now Law in Texas. Here's How They Will Work," May 2025</li>
+        <li>Newsweek, "The Slow Rise of America's Charter Schools," September 2025</li>
+        <li>FutureEd (Georgetown University), school choice legislation tracker, 2024-2025</li>
+        <li>National Education Policy Center, "CREDO Report Makes Overstated Claims of Charter School Gains," September 2023</li>
+        <li>Pew Research Center, "Facts About Public, Private and Charter Schools in the US," June 2024</li>
+        <li>National Center for Education Statistics, Private School Universe Survey, 2021-22</li>
+        <li>Moody's Investors Service, report on school district financial outlook, April 2025</li>
+      </ul>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-16 pt-8 border-t border-gray-200">
+      <p class="text-sm text-gray-500 italic">
+        This article is provided by TruSchools as an educational resource for parents.
+      </p>
+      <div class="mt-6">
+        <a href="/schools" class="text-brand-blue hover:underline font-medium">
+          Browse Schools by State &rarr;
+        </a>
+      </div>
+    </footer>
+  </article>
+</Layout>
