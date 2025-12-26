@@ -41,22 +41,22 @@ const youtubeId = getYoutubeId(video.embed_url);
 ---
 
 <Layout title={`${video.class} - ${video.course}`} description={video.class_tagline || video.class_description || `Watch ${video.class} - free video tutorial from ${video.author}.`}>
-  <div class="container">
-    <!-- Breadcrumb -->
-    <nav class="breadcrumb py-3">
-      <a href="/">Home</a>
-      <span class="breadcrumb-separator">&gt;</span>
-      <a href="/free-classes">Free Classes</a>
-      <span class="breadcrumb-separator">&gt;</span>
-      <a href={`/classes/${dept}`}>{video.dept}</a>
-      <span class="breadcrumb-separator">&gt;</span>
-      <a href={`/classes/${dept}/${course}`}>{video.course}</a>
-      <span class="breadcrumb-separator">&gt;</span>
-      <span>{video.class}</span>
-    </nav>
-  </div>
-
   <div class="container py-5">
+    <!-- Breadcrumb -->
+    <nav class="text-sm mb-4">
+      <ol class="flex flex-wrap items-center gap-2 text-gray-600">
+        <li><a href="/" class="hover:text-brand-blue">Home</a></li>
+        <li class="text-gray-400">/</li>
+        <li><a href="/classes" class="hover:text-brand-blue">Free Classes</a></li>
+        <li class="text-gray-400">/</li>
+        <li><a href={`/classes/${dept}`} class="hover:text-brand-blue">{video.dept}</a></li>
+        <li class="text-gray-400">/</li>
+        <li><a href={`/classes/${dept}/${course}`} class="hover:text-brand-blue">{video.course}</a></li>
+        <li class="text-gray-400">/</li>
+        <li class="text-gray-900 font-medium">{video.class}</li>
+      </ol>
+    </nav>
+
     <div class="flex flex-col lg:flex-row gap-5">
       <!-- Main Content -->
       <div class="lg:w-2/3">

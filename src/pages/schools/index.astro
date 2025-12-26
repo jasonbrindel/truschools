@@ -1,6 +1,15 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 
+// Images for featured article and topic cards
+import featuredImage from '@/images/students-walking-to-school-illustration.jpg';
+import academicsImage from '@/images/classroom-teacher-computers-watercolor.jpg';
+import activitiesImage from '@/images/school-playground-sunset-illustration.jpg';
+import healthImage from '@/images/school-basketball-court-illustration.jpg';
+import findingSchoolsImage from '@/images/school-entrance-students-abstract.jpg';
+import parentingImage from '@/images/elementary-students-smiling-classroom.jpg';
+import behaviorImage from '@/images/student-peer-group-school.jpg';
+
 // All US states
 const states = [
   { name: 'Alabama', slug: 'alabama', abbr: 'AL' },
@@ -119,6 +128,7 @@ function slugify(text: string): string {
 const topics = [
   {
     title: 'Academics',
+    image: academicsImage,
     articles: [
       { title: 'What to Teach When AI Does the Work', url: '/education-articles/what-to-teach-when-ai-does-the-work' },
       { title: '12 Homework Tips for Parents', url: '#' },
@@ -126,6 +136,7 @@ const topics = [
   },
   {
     title: 'Activities & Games',
+    image: activitiesImage,
     articles: [
       { title: 'Fun Educational Activities for Kids', url: '#' },
       { title: 'After-School Programs Guide', url: '#' },
@@ -133,6 +144,7 @@ const topics = [
   },
   {
     title: 'Physical Health',
+    image: healthImage,
     articles: [
       { title: 'The Stillness Epidemic', url: '/education-articles/the-stillness-epidemic' },
       { title: 'Sports Programs for Students', url: '#' },
@@ -140,6 +152,7 @@ const topics = [
   },
   {
     title: 'Finding Schools',
+    image: findingSchoolsImage,
     articles: [
       { title: 'How to Find the Right School', url: '/education-articles/how-to-find-the-right-school' },
       { title: 'The Rise of School Choice', url: '/education-articles/the-rise-of-school-choice' },
@@ -151,6 +164,7 @@ const topics = [
   },
   {
     title: 'Parenting',
+    image: parentingImage,
     articles: [
       { title: 'Parenting Styles: What\'s Your Style?', url: '#' },
       { title: 'Supporting Your Child\'s Education', url: '#' },
@@ -158,6 +172,7 @@ const topics = [
   },
   {
     title: 'Behavior & Social Health',
+    image: behaviorImage,
     articles: [
       { title: 'Helping Your Child Deal with Bullying', url: '#' },
       { title: 'Building Confidence in Children', url: '#' },
@@ -176,19 +191,19 @@ const schoolTypes = [
 ---
 
 <Layout title="K-12 Schools in the United States" description="Find K-12 schools across the United States. Browse comprehensive listings of preschools, kindergartens, elementary, middle, and high schools by state.">
-  <div class="container">
+  <div class="container py-5">
     <!-- Breadcrumb -->
-    <nav class="breadcrumb py-3">
-      <a href="/">Home</a>
-      <span class="breadcrumb-separator">&gt;</span>
-      <span>K-12 Schools</span>
+    <nav class="text-sm mb-4">
+      <ol class="flex flex-wrap items-center gap-2 text-gray-600">
+        <li><a href="/" class="hover:text-brand-blue">Home</a></li>
+        <li class="text-gray-400">/</li>
+        <li class="text-gray-900 font-medium">K-12 Schools</li>
+      </ol>
     </nav>
 
     <h1 class="text-brand-green-text mb-2">K-12 Schools in the United States</h1>
     <p class="fs-14 text-gray-500 mb-5">Find the right school for your child at every stage of their education.</p>
-  </div>
 
-  <div class="container py-5">
     <div class="flex flex-col lg:flex-row gap-5">
       <!-- Main Content -->
       <div class="lg:w-2/3">
@@ -196,13 +211,15 @@ const schoolTypes = [
         <div class="box-rounded mb-5">
           <div class="flex flex-col md:flex-row gap-4">
             <div class="md:w-1/3">
-              <div class="bg-gray-200 aspect-video rounded flex items-center justify-center text-gray-400">
-                Featured Image
-              </div>
+              <img
+                src={featuredImage.src}
+                alt="Students walking to school"
+                class="w-full aspect-video object-cover rounded"
+              />
             </div>
             <div class="md:w-2/3">
               <h2 class="text-brand-blue text-xl mb-2">
-                <a href="#" class="hover:underline">Finding & Evaluating Schools for Your Child</a>
+                <a href="/education-articles/how-to-find-the-right-school" class="hover:underline">Finding & Evaluating Schools for Your Child</a>
               </h2>
               <p class="text-gray-600 fs-14">
                 Choosing the right school is one of the most important decisions you'll make for your child.
@@ -217,15 +234,22 @@ const schoolTypes = [
           <h2 class="text-brand-blue text-xl mb-4">K-12 Education Topics</h2>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {topics.map((topic) => (
-              <div class="border border-gray-200 rounded p-4">
-                <h3 class="text-brand-green-text font-bold mb-2 fs-14">{topic.title}</h3>
-                <ul class="space-y-1 fs-13">
-                  {topic.articles.map((article) => (
-                    <li>
-                      <a href={article.url} class="text-brand-blue hover:underline">{article.title}</a>
-                    </li>
-                  ))}
-                </ul>
+              <div class="border border-gray-200 rounded overflow-hidden">
+                <img
+                  src={topic.image.src}
+                  alt={topic.title}
+                  class="w-full aspect-square object-cover"
+                />
+                <div class="p-4">
+                  <h3 class="text-brand-green-text font-bold mb-2 fs-14">{topic.title}</h3>
+                  <ul class="space-y-1 fs-13">
+                    {topic.articles.map((article) => (
+                      <li>
+                        <a href={article.url} class="text-brand-blue hover:underline">{article.title}</a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             ))}
           </div>

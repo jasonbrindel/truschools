@@ -44,6 +44,17 @@ When importing data or building pages:
 - **Database**: Cloudflare D1 (SQLite)
 - **Styling**: Tailwind CSS
 
+## CRITICAL: Deployment
+
+**The project name is `truschools` - NOT `trueschools` (no 'e').**
+
+When deploying to Cloudflare Pages, ALWAYS use:
+```
+--project-name=truschools
+```
+
+NEVER use `trueschools`, `trueschools-preview`, or any variation with an 'e'. The correct spelling is `tru` not `true`.
+
 ## Formatting Standards
 
 - All numbers should use `.toLocaleString()` for comma formatting (e.g., "156,755 students")

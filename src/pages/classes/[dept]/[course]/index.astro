@@ -49,23 +49,23 @@ const firstVideo = videos.length > 0 ? videos[0] : null;
 ---
 
 <Layout title={`${courseInfo.course} - Free Video Tutorials`} description={`Free ${courseInfo.course} video tutorials. ${videos.length} lessons available for self-paced learning.`}>
-  <div class="container">
+  <div class="container py-5">
     <!-- Breadcrumb -->
-    <nav class="breadcrumb py-3">
-      <a href="/">Home</a>
-      <span class="breadcrumb-separator">&gt;</span>
-      <a href="/free-classes">Free Classes</a>
-      <span class="breadcrumb-separator">&gt;</span>
-      <a href={`/classes/${dept}`}>{courseInfo.dept}</a>
-      <span class="breadcrumb-separator">&gt;</span>
-      <span>{courseInfo.course}</span>
+    <nav class="text-sm mb-4">
+      <ol class="flex flex-wrap items-center gap-2 text-gray-600">
+        <li><a href="/" class="hover:text-brand-blue">Home</a></li>
+        <li class="text-gray-400">/</li>
+        <li><a href="/classes" class="hover:text-brand-blue">Free Classes</a></li>
+        <li class="text-gray-400">/</li>
+        <li><a href={`/classes/${dept}`} class="hover:text-brand-blue">{courseInfo.dept}</a></li>
+        <li class="text-gray-400">/</li>
+        <li class="text-gray-900 font-medium">{courseInfo.course}</li>
+      </ol>
     </nav>
 
     <h1 class="text-brand-green-text mb-2">{courseInfo.course}</h1>
     <p class="fs-14 text-gray-500 mb-5">{videos.length} video lesson{videos.length !== 1 ? 's' : ''} available</p>
-  </div>
 
-  <div class="container py-5">
     <div class="flex flex-col lg:flex-row gap-5">
       <!-- Main Content -->
       <div class="lg:w-2/3">

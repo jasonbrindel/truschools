@@ -1,6 +1,7 @@
 ---
 import Layout from '@/layouts/Layout.astro';
-import heroImage from '@/images/elementary-school-2.jpg';
+import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import heroImage from '@/images/colorful-school-campus-illustration.jpg';
 
 const title = "Public vs. Private School";
 const subtitle = "Making the Right Choice for Your Family";
@@ -8,16 +9,7 @@ const description = "A comprehensive guide for parents comparing public and priv
 ---
 
 <Layout title={`${title}: ${subtitle}`} description={description}>
-  <!-- Breadcrumbs -->
-  <div class="container">
-    <nav class="breadcrumb py-3">
-      <a href="/">Home</a>
-      <span class="breadcrumb-separator">&gt;</span>
-      <a href="/schools">Schools</a>
-      <span class="breadcrumb-separator">&gt;</span>
-      <span>{title}</span>
-    </nav>
-  </div>
+  <ArticleBreadcrumb title={title} />
 
   <!-- Header - Centered, Narrow -->
   <header class="max-w-[680px] mx-auto px-5 pt-4 md:pt-8">

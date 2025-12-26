@@ -1,6 +1,15 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 
+// Images for featured article and topic cards
+import featuredImage from '@/images/elementary-school-students-classroom-learning.jpg';
+import academicsImage from '@/images/classroom-teacher-computers-watercolor.jpg';
+import activitiesImage from '@/images/school-playground-sunset-illustration.jpg';
+import healthImage from '@/images/school-basketball-court-illustration.jpg';
+import findingSchoolsImage from '@/images/school-entrance-students-abstract.jpg';
+import parentingImage from '@/images/elementary-students-smiling-classroom.jpg';
+import behaviorImage from '@/images/student-peer-group-school.jpg';
+
 // All US states
 const states = [
   { name: 'Alabama', slug: 'alabama', abbr: 'AL' },
@@ -119,13 +128,15 @@ function slugify(text: string): string {
 const topics = [
   {
     title: 'Elementary Academics',
+    image: academicsImage,
     articles: [
-      { title: 'What to Teach When AI Does the Work', url: '/education-articles/what-to-teach-when-ai-does-the-work' },
+      { title: 'What to Teach When AI Does the Work', url: '/education-articles/what-to-teach-when-ai-does-the-work?from=elementary-schools' },
       { title: '12 Homework Tips for Parents', url: '#' },
     ]
   },
   {
     title: 'Activities & Games',
+    image: activitiesImage,
     articles: [
       { title: 'Fun Activities for Kids', url: '#' },
       { title: 'Educational Games for Elementary Students', url: '#' },
@@ -133,23 +144,26 @@ const topics = [
   },
   {
     title: 'Physical Health',
+    image: healthImage,
     articles: [
-      { title: 'The Stillness Epidemic', url: '/education-articles/the-stillness-epidemic' },
+      { title: 'The Stillness Epidemic', url: '/education-articles/the-stillness-epidemic?from=elementary-schools' },
       { title: 'Sports and Physical Activities', url: '#' },
     ]
   },
   {
     title: 'Finding Schools',
+    image: findingSchoolsImage,
     articles: [
-      { title: 'How to Find the Right School', url: '/education-articles/how-to-find-the-right-school' },
-      { title: 'The Rise of School Choice', url: '/education-articles/the-rise-of-school-choice' },
-      { title: 'Public vs. Private School', url: '/education-articles/public-vs-private-school' },
-      { title: 'What Is a STEM School?', url: '/education-articles/what-is-a-stem-school' },
-      { title: 'Understanding Magnet Schools', url: '/education-articles/understanding-magnet-schools' },
+      { title: 'How to Find the Right School', url: '/education-articles/how-to-find-the-right-school?from=elementary-schools' },
+      { title: 'The Rise of School Choice', url: '/education-articles/the-rise-of-school-choice?from=elementary-schools' },
+      { title: 'Public vs. Private School', url: '/education-articles/public-vs-private-school?from=elementary-schools' },
+      { title: 'What Is a STEM School?', url: '/education-articles/what-is-a-stem-school?from=elementary-schools' },
+      { title: 'Understanding Magnet Schools', url: '/education-articles/understanding-magnet-schools?from=elementary-schools' },
     ]
   },
   {
     title: 'Parenting',
+    image: parentingImage,
     articles: [
       { title: 'Parenting Styles: What\'s Your Style?', url: '#' },
       { title: 'Supporting Your Child\'s Education', url: '#' },
@@ -157,6 +171,7 @@ const topics = [
   },
   {
     title: 'Behavior & Social Health',
+    image: behaviorImage,
     articles: [
       { title: 'Helping Your Child Deal with Bullying', url: '#' },
       { title: 'Building Confidence in Children', url: '#' },
@@ -166,19 +181,19 @@ const topics = [
 ---
 
 <Layout title="Elementary Schools in the United States" description="Find elementary schools across the United States. Browse comprehensive listings of public and private elementary schools by state.">
-  <div class="container">
+  <div class="container py-5">
     <!-- Breadcrumb -->
-    <nav class="breadcrumb py-3">
-      <a href="/">Home</a>
-      <span class="breadcrumb-separator">&gt;</span>
-      <span>Elementary Schools</span>
+    <nav class="text-sm mb-4">
+      <ol class="flex flex-wrap items-center gap-2 text-gray-600">
+        <li><a href="/" class="hover:text-brand-blue">Home</a></li>
+        <li class="text-gray-400">/</li>
+        <li class="text-gray-900 font-medium">Elementary Schools</li>
+      </ol>
     </nav>
 
     <h1 class="text-brand-green-text mb-2">Elementary Schools in the United States</h1>
     <p class="fs-14 text-gray-500 mb-5">Find the best elementary schools for your child's foundational education.</p>
-  </div>
 
-  <div class="container py-5">
     <div class="flex flex-col lg:flex-row gap-5">
       <!-- Main Content -->
       <div class="lg:w-2/3">
@@ -186,9 +201,11 @@ const topics = [
         <div class="box-rounded mb-5">
           <div class="flex flex-col md:flex-row gap-4">
             <div class="md:w-1/3">
-              <div class="bg-gray-200 aspect-video rounded flex items-center justify-center text-gray-400">
-                Featured Image
-              </div>
+              <img
+                src={featuredImage.src}
+                alt="Elementary school students"
+                class="w-full aspect-video object-cover rounded"
+              />
             </div>
             <div class="md:w-2/3">
               <h2 class="text-brand-blue text-xl mb-2">
@@ -207,15 +224,22 @@ const topics = [
           <h2 class="text-brand-blue text-xl mb-4">Elementary School Topics</h2>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {topics.map((topic) => (
-              <div class="border border-gray-200 rounded p-4">
-                <h3 class="text-brand-green-text font-bold mb-2 fs-14">{topic.title}</h3>
-                <ul class="space-y-1 fs-13">
-                  {topic.articles.map((article) => (
-                    <li>
-                      <a href={article.url} class="text-brand-blue hover:underline">{article.title}</a>
-                    </li>
-                  ))}
-                </ul>
+              <div class="border border-gray-200 rounded overflow-hidden">
+                <img
+                  src={topic.image.src}
+                  alt={topic.title}
+                  class="w-full aspect-square object-cover"
+                />
+                <div class="p-4">
+                  <h3 class="text-brand-green-text font-bold mb-2 fs-14">{topic.title}</h3>
+                  <ul class="space-y-1 fs-13">
+                    {topic.articles.map((article) => (
+                      <li>
+                        <a href={article.url} class="text-brand-blue hover:underline">{article.title}</a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             ))}
           </div>

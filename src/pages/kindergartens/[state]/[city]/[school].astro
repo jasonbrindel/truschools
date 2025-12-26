@@ -162,22 +162,22 @@ const pageDescription = `${schoolData.school_name} is a ${getSchoolType(schoolDa
 ---
 
 <Layout title={pageTitle} description={pageDescription}>
-  <div class="container">
-    <!-- Breadcrumb -->
-    <nav class="breadcrumb py-3">
-      <a href="/">Home</a>
-      <span class="breadcrumb-separator">&gt;</span>
-      <a href="/kindergartens">Kindergartens</a>
-      <span class="breadcrumb-separator">&gt;</span>
-      <a href={`/kindergartens/${state}`}>{schoolData.state_name}</a>
-      <span class="breadcrumb-separator">&gt;</span>
-      <a href={`/kindergartens/${state}/${city}`}>{cityName}</a>
-      <span class="breadcrumb-separator">&gt;</span>
-      <span>{schoolData.school_name}</span>
-    </nav>
-  </div>
-
   <div class="container py-5">
+    <!-- Breadcrumb -->
+    <nav class="text-sm mb-4">
+      <ol class="flex flex-wrap items-center gap-2 text-gray-600">
+        <li><a href="/" class="hover:text-brand-blue">Home</a></li>
+        <li class="text-gray-400">/</li>
+        <li><a href="/kindergartens" class="hover:text-brand-blue">Kindergartens</a></li>
+        <li class="text-gray-400">/</li>
+        <li><a href={`/kindergartens/${state}`} class="hover:text-brand-blue">{schoolData.state_name}</a></li>
+        <li class="text-gray-400">/</li>
+        <li><a href={`/kindergartens/${state}/${city}`} class="hover:text-brand-blue">{cityName}</a></li>
+        <li class="text-gray-400">/</li>
+        <li class="text-gray-900 font-medium">{schoolData.school_name}</li>
+      </ol>
+    </nav>
+
     <div class="flex flex-col lg:flex-row gap-5">
       <!-- Main Content -->
       <div class="lg:w-[728px] lg:flex-shrink-0">

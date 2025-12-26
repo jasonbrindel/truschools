@@ -1,6 +1,7 @@
 ---
 import Layout from '@/layouts/Layout.astro';
-import heroImage from '@/images/college-1.jpg';
+import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import heroImage from '@/images/university-campus-students-walking.jpg';
 
 const title = "The Price of Admission";
 const subtitle = "Financial 101 for College-Bound Families";
@@ -8,16 +9,7 @@ const description = "For millions of American families, the path to college has 
 ---
 
 <Layout title={`${title}: ${subtitle}`} description={description}>
-  <!-- Breadcrumbs -->
-  <div class="container">
-    <nav class="breadcrumb py-3">
-      <a href="/">Home</a>
-      <span class="breadcrumb-separator">&gt;</span>
-      <a href="/colleges">Colleges</a>
-      <span class="breadcrumb-separator">&gt;</span>
-      <span>{title}</span>
-    </nav>
-  </div>
+  <ArticleBreadcrumb title={title} defaultParent={{ label: 'Colleges', url: '/colleges' }} />
 
   <!-- Header - Centered, Narrow -->
   <header class="max-w-[680px] mx-auto px-5 pt-4 md:pt-8">

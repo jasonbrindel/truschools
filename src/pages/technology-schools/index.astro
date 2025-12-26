@@ -62,20 +62,20 @@ function getStateSlug(abbr: string): string {
 ---
 
 <Layout title={categoryName} description={`Find ${totalSchools.toLocaleString()} accredited technology schools and IT training programs across the United States.`}>
-  <div class="container">
-    <nav class="breadcrumb py-3">
-      <a href="/">Home</a>
-      <span class="breadcrumb-separator">&gt;</span>
-      <a href="/vocational-schools">Vocational Schools</a>
-      <span class="breadcrumb-separator">&gt;</span>
-      <span>{categoryName}</span>
+  <div class="container py-5">
+    <nav class="text-sm mb-4">
+      <ol class="flex flex-wrap items-center gap-2 text-gray-600">
+        <li><a href="/" class="hover:text-brand-blue">Home</a></li>
+        <li class="text-gray-400">/</li>
+        <li><a href="/vocational-schools" class="hover:text-brand-blue">Vocational Schools</a></li>
+        <li class="text-gray-400">/</li>
+        <li class="text-gray-900 font-medium">{categoryName}</li>
+      </ol>
     </nav>
 
     <h1 class="text-brand-green-text mb-2">{categoryName}</h1>
     <p class="fs-14 text-gray-500 mb-5">{totalSchools.toLocaleString()} accredited technology schools nationwide</p>
-  </div>
 
-  <div class="container py-5">
     <div class="flex flex-col lg:flex-row gap-5">
       <div class="lg:w-2/3">
         <div class="box-rounded mb-5">

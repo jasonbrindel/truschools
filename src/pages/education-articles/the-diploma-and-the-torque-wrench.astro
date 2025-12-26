@@ -1,6 +1,7 @@
 ---
 import Layout from '@/layouts/Layout.astro';
-import heroImage from '@/images/high-school-1.jpg';
+import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import heroImage from '@/images/high-school-students-classroom-vintage.jpg';
 
 const title = "The Diploma and the Torque Wrench";
 const subtitle = "What is high school for now?";
@@ -8,16 +9,7 @@ const description = "How career and technical education is transforming American
 ---
 
 <Layout title={title} description={description}>
-  <!-- Breadcrumbs -->
-  <div class="container">
-    <nav class="breadcrumb py-3">
-      <a href="/">Home</a>
-      <span class="breadcrumb-separator">&gt;</span>
-      <a href="/high-schools">High Schools</a>
-      <span class="breadcrumb-separator">&gt;</span>
-      <span>{title}</span>
-    </nav>
-  </div>
+  <ArticleBreadcrumb title={title} defaultParent={{ label: 'High Schools', url: '/high-schools' }} />
 
   <!-- Header - Centered, Narrow -->
   <header class="max-w-[680px] mx-auto px-5 pt-4 md:pt-8">

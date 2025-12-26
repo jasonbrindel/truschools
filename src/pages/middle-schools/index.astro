@@ -1,6 +1,15 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 
+// Images for featured article and topic cards
+import featuredImage from '@/images/students-studying-classroom-moody.jpg';
+import academicsImage from '@/images/classroom-teacher-computers-watercolor.jpg';
+import activitiesImage from '@/images/school-corridor-students-walking.jpg';
+import healthImage from '@/images/school-basketball-court-illustration.jpg';
+import findingSchoolsImage from '@/images/school-entrance-students-abstract.jpg';
+import parentingImage from '@/images/students-smiling-group-school.jpg';
+import behaviorImage from '@/images/student-peer-group-school.jpg';
+
 // All US states
 const states = [
   { name: 'Alabama', slug: 'alabama', abbr: 'AL' },
@@ -119,13 +128,15 @@ function slugify(text: string): string {
 const topics = [
   {
     title: 'Middle School Academics',
+    image: academicsImage,
     articles: [
-      { title: 'What to Teach When AI Does the Work', url: '/education-articles/what-to-teach-when-ai-does-the-work' },
+      { title: 'What to Teach When AI Does the Work', url: '/education-articles/what-to-teach-when-ai-does-the-work?from=middle-schools' },
       { title: 'Study Skills for Middle Schoolers', url: '#' },
     ]
   },
   {
     title: 'Activities & Sports',
+    image: activitiesImage,
     articles: [
       { title: 'Extracurricular Activities That Matter', url: '#' },
       { title: 'Middle School Sports Programs', url: '#' },
@@ -133,23 +144,26 @@ const topics = [
   },
   {
     title: 'Physical Health',
+    image: healthImage,
     articles: [
-      { title: 'The Stillness Epidemic', url: '/education-articles/the-stillness-epidemic' },
+      { title: 'The Stillness Epidemic', url: '/education-articles/the-stillness-epidemic?from=middle-schools' },
       { title: 'Encouraging Physical Activity', url: '#' },
     ]
   },
   {
     title: 'Finding Schools',
+    image: findingSchoolsImage,
     articles: [
-      { title: 'How to Find the Right School', url: '/education-articles/how-to-find-the-right-school' },
-      { title: 'The Rise of School Choice', url: '/education-articles/the-rise-of-school-choice' },
-      { title: 'Public vs. Private School', url: '/education-articles/public-vs-private-school' },
-      { title: 'What Is a STEM School?', url: '/education-articles/what-is-a-stem-school' },
-      { title: 'Understanding Magnet Schools', url: '/education-articles/understanding-magnet-schools' },
+      { title: 'How to Find the Right School', url: '/education-articles/how-to-find-the-right-school?from=middle-schools' },
+      { title: 'The Rise of School Choice', url: '/education-articles/the-rise-of-school-choice?from=middle-schools' },
+      { title: 'Public vs. Private School', url: '/education-articles/public-vs-private-school?from=middle-schools' },
+      { title: 'What Is a STEM School?', url: '/education-articles/what-is-a-stem-school?from=middle-schools' },
+      { title: 'Understanding Magnet Schools', url: '/education-articles/understanding-magnet-schools?from=middle-schools' },
     ]
   },
   {
     title: 'Parenting Tweens',
+    image: parentingImage,
     articles: [
       { title: 'Navigating the Tween Years', url: '#' },
       { title: 'Communication Tips for Parents', url: '#' },
@@ -157,6 +171,7 @@ const topics = [
   },
   {
     title: 'Behavior & Social Health',
+    image: behaviorImage,
     articles: [
       { title: 'Dealing with Peer Pressure', url: '#' },
       { title: 'Social Media and Middle Schoolers', url: '#' },
@@ -166,19 +181,19 @@ const topics = [
 ---
 
 <Layout title="Middle Schools in the United States" description="Find middle schools across the United States. Browse comprehensive listings of public and private middle schools by state.">
-  <div class="container">
+  <div class="container py-5">
     <!-- Breadcrumb -->
-    <nav class="breadcrumb py-3">
-      <a href="/">Home</a>
-      <span class="breadcrumb-separator">&gt;</span>
-      <span>Middle Schools</span>
+    <nav class="text-sm mb-4">
+      <ol class="flex flex-wrap items-center gap-2 text-gray-600">
+        <li><a href="/" class="hover:text-brand-blue">Home</a></li>
+        <li class="text-gray-400">/</li>
+        <li class="text-gray-900 font-medium">Middle Schools</li>
+      </ol>
     </nav>
 
     <h1 class="text-brand-green-text mb-2">Middle Schools in the United States</h1>
     <p class="fs-14 text-gray-500 mb-5">Find middle schools that will prepare your child for high school success.</p>
-  </div>
 
-  <div class="container py-5">
     <div class="flex flex-col lg:flex-row gap-5">
       <!-- Main Content -->
       <div class="lg:w-2/3">
@@ -186,9 +201,11 @@ const topics = [
         <div class="box-rounded mb-5">
           <div class="flex flex-col md:flex-row gap-4">
             <div class="md:w-1/3">
-              <div class="bg-gray-200 aspect-video rounded flex items-center justify-center text-gray-400">
-                Featured Image
-              </div>
+              <img
+                src={featuredImage.src}
+                alt="Middle school students"
+                class="w-full aspect-video object-cover rounded"
+              />
             </div>
             <div class="md:w-2/3">
               <h2 class="text-brand-blue text-xl mb-2">
@@ -207,15 +224,22 @@ const topics = [
           <h2 class="text-brand-blue text-xl mb-4">Middle School Topics</h2>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {topics.map((topic) => (
-              <div class="border border-gray-200 rounded p-4">
-                <h3 class="text-brand-green-text font-bold mb-2 fs-14">{topic.title}</h3>
-                <ul class="space-y-1 fs-13">
-                  {topic.articles.map((article) => (
-                    <li>
-                      <a href={article.url} class="text-brand-blue hover:underline">{article.title}</a>
-                    </li>
-                  ))}
-                </ul>
+              <div class="border border-gray-200 rounded overflow-hidden">
+                <img
+                  src={topic.image.src}
+                  alt={topic.title}
+                  class="w-full aspect-square object-cover"
+                />
+                <div class="p-4">
+                  <h3 class="text-brand-green-text font-bold mb-2 fs-14">{topic.title}</h3>
+                  <ul class="space-y-1 fs-13">
+                    {topic.articles.map((article) => (
+                      <li>
+                        <a href={article.url} class="text-brand-blue hover:underline">{article.title}</a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             ))}
           </div>

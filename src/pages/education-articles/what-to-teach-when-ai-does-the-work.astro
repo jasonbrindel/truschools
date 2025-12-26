@@ -1,6 +1,7 @@
 ---
 import Layout from '@/layouts/Layout.astro';
-import heroImage from '@/images/high-school-1.jpg';
+import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import heroImage from '@/images/ai-technology-classroom-learning.jpg';
 
 const title = "What to Teach When AI Does the Work";
 const subtitle = "How to future-proof your child's education for automation and robotics";
@@ -8,16 +9,7 @@ const description = "A guide for parents on preparing children for a future wher
 ---
 
 <Layout title={`${title}`} description={description}>
-  <!-- Breadcrumbs -->
-  <div class="container">
-    <nav class="breadcrumb py-3">
-      <a href="/">Home</a>
-      <span class="breadcrumb-separator">&gt;</span>
-      <a href="/schools">Schools</a>
-      <span class="breadcrumb-separator">&gt;</span>
-      <span>{title}</span>
-    </nav>
-  </div>
+  <ArticleBreadcrumb title={title} />
 
   <!-- Header - Centered, Narrow -->
   <header class="max-w-[680px] mx-auto px-5 pt-4 md:pt-8">

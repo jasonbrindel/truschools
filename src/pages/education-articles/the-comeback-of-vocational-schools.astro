@@ -1,6 +1,7 @@
 ---
 import Layout from '@/layouts/Layout.astro';
-import heroImage from '@/images/teaching-middle-school-1.jpg';
+import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import heroImage from '@/images/high-school-courtyard-picnic-tables.jpg';
 
 const title = "The Comeback of Vocational Schools";
 const subtitle = "America is facing a skilled labor crisis—and a generation of young people is discovering that trade careers offer something a college degree often can't: stable work, good pay, and freedom from crushing debt.";
@@ -8,16 +9,7 @@ const description = "How Gen Z is embracing vocational schools and skilled trade
 ---
 
 <Layout title={title} description={description}>
-  <!-- Breadcrumbs -->
-  <div class="container">
-    <nav class="breadcrumb py-3">
-      <a href="/">Home</a>
-      <span class="breadcrumb-separator">&gt;</span>
-      <a href="/vocational-schools">Vocational Schools</a>
-      <span class="breadcrumb-separator">&gt;</span>
-      <span>{title}</span>
-    </nav>
-  </div>
+  <ArticleBreadcrumb title={title} defaultParent={{ label: 'Vocational Schools', url: '/vocational-schools' }} />
 
   <!-- Header - Centered, Narrow -->
   <header class="max-w-[680px] mx-auto px-5 pt-4 md:pt-8">

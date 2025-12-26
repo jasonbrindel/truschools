@@ -87,25 +87,25 @@ const websiteUrl = formatWebsite(schoolData.website);
 ---
 
 <Layout title={`${schoolData.institution_name} - ${schoolData.city}, ${stateName}`} description={`Learn about ${schoolData.institution_name} in ${schoolData.city}, ${stateName}. Find program info, tuition costs, and admissions details.`}>
-  <div class="container">
+  <div class="container py-5">
     <!-- Breadcrumb -->
-    <nav class="breadcrumb py-3">
-      <a href="/">Home</a>
-      <span class="breadcrumb-separator">&gt;</span>
-      <a href="/vocational-schools">Vocational Schools</a>
-      <span class="breadcrumb-separator">&gt;</span>
-      <a href="/beauty-schools">Beauty Schools</a>
-      <span class="breadcrumb-separator">&gt;</span>
-      <a href={`/beauty-schools/${state}`}>{stateName}</a>
-      <span class="breadcrumb-separator">&gt;</span>
-      <span>{schoolData.institution_name}</span>
+    <nav class="text-sm mb-4">
+      <ol class="flex flex-wrap items-center gap-2 text-gray-600">
+        <li><a href="/" class="hover:text-brand-blue">Home</a></li>
+        <li class="text-gray-400">/</li>
+        <li><a href="/vocational-schools" class="hover:text-brand-blue">Vocational Schools</a></li>
+        <li class="text-gray-400">/</li>
+        <li><a href="/beauty-schools" class="hover:text-brand-blue">Beauty Schools</a></li>
+        <li class="text-gray-400">/</li>
+        <li><a href={`/beauty-schools/${state}`} class="hover:text-brand-blue">{stateName}</a></li>
+        <li class="text-gray-400">/</li>
+        <li class="text-gray-900 font-medium">{schoolData.institution_name}</li>
+      </ol>
     </nav>
 
     <h1 class="text-brand-green-text mb-2">{schoolData.institution_name}</h1>
     <p class="fs-14 text-gray-500 mb-5">{schoolData.city}, {stateName}</p>
-  </div>
 
-  <div class="container py-5">
     <div class="flex flex-col lg:flex-row gap-5">
       <!-- Main Content -->
       <div class="lg:w-2/3">

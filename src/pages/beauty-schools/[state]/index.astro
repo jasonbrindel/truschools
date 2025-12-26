@@ -82,23 +82,23 @@ const allStates = Object.entries(stateNames)
 ---
 
 <Layout title={`Beauty Schools in ${stateName}`} description={`Browse ${schools.length} accredited beauty schools and cosmetology programs in ${stateName}.`}>
-  <div class="container">
+  <div class="container py-5">
     <!-- Breadcrumb -->
-    <nav class="breadcrumb py-3">
-      <a href="/">Home</a>
-      <span class="breadcrumb-separator">&gt;</span>
-      <a href="/vocational-schools">Vocational Schools</a>
-      <span class="breadcrumb-separator">&gt;</span>
-      <a href="/beauty-schools">Beauty Schools</a>
-      <span class="breadcrumb-separator">&gt;</span>
-      <span>{stateName}</span>
+    <nav class="text-sm mb-4">
+      <ol class="flex flex-wrap items-center gap-2 text-gray-600">
+        <li><a href="/" class="hover:text-brand-blue">Home</a></li>
+        <li class="text-gray-400">/</li>
+        <li><a href="/vocational-schools" class="hover:text-brand-blue">Vocational Schools</a></li>
+        <li class="text-gray-400">/</li>
+        <li><a href="/beauty-schools" class="hover:text-brand-blue">Beauty Schools</a></li>
+        <li class="text-gray-400">/</li>
+        <li class="text-gray-900 font-medium">{stateName}</li>
+      </ol>
     </nav>
 
     <h1 class="text-brand-green-text mb-2">Beauty Schools in {stateName}</h1>
     <p class="fs-14 text-gray-500 mb-5">{schools.length} school{schools.length !== 1 ? 's' : ''} found</p>
-  </div>
 
-  <div class="container py-5">
     <div class="flex flex-col lg:flex-row gap-5">
       <!-- Main Content -->
       <div class="lg:w-2/3">

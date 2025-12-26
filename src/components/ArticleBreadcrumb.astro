@@ -1,0 +1,45 @@
+---
+interface Props {
+  title: string;
+  defaultParent?: {
+    label: string;
+    url: string;
+  };
+}
+
+const { title, defaultParent = { label: 'Schools', url: '/schools' } } = Astro.props;
+
+// Mapping of 'from' parameter values to breadcrumb info
+const parentMapping: Record<string, { label: string; url: string }> = {
+  'schools': { label: 'Schools', url: '/schools' },
+  'preschools': { label: 'Preschools', url: '/preschools' },
+  'kindergartens': { label: 'Kindergartens', url: '/kindergartens' },
+  'elementary-schools': { label: 'Elementary Schools', url: '/elementary-schools' },
+  'middle-schools': { label: 'Middle Schools', url: '/middle-schools' },
+  'high-schools': { label: 'High Schools', url: '/high-schools' },
+  'colleges': { label: 'Colleges', url: '/colleges' },
+  'vocational-schools': { label: 'Vocational Schools', url: '/vocational-schools' },
+  'trade-schools': { label: 'Trade Schools', url: '/trade-schools' },
+  'beauty-schools': { label: 'Beauty Schools', url: '/beauty-schools' },
+  'healthcare-schools': { label: 'Healthcare Schools', url: '/healthcare-schools' },
+  'technology-schools': { label: 'Technology Schools', url: '/technology-schools' },
+  'culinary-schools': { label: 'Culinary Schools', url: '/culinary-schools' },
+  'financial-aid': { label: 'Financial Aid', url: '/financial-aid' },
+};
+
+// Get the 'from' query parameter
+const fromParam = Astro.url.searchParams.get('from');
+const parent = (fromParam && parentMapping[fromParam]) || defaultParent;
+---
+
+<div class="container pt-5">
+  <nav class="text-sm mb-4">
+    <ol class="flex flex-wrap items-center gap-2 text-gray-600">
+      <li><a href="/" class="hover:text-brand-blue">Home</a></li>
+      <li class="text-gray-400">/</li>
+      <li><a href={parent.url} class="hover:text-brand-blue">{parent.label}</a></li>
+      <li class="text-gray-400">/</li>
+      <li class="text-gray-900 font-medium">{title}</li>
+    </ol>
+  </nav>
+</div>

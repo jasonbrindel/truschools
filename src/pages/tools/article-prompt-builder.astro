@@ -1,0 +1,726 @@
+---
+// Server-side auth check and load prompts
+const cookies = Astro.request.headers.get('cookie') || '';
+const sessionMatch = cookies.match(/session=([^;]+)/);
+const sessionToken = sessionMatch ? sessionMatch[1] : null;
+
+let isAuthenticated = false;
+let user = null;
+let dbPrompts: any[] = [];
+
+const db = (Astro.locals as any).runtime?.env?.DB;
+
+if (sessionToken && db) {
+  try {
+    const session = await db.prepare(`
+      SELECT s.*, u.id as user_id, u.email, u.name
+      FROM sessions s
+      JOIN users u ON s.user_id = u.id
+      WHERE s.token = ? AND s.expires_at > datetime('now')
+    `).bind(sessionToken).first();
+
+    if (session) {
+      isAuthenticated = true;
+      user = {
+        id: session.user_id,
+        email: session.email,
+        name: session.name
+      };
+
+      // Load prompts from database
+      const promptsResult = await db.prepare(
+        'SELECT * FROM prompts WHERE is_active = 1 ORDER BY sort_order ASC, name ASC'
+      ).all();
+      dbPrompts = promptsResult.results || [];
+    }
+  } catch (e) {
+    console.error('Session/prompts check error:', e);
+  }
+}
+
+// Default prompts (fallback if database is empty)
+const defaultPrompts = [
+  {
+    slug: 'vox',
+    name: 'Vox / Atlantic Explainer',
+    description: 'Clear, direct explanatory journalism with a strong framing',
+    prompt_template: `Topic: {TOPIC}
+
+I want you to research and write an article on the topic above in the style of a Vox/Atlantic explainer article. More style details below:
+
+Vox/Atlantic-Style Explainer Article
+
+Opening: Begin with a clear statement of what this piece will explain and why it matters right now. You might open with a news hook, a surprising statistic, a common misconception, or a question many readers are asking. The reader should know within the first few paragraphs exactly what they'll understand by the end that they didn't before.
+
+Structure: Organize the piece into 4-6 major sections, each covering a distinct aspect of the topic. Use subheadings sparingly—only to signal major topic shifts, not to introduce every new point. The prose itself should guide readers through transitions naturally. Think of the structure as chapters, not bullet points. A reader should be able to follow the argument without the headers; the headers just make navigation easier.
+
+Argument: State your framing clearly and early. The explainer doesn't hide its perspective—it makes an argument about how to understand a complex topic. But this is still prose, not a listicle. Build the reader's understanding through paragraphs that flow into one another, not through a series of disconnected points.
+
+Prose style:
+* Write in clear, direct paragraphs. This is explanatory journalism, not a reference document.
+* Avoid bullet points and numbered lists except when genuinely necessary (e.g., a short list of specific programs or a set of discrete options). Most information should be woven into prose.
+* Do NOT bold key terms, questions, or topic sentences within paragraphs. Bold text should be reserved for subheadings only.
+* Use statistics and data generously, but always contextualize them. Explain what the numbers mean and why they matter.
+* Define jargon when it first appears, but do so naturally within sentences.
+* Keep paragraphs digestible but not choppy. Three to five sentences is typical.
+* Transitions between paragraphs should feel natural. Avoid the sense that each paragraph is a standalone unit.
+
+Tone: Smart but accessible. You're the knowledgeable friend who can make complex things clear without being condescending. Confident in your explanations but honest about uncertainty or ongoing debates. Occasionally conversational but never flippant about serious topics.
+
+Attribution: Cite sources clearly within the prose ("According to a 2024 Brookings report..." / "Data from the Bureau of Labor Statistics shows..."). Expert quotes add authority or articulate positions in a debate—use them selectively, not decoratively.
+
+Ending: Conclude with a forward-looking synthesis. What should readers take away? What remains unresolved? What should they watch for? The ending should leave readers feeling genuinely more informed. Avoid simply restating what you've already said.
+
+Length: As long as necessary to genuinely explain the topic, but no longer. Every section should earn its place. Cut anything that feels like padding.
+
+Formatting note: This is an article, not a study guide. Resist the urge to over-structure. If you find yourself wanting to bold a question or key term mid-paragraph, that's a sign to integrate it into the prose instead.
+
+Sources section: Include a "Sources" section at the end of the article listing all major sources cited or drawn from in the piece. Format as a clean list with publication name, article/report title, and date where applicable.`
+  },
+  {
+    slug: 'nyt',
+    name: 'NYT Magazine Narrative',
+    description: 'Long-form narrative journalism anchored by real people and scenes',
+    prompt_template: `Topic: {TOPIC}
+
+I want you to research and write an article on the topic above in the style of a NYT Magazine long-form narrative journalism article. More style details below:
+
+New York Times Magazine-Style Long-Form Narrative Journalism
+
+Opening: Begin with a specific, concrete scene featuring a real person doing something particular. Not a statistic, not a thesis statement—a moment. The reader should be able to see it. This person and scene will serve as the article's emotional anchor and will return later.
+
+Structure: The piece moves between the particular (the person/scene from the opening) and the universal (data, history, systemic analysis, expert voices). It's shaped like an hourglass or a braid—zooming out from the opening scene to explore the broader issue, then returning to the original person/scene at the end to land emotionally.
+
+Argument: Rather than stating a thesis upfront, build the case through accumulation. Layer facts, history, and observations until the conclusion feels inevitable. Trust the reader to connect the pieces.
+
+Prose style:
+* Varied sentence rhythm. Some sentences are long and complex with subordinate clauses; others are short and declarative. ("And then came screens." / "She pauses." / "The question is whether we will.")
+* Minimal headers or section breaks—use whitespace or simple dividers (• • •) to signal transitions
+* No bullet points or lists. Everything flows as prose.
+* Sparing use of statistics—when you use them, make them land. Don't pile on numbers.
+* Active voice. Strong verbs. Minimal adverbs.
+* Allow yourself occasional fragments for emphasis.
+
+Tone: Authoritative but not preachy. The writer has a point of view but respects the reader's intelligence. Show, don't lecture. Let the facts carry moral weight without editorializing.
+
+Attribution: Weave sources into the prose naturally ("according to a 2024 report from..." / "a study published in JAMA Pediatrics found...") rather than using footnotes or parenthetical citations. The prose should still flow.
+
+Ending: Return to the person/scene from the opening. The ending should resonate emotionally and thematically—not summarize or call to action. Often ends on a quote or image that lingers.
+
+Length: Earns its length through depth, not padding. Every section advances the narrative or deepens the argument. No filler, no repetition, no sections that exist just to "cover" a topic.
+
+Sources section: Include a "Sources" section at the end of the article listing all major sources cited or drawn from in the piece. Format as a clean list with publication name, article/report title, and date where applicable.`
+  },
+  {
+    slug: 'conversation',
+    name: 'The Conversation',
+    description: 'Research-backed explainer with academic authority for general audiences',
+    prompt_template: `Topic: {TOPIC}
+
+I want you to research and write an article on the topic above in the style of The Conversation—research-backed explanatory journalism written with academic authority but for a general audience. More style details below:
+
+The Conversation-Style Research Explainer
+
+Opening: Begin by establishing what the research shows and why it matters to everyday readers. You might open with a common question people have, a misconception the research corrects, or a practical problem the research addresses. The opening should signal that this piece will deliver genuine expertise—the reader is learning from someone who knows the literature deeply. Avoid news hooks or narrative scenes; lead with substance.
+
+Structure: Organize the piece into 3-5 focused sections, each building the reader's understanding progressively. The structure should feel like a well-organized lecture from an expert who respects your time: establish the question or problem, explain what we know from research, address nuances or complications, and conclude with practical implications. Subheadings should be clear and descriptive—they're navigational aids, not clever hooks. Keep the total length focused (800-1,500 words typically); this style values density over sprawl.
+
+Argument: Lead with findings, not speculation. The piece should convey: "Here's what the evidence actually shows." Be clear about the strength of evidence—distinguish between well-established findings, emerging research, and areas of genuine uncertainty. You're not hiding your interpretation, but your interpretation is grounded in systematic review of research, not opinion.
+
+Prose style:
+- Write in clear, authoritative paragraphs. Every claim of substance should connect to research.
+- Cite studies specifically: name the institution, journal, or researchers when relevant. ("A 2023 study from Stanford's Graduate School of Education found…" / "Research published in Educational Researcher demonstrates…")
+- Translate academic findings into plain language. If a study found "statistically significant improvements in executive function," explain what that means for actual children in actual classrooms.
+- Avoid jargon, but don't avoid complexity. Readers can handle sophisticated ideas if you explain them clearly.
+- Keep paragraphs relatively short (2-4 sentences). This style prioritizes clarity and scannability.
+- No bullet points except for genuinely list-like content. Weave information into prose.
+- Do not bold text within paragraphs.
+
+Tone: Expert but approachable. You have genuine authority on this topic—you've read the studies, you understand the methods, you know the debates—but you're not talking down to readers. Think "professor who's great at explaining things at a dinner party." Confident about what the research shows, humble about what remains unknown.
+
+Attribution: Research attribution is central to this style. Cite frequently and specifically. Include publication names, years, and institutional affiliations where they add credibility. ("According to a meta-analysis published in Review of Educational Research…" / "Researchers at Johns Hopkins found…") The reader should finish the piece trusting that these claims are verifiable.
+
+Ending: Conclude with practical takeaways or implications. What should readers—whether they're parents, educators, policymakers, or citizens—understand or do differently based on this research? You might also note what questions remain open or what research is still needed. The ending should feel useful, not just informative.
+
+Length: Aim for 1,000-1,500 words. This style earns trust through research density, not length. Every paragraph should contain substantive information grounded in evidence.
+
+Sources section: Include a "Sources" section at the end listing all studies, reports, and sources cited. Format with full citation information: authors, title, publication/journal, and year.`
+  },
+  {
+    slug: 'ednext',
+    name: 'Education Next',
+    description: 'Rigorous policy analysis with evidence-based trade-offs',
+    prompt_template: `Topic: {TOPIC}
+
+I want you to research and write an article on the topic above in the style of Education Next—rigorous, research-informed education policy analysis written for an informed but non-specialist audience. More style details below:
+
+Education Next-Style Policy Analysis
+
+Opening: Begin by framing the policy question or debate clearly. What's at stake? What decision are policymakers, educators, or families facing? You might open with a recent policy development, a tension between competing approaches, or a question that research can help answer. The reader should understand within the first few paragraphs that this piece will bring evidence to bear on a consequential education issue.
+
+Structure: Organize the piece to guide readers through the policy landscape systematically. A typical structure might include: framing the issue and its stakes, examining what research evidence shows, exploring the strongest arguments on different sides, addressing implementation realities or trade-offs, and concluding with implications for policy or practice. Use clear subheadings to signal major sections. Aim for 4-6 sections that build a comprehensive understanding.
+
+Argument: Take the evidence seriously and let it complicate simple narratives. Education Next style respects readers enough to present genuine trade-offs rather than advocacy disguised as analysis. If the research is mixed, say so. If a popular policy has weak evidence, say so. If an unpopular approach has strong evidence, say so. You may have a perspective, but it should emerge from honest engagement with evidence, not predetermined conclusions.
+
+Prose style:
+- Write in clear, analytical paragraphs. This is policy analysis, not academic writing—but it's serious and substantive.
+- Use data and statistics to ground claims, but always explain their significance. What does a "0.2 standard deviation effect" actually mean for students?
+- Engage with research studies directly. Name researchers, institutions, and publications. ("Eric Hanushek's research on teacher effectiveness…" / "A randomized controlled trial conducted by MDRC found…")
+- Address counterarguments and alternative interpretations fairly. The strongest policy analysis anticipates objections.
+- Define policy terms and acronyms when first introduced, but assume readers have baseline familiarity with education issues.
+- Keep paragraphs substantive but readable (3-5 sentences typically).
+- Avoid bullet points in the main text. Information should flow as analytical prose.
+- Reserve bold text for subheadings only.
+
+Tone: Analytical, even-handed, intellectually serious. You're writing for readers who care about getting education policy right and who can handle complexity. Not dry or academic, but not breezy either. Think "smart policy brief from a researcher who also understands politics and implementation."
+
+Attribution: Cite research carefully and specifically. Education Next readers expect claims to be backed by identifiable studies. ("A 2023 CREDO study of charter school performance…" / "Research published in the Journal of Policy Analysis and Management shows…") Include enough detail that a motivated reader could find the source.
+
+Ending: Conclude with clear implications for policy or practice. Given what the evidence shows, what should policymakers consider? What questions remain unresolved? What would strengthen the evidence base? The ending should help readers think more clearly about the choices ahead, even if you don't prescribe a single answer.
+
+Length: Aim for 2,000-3,000 words. This style requires enough space to engage with research and policy complexity seriously, but every section should earn its place.
+
+Sources section: Include a "Sources" section listing all studies, reports, and data sources cited. Format with author/organization, title, and publication year.`
+  },
+  {
+    slug: 'aeon',
+    name: 'Aeon Essay',
+    description: 'Philosophical depth with historical perspective and intellectual exploration',
+    prompt_template: `Topic: {TOPIC}
+
+I want you to research and write an article on the topic above in the style of Aeon—a long-form intellectual essay that explores ideas with philosophical depth and historical perspective. More style details below:
+
+Aeon-Style Intellectual Essay
+
+Opening: Begin by drawing the reader into a question, puzzle, or tension that the essay will explore. This might be a philosophical paradox, a historical turning point, a concept we take for granted that deserves examination, or an observation that reveals something deeper about the human condition. The opening should create genuine intellectual curiosity—not through a news hook or a character scene, but through the pull of an interesting idea.
+
+Structure: Structure the essay as an intellectual journey rather than a reference document. You're not covering a topic; you're thinking through a question. The piece might move chronologically through history, conceptually through related ideas, or dialectically through argument and counterargument. Sections should flow into one another through the logic of the ideas themselves. Use subheadings sparingly if at all—the essay form traditionally relies on paragraph breaks and transitional prose rather than explicit signposting.
+
+Argument: Develop your argument through sustained reasoning, not accumulated evidence or expert quotes. This is an essay in the classic sense—an attempt to work something out on the page. You should have a perspective, but the essay earns it through the quality of its thinking, not assertion. Engage with thinkers and ideas that have grappled with these questions before you.
+
+Prose style:
+- Write in fluid, essayistic prose. Sentences can be longer and more complex than in journalistic writing; the style should feel thoughtful and deliberate.
+- Draw on philosophy, history, science, literature, and lived experience as sources of insight. Aeon essays are interdisciplinary by nature.
+- Use concrete examples and historical episodes to ground abstract ideas. The particular illuminates the universal.
+- Engage with other thinkers as interlocutors. ("As Hannah Arendt observed…" / "The philosopher Charles Taylor calls this…")
+- Vary paragraph length based on the rhythm of the ideas.
+- No bullet points. No bolded text. This is continuous prose.
+
+Tone: Intellectually serious but not academic. You're writing for curious, educated readers who enjoy thinking—not specialists who demand credentials.
+
+Ending: The ending should resonate rather than summarize. Return to the opening question with new depth. Leave room for continued reflection.
+
+Length: Aim for 2,500-4,000 words.
+
+Sources section: Include a "Sources" section listing books, articles, and works referenced.`
+  },
+  {
+    slug: 'wip',
+    name: 'Works in Progress',
+    description: 'Constructive analysis focused on mechanisms of progress and improvement',
+    prompt_template: `Topic: {TOPIC}
+
+I want you to research and write an article on the topic above in the style of Works in Progress—research-rich, constructive analysis focused on understanding how things improve and the mechanisms behind progress. More style details below:
+
+Works in Progress-Style Constructive Analysis
+
+Opening: Begin by establishing what has changed, improved, or developed—and why understanding how it happened matters. Works in Progress pieces often start by noting a transformation that people take for granted, a problem that's been substantially solved, or a mechanism of improvement that deserves attention.
+
+Structure: Organize the piece to build understanding of how and why progress happens. A typical structure might include: establishing the change or improvement in question, examining the historical context or baseline, analyzing the mechanisms or interventions that drove improvement, addressing what enabled or constrained progress, and drawing lessons for other domains.
+
+Argument: Focus on mechanisms and causation, not just correlation or description. Why did this improvement happen? What were the key levers? What conditions enabled success?
+
+Prose style:
+- Write in clear, engaging prose that takes complex empirical questions seriously.
+- Use data generously. Quantify changes over time. Compare across contexts.
+- Explain research findings and their limitations.
+- Credit specific researchers, practitioners, and institutions whose work drove progress.
+- Keep paragraphs substantive but focused (3-5 sentences typically).
+
+Tone: Intellectually curious, empirically rigorous, cautiously optimistic. Skeptical of simple narratives, attentive to complexity, but ultimately motivated by the question: "What works, and how do we know?"
+
+Ending: Conclude by drawing out lessons and implications. What does this case teach us about the conditions for progress?
+
+Length: Aim for 2,500-4,000 words.
+
+Sources section: Include a "Sources" section listing all studies, datasets, and reports cited.`
+  },
+  {
+    slug: 'mit',
+    name: 'MIT Technology Review',
+    description: 'Technically informed journalism explaining emerging tech with genuine depth',
+    prompt_template: `Topic: {TOPIC}
+
+I want you to research and write an article on the topic above in the style of MIT Technology Review—technically informed journalism that explains emerging technologies and their implications with genuine depth. More style details below:
+
+MIT Technology Review-Style Technology Analysis
+
+Opening: Begin by establishing what's happening technologically and why it matters. This might be a new capability, a turning point in development, a technology reaching maturity, or emerging implications of an existing technology.
+
+Structure: Organize the piece to build genuine technical understanding while remaining accessible. A typical structure might include: establishing what the technology is and what's new, explaining how it works at an appropriate level of technical depth, examining current applications and limitations, analyzing implications for industry/society/policy, and looking ahead at trajectories and uncertainties.
+
+Argument: Explain how things actually work, not just what they do. MIT Technology Review readers want to understand mechanisms, architectures, and trade-offs—not just hype or fear. Be honest about what the technology can and cannot do currently.
+
+Prose style:
+- Write in clear, confident prose that doesn't shy away from technical substance.
+- Explain technical concepts accurately but accessibly. Use analogies where helpful, but don't oversimplify to the point of distortion.
+- Include specific technical details that matter: performance metrics, architectural choices, resource requirements, comparison to alternatives.
+- Address business and competitive dynamics where relevant.
+- Keep paragraphs focused and substantive (3-5 sentences typically).
+
+Tone: Technically confident, analytically serious, neither breathless nor dismissive. You're explaining significant technological developments to readers who want to understand them accurately.
+
+Ending: Conclude with a forward-looking analysis. Where is this technology headed? What milestones should we watch for?
+
+Length: Aim for 2,000-3,500 words.
+
+Sources section: Include a "Sources" section listing technical papers, reports, and key sources cited.`
+  }
+];
+
+// Use database prompts if available, otherwise use defaults
+const prompts = dbPrompts.length > 0 ? dbPrompts : defaultPrompts;
+
+// Convert to JSON for client-side use
+const promptsJson = JSON.stringify(prompts.reduce((acc: any, p: any) => {
+  acc[p.slug] = p.prompt_template;
+  return acc;
+}, {}));
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Article Prompt Builder - TruSchools</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: #f8f9fa;
+            color: #1a1a1a;
+            line-height: 1.6;
+        }
+
+        .auth-required {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .auth-required h1 {
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+        }
+
+        .auth-required p {
+            color: #666;
+            margin-bottom: 24px;
+        }
+
+        .auth-required a {
+            display: inline-block;
+            background: #0066cc;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .auth-required a:hover {
+            background: #0055aa;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        h1 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .user-info {
+            font-size: 0.875rem;
+            color: #666;
+        }
+
+        .user-info a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+
+        .user-info a:hover {
+            text-decoration: underline;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 32px;
+        }
+
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #0066cc;
+            box-shadow: 0 0 0 3px rgba(0,102,204,0.1);
+        }
+
+        .style-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .style-option {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .style-option:hover {
+            background: #f8f9fa;
+        }
+
+        .style-option:has(input:checked) {
+            border-color: #0066cc;
+            background: #f0f7ff;
+        }
+
+        .style-option input[type="radio"] {
+            margin-top: 2px;
+            accent-color: #0066cc;
+        }
+
+        .style-label {
+            flex: 1;
+        }
+
+        .style-name {
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+
+        .style-desc {
+            font-size: 0.875rem;
+            color: #666;
+        }
+
+        button {
+            font-family: inherit;
+            font-size: 1rem;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.15s ease;
+        }
+
+        .btn-primary {
+            background: #0066cc;
+            color: white;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            background: #0055aa;
+        }
+
+        .btn-primary:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* Modal styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.visible {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 700px;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .modal-header h2 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .modal-close:hover {
+            color: #333;
+        }
+
+        .modal-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 16px;
+            white-space: pre-wrap;
+            font-size: 0.8125rem;
+            line-height: 1.7;
+            font-family: inherit;
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 12px;
+            padding: 16px 20px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .btn-copy {
+            background: #28a745;
+            color: white;
+            padding: 10px 20px;
+            font-size: 0.9375rem;
+            flex: 1;
+        }
+
+        .btn-copy:hover {
+            background: #218838;
+        }
+
+        .btn-copy.copied {
+            background: #666;
+        }
+
+        .btn-close-modal {
+            background: #6c757d;
+            color: white;
+            padding: 10px 20px;
+            font-size: 0.9375rem;
+        }
+
+        .btn-close-modal:hover {
+            background: #5a6268;
+        }
+    </style>
+</head>
+<body>
+    {!isAuthenticated ? (
+        <div class="auth-required">
+            <h1>Login Required</h1>
+            <p>You need to be logged in to access the Article Prompt Builder.</p>
+            <a href="/login">Sign In</a>
+        </div>
+    ) : (
+        <>
+            <div class="header">
+                <h1>Article Prompt Builder</h1>
+                <div class="user-info">
+                    {user?.name || user?.email} | <a href="/tools/prompts">Manage Prompts</a> | <a href="/">Back to TruSchools</a>
+                </div>
+            </div>
+            <p class="subtitle">Enter a topic, choose a writing style, and generate your prompt.</p>
+
+            <div class="section">
+                <label for="topic">Article Topic</label>
+                <textarea id="topic" placeholder="e.g., The rise of microschools in American education"></textarea>
+            </div>
+
+            <div class="section">
+                <label>Writing Style</label>
+                <div class="style-options">
+                    {prompts.map((prompt: any, index: number) => (
+                        <label class="style-option">
+                            <input type="radio" name="style" value={prompt.slug} checked={index === 0} />
+                            <div class="style-label">
+                                <div class="style-name">{prompt.name}</div>
+                                <div class="style-desc">{prompt.description}</div>
+                            </div>
+                        </label>
+                    ))}
+                </div>
+            </div>
+
+            <div class="section">
+                <button class="btn-primary" id="generate">Generate Prompt</button>
+            </div>
+
+            <!-- Modal -->
+            <div class="modal-overlay" id="modal-overlay">
+                <div class="modal">
+                    <div class="modal-header">
+                        <h2>Your Prompt</h2>
+                        <button class="modal-close" id="modal-close">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="modal-content" id="result"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn-copy" id="copy-btn">Copy to Clipboard</button>
+                        <button class="btn-close-modal" id="close-btn">Close</button>
+                    </div>
+                </div>
+            </div>
+
+            <script is:inline define:vars={{ promptsJson }}>
+                var prompts = JSON.parse(promptsJson);
+
+                var topicInput = document.getElementById('topic');
+                var generateBtn = document.getElementById('generate');
+                var modalOverlay = document.getElementById('modal-overlay');
+                var resultContent = document.getElementById('result');
+                var copyBtn = document.getElementById('copy-btn');
+                var modalClose = document.getElementById('modal-close');
+                var closeBtn = document.getElementById('close-btn');
+
+                function openModal() {
+                    modalOverlay.classList.add('visible');
+                    document.body.style.overflow = 'hidden';
+                }
+
+                function closeModal() {
+                    modalOverlay.classList.remove('visible');
+                    document.body.style.overflow = '';
+                }
+
+                generateBtn.addEventListener('click', function() {
+                    var topic = topicInput.value.trim();
+                    var style = document.querySelector('input[name="style"]:checked').value;
+
+                    if (!topic) {
+                        topicInput.focus();
+                        return;
+                    }
+
+                    var prompt = prompts[style].replace('{TOPIC}', topic);
+                    resultContent.textContent = prompt;
+                    copyBtn.textContent = 'Copy to Clipboard';
+                    copyBtn.classList.remove('copied');
+                    openModal();
+                });
+
+                copyBtn.addEventListener('click', async function() {
+                    try {
+                        await navigator.clipboard.writeText(resultContent.textContent);
+                        copyBtn.textContent = 'Copied!';
+                        copyBtn.classList.add('copied');
+                        setTimeout(function() {
+                            copyBtn.textContent = 'Copy to Clipboard';
+                            copyBtn.classList.remove('copied');
+                        }, 2000);
+                    } catch (err) {
+                        var textarea = document.createElement('textarea');
+                        textarea.value = resultContent.textContent;
+                        document.body.appendChild(textarea);
+                        textarea.select();
+                        document.execCommand('copy');
+                        document.body.removeChild(textarea);
+                        copyBtn.textContent = 'Copied!';
+                        copyBtn.classList.add('copied');
+                    }
+                });
+
+                modalClose.addEventListener('click', closeModal);
+                closeBtn.addEventListener('click', closeModal);
+
+                modalOverlay.addEventListener('click', function(e) {
+                    if (e.target === modalOverlay) {
+                        closeModal();
+                    }
+                });
+
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape' && modalOverlay.classList.contains('visible')) {
+                        closeModal();
+                    }
+                });
+
+                topicInput.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        generateBtn.click();
+                    }
+                });
+            </script>
+        </>
+    )}
+</body>
+</html>

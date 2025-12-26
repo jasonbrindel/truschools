@@ -1,6 +1,15 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 
+// Images for featured article and topic cards
+import featuredImage from '@/images/college-campus-quad-sunny-day.jpg';
+import academicsImage from '@/images/university-lecture-hall-students.jpg';
+import financialAidImage from '@/images/college-student-campus-lawn-studying.jpg';
+import onlineClassesImage from '@/images/college-classroom-students-computers.jpg';
+import applyingImage from '@/images/university-campus-students-walking.jpg';
+import satActImage from '@/images/college-students-friends-campus.jpg';
+import socialLifeImage from '@/images/happy-students-classroom-colorful.jpg';
+
 // All US states
 const states = [
   { name: 'Alabama', slug: 'alabama', abbr: 'AL' },
@@ -119,6 +128,7 @@ function slugify(text: string): string {
 const topics = [
   {
     title: 'Academics',
+    image: academicsImage,
     articles: [
       { title: 'Yale University Lectures on Financial Theory', url: '#' },
       { title: '17 Exam & Test Taking Tips', url: '#' },
@@ -126,13 +136,15 @@ const topics = [
   },
   {
     title: 'Financial Aid',
+    image: financialAidImage,
     articles: [
-      { title: 'The Price of Admission: Financial 101', url: '/education-articles/the-price-of-admission' },
+      { title: 'The Price of Admission: Financial 101', url: '/education-articles/the-price-of-admission?from=colleges' },
       { title: 'FAFSA Application Guide', url: '#' },
     ]
   },
   {
     title: 'Online Classes',
+    image: onlineClassesImage,
     articles: [
       { title: 'Free Online Classes', url: '#' },
       { title: 'Best Online Degree Programs', url: '#' },
@@ -140,6 +152,7 @@ const topics = [
   },
   {
     title: 'Applying to College',
+    image: applyingImage,
     articles: [
       { title: 'College Admissions Essays', url: '#' },
       { title: 'Rising College Tuition Costs', url: '#' },
@@ -147,6 +160,7 @@ const topics = [
   },
   {
     title: 'SAT & ACT Prep',
+    image: satActImage,
     articles: [
       { title: 'Free SAT Prep Videos', url: '#' },
       { title: 'SAT Tutoring - What You Need to Know', url: '#' },
@@ -154,6 +168,7 @@ const topics = [
   },
   {
     title: 'College Social Life',
+    image: socialLifeImage,
     articles: [
       { title: 'Balancing School & Social Life', url: '#' },
       { title: 'Making Friends in College', url: '#' },
@@ -163,19 +178,19 @@ const topics = [
 ---
 
 <Layout title="Colleges & Universities in the United States" description="Find colleges and universities across the United States. Browse comprehensive listings of public and private higher education institutions by state.">
-  <div class="container">
+  <div class="container py-5">
     <!-- Breadcrumb -->
-    <nav class="breadcrumb py-3">
-      <a href="/">Home</a>
-      <span class="breadcrumb-separator">&gt;</span>
-      <span>Colleges & Universities</span>
+    <nav class="text-sm mb-4">
+      <ol class="flex flex-wrap items-center gap-2 text-gray-600">
+        <li><a href="/" class="hover:text-brand-blue">Home</a></li>
+        <li class="text-gray-400">/</li>
+        <li class="text-gray-900 font-medium">Colleges & Universities</li>
+      </ol>
     </nav>
 
     <h1 class="text-brand-green-text mb-2">Colleges & Universities in the United States</h1>
     <p class="fs-14 text-gray-500 mb-5">Find the right college or university for your higher education journey.</p>
-  </div>
 
-  <div class="container py-5">
     <div class="flex flex-col lg:flex-row gap-5">
       <!-- Main Content -->
       <div class="lg:w-2/3">
@@ -183,9 +198,11 @@ const topics = [
         <div class="box-rounded mb-5">
           <div class="flex flex-col md:flex-row gap-4">
             <div class="md:w-1/3">
-              <div class="bg-gray-200 aspect-video rounded flex items-center justify-center text-gray-400">
-                Featured Image
-              </div>
+              <img
+                src={featuredImage.src}
+                alt="College campus"
+                class="w-full aspect-video object-cover rounded"
+              />
             </div>
             <div class="md:w-2/3">
               <h2 class="text-brand-blue text-xl mb-2">
@@ -204,15 +221,22 @@ const topics = [
           <h2 class="text-brand-blue text-xl mb-4">College & University Topics</h2>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {topics.map((topic) => (
-              <div class="border border-gray-200 rounded p-4">
-                <h3 class="text-brand-green-text font-bold mb-2 fs-14">{topic.title}</h3>
-                <ul class="space-y-1 fs-13">
-                  {topic.articles.map((article) => (
-                    <li>
-                      <a href={article.url} class="text-brand-blue hover:underline">{article.title}</a>
-                    </li>
-                  ))}
-                </ul>
+              <div class="border border-gray-200 rounded overflow-hidden">
+                <img
+                  src={topic.image.src}
+                  alt={topic.title}
+                  class="w-full aspect-square object-cover"
+                />
+                <div class="p-4">
+                  <h3 class="text-brand-green-text font-bold mb-2 fs-14">{topic.title}</h3>
+                  <ul class="space-y-1 fs-13">
+                    {topic.articles.map((article) => (
+                      <li>
+                        <a href={article.url} class="text-brand-blue hover:underline">{article.title}</a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             ))}
           </div>

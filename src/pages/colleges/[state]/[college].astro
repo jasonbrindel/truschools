@@ -188,20 +188,20 @@ const nearbyColleges = nearbyResult.results;
 ---
 
 <Layout title={`${collegeData.institution_name} - ${collegeData.city}, ${collegeData.state_abbr}`} description={`${collegeData.institution_name} is a ${institutionType} institution located in ${collegeData.city}, ${stateName}. View admissions info, programs, tuition costs, and financial aid.`}>
-  <div class="container">
-    <!-- Breadcrumb -->
-    <nav class="breadcrumb py-3">
-      <a href="/">Home</a>
-      <span class="breadcrumb-separator">&gt;</span>
-      <a href="/colleges">Colleges</a>
-      <span class="breadcrumb-separator">&gt;</span>
-      <a href={`/colleges/${state}`}>{stateName}</a>
-      <span class="breadcrumb-separator">&gt;</span>
-      <span>{collegeData.institution_name}</span>
-    </nav>
-  </div>
-
   <div class="container py-5">
+    <!-- Breadcrumb -->
+    <nav class="text-sm mb-4">
+      <ol class="flex flex-wrap items-center gap-2 text-gray-600">
+        <li><a href="/" class="hover:text-brand-blue">Home</a></li>
+        <li class="text-gray-400">/</li>
+        <li><a href="/colleges" class="hover:text-brand-blue">Colleges</a></li>
+        <li class="text-gray-400">/</li>
+        <li><a href={`/colleges/${state}`} class="hover:text-brand-blue">{stateName}</a></li>
+        <li class="text-gray-400">/</li>
+        <li class="text-gray-900 font-medium">{collegeData.institution_name}</li>
+      </ol>
+    </nav>
+
     <div class="flex flex-col lg:flex-row gap-5">
       <!-- Main Content -->
       <div class="lg:w-2/3">

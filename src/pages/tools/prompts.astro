@@ -1,0 +1,588 @@
+---
+// Server-side auth check
+const cookies = Astro.request.headers.get('cookie') || '';
+const sessionMatch = cookies.match(/session=([^;]+)/);
+const sessionToken = sessionMatch ? sessionMatch[1] : null;
+
+let isAuthenticated = false;
+let user = null;
+let prompts: any[] = [];
+
+const db = (Astro.locals as any).runtime?.env?.DB;
+
+if (sessionToken && db) {
+  try {
+    const session = await db.prepare(`
+      SELECT s.*, u.id as user_id, u.email, u.name
+      FROM sessions s
+      JOIN users u ON s.user_id = u.id
+      WHERE s.token = ? AND s.expires_at > datetime('now')
+    `).bind(sessionToken).first();
+
+    if (session) {
+      isAuthenticated = true;
+      user = {
+        id: session.user_id,
+        email: session.email,
+        name: session.name
+      };
+
+      // Load all prompts
+      const promptsResult = await db.prepare(
+        'SELECT * FROM prompts ORDER BY sort_order ASC, name ASC'
+      ).all();
+      prompts = promptsResult.results || [];
+    }
+  } catch (e) {
+    console.error('Session/prompts check error:', e);
+  }
+}
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Prompts - TruSchools</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: #f8f9fa;
+            color: #1a1a1a;
+            line-height: 1.6;
+        }
+
+        .auth-required {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .auth-required h1 {
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+        }
+
+        .auth-required p {
+            color: #666;
+            margin-bottom: 24px;
+        }
+
+        .auth-required a {
+            display: inline-block;
+            background: #0066cc;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        h1 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .user-info {
+            font-size: 0.875rem;
+            color: #666;
+        }
+
+        .user-info a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+
+        .user-info a:hover {
+            text-decoration: underline;
+        }
+
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .section-header h2 {
+            font-size: 1.25rem;
+            margin: 0;
+        }
+
+        label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 6px;
+            font-size: 0.875rem;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 0.9375rem;
+            font-family: inherit;
+        }
+
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #0066cc;
+            box-shadow: 0 0 0 3px rgba(0,102,204,0.1);
+        }
+
+        textarea {
+            min-height: 300px;
+            resize: vertical;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.8125rem;
+            line-height: 1.5;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 100px;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .form-row-full {
+            margin-bottom: 16px;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        button {
+            font-family: inherit;
+            font-size: 0.9375rem;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.15s ease;
+        }
+
+        .btn-primary {
+            background: #0066cc;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #0055aa;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 0.8125rem;
+        }
+
+        .prompt-list {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .prompt-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            border-bottom: 1px solid #e0e0e0;
+            background: white;
+        }
+
+        .prompt-item:last-child {
+            border-bottom: none;
+        }
+
+        .prompt-item:hover {
+            background: #f8f9fa;
+        }
+
+        .prompt-info {
+            flex: 1;
+        }
+
+        .prompt-name {
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+
+        .prompt-meta {
+            font-size: 0.8125rem;
+            color: #666;
+        }
+
+        .prompt-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .badge-active {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .badge-inactive {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-weight: normal;
+        }
+
+        .checkbox-label input {
+            width: auto;
+        }
+
+        .message {
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-bottom: 16px;
+            font-size: 0.875rem;
+        }
+
+        .message-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        #editor-section {
+            display: none;
+        }
+
+        #editor-section.visible {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    {!isAuthenticated ? (
+        <div class="auth-required">
+            <h1>Login Required</h1>
+            <p>You need to be logged in to manage prompts.</p>
+            <a href="/login">Sign In</a>
+        </div>
+    ) : (
+        <>
+            <div class="header">
+                <h1>Manage Prompts</h1>
+                <div class="user-info">
+                    {user?.name || user?.email} | <a href="/tools/article-prompt-builder">Back to Builder</a>
+                </div>
+            </div>
+
+            <div id="message-container"></div>
+
+            <!-- Prompt List -->
+            <div class="section" id="list-section">
+                <div class="section-header">
+                    <h2>Writing Style Prompts</h2>
+                    <button class="btn-primary" id="add-new-btn">Add New Prompt</button>
+                </div>
+
+                {prompts.length === 0 ? (
+                    <div class="empty-state">
+                        <p>No prompts found. Click "Add New Prompt" to create one, or the system will use default prompts.</p>
+                    </div>
+                ) : (
+                    <div class="prompt-list">
+                        {prompts.map((prompt: any) => (
+                            <div class="prompt-item" data-id={prompt.id}>
+                                <div class="prompt-info">
+                                    <div class="prompt-name">{prompt.name}</div>
+                                    <div class="prompt-meta">
+                                        Slug: {prompt.slug} • Order: {prompt.sort_order} •
+                                        <span class={`badge ${prompt.is_active ? 'badge-active' : 'badge-inactive'}`}>
+                                            {prompt.is_active ? 'Active' : 'Inactive'}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="prompt-actions">
+                                    <button class="btn-secondary btn-sm edit-btn" data-id={prompt.id}>Edit</button>
+                                    <button class="btn-danger btn-sm delete-btn" data-id={prompt.id} data-name={prompt.name}>Delete</button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </div>
+
+            <!-- Editor Section -->
+            <div class="section" id="editor-section">
+                <div class="section-header">
+                    <h2 id="editor-title">Add New Prompt</h2>
+                    <button class="btn-secondary" id="cancel-btn">Cancel</button>
+                </div>
+
+                <form id="prompt-form">
+                    <input type="hidden" id="prompt-id" value="" />
+
+                    <div class="form-row">
+                        <div>
+                            <label for="prompt-name">Name</label>
+                            <input type="text" id="prompt-name" placeholder="e.g., Vox / Atlantic Explainer" required />
+                        </div>
+                        <div>
+                            <label for="prompt-slug">Slug</label>
+                            <input type="text" id="prompt-slug" placeholder="e.g., vox" required pattern="[a-z0-9-]+" />
+                        </div>
+                        <div>
+                            <label for="prompt-order">Order</label>
+                            <input type="number" id="prompt-order" value="0" min="0" />
+                        </div>
+                    </div>
+
+                    <div class="form-row-full">
+                        <label for="prompt-description">Description</label>
+                        <input type="text" id="prompt-description" placeholder="Brief description shown in the builder" />
+                    </div>
+
+                    <div class="form-row-full">
+                        <label for="prompt-template">Prompt Template</label>
+                        <textarea id="prompt-template" placeholder="Enter the full prompt template. Use {TOPIC} as placeholder for the article topic." required></textarea>
+                    </div>
+
+                    <div class="form-row-full">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="prompt-active" checked />
+                            Active (visible in the builder)
+                        </label>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn-success" id="save-btn">Save Prompt</button>
+                        <button type="button" class="btn-secondary" id="cancel-btn-2">Cancel</button>
+                    </div>
+                </form>
+            </div>
+
+            <script is:inline>
+                var prompts = JSON.parse(document.currentScript.getAttribute('data-prompts') || '[]');
+            </script>
+            <script is:inline define:vars={{ promptsData: JSON.stringify(prompts) }}>
+                var allPrompts = JSON.parse(promptsData);
+                var listSection = document.getElementById('list-section');
+                var editorSection = document.getElementById('editor-section');
+                var editorTitle = document.getElementById('editor-title');
+                var messageContainer = document.getElementById('message-container');
+                var form = document.getElementById('prompt-form');
+
+                function showMessage(text, isError) {
+                    messageContainer.innerHTML = '<div class="message ' + (isError ? 'message-error' : 'message-success') + '">' + text + '</div>';
+                    setTimeout(function() {
+                        messageContainer.innerHTML = '';
+                    }, 5000);
+                }
+
+                function showEditor(prompt) {
+                    if (prompt) {
+                        editorTitle.textContent = 'Edit Prompt';
+                        document.getElementById('prompt-id').value = prompt.id;
+                        document.getElementById('prompt-name').value = prompt.name;
+                        document.getElementById('prompt-slug').value = prompt.slug;
+                        document.getElementById('prompt-order').value = prompt.sort_order || 0;
+                        document.getElementById('prompt-description').value = prompt.description || '';
+                        document.getElementById('prompt-template').value = prompt.prompt_template;
+                        document.getElementById('prompt-active').checked = prompt.is_active == 1;
+                    } else {
+                        editorTitle.textContent = 'Add New Prompt';
+                        form.reset();
+                        document.getElementById('prompt-id').value = '';
+                        document.getElementById('prompt-active').checked = true;
+                    }
+                    editorSection.classList.add('visible');
+                    listSection.classList.add('hidden');
+                }
+
+                function hideEditor() {
+                    editorSection.classList.remove('visible');
+                    listSection.classList.remove('hidden');
+                }
+
+                // Add new button
+                document.getElementById('add-new-btn').addEventListener('click', function() {
+                    showEditor(null);
+                });
+
+                // Cancel buttons
+                document.getElementById('cancel-btn').addEventListener('click', hideEditor);
+                document.getElementById('cancel-btn-2').addEventListener('click', hideEditor);
+
+                // Edit buttons
+                document.querySelectorAll('.edit-btn').forEach(function(btn) {
+                    btn.addEventListener('click', function() {
+                        var id = this.getAttribute('data-id');
+                        var prompt = allPrompts.find(function(p) { return p.id == id; });
+                        if (prompt) {
+                            showEditor(prompt);
+                        }
+                    });
+                });
+
+                // Delete buttons
+                document.querySelectorAll('.delete-btn').forEach(function(btn) {
+                    btn.addEventListener('click', async function() {
+                        var id = this.getAttribute('data-id');
+                        var name = this.getAttribute('data-name');
+                        if (confirm('Are you sure you want to delete "' + name + '"?')) {
+                            try {
+                                var response = await fetch('/api/prompts/' + id, {
+                                    method: 'DELETE',
+                                    credentials: 'same-origin'
+                                });
+                                var data = await response.json();
+                                if (data.success) {
+                                    showMessage('Prompt deleted successfully');
+                                    setTimeout(function() { location.reload(); }, 1000);
+                                } else {
+                                    showMessage(data.error || 'Failed to delete prompt', true);
+                                }
+                            } catch (err) {
+                                showMessage('An error occurred', true);
+                            }
+                        }
+                    });
+                });
+
+                // Form submission
+                form.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+
+                    var id = document.getElementById('prompt-id').value;
+                    var promptData = {
+                        name: document.getElementById('prompt-name').value,
+                        slug: document.getElementById('prompt-slug').value,
+                        description: document.getElementById('prompt-description').value,
+                        prompt_template: document.getElementById('prompt-template').value,
+                        sort_order: parseInt(document.getElementById('prompt-order').value) || 0,
+                        is_active: document.getElementById('prompt-active').checked
+                    };
+
+                    try {
+                        var url = id ? '/api/prompts/' + id : '/api/prompts';
+                        var method = id ? 'PUT' : 'POST';
+
+                        var response = await fetch(url, {
+                            method: method,
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(promptData),
+                            credentials: 'same-origin'
+                        });
+
+                        var data = await response.json();
+
+                        if (data.success) {
+                            showMessage(id ? 'Prompt updated successfully' : 'Prompt created successfully');
+                            setTimeout(function() { location.reload(); }, 1000);
+                        } else {
+                            showMessage(data.error || 'Failed to save prompt', true);
+                        }
+                    } catch (err) {
+                        showMessage('An error occurred', true);
+                    }
+                });
+
+                // Auto-generate slug from name
+                document.getElementById('prompt-name').addEventListener('input', function() {
+                    var slugField = document.getElementById('prompt-slug');
+                    if (!document.getElementById('prompt-id').value && !slugField.value) {
+                        slugField.value = this.value.toLowerCase()
+                            .replace(/[^a-z0-9\s-]/g, '')
+                            .replace(/\s+/g, '-')
+                            .replace(/-+/g, '-');
+                    }
+                });
+            </script>
+        </>
+    )}
+</body>
+</html>

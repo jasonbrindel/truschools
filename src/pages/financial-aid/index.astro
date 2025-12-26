@@ -1,0 +1,339 @@
+---
+import Layout from '@/layouts/Layout.astro';
+
+// All US states for college lookup
+const states = [
+  { name: 'Alabama', slug: 'alabama', abbr: 'AL' },
+  { name: 'Alaska', slug: 'alaska', abbr: 'AK' },
+  { name: 'Arizona', slug: 'arizona', abbr: 'AZ' },
+  { name: 'Arkansas', slug: 'arkansas', abbr: 'AR' },
+  { name: 'California', slug: 'california', abbr: 'CA' },
+  { name: 'Colorado', slug: 'colorado', abbr: 'CO' },
+  { name: 'Connecticut', slug: 'connecticut', abbr: 'CT' },
+  { name: 'Delaware', slug: 'delaware', abbr: 'DE' },
+  { name: 'District of Columbia', slug: 'district-of-columbia', abbr: 'DC' },
+  { name: 'Florida', slug: 'florida', abbr: 'FL' },
+  { name: 'Georgia', slug: 'georgia', abbr: 'GA' },
+  { name: 'Hawaii', slug: 'hawaii', abbr: 'HI' },
+  { name: 'Idaho', slug: 'idaho', abbr: 'ID' },
+  { name: 'Illinois', slug: 'illinois', abbr: 'IL' },
+  { name: 'Indiana', slug: 'indiana', abbr: 'IN' },
+  { name: 'Iowa', slug: 'iowa', abbr: 'IA' },
+  { name: 'Kansas', slug: 'kansas', abbr: 'KS' },
+  { name: 'Kentucky', slug: 'kentucky', abbr: 'KY' },
+  { name: 'Louisiana', slug: 'louisiana', abbr: 'LA' },
+  { name: 'Maine', slug: 'maine', abbr: 'ME' },
+  { name: 'Maryland', slug: 'maryland', abbr: 'MD' },
+  { name: 'Massachusetts', slug: 'massachusetts', abbr: 'MA' },
+  { name: 'Michigan', slug: 'michigan', abbr: 'MI' },
+  { name: 'Minnesota', slug: 'minnesota', abbr: 'MN' },
+  { name: 'Mississippi', slug: 'mississippi', abbr: 'MS' },
+  { name: 'Missouri', slug: 'missouri', abbr: 'MO' },
+  { name: 'Montana', slug: 'montana', abbr: 'MT' },
+  { name: 'Nebraska', slug: 'nebraska', abbr: 'NE' },
+  { name: 'Nevada', slug: 'nevada', abbr: 'NV' },
+  { name: 'New Hampshire', slug: 'new-hampshire', abbr: 'NH' },
+  { name: 'New Jersey', slug: 'new-jersey', abbr: 'NJ' },
+  { name: 'New Mexico', slug: 'new-mexico', abbr: 'NM' },
+  { name: 'New York', slug: 'new-york', abbr: 'NY' },
+  { name: 'North Carolina', slug: 'north-carolina', abbr: 'NC' },
+  { name: 'North Dakota', slug: 'north-dakota', abbr: 'ND' },
+  { name: 'Ohio', slug: 'ohio', abbr: 'OH' },
+  { name: 'Oklahoma', slug: 'oklahoma', abbr: 'OK' },
+  { name: 'Oregon', slug: 'oregon', abbr: 'OR' },
+  { name: 'Pennsylvania', slug: 'pennsylvania', abbr: 'PA' },
+  { name: 'Puerto Rico', slug: 'puerto-rico', abbr: 'PR' },
+  { name: 'Rhode Island', slug: 'rhode-island', abbr: 'RI' },
+  { name: 'South Carolina', slug: 'south-carolina', abbr: 'SC' },
+  { name: 'South Dakota', slug: 'south-dakota', abbr: 'SD' },
+  { name: 'Tennessee', slug: 'tennessee', abbr: 'TN' },
+  { name: 'Texas', slug: 'texas', abbr: 'TX' },
+  { name: 'Utah', slug: 'utah', abbr: 'UT' },
+  { name: 'Vermont', slug: 'vermont', abbr: 'VT' },
+  { name: 'Virginia', slug: 'virginia', abbr: 'VA' },
+  { name: 'Washington', slug: 'washington', abbr: 'WA' },
+  { name: 'West Virginia', slug: 'west-virginia', abbr: 'WV' },
+  { name: 'Wisconsin', slug: 'wisconsin', abbr: 'WI' },
+  { name: 'Wyoming', slug: 'wyoming', abbr: 'WY' },
+];
+
+// Financial aid topic categories
+const topics = [
+  {
+    title: 'Financial Aid Basics',
+    description: 'Understanding the fundamentals of college financial aid, including grants, loans, and work-study programs.',
+    articles: [
+      { title: 'The Price of Admission: Financial 101', url: '/education-articles/the-price-of-admission?from=financial-aid' },
+      { title: 'How Financial Aid Works', url: '#' },
+      { title: 'Types of Financial Aid Explained', url: '#' },
+    ]
+  },
+  {
+    title: 'College Grants',
+    description: 'Grants are free money that does not need to be repaid. Learn about federal, state, and institutional grant programs.',
+    articles: [
+      { title: 'Federal Pell Grants', url: '#' },
+      { title: 'State Grant Programs', url: '#' },
+      { title: 'Institutional Grants', url: '#' },
+    ]
+  },
+  {
+    title: 'Student Loans',
+    description: 'Student loans are the most common form of financial aid. Understand the differences between federal and private loans.',
+    articles: [
+      { title: 'Federal vs. Private Loans', url: '#' },
+      { title: 'Understanding Loan Repayment', url: '#' },
+      { title: 'Loan Forgiveness Programs', url: '#' },
+    ]
+  },
+  {
+    title: 'College Scholarships',
+    description: 'Scholarships are awarded based on merit, need, or specific criteria. They do not need to be repaid.',
+    articles: [
+      { title: 'Finding Scholarships', url: '#' },
+      { title: 'Writing Scholarship Essays', url: '#' },
+      { title: 'Scholarship Deadlines', url: '#' },
+    ]
+  },
+  {
+    title: 'Work-Study Programs',
+    description: 'Federal Work-Study provides part-time jobs for students with financial need, helping cover education expenses.',
+    articles: [
+      { title: 'How Work-Study Works', url: '#' },
+      { title: 'Finding Work-Study Jobs', url: '#' },
+    ]
+  },
+  {
+    title: 'FAFSA',
+    description: 'The Free Application for Federal Student Aid (FAFSA) is required for most financial aid programs.',
+    articles: [
+      { title: 'FAFSA Application Guide', url: '#' },
+      { title: 'FAFSA Deadlines', url: '#' },
+      { title: 'Common FAFSA Mistakes', url: '#' },
+    ]
+  },
+];
+---
+
+<Layout title="Financial Aid for College" description="Everything you need to know about financial aid for college, including grants, loans, scholarships, work-study, and the FAFSA application process.">
+  <div class="container py-5">
+    <!-- Breadcrumb -->
+    <nav class="text-sm mb-4">
+      <ol class="flex flex-wrap items-center gap-2 text-gray-600">
+        <li><a href="/" class="hover:text-brand-blue">Home</a></li>
+        <li class="text-gray-400">/</li>
+        <li class="text-gray-900 font-medium">Financial Aid</li>
+      </ol>
+    </nav>
+
+    <h1 class="text-brand-green-text mb-2">Financial Aid for College</h1>
+    <p class="fs-14 text-gray-500 mb-5">Everything you need to know about paying for higher education.</p>
+
+    <div class="flex flex-col lg:flex-row gap-5">
+      <!-- Main Content -->
+      <div class="lg:w-2/3">
+        <!-- Featured Article -->
+        <div class="box-rounded mb-5">
+          <div class="flex flex-col md:flex-row gap-4">
+            <div class="md:w-1/3">
+              <div class="bg-gray-200 aspect-video rounded flex items-center justify-center text-gray-400">
+                Featured Image
+              </div>
+            </div>
+            <div class="md:w-2/3">
+              <h2 class="text-brand-blue text-xl mb-2">
+                <a href="/education-articles/the-price-of-admission?from=financial-aid" class="hover:underline">The Price of Admission: Financial 101 for College-Bound Families</a>
+              </h2>
+              <p class="text-gray-600 fs-14">
+                For millions of American families, the path to college has become a labyrinth of forms, formulas, and financial gambles.
+                Understanding financial aid terminology is essential: grants, loans, and work-study are the three main types of aid available.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Introduction -->
+        <div class="box-rounded mb-5">
+          <h2 class="text-brand-blue mb-3">Understanding Financial Aid</h2>
+          <p class="text-gray-700 mb-3">
+            Financial aid helps students and families pay for college. It can come from federal and state governments,
+            colleges and universities, and private organizations. The three main types of financial aid are:
+          </p>
+          <ul class="list-disc pl-5 space-y-2 text-gray-700 mb-0">
+            <li><strong>Grants and Scholarships:</strong> Free money that doesn't need to be repaid</li>
+            <li><strong>Loans:</strong> Borrowed money that must be repaid with interest</li>
+            <li><strong>Work-Study:</strong> Part-time employment to help cover education costs</li>
+          </ul>
+        </div>
+
+        <!-- Topic Categories -->
+        <div class="box-rounded mb-5">
+          <h2 class="text-brand-blue text-xl mb-4">Financial Aid Topics</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {topics.map((topic) => (
+              <div class="border border-gray-200 rounded p-4">
+                <h3 class="text-brand-green-text font-bold mb-2 fs-14">{topic.title}</h3>
+                <p class="text-gray-600 fs-13 mb-3">{topic.description}</p>
+                <ul class="space-y-1 fs-13">
+                  {topic.articles.map((article) => (
+                    <li>
+                      <a href={article.url} class="text-brand-blue hover:underline">{article.title}</a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <!-- Q&A Section -->
+        <div class="box-rounded mb-5 bg-lt-blue">
+          <h2 class="text-brand-blue text-lg mb-3">College Q&A</h2>
+          <p class="text-gray-700 fs-14 mb-3">
+            <strong>Question:</strong> Would you assume significant student debt for your dream school?
+          </p>
+          <div class="flex gap-2 flex-wrap">
+            <button class="px-3 py-1 bg-white border border-gray-300 rounded text-sm hover:bg-gray-50">Yes, it's worth it</button>
+            <button class="px-3 py-1 bg-white border border-gray-300 rounded text-sm hover:bg-gray-50">Only for a top school</button>
+            <button class="px-3 py-1 bg-white border border-gray-300 rounded text-sm hover:bg-gray-50">I'd choose affordability</button>
+            <button class="px-3 py-1 bg-white border border-gray-300 rounded text-sm hover:bg-gray-50">Depends on my major</button>
+          </div>
+        </div>
+
+        <!-- Key Statistics -->
+        <div class="box-rounded mb-5">
+          <h2 class="text-brand-blue mb-4">Financial Aid by the Numbers</h2>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="text-center p-4 bg-gray-50 rounded">
+              <div class="text-2xl font-bold text-brand-green-text">$1.8T</div>
+              <div class="fs-13 text-gray-600">Total Student Loan Debt</div>
+            </div>
+            <div class="text-center p-4 bg-gray-50 rounded">
+              <div class="text-2xl font-bold text-brand-green-text">$7,395</div>
+              <div class="fs-13 text-gray-600">Max Pell Grant (2024-25)</div>
+            </div>
+            <div class="text-center p-4 bg-gray-50 rounded">
+              <div class="text-2xl font-bold text-brand-green-text">43M</div>
+              <div class="fs-13 text-gray-600">Americans with Student Loans</div>
+            </div>
+            <div class="text-center p-4 bg-gray-50 rounded">
+              <div class="text-2xl font-bold text-brand-green-text">$37K</div>
+              <div class="fs-13 text-gray-600">Average Student Loan Balance</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Browse Colleges -->
+        <div class="box-rounded mb-5">
+          <h2 class="text-brand-blue mb-4">Find Colleges by State</h2>
+          <p class="text-gray-600 fs-14 mb-4">Research colleges and their financial aid offerings in your state.</p>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-2 fs-13">
+            {states.slice(0, 20).map((state) => (
+              <a href={`/colleges/${state.slug}`} class="text-brand-blue hover:underline py-1">
+                {state.name}
+              </a>
+            ))}
+          </div>
+          <div class="mt-4 text-center">
+            <a href="/colleges" class="text-brand-blue hover:underline font-medium">View All States &rarr;</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="lg:w-1/3">
+        <!-- Quick Links -->
+        <div class="box-rounded bg-lt-blue mb-4">
+          <h3 class="text-brand-blue mb-3">Quick Links</h3>
+          <ul class="list-none m-0 p-0 space-y-2 fs-13">
+            <li>
+              <a href="https://studentaid.gov/h/apply-for-aid/fafsa" target="_blank" rel="noopener" class="text-brand-blue hover:underline">Apply for FAFSA</a>
+            </li>
+            <li>
+              <a href="https://studentaid.gov" target="_blank" rel="noopener" class="text-brand-blue hover:underline">Federal Student Aid</a>
+            </li>
+            <li>
+              <a href="#" class="text-brand-blue hover:underline">Scholarship Search</a>
+            </li>
+            <li>
+              <a href="#" class="text-brand-blue hover:underline">Loan Calculators</a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- College Search -->
+        <div class="box-rounded mb-4">
+          <h3 class="text-brand-blue mb-3">Find a College</h3>
+          <select
+            class="input w-full"
+            onchange="if(this.value) window.location.href=this.value"
+          >
+            <option value="">-- Select a State --</option>
+            {states.map((state) => (
+              <option value={`/colleges/${state.slug}`}>
+                {state.name} Colleges
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <!-- Ad Placeholder -->
+        <div class="box-rounded mb-4">
+          <div class="bg-gray-100 h-[280px] flex items-center justify-center text-gray-400 fs-13">
+            Advertisement
+          </div>
+        </div>
+
+        <!-- Important Dates -->
+        <div class="box-rounded mb-4">
+          <h3 class="text-brand-blue mb-3">Important Dates</h3>
+          <ul class="list-none m-0 p-0 space-y-3 fs-13">
+            <li class="pb-2 border-b border-dotted border-[#c1c1c1]">
+              <div class="font-bold text-brand-green-text">October 1</div>
+              <div class="text-gray-600">FAFSA Opens</div>
+            </li>
+            <li class="pb-2 border-b border-dotted border-[#c1c1c1]">
+              <div class="font-bold text-brand-green-text">Varies by State</div>
+              <div class="text-gray-600">State Aid Deadlines</div>
+            </li>
+            <li class="pb-2 border-b border-dotted border-[#c1c1c1]">
+              <div class="font-bold text-brand-green-text">June 30</div>
+              <div class="text-gray-600">Federal FAFSA Deadline</div>
+            </li>
+            <li>
+              <div class="font-bold text-brand-green-text">Check Each School</div>
+              <div class="text-gray-600">Institutional Deadlines</div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Related Links -->
+        <div class="box-rounded mb-4">
+          <h3 class="text-brand-blue mb-3">Related Resources</h3>
+          <ul class="list-none m-0 p-0 fs-13">
+            <li class="py-2 border-b border-dotted border-[#c1c1c1]">
+              <a href="/colleges">Colleges & Universities</a>
+            </li>
+            <li class="py-2 border-b border-dotted border-[#c1c1c1]">
+              <a href="/vocational-schools">Vocational Schools</a>
+            </li>
+            <li class="py-2 border-b border-dotted border-[#c1c1c1]">
+              <a href="/education-articles/the-comeback-of-vocational-schools?from=financial-aid">The Comeback of Vocational Schools</a>
+            </li>
+            <li class="py-2">
+              <a href="/education-articles/the-diploma-and-the-torque-wrench?from=financial-aid">The Diploma and the Torque Wrench</a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Newsletter Signup -->
+        <div class="box-rounded">
+          <h3 class="text-brand-blue mb-3">Newsletter Signup</h3>
+          <p class="fs-13 text-gray-600 mb-3">Get financial aid tips and deadline reminders delivered to your inbox.</p>
+          <input type="email" placeholder="Your email address" class="input w-full mb-2" />
+          <button class="btn btn-primary w-full">Subscribe</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
