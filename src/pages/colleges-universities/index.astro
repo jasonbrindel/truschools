@@ -1,0 +1,372 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import QAPoll from '@/components/QAPoll.astro';
+import NewsletterSignup from '@/components/NewsletterSignup.astro';
+
+// Images for featured article and topic cards
+import featuredImage from '@/images/a_college_campus_in_the_background_stacks_of_cash_in_the_fore_68e3b6e1-a535-46f7-bcb5-d8952b1bc817_1.jpg';
+
+// College section images
+import collegeFinancialAidImage from '@/images/college-student-campus-lawn-studying.jpg';
+
+// New article images
+import choosingMajorImage from '@/images/USED-choosing-college-major.jpg';
+import applicationTimelineImage from '@/images/USED-college-application-timeline.jpg';
+import commonAppEssayImage from '@/images/USED-common-app-essay-guide.jpg';
+
+// University article images
+import medSchoolMcatImage from '@/images/USED-medical-school-mcat-gpa.jpg';
+import lawSchoolLsatImage from '@/images/USED-law-school-lsat-vs-gre.jpg';
+import gradSchoolFundingImage from '@/images/USED-how-to-pay-for-graduate-school.jpg';
+
+// All US states
+const states = [
+  { name: 'Alabama', slug: 'alabama', abbr: 'AL' },
+  { name: 'Alaska', slug: 'alaska', abbr: 'AK' },
+  { name: 'Arizona', slug: 'arizona', abbr: 'AZ' },
+  { name: 'Arkansas', slug: 'arkansas', abbr: 'AR' },
+  { name: 'California', slug: 'california', abbr: 'CA' },
+  { name: 'Colorado', slug: 'colorado', abbr: 'CO' },
+  { name: 'Connecticut', slug: 'connecticut', abbr: 'CT' },
+  { name: 'Delaware', slug: 'delaware', abbr: 'DE' },
+  { name: 'District of Columbia', slug: 'district-of-columbia', abbr: 'DC' },
+  { name: 'Florida', slug: 'florida', abbr: 'FL' },
+  { name: 'Georgia', slug: 'georgia', abbr: 'GA' },
+  { name: 'Hawaii', slug: 'hawaii', abbr: 'HI' },
+  { name: 'Idaho', slug: 'idaho', abbr: 'ID' },
+  { name: 'Illinois', slug: 'illinois', abbr: 'IL' },
+  { name: 'Indiana', slug: 'indiana', abbr: 'IN' },
+  { name: 'Iowa', slug: 'iowa', abbr: 'IA' },
+  { name: 'Kansas', slug: 'kansas', abbr: 'KS' },
+  { name: 'Kentucky', slug: 'kentucky', abbr: 'KY' },
+  { name: 'Louisiana', slug: 'louisiana', abbr: 'LA' },
+  { name: 'Maine', slug: 'maine', abbr: 'ME' },
+  { name: 'Maryland', slug: 'maryland', abbr: 'MD' },
+  { name: 'Massachusetts', slug: 'massachusetts', abbr: 'MA' },
+  { name: 'Michigan', slug: 'michigan', abbr: 'MI' },
+  { name: 'Minnesota', slug: 'minnesota', abbr: 'MN' },
+  { name: 'Mississippi', slug: 'mississippi', abbr: 'MS' },
+  { name: 'Missouri', slug: 'missouri', abbr: 'MO' },
+  { name: 'Montana', slug: 'montana', abbr: 'MT' },
+  { name: 'Nebraska', slug: 'nebraska', abbr: 'NE' },
+  { name: 'Nevada', slug: 'nevada', abbr: 'NV' },
+  { name: 'New Hampshire', slug: 'new-hampshire', abbr: 'NH' },
+  { name: 'New Jersey', slug: 'new-jersey', abbr: 'NJ' },
+  { name: 'New Mexico', slug: 'new-mexico', abbr: 'NM' },
+  { name: 'New York', slug: 'new-york', abbr: 'NY' },
+  { name: 'North Carolina', slug: 'north-carolina', abbr: 'NC' },
+  { name: 'North Dakota', slug: 'north-dakota', abbr: 'ND' },
+  { name: 'Ohio', slug: 'ohio', abbr: 'OH' },
+  { name: 'Oklahoma', slug: 'oklahoma', abbr: 'OK' },
+  { name: 'Oregon', slug: 'oregon', abbr: 'OR' },
+  { name: 'Pennsylvania', slug: 'pennsylvania', abbr: 'PA' },
+  { name: 'Puerto Rico', slug: 'puerto-rico', abbr: 'PR' },
+  { name: 'Rhode Island', slug: 'rhode-island', abbr: 'RI' },
+  { name: 'South Carolina', slug: 'south-carolina', abbr: 'SC' },
+  { name: 'South Dakota', slug: 'south-dakota', abbr: 'SD' },
+  { name: 'Tennessee', slug: 'tennessee', abbr: 'TN' },
+  { name: 'Texas', slug: 'texas', abbr: 'TX' },
+  { name: 'Utah', slug: 'utah', abbr: 'UT' },
+  { name: 'Vermont', slug: 'vermont', abbr: 'VT' },
+  { name: 'Virginia', slug: 'virginia', abbr: 'VA' },
+  { name: 'Washington', slug: 'washington', abbr: 'WA' },
+  { name: 'West Virginia', slug: 'west-virginia', abbr: 'WV' },
+  { name: 'Wisconsin', slug: 'wisconsin', abbr: 'WI' },
+  { name: 'Wyoming', slug: 'wyoming', abbr: 'WY' },
+];
+
+// Major cities for the "by city" section
+const majorCities = [
+  { name: 'Albuquerque', state: 'new-mexico' },
+  { name: 'Atlanta', state: 'georgia' },
+  { name: 'Austin', state: 'texas' },
+  { name: 'Baltimore', state: 'maryland' },
+  { name: 'Boston', state: 'massachusetts' },
+  { name: 'Charlotte', state: 'north-carolina' },
+  { name: 'Chicago', state: 'illinois' },
+  { name: 'Cleveland', state: 'ohio' },
+  { name: 'Columbus', state: 'ohio' },
+  { name: 'Dallas', state: 'texas' },
+  { name: 'Denver', state: 'colorado' },
+  { name: 'Detroit', state: 'michigan' },
+  { name: 'El Paso', state: 'texas' },
+  { name: 'Fort Worth', state: 'texas' },
+  { name: 'Fresno', state: 'california' },
+  { name: 'Houston', state: 'texas' },
+  { name: 'Indianapolis', state: 'indiana' },
+  { name: 'Jacksonville', state: 'florida' },
+  { name: 'Kansas City', state: 'missouri' },
+  { name: 'Las Vegas', state: 'nevada' },
+  { name: 'Long Beach', state: 'california' },
+  { name: 'Los Angeles', state: 'california' },
+  { name: 'Louisville', state: 'kentucky' },
+  { name: 'Memphis', state: 'tennessee' },
+  { name: 'Mesa', state: 'arizona' },
+  { name: 'Miami', state: 'florida' },
+  { name: 'Milwaukee', state: 'wisconsin' },
+  { name: 'Minneapolis', state: 'minnesota' },
+  { name: 'Nashville', state: 'tennessee' },
+  { name: 'New Orleans', state: 'louisiana' },
+  { name: 'New York', state: 'new-york' },
+  { name: 'Oakland', state: 'california' },
+  { name: 'Oklahoma City', state: 'oklahoma' },
+  { name: 'Omaha', state: 'nebraska' },
+  { name: 'Philadelphia', state: 'pennsylvania' },
+  { name: 'Phoenix', state: 'arizona' },
+  { name: 'Pittsburgh', state: 'pennsylvania' },
+  { name: 'Portland', state: 'oregon' },
+  { name: 'Raleigh', state: 'north-carolina' },
+  { name: 'Sacramento', state: 'california' },
+  { name: 'San Antonio', state: 'texas' },
+  { name: 'San Diego', state: 'california' },
+  { name: 'San Francisco', state: 'california' },
+  { name: 'San Jose', state: 'california' },
+  { name: 'Seattle', state: 'washington' },
+  { name: 'Tampa', state: 'florida' },
+  { name: 'Tucson', state: 'arizona' },
+  { name: 'Virginia Beach', state: 'virginia' },
+  { name: 'Washington', state: 'district-of-columbia' },
+  { name: 'Wichita', state: 'kansas' },
+];
+
+function slugify(text: string): string {
+  return text.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+}
+
+// College articles
+const collegeArticles = [
+  {
+    title: 'Choosing a College Major',
+    url: '/education-articles/choosing-a-college-major',
+    image: choosingMajorImage,
+    description: 'What parents need to know about undecided students and career-connected degrees in an AI-shaped job market.',
+  },
+  {
+    title: 'College Application Timeline',
+    url: '/education-articles/college-application-timeline',
+    image: applicationTimelineImage,
+    description: 'A technical guide to the modern admissions timeline from sophomore spring through senior summer.',
+  },
+  {
+    title: 'The Art of the College Essay',
+    url: '/education-articles/common-app-essay-guide',
+    image: commonAppEssayImage,
+    description: 'Self-knowledge, authenticity, and writing an essay that reveals genuine character in an age of AI.',
+  },
+  {
+    title: 'Financial Aid & Scholarships',
+    url: '/financial-aid',
+    image: collegeFinancialAidImage,
+    description: 'Navigate scholarships, grants, loans, and work-study programs to make your college education affordable.',
+  },
+];
+
+// University articles
+const universityArticles = [
+  {
+    title: 'Medical School MCAT & GPA Requirements',
+    url: '/education-articles/medical-school-mcat-gpa-requirements',
+    image: medSchoolMcatImage,
+    description: 'The truth behind MCAT and GPA "requirements" - why the numbers matter, why they don\'t, and how parents can stay sane.',
+  },
+  {
+    title: 'Law School: LSAT vs. GRE',
+    url: '/education-articles/law-school-lsat-vs-gre',
+    image: lawSchoolLsatImage,
+    description: 'Which test to take and how schools really evaluate them in the post-logic-games era.',
+  },
+  {
+    title: 'How to Pay for Graduate School',
+    url: '/education-articles/how-to-pay-for-graduate-school',
+    image: gradSchoolFundingImage,
+    description: 'The complete funding guide: fellowships, assistantships, employer benefits, federal loans, and strategies to minimize debt.',
+  },
+];
+---
+
+<Layout title="Colleges & Universities in the United States" description="Find colleges and universities across the United States. Browse comprehensive listings of public and private higher education institutions by state.">
+  <div class="container py-5">
+    <!-- Breadcrumb -->
+    <nav class="text-sm mb-4">
+      <ol class="flex flex-wrap items-center gap-2 text-gray-600">
+        <li><a href="/" class="hover:text-brand-blue">Home</a></li>
+        <li class="text-gray-400">/</li>
+        <li class="text-gray-900 font-medium">Colleges & Universities</li>
+      </ol>
+    </nav>
+
+    <h1 class="text-brand-green-text mb-2">Colleges & Universities in the United States</h1>
+    <p class="fs-14 text-gray-500 mb-5">Find the right college or university for your higher education journey.</p>
+
+    <div class="flex flex-col lg:flex-row gap-5">
+      <!-- Main Content -->
+      <div class="lg:w-2/3">
+        <!-- Featured Article -->
+        <div class="box-rounded mb-5">
+          <a href="/education-articles/fafsa-2026-2027-parents-guide">
+            <img
+              src={featuredImage.src}
+              alt="College campus with financial considerations"
+              class="w-full aspect-video object-cover rounded mb-4"
+            />
+          </a>
+          <h2 class="text-brand-blue text-xl mb-2">
+            <a href="/education-articles/fafsa-2026-2027-parents-guide" class="hover:underline">FAFSA 2026-2027: Complete Parent's Guide to the New Rules and How to Maximize Financial Aid</a>
+          </h2>
+          <p class="text-gray-600 fs-14">
+            Major changes under the One Big Beautiful Bill Act reshape federal aid. From new Parent PLUS loan limits and the end of Grad PLUS to the grandparent 529 loophole, understanding these changes can mean thousands of dollars in additional aid for your student. <a href="/education-articles/fafsa-2026-2027-parents-guide" class="text-brand-blue hover:underline">Read article &rarr;</a>
+          </p>
+        </div>
+
+        <!-- College Articles & Guides -->
+        <div class="box-rounded mb-5">
+          <h2 class="text-brand-blue text-xl mb-2">College Resources</h2>
+          <p class="text-gray-600 fs-14 mb-4">Essential guides for navigating the college experience, from applications and financial aid to campus life and making the most of your undergraduate years.</p>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {collegeArticles.map((article) => (
+              <div class="border border-gray-200 rounded overflow-hidden p-4">
+                <a href={article.url}>
+                  <img
+                    src={article.image.src}
+                    alt={article.title}
+                    class="w-full aspect-square object-cover rounded"
+                  />
+                </a>
+                <div class="pt-4">
+                  <h3 class="text-brand-green-text font-bold mb-1 fs-14">
+                    <a href={article.url} class="hover:underline">{article.title}</a>
+                  </h3>
+                  <p class="text-gray-600 fs-12 mb-2 leading-snug">{article.description}</p>
+                  <a href={article.url} class="text-brand-blue hover:underline fs-13">Learn more &rarr;</a>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <!-- University Articles & Guides -->
+        <div class="box-rounded mb-5">
+          <h2 class="text-brand-blue text-xl mb-2">University Resources</h2>
+          <p class="text-gray-600 fs-14 mb-4">Resources for students at research universities, including graduate school preparation, research opportunities, and advanced academic programs.</p>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {universityArticles.map((article) => (
+              <div class="border border-gray-200 rounded overflow-hidden p-4">
+                <a href={article.url}>
+                  <img
+                    src={article.image.src}
+                    alt={article.title}
+                    class="w-full aspect-square object-cover rounded"
+                  />
+                </a>
+                <div class="pt-4">
+                  <h3 class="text-brand-green-text font-bold mb-1 fs-14">
+                    <a href={article.url} class="hover:underline">{article.title}</a>
+                  </h3>
+                  <p class="text-gray-600 fs-12 mb-2 leading-snug">{article.description}</p>
+                  <a href={article.url} class="text-brand-blue hover:underline fs-13">Learn more &rarr;</a>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <!-- Q&A Section -->
+        <div class="box-rounded mb-5 bg-lt-blue">
+          <QAPoll
+            questionId="college-important-factor"
+            pageSlug="colleges-universities"
+            question="What's most important when choosing a college?"
+            answers={["Academic reputation", "Cost & financial aid", "Location", "Career outcomes"]}
+          />
+        </div>
+
+        <!-- Browse by State -->
+        <div class="box-rounded mb-5">
+          <h2 class="text-brand-blue mb-4">Browse Colleges by State</h2>
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-0">
+            {states.map((state, index) => (
+              <div class={`p-3 ${index < states.length - 3 ? 'border-b border-dotted border-[#c1c1c1]' : ''}`}>
+                <a href={`/colleges-universities/${state.slug}`} class="flex items-center gap-2">
+                  <span class="text-brand-blue font-bold">{state.abbr}</span>
+                  <span>{state.name}</span>
+                </a>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <!-- Browse by City -->
+        <div class="box-rounded mb-5">
+          <h2 class="text-brand-blue mb-4">Colleges by City</h2>
+          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 fs-13">
+            {majorCities.map((city) => (
+              <a href={`/colleges-universities/${city.state}/${slugify(city.name)}`} class="text-brand-blue hover:underline">
+                {city.name}
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="lg:w-1/3">
+        <div class="box-rounded bg-lt-blue mb-4">
+          <h3 class="text-brand-blue mb-3">Quick Jump</h3>
+          <select
+            class="input w-full"
+            onchange="if(this.value) window.location.href=this.value"
+          >
+            <option value="">-- Select a State --</option>
+            {states.map((state) => (
+              <option value={`/colleges-universities/${state.slug}`}>
+                {state.name} Colleges
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <!-- Financial Aid -->
+        <div class="box-rounded mb-4">
+          <h3 class="text-brand-blue mb-2">Financial Aid</h3>
+          <p class="text-gray-600 fs-13 mb-3">
+            Learn about grants, scholarships, loans, work-study, and how to navigate the FAFSA application process.
+          </p>
+          <a href="/financial-aid" class="inline-flex items-center gap-1 text-brand-blue hover:underline font-medium fs-14">
+            Explore Financial Aid &rarr;
+          </a>
+        </div>
+
+        <!-- Ad Placeholder -->
+        <div class="box-rounded mb-4">
+          <div class="bg-gray-100 h-[280px] flex items-center justify-center text-gray-400 fs-13">
+            Advertisement
+          </div>
+        </div>
+
+        <div class="box-rounded mb-4">
+          <h3 class="text-brand-blue mb-3">K-12 Schools</h3>
+          <ul class="list-none m-0 p-0 fs-13">
+            <li class="py-2 border-b border-dotted border-[#c1c1c1]">
+              <a href="/preschools">Preschools</a>
+            </li>
+            <li class="py-2 border-b border-dotted border-[#c1c1c1]">
+              <a href="/kindergartens">Kindergartens</a>
+            </li>
+            <li class="py-2 border-b border-dotted border-[#c1c1c1]">
+              <a href="/elementary-schools">Elementary Schools</a>
+            </li>
+            <li class="py-2 border-b border-dotted border-[#c1c1c1]">
+              <a href="/middle-schools">Middle Schools</a>
+            </li>
+            <li class="py-2">
+              <a href="/high-schools">High Schools</a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Newsletter Signup -->
+        <NewsletterSignup preselected={['college', 'university', 'financial-aid']} />
+      </div>
+    </div>
+  </div>
+</Layout>

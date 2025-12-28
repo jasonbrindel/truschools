@@ -1,0 +1,894 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import NewsletterSignup from '@/components/NewsletterSignup.astro';
+
+const { state, college } = Astro.params;
+const db = Astro.locals.runtime?.env?.DB;
+
+if (!db) {
+  return Astro.redirect('/404');
+}
+
+// State name to abbreviation mapping
+const stateMap: Record<string, string> = {
+  'alabama': 'AL', 'alaska': 'AK', 'arizona': 'AZ', 'arkansas': 'AR',
+  'california': 'CA', 'colorado': 'CO', 'connecticut': 'CT', 'delaware': 'DE',
+  'district-of-columbia': 'DC', 'florida': 'FL', 'georgia': 'GA', 'hawaii': 'HI',
+  'idaho': 'ID', 'illinois': 'IL', 'indiana': 'IN', 'iowa': 'IA',
+  'kansas': 'KS', 'kentucky': 'KY', 'louisiana': 'LA', 'maine': 'ME',
+  'maryland': 'MD', 'massachusetts': 'MA', 'michigan': 'MI', 'minnesota': 'MN',
+  'mississippi': 'MS', 'missouri': 'MO', 'montana': 'MT', 'nebraska': 'NE',
+  'nevada': 'NV', 'new-hampshire': 'NH', 'new-jersey': 'NJ', 'new-mexico': 'NM',
+  'new-york': 'NY', 'north-carolina': 'NC', 'north-dakota': 'ND', 'ohio': 'OH',
+  'oklahoma': 'OK', 'oregon': 'OR', 'pennsylvania': 'PA', 'puerto-rico': 'PR',
+  'rhode-island': 'RI', 'south-carolina': 'SC', 'south-dakota': 'SD',
+  'tennessee': 'TN', 'texas': 'TX', 'utah': 'UT', 'vermont': 'VT',
+  'virginia': 'VA', 'washington': 'WA', 'west-virginia': 'WV',
+  'wisconsin': 'WI', 'wyoming': 'WY'
+};
+
+const stateAbbr = stateMap[state || ''] || state?.toUpperCase();
+
+// State abbreviation to full name mapping
+const stateNames: Record<string, string> = {
+  'AL': 'Alabama', 'AK': 'Alaska', 'AZ': 'Arizona', 'AR': 'Arkansas',
+  'CA': 'California', 'CO': 'Colorado', 'CT': 'Connecticut', 'DE': 'Delaware',
+  'DC': 'District of Columbia', 'FL': 'Florida', 'GA': 'Georgia', 'HI': 'Hawaii',
+  'ID': 'Idaho', 'IL': 'Illinois', 'IN': 'Indiana', 'IA': 'Iowa',
+  'KS': 'Kansas', 'KY': 'Kentucky', 'LA': 'Louisiana', 'ME': 'Maine',
+  'MD': 'Maryland', 'MA': 'Massachusetts', 'MI': 'Michigan', 'MN': 'Minnesota',
+  'MS': 'Mississippi', 'MO': 'Missouri', 'MT': 'Montana', 'NE': 'Nebraska',
+  'NV': 'Nevada', 'NH': 'New Hampshire', 'NJ': 'New Jersey', 'NM': 'New Mexico',
+  'NY': 'New York', 'NC': 'North Carolina', 'ND': 'North Dakota', 'OH': 'Ohio',
+  'OK': 'Oklahoma', 'OR': 'Oregon', 'PA': 'Pennsylvania', 'PR': 'Puerto Rico',
+  'RI': 'Rhode Island', 'SC': 'South Carolina', 'SD': 'South Dakota',
+  'TN': 'Tennessee', 'TX': 'Texas', 'UT': 'Utah', 'VT': 'Vermont',
+  'VA': 'Virginia', 'WA': 'Washington', 'WV': 'West Virginia',
+  'WI': 'Wisconsin', 'WY': 'Wyoming'
+};
+
+const stateName = stateNames[stateAbbr || ''] || state;
+
+// Try to find college by page_name - exact match first, then prefix match
+// Old URLs use format like: university-of-michigan-ann-arbor
+// DB has: university-of-michigan-ann-arbor-ann-arbor-mi
+let collegeResult = await db.prepare(`
+  SELECT * FROM colleges
+  WHERE state_abbr = ?
+  AND page_name = ?
+  AND active = 1
+  LIMIT 1
+`).bind(stateAbbr, college).first();
+
+// If exact match fails, try prefix matching (for legacy URLs)
+if (!collegeResult) {
+  // Use a simpler pattern - just the slug prefix without wildcards for complex names
+  collegeResult = await db.prepare(`
+    SELECT * FROM colleges
+    WHERE state_abbr = ?
+    AND page_name LIKE ?
+    AND active = 1
+    LIMIT 1
+  `).bind(stateAbbr, `${college}%`).first();
+}
+
+if (!collegeResult) {
+  return Astro.redirect('/404');
+}
+
+// Cast to any to avoid TypeScript errors with dynamic DB columns
+const collegeData = collegeResult as Record<string, any>;
+
+// Get scorecard data - try unit_id first, then ipeds_id, then fall back to name matching
+let scorecardData: any = null;
+try {
+  if (collegeData.unit_id) {
+    scorecardData = await db.prepare(`
+      SELECT * FROM scorecard WHERE unitid = ?
+    `).bind(String(collegeData.unit_id)).first();
+  }
+  // Try ipeds_id if no unit_id match
+  if (!scorecardData && collegeData.ipeds_id) {
+    scorecardData = await db.prepare(`
+      SELECT * FROM scorecard WHERE unitid = ?
+    `).bind(String(collegeData.ipeds_id)).first();
+  }
+  // Fall back to name + state matching if still no match
+  if (!scorecardData && collegeData.institution_name && collegeData.state_abbr) {
+    scorecardData = await db.prepare(`
+      SELECT * FROM scorecard
+      WHERE LOWER(TRIM(instnm)) = LOWER(TRIM(?))
+      AND LOWER(stabbr) = LOWER(?)
+      LIMIT 1
+    `).bind(collegeData.institution_name, collegeData.state_abbr).first();
+  }
+} catch (e) {
+  console.error('Error fetching scorecard:', e);
+  // Continue without scorecard data
+}
+
+// Get nearby colleges in same state
+let nearbyColleges: any[] = [];
+try {
+  const nearbyResult = await db.prepare(`
+    SELECT id, institution_name, page_name, city, sector
+    FROM colleges
+    WHERE state_abbr = ? AND id != ? AND active = 1
+    ORDER BY RANDOM()
+    LIMIT 6
+  `).bind(stateAbbr, collegeData.id).all();
+  nearbyColleges = nearbyResult?.results || [];
+} catch (e) {
+  console.error('Error fetching nearby colleges:', e);
+  // Continue without nearby colleges
+}
+
+// Safe JSON parse helper
+function safeJsonParse(str: string | null | undefined): any {
+  if (!str) return null;
+  try {
+    return JSON.parse(str);
+  } catch {
+    return null;
+  }
+}
+
+// Parse JSON fields from scorecard
+const testScores = safeJsonParse(scorecardData?.test_scores);
+const netPrice = safeJsonParse(scorecardData?.net_price);
+const programs = safeJsonParse(scorecardData?.programs);
+// Note: demographics JSON field is available in scorecardData?.demographics if needed
+
+// Build earnings object from regular columns (new format) with JSON fallback
+const earningsJson = safeJsonParse(scorecardData?.earnings);
+const earnings = scorecardData ? {
+  md_earn_wne_p6: scorecardData.md_earn_wne_p6 || earningsJson?.md_earn_wne_p6,
+  md_earn_wne_p8: earningsJson?.md_earn_wne_p8,
+  md_earn_wne_p10: scorecardData.md_earn_wne_p10 || earningsJson?.md_earn_wne_p10,
+  md_earn_wne_inc1_p6: earningsJson?.md_earn_wne_inc1_p6,
+  md_earn_wne_inc2_p6: earningsJson?.md_earn_wne_inc2_p6,
+  md_earn_wne_inc3_p6: earningsJson?.md_earn_wne_inc3_p6,
+  pct25_earn_wne_p6: earningsJson?.pct25_earn_wne_p6,
+  pct75_earn_wne_p6: earningsJson?.pct75_earn_wne_p6,
+} : null;
+
+// Program name mapping
+const programNames: Record<string, string> = {
+  pcip11: 'Computer Science',
+  pcip13: 'Education',
+  pcip14: 'Engineering',
+  pcip24: 'Liberal Arts',
+  pcip26: 'Biology',
+  pcip27: 'Mathematics',
+  pcip42: 'Psychology',
+  pcip45: 'Social Sciences',
+  pcip50: 'Visual/Performing Arts',
+  pcip51: 'Health Professions',
+  pcip52: 'Business',
+  pcip54: 'History',
+  pcip43: 'Protective Services',
+  pcip09: 'Communication',
+  pcip23: 'English'
+};
+
+// Get top programs (non-zero values, sorted by percentage)
+const topPrograms = programs ? Object.entries(programs)
+  .filter(([_, val]) => val && (val as number) > 0)
+  .map(([key, val]) => ({ code: key, name: programNames[key] || key, pct: val as number }))
+  .sort((a, b) => b.pct - a.pct)
+  .slice(0, 8) : [];
+
+// Format phone number
+function formatPhone(phone: string | null): string {
+  if (!phone) return '';
+  const cleaned = phone.replace(/\D/g, '');
+  if (cleaned.length === 10) {
+    return `(${cleaned.slice(0,3)}) ${cleaned.slice(3,6)}-${cleaned.slice(6)}`;
+  }
+  return phone;
+}
+
+// Format currency
+function formatCurrency(amount: number | null): string {
+  if (!amount) return 'N/A';
+  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(amount);
+}
+
+// Format number with commas
+function formatNumber(num: number | null): string {
+  if (!num) return 'N/A';
+  return new Intl.NumberFormat('en-US').format(num);
+}
+
+// Format percentage
+function formatPercent(num: number | null): string {
+  if (num === null || num === undefined) return 'N/A';
+  return `${num}%`;
+}
+
+// Get institution type label
+function getInstitutionType(college: any): string {
+  const parts = [];
+  if (college.institution_control) parts.push(college.institution_control);
+  if (college.is_four_year) parts.push('4-year');
+  else if (college.is_two_year) parts.push('2-year');
+  return parts.join(', ') || college.sector || 'Institution';
+}
+
+// Get degrees offered
+function getDegreesOffered(college: any): string[] {
+  const degrees = [];
+  if (college.offers_doctoral) degrees.push('Doctoral');
+  if (college.offers_masters) degrees.push("Master's");
+  if (college.offers_bachelors) degrees.push("Bachelor's");
+  if (college.offers_associates) degrees.push("Associate's");
+  if (college.offers_certificate) degrees.push('Certificate');
+  return degrees;
+}
+
+const degrees = getDegreesOffered(collegeData);
+const institutionType = getInstitutionType(collegeData);
+---
+
+<Layout title={`${collegeData.institution_name} - ${collegeData.city}, ${collegeData.state_abbr}`} description={`${collegeData.institution_name} is a ${institutionType} institution located in ${collegeData.city}, ${stateName}. View admissions info, programs, tuition costs, and financial aid.`}>
+  <div class="container py-5">
+    <!-- Breadcrumb -->
+    <nav class="text-sm mb-4">
+      <ol class="flex flex-wrap items-center gap-2 text-gray-600">
+        <li><a href="/" class="hover:text-brand-blue">Home</a></li>
+        <li class="text-gray-400">/</li>
+        <li><a href="/colleges-universities" class="hover:text-brand-blue">Colleges</a></li>
+        <li class="text-gray-400">/</li>
+        <li><a href={`/colleges-universities/${state}`} class="hover:text-brand-blue">{stateName}</a></li>
+        <li class="text-gray-400">/</li>
+        <li class="text-gray-900 font-medium">{collegeData.institution_name}</li>
+      </ol>
+    </nav>
+
+    <div class="flex flex-col lg:flex-row gap-5">
+      <!-- Main Content -->
+      <div class="lg:w-2/3">
+        <!-- Header Section -->
+        <div class="box-rounded mb-5">
+          <div class="flex flex-col md:flex-row gap-4">
+            <div class="md:w-24 flex-shrink-0">
+              <div class="w-24 h-24 bg-brand-blue rounded-lg flex items-center justify-center text-white text-3xl font-bold">
+                {collegeData.institution_name.charAt(0)}
+              </div>
+            </div>
+            <div class="flex-1">
+              <h1 class="text-brand-green-text text-2xl mb-2">{collegeData.institution_name}</h1>
+              <p class="text-gray-600 fs-14 mb-2">{institutionType}</p>
+              <p class="text-gray-500 fs-14">
+                {collegeData.address && `${collegeData.address}, `}
+                {collegeData.city}, {collegeData.state_abbr} {collegeData.zip}
+              </p>
+              {collegeData.phone && (
+                <p class="text-gray-500 fs-14 mt-1">
+                  <a href={`tel:${String(collegeData.phone).replace(/\D/g, '')}`} class="text-brand-blue hover:underline">
+                    {formatPhone(collegeData.phone as string)}
+                  </a>
+                </p>
+              )}
+              {collegeData.website && (
+                <p class="mt-2">
+                  <a href={collegeData.website} target="_blank" rel="noopener noreferrer" class="text-brand-blue hover:underline fs-14">
+                    Visit Website &rarr;
+                  </a>
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="box-rounded mb-5">
+          <h2 class="text-brand-blue text-xl mb-4">Quick Facts</h2>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {(collegeData.total_enrollment || scorecardData?.ugds) && (
+              <div class="text-center p-3 bg-lt-blue rounded">
+                <p class="text-2xl font-bold text-brand-blue">{formatNumber(collegeData.total_enrollment || scorecardData?.ugds)}</p>
+                <p class="text-gray-600 fs-13">Total Enrollment</p>
+              </div>
+            )}
+            {scorecardData?.adm_rate != null && !isNaN(Number(scorecardData.adm_rate)) && (
+              <div class="text-center p-3 bg-lt-blue rounded">
+                <p class="text-2xl font-bold text-brand-blue">{(Number(scorecardData.adm_rate) * 100).toFixed(0)}%</p>
+                <p class="text-gray-600 fs-13">Acceptance Rate</p>
+              </div>
+            )}
+            {(collegeData.graduation_rate || (scorecardData?.c150_4 != null && !isNaN(Number(scorecardData.c150_4))) || (scorecardData?.c150_l4 != null && !isNaN(Number(scorecardData.c150_l4)))) && (
+              <div class="text-center p-3 bg-lt-blue rounded">
+                <p class="text-2xl font-bold text-brand-blue">
+                  {collegeData.graduation_rate ? formatPercent(collegeData.graduation_rate) :
+                   `${(Number(scorecardData?.c150_4 ?? scorecardData?.c150_l4 ?? 0) * 100).toFixed(0)}%`}
+                </p>
+                <p class="text-gray-600 fs-13">Graduation Rate</p>
+              </div>
+            )}
+            {scorecardData?.md_earn_wne_p6 && (
+              <div class="text-center p-3 bg-lt-blue rounded">
+                <p class="text-2xl font-bold text-brand-green-text">{formatCurrency(scorecardData.md_earn_wne_p6)}</p>
+                <p class="text-gray-600 fs-13">Median Earnings (6yr)</p>
+              </div>
+            )}
+            {(collegeData.tuition_in_state || scorecardData?.tuitionfee_in) && (
+              <div class="text-center p-3 bg-lt-blue rounded">
+                <p class="text-2xl font-bold text-brand-blue">{formatCurrency(collegeData.tuition_in_state || scorecardData?.tuitionfee_in)}</p>
+                <p class="text-gray-600 fs-13">In-State Tuition</p>
+              </div>
+            )}
+            {(scorecardData?.npt4_pub || scorecardData?.npt4_priv) && (
+              <div class="text-center p-3 bg-lt-blue rounded">
+                <p class="text-2xl font-bold text-brand-blue">{formatCurrency(scorecardData.npt4_pub || scorecardData.npt4_priv)}</p>
+                <p class="text-gray-600 fs-13">Avg Net Price</p>
+              </div>
+            )}
+            {(collegeData.student_faculty_ratio || scorecardData?.stufacr) && (
+              <div class="text-center p-3 bg-lt-blue rounded">
+                <p class="text-2xl font-bold text-brand-blue">{collegeData.student_faculty_ratio || scorecardData?.stufacr}:1</p>
+                <p class="text-gray-600 fs-13">Student-Faculty Ratio</p>
+              </div>
+            )}
+            {scorecardData?.sat_avg && (
+              <div class="text-center p-3 bg-lt-blue rounded">
+                <p class="text-2xl font-bold text-brand-blue">{scorecardData.sat_avg}</p>
+                <p class="text-gray-600 fs-13">Avg SAT Score</p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <!-- About Section -->
+        <div class="box-rounded mb-5" id="overview">
+          <h2 class="text-brand-blue text-xl mb-4">About {collegeData.institution_name}</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <h3 class="text-brand-green-text font-bold mb-2 fs-14">Institution Details</h3>
+              <table class="w-full fs-14">
+                <tbody>
+                  <tr class="border-b border-gray-100">
+                    <td class="py-2 text-gray-600">Type</td>
+                    <td class="py-2 font-medium">{institutionType}</td>
+                  </tr>
+                  {collegeData.carnegie_classification && (
+                    <tr class="border-b border-gray-100">
+                      <td class="py-2 text-gray-600">Classification</td>
+                      <td class="py-2 font-medium">{collegeData.carnegie_classification}</td>
+                    </tr>
+                  )}
+                  {collegeData.institution_size && (
+                    <tr class="border-b border-gray-100">
+                      <td class="py-2 text-gray-600">Size</td>
+                      <td class="py-2 font-medium">{collegeData.institution_size}</td>
+                    </tr>
+                  )}
+                  {collegeData.hbcu === 1 && (
+                    <tr class="border-b border-gray-100">
+                      <td class="py-2 text-gray-600">HBCU</td>
+                      <td class="py-2 font-medium">Yes</td>
+                    </tr>
+                  )}
+                  {collegeData.is_land_grant === 1 && (
+                    <tr class="border-b border-gray-100">
+                      <td class="py-2 text-gray-600">Land Grant</td>
+                      <td class="py-2 font-medium">Yes</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+            <div>
+              <h3 class="text-brand-green-text font-bold mb-2 fs-14">Location</h3>
+              <table class="w-full fs-14">
+                <tbody>
+                  <tr class="border-b border-gray-100">
+                    <td class="py-2 text-gray-600">Address</td>
+                    <td class="py-2 font-medium">{collegeData.address || 'N/A'}</td>
+                  </tr>
+                  <tr class="border-b border-gray-100">
+                    <td class="py-2 text-gray-600">City</td>
+                    <td class="py-2 font-medium">{collegeData.city}, {collegeData.state_abbr}</td>
+                  </tr>
+                  <tr class="border-b border-gray-100">
+                    <td class="py-2 text-gray-600">ZIP Code</td>
+                    <td class="py-2 font-medium">{collegeData.zip}</td>
+                  </tr>
+                  {collegeData.county && (
+                    <tr class="border-b border-gray-100">
+                      <td class="py-2 text-gray-600">County</td>
+                      <td class="py-2 font-medium">{collegeData.county}</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          {collegeData.chief_admin_name && (
+            <div class="mt-4 pt-4 border-t border-gray-200">
+              <p class="fs-14">
+                <span class="text-gray-600">President/Chief Administrator:</span>
+                <span class="font-medium ml-2">{collegeData.chief_admin_name}</span>
+                {collegeData.chief_admin_title && <span class="text-gray-500"> ({collegeData.chief_admin_title})</span>}
+              </p>
+            </div>
+          )}
+        </div>
+
+        <!-- Programs Section -->
+        <div class="box-rounded mb-5" id="programs">
+          <h2 class="text-brand-blue text-xl mb-4">Programs & Degrees</h2>
+          {degrees.length > 0 ? (
+            <div>
+              <h3 class="text-brand-green-text font-bold mb-3 fs-14">Degrees Offered</h3>
+              <div class="flex flex-wrap gap-2 mb-4">
+                {degrees.map((degree) => (
+                  <span class="px-3 py-1 bg-brand-blue text-white rounded-full fs-13">{degree}</span>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <p class="text-gray-600 fs-14">Degree information not available.</p>
+          )}
+          {topPrograms.length > 0 && (
+            <div class="mt-4 pt-4 border-t border-gray-200">
+              <h3 class="text-brand-green-text font-bold mb-3 fs-14">Top Programs by Graduates</h3>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                {topPrograms.map((prog) => (
+                  <div class="flex justify-between items-center py-2 border-b border-gray-100 fs-14">
+                    <span class="text-gray-700">{prog.name}</span>
+                    <span class="font-medium text-brand-blue">{(Number(prog.pct) * 100).toFixed(0)}%</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          <div class="mt-4 pt-4 border-t border-gray-200">
+            <div class="grid grid-cols-2 gap-4 fs-14">
+              <div>
+                <span class="text-gray-600">Undergraduate Programs:</span>
+                <span class="font-medium ml-2">{collegeData.offers_undergrad ? 'Yes' : 'No'}</span>
+              </div>
+              <div>
+                <span class="text-gray-600">Graduate Programs:</span>
+                <span class="font-medium ml-2">{collegeData.offers_graduate ? 'Yes' : 'No'}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Admissions Section -->
+        <div class="box-rounded mb-5" id="admissions">
+          <h2 class="text-brand-blue text-xl mb-4">Admissions</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <h3 class="text-brand-green-text font-bold mb-3 fs-14">Enrollment Statistics</h3>
+              <table class="w-full fs-14">
+                <tbody>
+                  {collegeData.total_enrollment && (
+                    <tr class="border-b border-gray-100">
+                      <td class="py-2 text-gray-600">Total Enrollment</td>
+                      <td class="py-2 font-medium">{formatNumber(collegeData.total_enrollment)}</td>
+                    </tr>
+                  )}
+                  {collegeData.undergraduate_enrollment && (
+                    <tr class="border-b border-gray-100">
+                      <td class="py-2 text-gray-600">Undergraduate</td>
+                      <td class="py-2 font-medium">{formatNumber(collegeData.undergraduate_enrollment)}</td>
+                    </tr>
+                  )}
+                  {collegeData.graduate_enrollment && (
+                    <tr class="border-b border-gray-100">
+                      <td class="py-2 text-gray-600">Graduate</td>
+                      <td class="py-2 font-medium">{formatNumber(collegeData.graduate_enrollment)}</td>
+                    </tr>
+                  )}
+                  {collegeData.enrollment_ft && (
+                    <tr class="border-b border-gray-100">
+                      <td class="py-2 text-gray-600">Full-Time</td>
+                      <td class="py-2 font-medium">{formatNumber(collegeData.enrollment_ft)}</td>
+                    </tr>
+                  )}
+                  {collegeData.enrollment_pt && (
+                    <tr class="border-b border-gray-100">
+                      <td class="py-2 text-gray-600">Part-Time</td>
+                      <td class="py-2 font-medium">{formatNumber(collegeData.enrollment_pt)}</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+            <div>
+              <h3 class="text-brand-green-text font-bold mb-3 fs-14">Student Demographics</h3>
+              <table class="w-full fs-14">
+                <tbody>
+                  {collegeData.pct_female !== null && (
+                    <tr class="border-b border-gray-100">
+                      <td class="py-2 text-gray-600">Male</td>
+                      <td class="py-2 font-medium">{formatPercent(100 - collegeData.pct_female)}</td>
+                    </tr>
+                  )}
+                  {collegeData.pct_female !== null && (
+                    <tr class="border-b border-gray-100">
+                      <td class="py-2 text-gray-600">Female</td>
+                      <td class="py-2 font-medium">{formatPercent(collegeData.pct_female)}</td>
+                    </tr>
+                  )}
+                  {collegeData.pct_white !== null && (
+                    <tr class="border-b border-gray-100">
+                      <td class="py-2 text-gray-600">White</td>
+                      <td class="py-2 font-medium">{formatPercent(collegeData.pct_white)}</td>
+                    </tr>
+                  )}
+                  {collegeData.pct_black !== null && (
+                    <tr class="border-b border-gray-100">
+                      <td class="py-2 text-gray-600">Black</td>
+                      <td class="py-2 font-medium">{formatPercent(collegeData.pct_black)}</td>
+                    </tr>
+                  )}
+                  {collegeData.pct_hispanic !== null && (
+                    <tr class="border-b border-gray-100">
+                      <td class="py-2 text-gray-600">Hispanic</td>
+                      <td class="py-2 font-medium">{formatPercent(collegeData.pct_hispanic)}</td>
+                    </tr>
+                  )}
+                  {collegeData.pct_asian !== null && (
+                    <tr class="border-b border-gray-100">
+                      <td class="py-2 text-gray-600">Asian</td>
+                      <td class="py-2 font-medium">{formatPercent(collegeData.pct_asian)}</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          {testScores && (
+            <div class="mt-4 pt-4 border-t border-gray-200">
+              <h3 class="text-brand-green-text font-bold mb-3 fs-14">Test Score Ranges</h3>
+              <div class="overflow-x-auto">
+                <table class="w-full fs-14">
+                  <thead>
+                    <tr class="border-b border-gray-200">
+                      <th class="py-2 text-left text-gray-600 font-medium">Test</th>
+                      <th class="py-2 text-center text-gray-600 font-medium">25th %ile</th>
+                      <th class="py-2 text-center text-gray-600 font-medium">Median</th>
+                      <th class="py-2 text-center text-gray-600 font-medium">75th %ile</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {(testScores.satvr25 || testScores.satvr50 || testScores.satvr75) && (
+                      <tr class="border-b border-gray-100">
+                        <td class="py-2 text-gray-700">SAT Reading</td>
+                        <td class="py-2 text-center font-medium">{testScores.satvr25 || '-'}</td>
+                        <td class="py-2 text-center font-medium">{testScores.satvr50 || '-'}</td>
+                        <td class="py-2 text-center font-medium">{testScores.satvr75 || '-'}</td>
+                      </tr>
+                    )}
+                    {(testScores.satmt25 || testScores.satmt50 || testScores.satmt75) && (
+                      <tr class="border-b border-gray-100">
+                        <td class="py-2 text-gray-700">SAT Math</td>
+                        <td class="py-2 text-center font-medium">{testScores.satmt25 || '-'}</td>
+                        <td class="py-2 text-center font-medium">{testScores.satmt50 || '-'}</td>
+                        <td class="py-2 text-center font-medium">{testScores.satmt75 || '-'}</td>
+                      </tr>
+                    )}
+                    {(testScores.actcm25 || testScores.actcm50 || testScores.actcm75) && (
+                      <tr class="border-b border-gray-100">
+                        <td class="py-2 text-gray-700">ACT Composite</td>
+                        <td class="py-2 text-center font-medium">{testScores.actcm25 || '-'}</td>
+                        <td class="py-2 text-center font-medium">{testScores.actcm50 || '-'}</td>
+                        <td class="py-2 text-center font-medium">{testScores.actcm75 || '-'}</td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+          {collegeData.website_admissions && (
+            <div class="mt-4 pt-4 border-t border-gray-200">
+              <a href={collegeData.website_admissions} target="_blank" rel="noopener noreferrer" class="text-brand-blue hover:underline fs-14">
+                Visit Admissions Website &rarr;
+              </a>
+            </div>
+          )}
+        </div>
+
+        <!-- Financial Aid Section -->
+        <div class="box-rounded mb-5" id="financial-aid">
+          <h2 class="text-brand-blue text-xl mb-4">Tuition & Financial Aid</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <h3 class="text-brand-green-text font-bold mb-3 fs-14">Tuition & Fees</h3>
+              <table class="w-full fs-14">
+                <tbody>
+                  <tr class="border-b border-gray-100">
+                    <td class="py-2 text-gray-600">In-State Tuition</td>
+                    <td class="py-2 font-medium">{formatCurrency(collegeData.tuition_in_state)}</td>
+                  </tr>
+                  <tr class="border-b border-gray-100">
+                    <td class="py-2 text-gray-600">Out-of-State Tuition</td>
+                    <td class="py-2 font-medium">{formatCurrency(collegeData.tuition_out_state)}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div>
+              <h3 class="text-brand-green-text font-bold mb-3 fs-14">Financial Aid</h3>
+              <table class="w-full fs-14">
+                <tbody>
+                  {collegeData.pct_receiving_aid !== null && (
+                    <tr class="border-b border-gray-100">
+                      <td class="py-2 text-gray-600">Students Receiving Aid</td>
+                      <td class="py-2 font-medium">{formatPercent(collegeData.pct_receiving_aid)}</td>
+                    </tr>
+                  )}
+                  {collegeData.avg_grant_aid && (
+                    <tr class="border-b border-gray-100">
+                      <td class="py-2 text-gray-600">Avg. Grant Aid</td>
+                      <td class="py-2 font-medium">{formatCurrency(collegeData.avg_grant_aid)}</td>
+                    </tr>
+                  )}
+                  {collegeData.avg_pell_grant && (
+                    <tr class="border-b border-gray-100">
+                      <td class="py-2 text-gray-600">Avg. Pell Grant</td>
+                      <td class="py-2 font-medium">{formatCurrency(collegeData.avg_pell_grant)}</td>
+                    </tr>
+                  )}
+                  {collegeData.avg_federal_grant && (
+                    <tr class="border-b border-gray-100">
+                      <td class="py-2 text-gray-600">Avg. Federal Grant</td>
+                      <td class="py-2 font-medium">{formatCurrency(collegeData.avg_federal_grant)}</td>
+                    </tr>
+                  )}
+                  {collegeData.avg_loan_amount && (
+                    <tr class="border-b border-gray-100">
+                      <td class="py-2 text-gray-600">Avg. Loan Amount</td>
+                      <td class="py-2 font-medium">{formatCurrency(collegeData.avg_loan_amount)}</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          {netPrice && (
+            <div class="mt-4 pt-4 border-t border-gray-200">
+              <h3 class="text-brand-green-text font-bold mb-3 fs-14">Net Price by Family Income</h3>
+              <p class="text-gray-500 fs-13 mb-3">What families actually pay after grants and scholarships:</p>
+              <table class="w-full fs-14">
+                <tbody>
+                  {(netPrice.npt41_pub || netPrice.npt41_priv) && (
+                    <tr class="border-b border-gray-100">
+                      <td class="py-2 text-gray-600">$0 - $30,000</td>
+                      <td class="py-2 font-medium text-right">{formatCurrency(netPrice.npt41_pub || netPrice.npt41_priv)}</td>
+                    </tr>
+                  )}
+                  {(netPrice.npt42_pub || netPrice.npt42_priv) && (
+                    <tr class="border-b border-gray-100">
+                      <td class="py-2 text-gray-600">$30,001 - $48,000</td>
+                      <td class="py-2 font-medium text-right">{formatCurrency(netPrice.npt42_pub || netPrice.npt42_priv)}</td>
+                    </tr>
+                  )}
+                  {(netPrice.npt43_pub || netPrice.npt43_priv) && (
+                    <tr class="border-b border-gray-100">
+                      <td class="py-2 text-gray-600">$48,001 - $75,000</td>
+                      <td class="py-2 font-medium text-right">{formatCurrency(netPrice.npt43_pub || netPrice.npt43_priv)}</td>
+                    </tr>
+                  )}
+                  {(netPrice.npt44_pub || netPrice.npt44_priv) && (
+                    <tr class="border-b border-gray-100">
+                      <td class="py-2 text-gray-600">$75,001 - $110,000</td>
+                      <td class="py-2 font-medium text-right">{formatCurrency(netPrice.npt44_pub || netPrice.npt44_priv)}</td>
+                    </tr>
+                  )}
+                  {(netPrice.npt45_pub || netPrice.npt45_priv) && (
+                    <tr class="border-b border-gray-100">
+                      <td class="py-2 text-gray-600">$110,001+</td>
+                      <td class="py-2 font-medium text-right">{formatCurrency(netPrice.npt45_pub || netPrice.npt45_priv)}</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          )}
+          <div class="mt-4 pt-4 border-t border-gray-200 flex gap-4 flex-wrap">
+            {collegeData.website_financial_aid && (
+              <a href={collegeData.website_financial_aid} target="_blank" rel="noopener noreferrer" class="text-brand-blue hover:underline fs-14">
+                Financial Aid Website &rarr;
+              </a>
+            )}
+            {(collegeData.website_net_price || scorecardData?.npcurl) && (
+              <a href={collegeData.website_net_price || scorecardData?.npcurl} target="_blank" rel="noopener noreferrer" class="text-brand-blue hover:underline fs-14">
+                Net Price Calculator &rarr;
+              </a>
+            )}
+          </div>
+        </div>
+
+        <!-- Earnings & ROI -->
+        {earnings && (
+          <div class="box-rounded mb-5" id="earnings">
+            <h2 class="text-brand-blue text-xl mb-4">Earnings After Graduation</h2>
+            <p class="text-gray-600 fs-14 mb-4">Median earnings for students who received federal financial aid:</p>
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
+              {earnings.md_earn_wne_p6 && (
+                <div class="text-center p-4 border border-gray-200 rounded">
+                  <p class="text-2xl font-bold text-brand-green-text">{formatCurrency(earnings.md_earn_wne_p6)}</p>
+                  <p class="text-gray-600 fs-13 mt-1">6 Years After</p>
+                </div>
+              )}
+              {earnings.md_earn_wne_p8 && (
+                <div class="text-center p-4 border border-gray-200 rounded">
+                  <p class="text-2xl font-bold text-brand-green-text">{formatCurrency(earnings.md_earn_wne_p8)}</p>
+                  <p class="text-gray-600 fs-13 mt-1">8 Years After</p>
+                </div>
+              )}
+              {earnings.md_earn_wne_p10 && (
+                <div class="text-center p-4 border border-gray-200 rounded">
+                  <p class="text-2xl font-bold text-brand-green-text">{formatCurrency(earnings.md_earn_wne_p10)}</p>
+                  <p class="text-gray-600 fs-13 mt-1">10 Years After</p>
+                </div>
+              )}
+            </div>
+            {(earnings.pct25_earn_wne_p6 || earnings.pct75_earn_wne_p6) && (
+              <div class="bg-lt-blue p-4 rounded fs-14">
+                <p class="text-gray-600 mb-2">Earnings Range (6 years after enrollment):</p>
+                <p class="font-medium">
+                  25th percentile: {formatCurrency(earnings.pct25_earn_wne_p6)} &nbsp;|&nbsp;
+                  75th percentile: {formatCurrency(earnings.pct75_earn_wne_p6)}
+                </p>
+              </div>
+            )}
+            {(earnings.md_earn_wne_inc1_p6 || earnings.md_earn_wne_inc2_p6 || earnings.md_earn_wne_inc3_p6) && (
+              <div class="mt-4 pt-4 border-t border-gray-200">
+                <h3 class="text-brand-green-text font-bold mb-3 fs-14">Earnings by Family Income Background</h3>
+                <div class="grid grid-cols-3 gap-4">
+                  {earnings.md_earn_wne_inc1_p6 && (
+                    <div class="text-center">
+                      <p class="text-xl font-bold text-brand-blue">{formatCurrency(earnings.md_earn_wne_inc1_p6)}</p>
+                      <p class="text-gray-600 fs-12">Low Income</p>
+                    </div>
+                  )}
+                  {earnings.md_earn_wne_inc2_p6 && (
+                    <div class="text-center">
+                      <p class="text-xl font-bold text-brand-blue">{formatCurrency(earnings.md_earn_wne_inc2_p6)}</p>
+                      <p class="text-gray-600 fs-12">Middle Income</p>
+                    </div>
+                  )}
+                  {earnings.md_earn_wne_inc3_p6 && (
+                    <div class="text-center">
+                      <p class="text-xl font-bold text-brand-blue">{formatCurrency(earnings.md_earn_wne_inc3_p6)}</p>
+                      <p class="text-gray-600 fs-12">High Income</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        <!-- Retention & Graduation -->
+        {(collegeData.retention_rate_ft || collegeData.graduation_rate) && (
+          <div class="box-rounded mb-5" id="outcomes">
+            <h2 class="text-brand-blue text-xl mb-4">Student Outcomes</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {collegeData.retention_rate_ft && (
+                <div class="text-center p-4 border border-gray-200 rounded">
+                  <p class="text-3xl font-bold text-brand-green-text">{collegeData.retention_rate_ft}%</p>
+                  <p class="text-gray-600 fs-13 mt-1">Full-Time Retention</p>
+                </div>
+              )}
+              {collegeData.retention_rate_pt && (
+                <div class="text-center p-4 border border-gray-200 rounded">
+                  <p class="text-3xl font-bold text-brand-green-text">{collegeData.retention_rate_pt}%</p>
+                  <p class="text-gray-600 fs-13 mt-1">Part-Time Retention</p>
+                </div>
+              )}
+              {collegeData.graduation_rate && (
+                <div class="text-center p-4 border border-gray-200 rounded">
+                  <p class="text-3xl font-bold text-brand-green-text">{collegeData.graduation_rate}%</p>
+                  <p class="text-gray-600 fs-13 mt-1">Graduation Rate</p>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+
+      <!-- Sidebar -->
+      <div class="lg:w-1/3">
+        <!-- Quick Navigation -->
+        <div class="box-rounded bg-lt-blue mb-4">
+          <h3 class="text-brand-blue mb-3">Quick Navigation</h3>
+          <ul class="list-none m-0 p-0 fs-13">
+            <li class="py-2 border-b border-dotted border-[#c1c1c1]">
+              <a href="#overview" class="text-brand-blue hover:underline">Overview</a>
+            </li>
+            <li class="py-2 border-b border-dotted border-[#c1c1c1]">
+              <a href="#programs" class="text-brand-blue hover:underline">Programs & Degrees</a>
+            </li>
+            <li class="py-2 border-b border-dotted border-[#c1c1c1]">
+              <a href="#admissions" class="text-brand-blue hover:underline">Admissions</a>
+            </li>
+            <li class="py-2 border-b border-dotted border-[#c1c1c1]">
+              <a href="#financial-aid" class="text-brand-blue hover:underline">Tuition & Financial Aid</a>
+            </li>
+            {earnings && (
+              <li class="py-2 border-b border-dotted border-[#c1c1c1]">
+                <a href="#earnings" class="text-brand-blue hover:underline">Earnings</a>
+              </li>
+            )}
+            {(collegeData.retention_rate_ft || collegeData.graduation_rate) && (
+              <li class="py-2">
+                <a href="#outcomes" class="text-brand-blue hover:underline">Student Outcomes</a>
+              </li>
+            )}
+          </ul>
+        </div>
+
+        <!-- Contact -->
+        <div class="box-rounded mb-4">
+          <h3 class="text-brand-blue mb-3">Contact Information</h3>
+          <div class="fs-14 space-y-2">
+            {collegeData.phone && (
+              <p>
+                <span class="text-gray-600">Phone:</span>
+                <a href={`tel:${String(collegeData.phone).replace(/\D/g, '')}`} class="text-brand-blue hover:underline ml-1">
+                  {formatPhone(collegeData.phone as string)}
+                </a>
+              </p>
+            )}
+            {collegeData.website && (
+              <p>
+                <span class="text-gray-600">Website:</span>
+                <a href={collegeData.website} target="_blank" rel="noopener noreferrer" class="text-brand-blue hover:underline ml-1">
+                  Visit Site
+                </a>
+              </p>
+            )}
+            {collegeData.website_admissions && (
+              <p>
+                <span class="text-gray-600">Admissions:</span>
+                <a href={collegeData.website_admissions} target="_blank" rel="noopener noreferrer" class="text-brand-blue hover:underline ml-1">
+                  Apply Now
+                </a>
+              </p>
+            )}
+          </div>
+        </div>
+
+        <!-- Ad Placeholder -->
+        <div class="box-rounded mb-4">
+          <div class="bg-gray-100 h-[280px] flex items-center justify-center text-gray-400 fs-13">
+            Advertisement
+          </div>
+        </div>
+
+        <!-- Nearby Colleges -->
+        {nearbyColleges.length > 0 && (
+          <div class="box-rounded mb-4">
+            <h3 class="text-brand-blue mb-3">Other {stateName} Colleges</h3>
+            <ul class="list-none m-0 p-0 fs-13">
+              {nearbyColleges.map((nc: any, index: number) => (
+                <li class={`py-2 ${index < nearbyColleges.length - 1 ? 'border-b border-dotted border-[#c1c1c1]' : ''}`}>
+                  <a href={`/colleges-universities/${state}/${nc.page_name}`} class="text-brand-blue hover:underline">
+                    {nc.institution_name}
+                  </a>
+                  <span class="text-gray-400 block fs-12">{nc.city}</span>
+                </li>
+              ))}
+            </ul>
+            <div class="mt-3 pt-3 border-t border-gray-200">
+              <a href={`/colleges-universities/${state}`} class="text-brand-blue hover:underline fs-13">
+                View all {stateName} colleges &rarr;
+              </a>
+            </div>
+          </div>
+        )}
+
+        <!-- Newsletter -->
+        <NewsletterSignup preselected={['college', 'university']} />
+      </div>
+    </div>
+  </div>
+</Layout>

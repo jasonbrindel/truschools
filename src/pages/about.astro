@@ -1,0 +1,123 @@
+---
+import Layout from '@/layouts/Layout.astro';
+
+const title = "About TruSchools";
+const description = "TruSchools is your comprehensive guide to finding and comparing schools across the United States. Learn about our mission to help families make informed education decisions.";
+---
+
+<Layout title={title} description={description}>
+  <div class="container py-5">
+    <!-- Breadcrumb -->
+    <nav class="text-sm mb-4">
+      <ol class="flex flex-wrap items-center gap-2 text-gray-600">
+        <li><a href="/" class="hover:text-brand-blue">Home</a></li>
+        <li class="text-gray-400">/</li>
+        <li class="text-gray-900 font-medium">About Us</li>
+      </ol>
+    </nav>
+
+    <div class="max-w-[800px] mx-auto">
+      <div class="box-rounded mb-6">
+        <h1 class="text-brand-blue text-3xl mb-4">About TruSchools</h1>
+        <p class="text-xl text-gray-600 mb-0">Helping families make informed education decisions since 2011.</p>
+      </div>
+
+      <div class="box-rounded mb-6">
+        <h2 class="text-brand-green-text text-xl mb-4">Our Mission</h2>
+        <p class="text-gray-700 mb-4">
+          TruSchools was founded with a simple belief: every family deserves access to comprehensive,
+          unbiased information about their education options. Whether you're looking for a preschool
+          for your toddler, researching high schools for your teenager, or exploring college options,
+          we're here to help you navigate the complex landscape of American education.
+        </p>
+        <p class="text-gray-700 mb-0">
+          We believe that informed parents make better decisions. That's why we've built the most
+          comprehensive school database in the country, covering over 130,000 K-12 schools and
+          7,000+ colleges and universities.
+        </p>
+      </div>
+
+      <div class="box-rounded mb-6">
+        <h2 class="text-brand-green-text text-xl mb-4">What We Offer</h2>
+        <div class="space-y-4">
+          <div>
+            <h3 class="font-bold text-gray-900 mb-2">Comprehensive School Data</h3>
+            <p class="text-gray-700 mb-0">
+              Unlike other school directories that show only a handful of data points, TruSchools
+              provides in-depth information for every school. We pull data from authoritative sources
+              including the National Center for Education Statistics (NCES), College Scorecard, IPEDS,
+              and the U.S. Census Bureau to give you a complete picture.
+            </p>
+          </div>
+          <div>
+            <h3 class="font-bold text-gray-900 mb-2">All School Types</h3>
+            <p class="text-gray-700 mb-0">
+              We cover the full spectrum of education options: public schools, private schools,
+              charter schools, magnet schools, preschools, vocational schools, and colleges.
+              Whatever type of school you're looking for, we have the data you need.
+            </p>
+          </div>
+          <div>
+            <h3 class="font-bold text-gray-900 mb-2">Community Context</h3>
+            <p class="text-gray-700 mb-0">
+              Schools don't exist in isolation. That's why we include demographic and economic data
+              for the communities surrounding each school, helping you understand the full context
+              of where your child would learn.
+            </p>
+          </div>
+          <div>
+            <h3 class="font-bold text-gray-900 mb-2">Educational Resources</h3>
+            <p class="text-gray-700 mb-0">
+              Our library of research-backed articles helps parents understand everything from
+              kindergarten readiness to college admissions. We cut through the noise to give you
+              the information that actually matters.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="box-rounded mb-6">
+        <h2 class="text-brand-green-text text-xl mb-4">Our Data Sources</h2>
+        <p class="text-gray-700 mb-4">
+          We believe in transparency. Here's where our data comes from:
+        </p>
+        <ul class="space-y-2 text-gray-700">
+          <li class="flex items-start gap-2">
+            <span class="text-brand-blue font-bold">•</span>
+            <span><strong>K-12 Public Schools:</strong> National Center for Education Statistics (NCES) Common Core of Data</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-brand-blue font-bold">•</span>
+            <span><strong>Private Schools:</strong> NCES Private School Universe Survey</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-brand-blue font-bold">•</span>
+            <span><strong>Colleges & Universities:</strong> U.S. Department of Education College Scorecard and IPEDS</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-brand-blue font-bold">•</span>
+            <span><strong>Community Data:</strong> U.S. Census Bureau American Community Survey (ACS)</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-brand-blue font-bold">•</span>
+            <span><strong>Financial Aid:</strong> Federal Student Aid (FSA) and state scholarship programs</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="box-rounded mb-6">
+        <h2 class="text-brand-green-text text-xl mb-4">Our Commitment</h2>
+        <p class="text-gray-700 mb-4">
+          TruSchools is committed to providing accurate, up-to-date, and unbiased information.
+          We don't accept payment from schools to influence their rankings or placement. Our goal
+          is to be the resource we wish we had when making education decisions for our own families.
+        </p>
+        <p class="text-gray-700 mb-0">
+          We update our database regularly as new data becomes available from federal and state
+          sources, ensuring you always have access to the most current information.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</Layout>

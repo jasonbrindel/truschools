@@ -8,41 +8,169 @@ let schools: any[] = [];
 let colleges: any[] = [];
 let searchPerformed = false;
 
+// Parse query to extract city and state if comma-separated (e.g., "Ann Arbor, MI")
+function parseQuery(q: string): { city: string | null; state: string | null; terms: string[] } {
+  const trimmed = q.trim();
+
+  // Check for "city, state" pattern
+  const commaMatch = trimmed.match(/^(.+?),\s*([A-Za-z]{2})$/);
+  if (commaMatch) {
+    return {
+      city: commaMatch[1].trim(),
+      state: commaMatch[2].toUpperCase(),
+      terms: [commaMatch[1].trim()]
+    };
+  }
+
+  // Check for "city state" pattern (city followed by 2-letter state)
+  const spaceMatch = trimmed.match(/^(.+?)\s+([A-Za-z]{2})$/);
+  if (spaceMatch) {
+    return {
+      city: spaceMatch[1].trim(),
+      state: spaceMatch[2].toUpperCase(),
+      terms: [spaceMatch[1].trim()]
+    };
+  }
+
+  // Just a single search term
+  return { city: null, state: null, terms: [trimmed] };
+}
+
+const parsed = parseQuery(query);
+
+// Helper to slugify city names
+function slugify(text: string): string {
+  return text.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+}
+
+// Helper to get school URL based on type
+function getSchoolUrl(school: any): string {
+  const stateSlug = school.state_slug; // From JOIN with states table
+  const citySlug = slugify(school.city || '');
+
+  if (school.is_charter) {
+    return `/charter-schools/${stateSlug}/${citySlug}/${school.page_name}`;
+  } else if (school.is_magnet) {
+    return `/magnet-schools/${stateSlug}/${citySlug}/${school.page_name}`;
+  } else if (!school.is_public) {
+    return `/private-schools/${stateSlug}/${citySlug}/${school.page_name}`;
+  } else if (school.school_level === 'High' || school.is_high_school) {
+    return `/high-schools/${stateSlug}/${citySlug}/${school.page_name}`;
+  } else if (school.school_level === 'Middle' || school.is_middle_school) {
+    return `/middle-schools/${stateSlug}/${citySlug}/${school.page_name}`;
+  } else if (school.school_level === 'Elementary' || school.is_elementary) {
+    return `/elementary-schools/${stateSlug}/${citySlug}/${school.page_name}`;
+  } else if (school.is_kindergarten) {
+    return `/kindergartens/${stateSlug}/${citySlug}/${school.page_name}`;
+  } else if (school.is_preschool) {
+    return `/preschools/${stateSlug}/${citySlug}/${school.page_name}`;
+  }
+  return `/elementary-schools/${stateSlug}/${citySlug}/${school.page_name}`;
+}
+
+// Helper to get college URL
+function getCollegeUrl(college: any): string {
+  return `/colleges-universities/${college.state_slug}/${college.page_name}`;
+}
+
 if (query && db) {
   searchPerformed = true;
   try {
-    // Search schools
-    const schoolResults = await db
-      .prepare(`
-        SELECT id, school_name, city, state_abbr, school_level, is_public, is_charter, is_magnet
-        FROM schools
-        WHERE active = 1 AND (
-          school_name LIKE ? OR
-          city LIKE ? OR
-          zip LIKE ?
-        )
-        LIMIT 20
-      `)
-      .bind(`%${query}%`, `%${query}%`, `${query}%`)
-      .all();
-    schools = schoolResults?.results || [];
+    if (parsed.city && parsed.state) {
+      // City + State search - JOIN with states to get state_slug
+      const schoolResults = await db
+        .prepare(`
+          SELECT s.id, s.school_name, s.city, s.state, s.state_abbr, s.page_name, s.school_level,
+                 s.is_public, s.is_charter, s.is_magnet, s.is_high_school, s.is_middle_school,
+                 s.is_elementary, s.is_kindergarten, s.is_preschool,
+                 st.slug as state_slug, st.name as state_name
+          FROM schools s
+          JOIN states st ON s.state_abbr = st.abbr
+          WHERE s.state_abbr = ? AND (
+            s.city LIKE ? OR
+            s.school_name LIKE ?
+          )
+          ORDER BY s.school_name
+          LIMIT 50
+        `)
+        .bind(parsed.state, `%${parsed.city}%`, `%${parsed.city}%`)
+        .all();
+      schools = schoolResults?.results || [];
 
-    // Search colleges
-    const collegeResults = await db
-      .prepare(`
-        SELECT id, institution_name, city, state_abbr, sector
-        FROM colleges
-        WHERE active = 1 AND (
-          institution_name LIKE ? OR
-          city LIKE ?
+      const collegeResults = await db
+        .prepare(`
+          SELECT c.id, c.institution_name, c.city, c.state, c.state_abbr, c.page_name, c.sector,
+                 st.slug as state_slug, st.name as state_name
+          FROM colleges c
+          JOIN states st ON c.state_abbr = st.abbr
+          WHERE c.state_abbr = ? AND (
+            c.city LIKE ? OR
+            c.institution_name LIKE ?
+          )
+          ORDER BY c.institution_name
+          LIMIT 20
+        `)
+        .bind(parsed.state, `%${parsed.city}%`, `%${parsed.city}%`)
+        .all();
+      colleges = collegeResults?.results || [];
+    } else {
+      // General search
+      const searchTerm = query.trim();
+
+      // Search schools - JOIN with states to get state_slug
+      const schoolResults = await db
+        .prepare(`
+          SELECT s.id, s.school_name, s.city, s.state, s.state_abbr, s.page_name, s.school_level,
+                 s.is_public, s.is_charter, s.is_magnet, s.is_high_school, s.is_middle_school,
+                 s.is_elementary, s.is_kindergarten, s.is_preschool,
+                 st.slug as state_slug, st.name as state_name
+          FROM schools s
+          JOIN states st ON s.state_abbr = st.abbr
+          WHERE s.school_name LIKE ? OR
+            s.city LIKE ? OR
+            s.zip LIKE ? OR
+            s.state_abbr = ?
+          ORDER BY
+            CASE WHEN s.school_name LIKE ? THEN 0 ELSE 1 END,
+            s.school_name
+          LIMIT 50
+        `)
+        .bind(
+          `%${searchTerm}%`,
+          `%${searchTerm}%`,
+          `${searchTerm}%`,
+          searchTerm.toUpperCase(),
+          `${searchTerm}%`
         )
-        LIMIT 10
-      `)
-      .bind(`%${query}%`, `%${query}%`)
-      .all();
-    colleges = collegeResults?.results || [];
+        .all();
+      schools = schoolResults?.results || [];
+
+      // Search colleges - JOIN with states to get state_slug
+      const collegeResults = await db
+        .prepare(`
+          SELECT c.id, c.institution_name, c.city, c.state, c.state_abbr, c.page_name, c.sector,
+                 st.slug as state_slug, st.name as state_name
+          FROM colleges c
+          JOIN states st ON c.state_abbr = st.abbr
+          WHERE c.institution_name LIKE ? OR
+            c.city LIKE ? OR
+            c.state_abbr = ?
+          ORDER BY
+            CASE WHEN c.institution_name LIKE ? THEN 0 ELSE 1 END,
+            c.institution_name
+          LIMIT 20
+        `)
+        .bind(
+          `%${searchTerm}%`,
+          `%${searchTerm}%`,
+          searchTerm.toUpperCase(),
+          `${searchTerm}%`
+        )
+        .all();
+      colleges = collegeResults?.results || [];
+    }
   } catch (e) {
-    // Database not yet set up
+    console.error('Search error:', e);
   }
 }
 ---
@@ -60,7 +188,7 @@ if (query && db) {
           type="text"
           name="q"
           value={query}
-          placeholder="Enter school name, city, or ZIP code..."
+          placeholder="Enter school name, city, state, or ZIP code..."
           class="input flex-grow"
         />
         <button type="submit" class="btn-blue">
@@ -93,7 +221,7 @@ if (query && db) {
                 {schools.map((school) => (
                   <tr>
                     <td>
-                      <a href={`/schools/${school.state_abbr?.toLowerCase()}/${school.city?.toLowerCase().replace(/\s+/g, '-')}/${school.id}`}>
+                      <a href={getSchoolUrl(school)}>
                         {school.school_name}
                       </a>
                     </td>
@@ -124,7 +252,7 @@ if (query && db) {
                 {colleges.map((college) => (
                   <tr>
                     <td>
-                      <a href={`/colleges/${college.state_abbr?.toLowerCase()}/${college.id}`}>
+                      <a href={getCollegeUrl(college)}>
                         {college.institution_name}
                       </a>
                     </td>
@@ -152,6 +280,7 @@ if (query && db) {
         <ul class="list-disc ml-8 fs-13">
           <li class="mb-2">Search by school name (e.g., "Lincoln Elementary")</li>
           <li class="mb-2">Search by city (e.g., "Austin")</li>
+          <li class="mb-2">Search by city and state (e.g., "Ann Arbor, MI" or "Austin TX")</li>
           <li class="mb-2">Search by ZIP code (e.g., "90210")</li>
           <li class="mb-2">For best results, try different variations of the school name</li>
         </ul>

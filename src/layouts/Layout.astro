@@ -26,7 +26,7 @@ const currentYear = new Date().getFullYear();
 // Navigation items matching original site structure
 const mainNav = [
   { label: 'K-12 Schools', href: '/schools' },
-  { label: 'Colleges & Universities', href: '/colleges' },
+  { label: 'Colleges & Universities', href: '/colleges-universities' },
   { label: 'Vocational Schools', href: '/vocational-schools' },
 ];
 
@@ -93,9 +93,9 @@ const resourcesDropdown = [
   <!-- Header with Logo and Search -->
   <header class="bg-white">
     <div class="container py-4">
-      <div class="flex flex-col lg:flex-row lg:items-end gap-4 lg:gap-5">
-        <!-- Logo - matches main content width -->
-        <div class="lg:w-[728px] lg:flex-shrink-0">
+      <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
+        <!-- Logo -->
+        <div class="flex-shrink-0">
           <a href="/" class="block no-underline hover:no-underline group pl-[5px]">
             <img
               src={logoUp.src}
@@ -110,16 +110,16 @@ const resourcesDropdown = [
           </a>
         </div>
 
-        <!-- Search Box - matches sidebar width -->
-        <div class="lg:w-[336px] lg:flex-shrink-0">
+        <!-- Search Box -->
+        <div class="w-full lg:w-auto lg:max-w-[336px] flex-shrink-0">
           <form action="/search" method="GET" class="flex gap-2">
             <input
               type="text"
               name="q"
               placeholder="Search by school, city or zip"
-              class="input flex-1 text-sm"
+              class="input flex-1 text-sm min-w-[200px]"
             />
-            <button type="submit" class="btn-green text-sm px-5">
+            <button type="submit" class="btn-green text-sm px-5 whitespace-nowrap">
               Search
             </button>
           </form>
@@ -129,10 +129,10 @@ const resourcesDropdown = [
 
     <!-- Navigation Menu - Blue Bar -->
     <div class="container">
-      <nav class="bg-brand-blue w-full lg:w-[1084px] rounded-box">
+      <nav class="bg-brand-blue w-full rounded-box">
         <div class="flex items-center justify-between">
           <!-- Main Navigation (Left) -->
-          <ul class="hidden md:flex items-center m-0 p-0 list-none">
+          <ul class="hidden lg:flex items-center m-0 p-0 list-none">
             {mainNav.map((item, index) => (
               <li class={`${index > 0 ? 'border-l border-[#3fa9f5]' : ''} ${item.label === 'Vocational Schools' ? 'relative group' : ''}`}>
                 {item.label === 'Vocational Schools' ? (
@@ -161,14 +161,14 @@ const resourcesDropdown = [
           </ul>
 
           <!-- Mobile menu button - full width tap target -->
-          <button type="button" class="md:hidden flex-1 flex items-center p-3 text-white" aria-label="Open menu" id="mobile-menu-btn">
+          <button type="button" class="lg:hidden flex-1 flex items-center p-3 text-white" aria-label="Open menu" id="mobile-menu-btn">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
             </svg>
           </button>
 
           <!-- Right Navigation -->
-          <div class="hidden md:flex items-center">
+          <div class="hidden lg:flex items-center">
             <!-- Resources Dropdown -->
             <div class="relative group">
               <button class="flex items-center gap-1 px-4 py-3 text-white hover:bg-[#0a6fc2] transition-colors">
@@ -199,6 +199,9 @@ const resourcesDropdown = [
                 <a href="/elementary-schools" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 no-underline">Elementary Schools</a>
                 <a href="/middle-schools" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 no-underline">Middle Schools</a>
                 <a href="/high-schools" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 no-underline">High Schools</a>
+                <a href="/charter-schools" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 no-underline">Charter Schools</a>
+                <a href="/magnet-schools" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 no-underline">Magnet Schools</a>
+                <a href="/private-schools" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 no-underline">Private Schools</a>
               </div>
             </div>
             <!-- Login Button -->
@@ -209,7 +212,7 @@ const resourcesDropdown = [
         </div>
 
         <!-- Mobile Navigation -->
-        <div class="md:hidden hidden py-4 px-5 border-t border-[#3fa9f5]" id="mobile-menu">
+        <div class="lg:hidden hidden py-4 px-5 border-t border-[#3fa9f5]" id="mobile-menu">
           <div class="flex flex-col">
             {mainNav.map((item) => (
               <a href={item.href} class="py-2 text-white no-underline hover:no-underline border-b border-[#3fa9f5]">
@@ -228,6 +231,9 @@ const resourcesDropdown = [
             <a href="/elementary-schools" class="py-2 pl-4 text-white no-underline hover:no-underline border-b border-[#3fa9f5]">Elementary Schools</a>
             <a href="/middle-schools" class="py-2 pl-4 text-white no-underline hover:no-underline border-b border-[#3fa9f5]">Middle Schools</a>
             <a href="/high-schools" class="py-2 pl-4 text-white no-underline hover:no-underline border-b border-[#3fa9f5]">High Schools</a>
+            <a href="/charter-schools" class="py-2 pl-4 text-white no-underline hover:no-underline border-b border-[#3fa9f5]">Charter Schools</a>
+            <a href="/magnet-schools" class="py-2 pl-4 text-white no-underline hover:no-underline border-b border-[#3fa9f5]">Magnet Schools</a>
+            <a href="/private-schools" class="py-2 pl-4 text-white no-underline hover:no-underline border-b border-[#3fa9f5]">Private Schools</a>
             <a href="/login" class="py-2 text-white no-underline hover:no-underline">Login</a>
           </div>
         </div>
@@ -243,9 +249,9 @@ const resourcesDropdown = [
   <!-- Footer -->
   <footer class="bg-brand-blue text-white mt-auto">
     <div class="container py-8">
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div class="grid grid-cols-2 md:grid-cols-6 gap-6">
         <!-- About -->
-        <div class="md:col-span-2">
+        <div class="col-span-2">
           <a href="/" class="block no-underline hover:no-underline group mb-4">
             <img
               src={logoWhiteUp.src}
@@ -264,27 +270,59 @@ const resourcesDropdown = [
           </p>
         </div>
 
-        <!-- Browse Schools -->
+        <!-- K-12 Schools -->
         <div>
-          <h4 class="text-white mb-4">Browse Schools</h4>
-          <ul class="list-none m-0 p-0 space-y-2 text-sm">
-            <li><a href="/preschools" class="text-white hover:underline">Preschools</a></li>
-            <li><a href="/kindergartens" class="text-white hover:underline">Kindergartens</a></li>
-            <li><a href="/elementary-schools" class="text-white hover:underline">Elementary Schools</a></li>
-            <li><a href="/middle-schools" class="text-white hover:underline">Middle Schools</a></li>
-            <li><a href="/high-schools" class="text-white hover:underline">High Schools</a></li>
-            <li><a href="/colleges" class="text-white hover:underline">Colleges & Universities</a></li>
+          <h4 class="text-white mb-4 text-sm font-bold">K-12 Schools</h4>
+          <ul class="list-none m-0 p-0 space-y-1.5 text-sm">
+            <li><a href="/preschools" class="text-white/80 hover:text-white hover:underline">Preschools</a></li>
+            <li><a href="/kindergartens" class="text-white/80 hover:text-white hover:underline">Kindergartens</a></li>
+            <li><a href="/elementary-schools" class="text-white/80 hover:text-white hover:underline">Elementary Schools</a></li>
+            <li><a href="/middle-schools" class="text-white/80 hover:text-white hover:underline">Middle Schools</a></li>
+            <li><a href="/high-schools" class="text-white/80 hover:text-white hover:underline">High Schools</a></li>
+            <li><a href="/charter-schools" class="text-white/80 hover:text-white hover:underline">Charter Schools</a></li>
+            <li><a href="/magnet-schools" class="text-white/80 hover:text-white hover:underline">Magnet Schools</a></li>
+            <li><a href="/private-schools" class="text-white/80 hover:text-white hover:underline">Private Schools</a></li>
+          </ul>
+        </div>
+
+        <!-- Higher Education -->
+        <div>
+          <h4 class="text-white mb-4 text-sm font-bold">Higher Education</h4>
+          <ul class="list-none m-0 p-0 space-y-1.5 text-sm">
+            <li><a href="/colleges-universities" class="text-white/80 hover:text-white hover:underline">Colleges & Universities</a></li>
+          </ul>
+          <h4 class="text-white mb-4 mt-6 text-sm font-bold">Vocational Schools</h4>
+          <ul class="list-none m-0 p-0 space-y-1.5 text-sm">
+            <li><a href="/vocational-schools" class="text-white/80 hover:text-white hover:underline">All Vocational Schools</a></li>
+            <li><a href="/beauty-schools" class="text-white/80 hover:text-white hover:underline">Beauty Schools</a></li>
+            <li><a href="/trade-schools" class="text-white/80 hover:text-white hover:underline">Trade Schools</a></li>
+            <li><a href="/healthcare-schools" class="text-white/80 hover:text-white hover:underline">Healthcare Schools</a></li>
+            <li><a href="/technology-schools" class="text-white/80 hover:text-white hover:underline">Technology Schools</a></li>
+            <li><a href="/culinary-schools" class="text-white/80 hover:text-white hover:underline">Culinary Schools</a></li>
+          </ul>
+        </div>
+
+        <!-- Resources -->
+        <div>
+          <h4 class="text-white mb-4 text-sm font-bold">Resources</h4>
+          <ul class="list-none m-0 p-0 space-y-1.5 text-sm">
+            <li><a href="/classes" class="text-white/80 hover:text-white hover:underline">Free Classes</a></li>
+            <li><a href="/financial-aid" class="text-white/80 hover:text-white hover:underline">Financial Aid</a></li>
+            <li><a href="/financial-aid/fafsa/application-guide" class="text-white/80 hover:text-white hover:underline">FAFSA Guide</a></li>
+            <li><a href="/financial-aid/grants" class="text-white/80 hover:text-white hover:underline">Grants</a></li>
+            <li><a href="/financial-aid/scholarships" class="text-white/80 hover:text-white hover:underline">Scholarships</a></li>
+            <li><a href="/search" class="text-white/80 hover:text-white hover:underline">School Search</a></li>
           </ul>
         </div>
 
         <!-- Company -->
         <div>
-          <h4 class="text-white mb-4">Company</h4>
-          <ul class="list-none m-0 p-0 space-y-2 text-sm">
-            <li><a href="/about" class="text-white hover:underline">About Us</a></li>
-            <li><a href="/privacy-policy" class="text-white hover:underline">Privacy Policy</a></li>
-            <li><a href="/terms-of-use" class="text-white hover:underline">Terms of Use</a></li>
-            <li><a href="/sitemap" class="text-white hover:underline">Sitemap</a></li>
+          <h4 class="text-white mb-4 text-sm font-bold">Company</h4>
+          <ul class="list-none m-0 p-0 space-y-1.5 text-sm">
+            <li><a href="/about" class="text-white/80 hover:text-white hover:underline">About Us</a></li>
+            <li><a href="/privacy-policy" class="text-white/80 hover:text-white hover:underline">Privacy Policy</a></li>
+            <li><a href="/terms-of-use" class="text-white/80 hover:text-white hover:underline">Terms of Use</a></li>
+            <li><a href="/sitemap" class="text-white/80 hover:text-white hover:underline">Sitemap</a></li>
           </ul>
         </div>
       </div>
