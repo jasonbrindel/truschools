@@ -1,0 +1,361 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import heroImage from '@/images/USED-ap-classes-explained.jpg';
+
+const title = "AP Classes Explained";
+const description = "How Many to Take, Which Ones Matter, and What Colleges Really Want. A technical analysis of the Advanced Placement system and its role in college admissions.";
+const category = 'High School';
+---
+
+<Layout title={title} description={description}>
+  <ArticleBreadcrumb title={title} defaultParent={{ label: 'High Schools', url: '/high-schools' }} />
+
+  <!-- Header - Centered, Narrow -->
+  <header class="max-w-[680px] mx-auto px-5 pt-4 md:pt-8">
+    <h1 class="text-4xl md:text-5xl font-bold text-gray-900 leading-tight mb-5">
+      {title}
+    </h1>
+    <p class="text-xl md:text-2xl text-gray-600 italic mb-6">
+      How Many to Take, Which Ones Matter, and What Colleges Really Want
+    </p>
+    <p class="text-lg text-gray-500 mb-6">A technical analysis of the Advanced Placement system and its role in college admissions</p>
+    <p class="text-base text-gray-500 mb-10">By TruSchools Staff</p>
+  </header>
+
+  <!-- Hero Image - Container Width -->
+  <div class="container">
+    <img
+      src={heroImage.src}
+      alt="High school students working on laptops"
+      class="w-full h-[400px] md:h-[500px] object-cover"
+    />
+  </div>
+
+  <!-- Article Container - Centered, Narrow -->
+  <article class="max-w-[680px] mx-auto px-5 py-10 md:py-16">
+    <!-- Article Body -->
+    <div class="article-body text-lg leading-relaxed text-gray-800">
+      <!-- Opening with drop cap -->
+      <p class="first-letter:text-6xl first-letter:font-bold first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:text-gray-900 mb-6">
+        The Advanced Placement program has become the predominant signal for academic rigor in American secondary education. In 2024, more than 1.2 million students—35.7% of U.S. public high school graduates—took at least one AP exam, a substantial increase from 32.8% a decade earlier. This expansion reflects a fundamental shift in how academic potential is measured and communicated to selective institutions. Understanding how this system actually works—its mechanics, its limitations, and its strategic implications—has become essential knowledge for families navigating the path to higher education.
+      </p>
+
+      <p class="mb-10">
+        The AP ecosystem operates on a deceptively simple premise: college-level courses taught in high school, validated by standardized examinations. But beneath this surface lies a complex interplay of curriculum design, institutional signaling, credit policies, and admissions calculus that rewards students who understand its architecture.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">The Taxonomy of Advanced Courses</h2>
+
+      <p class="mb-6">
+        The American high school curriculum typically operates across three tiers of academic intensity: college preparatory, honors, and Advanced Placement. These distinctions carry significant weight in how colleges evaluate transcripts, yet the boundaries between them vary considerably across schools.
+      </p>
+
+      <p class="mb-6">
+        <strong>College preparatory courses</strong> represent the baseline curriculum designed to prepare students for post-secondary education. These courses follow standard state curricula and teach foundational skills expected of college-bound students. They carry no GPA weighting and signal adequate but unremarkable academic engagement.
+      </p>
+
+      <p class="mb-6">
+        <strong>Honors courses</strong> occupy the middle tier, offering accelerated content and greater analytical depth than standard classes. The critical limitation of honors courses is their lack of standardization—an honors English course at one high school may bear little resemblance to another school's offering. Most high schools weight honors courses at 0.5 points above standard classes, meaning an A in honors might translate to a 4.5 rather than a 4.0 on a weighted scale.
+      </p>
+
+      <p class="mb-6">
+        <strong>AP courses</strong> represent a categorically different proposition. The College Board, which administers the program, requires all AP courses to follow standardized curricula approved through a formal audit process. This standardization serves a crucial function: it creates a nationally comparable metric of academic achievement. When a student earns an A in AP Chemistry, admissions officers can be reasonably confident about what that represents, regardless of which high school awarded the grade. AP courses typically carry a full point of GPA weighting, meaning that A translates to a 5.0 on weighted scales.
+      </p>
+
+      <p class="mb-10">
+        The distinction extends beyond content to assessment. AP courses culminate in standardized examinations scored on a 1-5 scale, with scores of 3 or higher generally considered passing. These scores provide external validation that transcends the variability of high school grading standards—a particularly valuable signal given the documented inflation of high school grades over recent decades.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">The Most Popular AP Courses: What the Numbers Reveal</h2>
+
+      <p class="mb-6">
+        The College Board currently offers 40 AP courses spanning arts, English, history, social sciences, mathematics, sciences, and world languages. However, student enrollment is heavily concentrated in a handful of subjects.
+      </p>
+
+      <p class="mb-6">According to registration data from the 2024 exam cycle, the most popular AP exams by enrollment are:</p>
+
+      <div class="overflow-x-auto mb-6">
+        <table class="w-full text-sm border-collapse">
+          <thead>
+            <tr class="bg-gray-100">
+              <th class="border border-gray-300 px-4 py-2 text-left">Rank</th>
+              <th class="border border-gray-300 px-4 py-2 text-left">Course</th>
+              <th class="border border-gray-300 px-4 py-2 text-left">Approximate Enrollment</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="border border-gray-300 px-4 py-2">1</td><td class="border border-gray-300 px-4 py-2">AP English Language & Composition</td><td class="border border-gray-300 px-4 py-2">~600,000</td></tr>
+            <tr class="bg-gray-50"><td class="border border-gray-300 px-4 py-2">2</td><td class="border border-gray-300 px-4 py-2">AP U.S. History</td><td class="border border-gray-300 px-4 py-2">Very High</td></tr>
+            <tr><td class="border border-gray-300 px-4 py-2">3</td><td class="border border-gray-300 px-4 py-2">AP English Literature & Composition</td><td class="border border-gray-300 px-4 py-2">Very High</td></tr>
+            <tr class="bg-gray-50"><td class="border border-gray-300 px-4 py-2">4</td><td class="border border-gray-300 px-4 py-2">AP World History</td><td class="border border-gray-300 px-4 py-2">High</td></tr>
+            <tr><td class="border border-gray-300 px-4 py-2">5</td><td class="border border-gray-300 px-4 py-2">AP U.S. Government & Politics</td><td class="border border-gray-300 px-4 py-2">High</td></tr>
+            <tr class="bg-gray-50"><td class="border border-gray-300 px-4 py-2">6</td><td class="border border-gray-300 px-4 py-2">AP Psychology</td><td class="border border-gray-300 px-4 py-2">High</td></tr>
+            <tr><td class="border border-gray-300 px-4 py-2">7</td><td class="border border-gray-300 px-4 py-2">AP Calculus AB</td><td class="border border-gray-300 px-4 py-2">High</td></tr>
+            <tr class="bg-gray-50"><td class="border border-gray-300 px-4 py-2">8</td><td class="border border-gray-300 px-4 py-2">AP Biology</td><td class="border border-gray-300 px-4 py-2">High</td></tr>
+            <tr><td class="border border-gray-300 px-4 py-2">9</td><td class="border border-gray-300 px-4 py-2">AP Human Geography</td><td class="border border-gray-300 px-4 py-2">High</td></tr>
+            <tr class="bg-gray-50"><td class="border border-gray-300 px-4 py-2">10</td><td class="border border-gray-300 px-4 py-2">AP Statistics</td><td class="border border-gray-300 px-4 py-2">High</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="mb-6">
+        These enrollment patterns reflect a combination of accessibility, perceived utility, and the structure of typical high school course progressions. AP English Language is often the first AP English course students encounter, typically in junior year. AP Human Geography has become a common entry point for underclassmen, with roughly 70% of its test-takers being freshmen.
+      </p>
+
+      <p class="mb-10">
+        The popularity of a course tells you relatively little about its difficulty or its impact on admissions decisions. AP Psychology attracts large numbers partly because students perceive it as more accessible, yet its 61.7% pass rate in 2024 suggests substantial challenge. Meanwhile, AP Calculus BC—a course with rigorous prerequisites that self-selects highly prepared students—boasted an 80.9% pass rate, with nearly half of all test-takers earning a 5.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Which AP Courses Impress Admissions Officers?</h2>
+
+      <p class="mb-6">
+        The question of which AP courses "matter most" requires distinguishing between popularity and perceived academic weight. Admissions officers at selective institutions consistently emphasize courses in core academic disciplines: mathematics, sciences, English, history, and foreign languages.
+      </p>
+
+      <p class="mb-6">
+        <strong>AP Calculus</strong>—whether AB or BC—functions as something of a gold standard in the eyes of admissions committees. Admissions consultants note that calculus is viewed as a benchmark course that demonstrates quantitative reasoning capacity. The course signals not just mathematical ability but the willingness to engage with abstract, sequential reasoning at a high level.
+      </p>
+
+      <p class="mb-6">
+        <strong>The sciences</strong> follow closely behind, with AP Chemistry, AP Biology, and the AP Physics sequence (particularly Physics C) carrying substantial weight. These courses involve laboratory components and require synthesis of theoretical knowledge with practical application. For students pursuing STEM fields, these courses are essentially non-negotiable at selective institutions.
+      </p>
+
+      <p class="mb-6">
+        <strong>AP English Literature and AP English Language</strong> demonstrate writing and analytical capabilities that transfer across disciplines. History courses—particularly AP U.S. History and AP European History—signal the ability to construct arguments from evidence and synthesize large bodies of information.
+      </p>
+
+      <p class="mb-6">
+        Admissions officers are less uniformly impressed by what some characterize as "lighter" AP courses. AP Psychology, AP Environmental Science, and AP Human Geography, while valuable learning experiences, are sometimes viewed as less rigorous than core academic subjects. This does not mean students should avoid these courses—context matters enormously—but students seeking to demonstrate maximum academic challenge typically prioritize core subjects first.
+      </p>
+
+      <p class="mb-10">
+        The strategic insight here is alignment: AP courses should connect to a student's demonstrated interests and intended academic direction. A student planning to study engineering who takes AP Physics C, AP Calculus BC, and AP Chemistry sends a coherent signal. Taking AP Art History instead of a second lab science, absent other compelling reasons, creates narrative dissonance.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">How Colleges Actually Evaluate GPA</h2>
+
+      <p class="mb-6">
+        One of the most misunderstood aspects of college admissions is how institutions handle the profound variability in high school grading systems. A student with a 4.3 weighted GPA at one school might have completed very different coursework than a student with identical numbers elsewhere.
+      </p>
+
+      <p class="mb-6">
+        <strong>Most selective colleges address this through GPA recalculation.</strong> Admissions offices typically strip away local weighting systems and recalculate GPAs on a standardized unweighted 4.0 scale, considering only core academic subjects—English, mathematics, science, history, and foreign language. Courses like physical education, health, or non-academic electives are excluded from this calculation.
+      </p>
+
+      <p class="mb-6">
+        After recalculation, admissions officers perform what the industry calls a "rigor assessment." They examine how many courses in that recalculated GPA were honors, AP, or IB level. This two-step process means that a student with a recalculated 3.8 GPA achieved primarily through AP and honors courses may appear more competitive than a student with a 4.0 composed entirely of standard-level classes.
+      </p>
+
+      <p class="mb-6">
+        The practical implication is clear: taking rigorous courses matters more than protecting a perfect numerical GPA through easier classes. Admissions officers have explicitly stated they would rather see a B in an AP course than an A in a regular course—the former demonstrates willingness to be challenged, while the latter might suggest academic timidity.
+      </p>
+
+      <p class="mb-10">
+        This does not mean students should take AP courses they are likely to fail. A C or D in an AP course raises legitimate questions about judgment and self-awareness. The optimal strategy is challenging oneself within the bounds of what can be successfully managed.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">The Optimal Number of AP Courses by College Tier</h2>
+
+      <p class="mb-6">
+        The question every ambitious student asks—how many AP courses do I need?—has no universal answer, but research and admissions data provide useful benchmarks.
+      </p>
+
+      <div class="overflow-x-auto mb-6">
+        <table class="w-full text-sm border-collapse">
+          <thead>
+            <tr class="bg-gray-100">
+              <th class="border border-gray-300 px-4 py-2 text-left">College Tier</th>
+              <th class="border border-gray-300 px-4 py-2 text-left">Recommended AP Courses</th>
+              <th class="border border-gray-300 px-4 py-2 text-left">Key Considerations</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="border border-gray-300 px-4 py-2">Ivy League / Top 10</td><td class="border border-gray-300 px-4 py-2">8-12 (some: 10-14)</td><td class="border border-gray-300 px-4 py-2">High grades essential; coverage across core subjects</td></tr>
+            <tr class="bg-gray-50"><td class="border border-gray-300 px-4 py-2">Top 20 / Highly Selective</td><td class="border border-gray-300 px-4 py-2">7-10</td><td class="border border-gray-300 px-4 py-2">Balance rigor with performance; depth in interest areas</td></tr>
+            <tr><td class="border border-gray-300 px-4 py-2">Selective (Top 50)</td><td class="border border-gray-300 px-4 py-2">4-6</td><td class="border border-gray-300 px-4 py-2">Full use of available opportunities; alignment with major</td></tr>
+            <tr class="bg-gray-50"><td class="border border-gray-300 px-4 py-2">Less Selective</td><td class="border border-gray-300 px-4 py-2">1-4</td><td class="border border-gray-300 px-4 py-2">Demonstrate competence; focus on areas of strength</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="mb-10">
+        These benchmarks assume the student's high school offers a robust AP program. Admissions officers evaluate students within the context of their schools' offerings. A student who takes all 6 AP courses available at their school demonstrates the same commitment to rigor as a student who takes 10 of 25 available courses at a more resourced institution—arguably more.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">The Diminishing Returns Problem</h2>
+
+      <p class="mb-6">
+        A critical insight from admissions research is that more AP courses do not always yield better outcomes. After interviewing roughly one hundred college admissions officers, researchers found clear evidence of diminishing returns beyond five or six AP courses. Additional AP courses beyond this threshold added little marginal value to applications.
+      </p>
+
+      <p class="mb-6">This finding challenges the prevailing arms race mentality. Several mechanisms explain why more is not always better:</p>
+
+      <p class="mb-6">
+        <strong>Grade degradation risk.</strong> Taking excessive AP courses can compromise performance across all classes. A student with 12 AP courses and a 3.4 GPA may appear less attractive than a student with 8 AP courses and a 3.9 GPA. Quality matters more than quantity.
+      </p>
+
+      <p class="mb-6">
+        <strong>Opportunity cost.</strong> Every additional AP course consumes time that could be devoted to meaningful extracurricular engagement, which constitutes a critical dimension of selective admissions.
+      </p>
+
+      <p class="mb-6">
+        <strong>Burnout and wellbeing.</strong> The psychological costs of academic overload are real and increasingly recognized. Students who arrive at college exhausted represent suboptimal outcomes for everyone involved.
+      </p>
+
+      <p class="mb-10">
+        <strong>Narrative incoherence.</strong> A transcript packed with AP courses across every conceivable discipline may suggest a student optimizing for appearance rather than pursuing genuine intellectual interests.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">AP Exam Scores: Pass Rates and What They Mean</h2>
+
+      <p class="mb-6">
+        AP exams are scored on a 5-point scale, with scores of 3 and above generally considered passing. However, pass rates vary dramatically across subjects, revealing important information about course difficulty and student preparation.
+      </p>
+
+      <div class="overflow-x-auto mb-6">
+        <table class="w-full text-sm border-collapse">
+          <thead>
+            <tr class="bg-gray-100">
+              <th class="border border-gray-300 px-4 py-2 text-left">Subject</th>
+              <th class="border border-gray-300 px-4 py-2 text-left">Pass Rate (3+)</th>
+              <th class="border border-gray-300 px-4 py-2 text-left">Score of 5</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="border border-gray-300 px-4 py-2">AP Chinese Language</td><td class="border border-gray-300 px-4 py-2">88.5%</td><td class="border border-gray-300 px-4 py-2">53.3%</td></tr>
+            <tr class="bg-gray-50"><td class="border border-gray-300 px-4 py-2">AP Calculus BC</td><td class="border border-gray-300 px-4 py-2">80.9%</td><td class="border border-gray-300 px-4 py-2">47.7%</td></tr>
+            <tr><td class="border border-gray-300 px-4 py-2">AP Spanish Language</td><td class="border border-gray-300 px-4 py-2">82.9%</td><td class="border border-gray-300 px-4 py-2">21.2%</td></tr>
+            <tr class="bg-gray-50"><td class="border border-gray-300 px-4 py-2">AP Chemistry</td><td class="border border-gray-300 px-4 py-2">75.6%</td><td class="border border-gray-300 px-4 py-2">17.9%</td></tr>
+            <tr><td class="border border-gray-300 px-4 py-2">AP U.S. History</td><td class="border border-gray-300 px-4 py-2">72.2%</td><td class="border border-gray-300 px-4 py-2">12.8%</td></tr>
+            <tr class="bg-gray-50"><td class="border border-gray-300 px-4 py-2">AP Biology</td><td class="border border-gray-300 px-4 py-2">68.3%</td><td class="border border-gray-300 px-4 py-2">16.8%</td></tr>
+            <tr><td class="border border-gray-300 px-4 py-2">AP Statistics</td><td class="border border-gray-300 px-4 py-2">61.8%</td><td class="border border-gray-300 px-4 py-2">17.5%</td></tr>
+            <tr class="bg-gray-50"><td class="border border-gray-300 px-4 py-2">AP Psychology</td><td class="border border-gray-300 px-4 py-2">61.7%</td><td class="border border-gray-300 px-4 py-2">19.2%</td></tr>
+            <tr><td class="border border-gray-300 px-4 py-2">AP Human Geography</td><td class="border border-gray-300 px-4 py-2">56.1%</td><td class="border border-gray-300 px-4 py-2">17.9%</td></tr>
+            <tr class="bg-gray-50"><td class="border border-gray-300 px-4 py-2">AP English Language</td><td class="border border-gray-300 px-4 py-2">54.6%</td><td class="border border-gray-300 px-4 py-2">9.8%</td></tr>
+            <tr><td class="border border-gray-300 px-4 py-2">AP Environmental Science</td><td class="border border-gray-300 px-4 py-2">54.1%</td><td class="border border-gray-300 px-4 py-2">9.2%</td></tr>
+            <tr class="bg-gray-50"><td class="border border-gray-300 px-4 py-2">AP Physics 1</td><td class="border border-gray-300 px-4 py-2">47.3%</td><td class="border border-gray-300 px-4 py-2">10.2%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="text-sm text-gray-500 mb-6 italic">Source: College Board 2024 Score Distributions</p>
+
+      <p class="mb-6">
+        These pass rate disparities require careful interpretation. AP Chinese's high pass rate partly reflects that many test-takers are heritage speakers. AP Calculus BC's high pass rate reflects self-selection—students who have completed the prerequisites are already mathematically advanced. Conversely, AP Physics 1's low pass rate reflects both genuine difficulty and the fact that it is often students' first exposure to college-level physics.
+      </p>
+
+      <p class="mb-10">
+        For college credit purposes, institutional policies vary significantly. Public university systems increasingly accept scores of 3 for credit under statewide policies—37 states now have such policies. However, selective private institutions often require 4s or 5s, and some award no credit at all. MIT, for example, grants credit only for scores of 5 on select exams, and accepts no credit for AP Biology, Chemistry, or Computer Science regardless of score.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Grade-by-Grade Strategic Planning</h2>
+
+      <p class="mb-6">
+        The optimal approach to AP courses involves gradual progression that builds skills while avoiding early overload.
+      </p>
+
+      <h3 class="text-xl font-bold text-gray-900 mt-8 mb-4">Freshman Year</h3>
+
+      <p class="mb-6">
+        Focus on establishing strong foundational habits in honors-level courses where available. Most high schools restrict AP access for freshmen, though AP Human Geography and occasionally AP Computer Science Principles are offered. Taking one AP course is reasonable for students who have demonstrated strong academic performance in middle school, but there is no penalty for waiting.
+      </p>
+
+      <h3 class="text-xl font-bold text-gray-900 mt-8 mb-4">Sophomore Year</h3>
+
+      <p class="mb-6">
+        The typical entry point for AP coursework. Students commonly begin with 1 to 3 AP courses, often including AP World History or AP European History, which build document analysis and essay skills applicable to later AP courses. Continuing with honors courses in areas where AP is not yet taken helps maintain rigor across the transcript.
+      </p>
+
+      <h3 class="text-xl font-bold text-gray-900 mt-8 mb-4">Junior Year</h3>
+
+      <p class="mb-6">
+        Typically the most intensive for AP coursework. Students aiming for selective institutions should consider 3 to 5 AP courses, prioritizing core subjects that align with their intended academic direction. This is the year when transcripts are most closely scrutinized by colleges. Students should also account for SAT or ACT preparation when planning their course load.
+      </p>
+
+      <h3 class="text-xl font-bold text-gray-900 mt-8 mb-4">Senior Year</h3>
+
+      <p class="mb-10">
+        Maintain the rigor established in junior year. Continue with advanced courses in areas of strength while ensuring you do not overextend given the additional demands of college applications. Some students reduce their AP load modestly in senior year without adverse consequences.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">The Signaling Value in a Changing Landscape</h2>
+
+      <p class="mb-6">
+        The AP program exists within a broader ecosystem of academic signaling that continues to evolve. The test-optional movement has shifted some emphasis back toward transcript analysis, making course rigor—and AP performance specifically—more important as a differentiator.
+      </p>
+
+      <p class="mb-6">
+        Even test-blind institutions have shown continued interest in AP outcomes. The University of California system, while officially test-blind for admissions, has reportedly followed up with students applying to competitive majors to request AP scores. Yale's flexible testing policy now allows students to submit AP exam results as one of their standardized testing options.
+      </p>
+
+      <p class="mb-6">
+        At the same time, AP faces competition from alternative rigor signals. Dual enrollment programs, which allow students to take actual college courses for credit, have expanded significantly. The International Baccalaureate program offers a comprehensive two-year diploma that some argue provides more holistic preparation.
+      </p>
+
+      <p class="mb-10">
+        For the vast majority of American students, however, AP remains the predominant and most accessible mechanism for demonstrating academic challenge. The program's standardization and ubiquity mean that admissions officers have well-developed frameworks for interpreting AP performance, reducing the friction in evaluation.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Key Takeaways</h2>
+
+      <ul class="list-disc pl-6 mb-10 space-y-2">
+        <li>Course rigor matters more than maximizing either GPA or the number of AP courses in isolation.</li>
+        <li>Most selective colleges recalculate GPAs and perform separate rigor assessments.</li>
+        <li>Admissions officers generally prefer a B in an AP course over an A in a regular course.</li>
+        <li>Competitive Ivy League applicants typically take 8-12 AP courses; research shows diminishing returns beyond 5-6.</li>
+        <li>Align AP courses with your intended academic direction for narrative coherence.</li>
+        <li>Pass rates vary dramatically by subject—understand what you're getting into.</li>
+        <li>Build gradually: typically 1-2 APs sophomore year, 3-5 junior year, maintaining rigor senior year.</li>
+        <li>Quality of performance matters more than quantity of courses.</li>
+      </ul>
+
+      <!-- Sources -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
+
+      <ul class="text-sm text-gray-600 space-y-2 mb-10">
+        <li>College Board. "AP Program Results: Class of 2024." Reports.collegeboard.org. 2024.</li>
+        <li>College Board. "2024 AP Score Distributions." APStudents.collegeboard.org. 2024.</li>
+        <li>College Board. "AP National and State Data." APCentral.collegeboard.org. 2024.</li>
+        <li>College Board. "Statewide AP Credit Policies." Reports.collegeboard.org. 2024.</li>
+        <li>Education Week. "The 10 Most-Requested AP Exams of 2024." EdWeek.org. February 2025.</li>
+        <li>Education Week. "Here's Why More Students Have Passed AP Exams in Recent Years." August 2024.</li>
+        <li>Getting Smart. "Can We Ditch AP for More Engaging Courses?" GettingSmart.com. March 2022.</li>
+        <li>Massachusetts Institute of Technology. "Advanced Placement." MIT Office of the First Year. 2025.</li>
+        <li>National Center for Education Statistics. "Public Schools Rate Themselves on College Preparation." March 2024.</li>
+        <li>University of California. "AP Credits." UC Admissions. 2024.</li>
+      </ul>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-16 pt-8 border-t border-gray-200">
+      <p class="text-sm text-gray-500 italic">
+        This article is provided by TruSchools as an educational resource for families navigating AP course selection.
+      </p>
+      <div class="mt-6">
+        <a href="/high-schools" class="text-brand-blue hover:underline font-medium">
+          Browse High Schools by State &rarr;
+        </a>
+      </div>
+    </footer>
+  </article>
+</Layout>

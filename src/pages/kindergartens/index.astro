@@ -1,14 +1,20 @@
 ---
 import Layout from '@/layouts/Layout.astro';
+import QAPoll from '@/components/QAPoll.astro';
+import NewsletterSignup from '@/components/NewsletterSignup.astro';
 
 // Images for featured article and topic cards
-import featuredImage from '@/images/elementary-students-writing-classroom.jpg';
-import academicsImage from '@/images/elementary-classroom-students-learning.jpg';
-import activitiesImage from '@/images/colorful-school-campus-illustration.jpg';
-import healthImage from '@/images/school-playground-sunset-illustration.jpg';
-import findingImage from '@/images/modern-school-architecture-illustration.jpg';
-import parentingImage from '@/images/student-first-day-school-illustration.jpg';
-import behaviorImage from '@/images/elementary-students-smiling-classroom.jpg';
+import featuredImage from '@/images/USED-kindergarten-readiness-joyful-child.jpg';
+import separationAnxietyImage from '@/images/USED-kindergarten-separation-anxiety.jpg';
+import californiaTkImage from '@/images/USED-california-tk-classroom.jpg';
+import whatKindergartenRequiresImage from '@/images/USED-what-kindergarten-really-requires.jpg';
+import cutoffDatesImage from '@/images/USED-kindergarten-age-cutoff-dates.jpg';
+import chooseKindergartenImage from '@/images/USED-how-to-choose-kindergarten.jpg';
+import delayKindergartenImage from '@/images/USED-should-you-delay-kindergarten.jpg';
+import findRightSchoolImage from '@/images/USED-students-walking-to-school-illustration.jpg';
+import schoolChoiceImage from '@/images/USED-school-courtyard-students-illustration.jpg';
+import publicPrivateImage from '@/images/USED-colorful-school-campus-illustration.jpg';
+import charterSchoolImage from '@/images/USED-school-campus-colorful-illustration.jpg';
 
 // All US states
 const states = [
@@ -124,55 +130,67 @@ function slugify(text: string): string {
   return text.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
 }
 
-// Topic categories with placeholder articles
-const topics = [
+// Featured articles for the topic cards
+const featuredArticles = [
   {
-    title: 'Kindergarten Academics',
-    image: academicsImage,
-    articles: [
-      { title: 'Reading Readiness for Kindergarteners', url: '#' },
-      { title: 'Math Skills Your Child Needs', url: '#' },
-    ]
+    title: 'The Long Goodbye: Kindergarten Separation Anxiety',
+    url: '/education-articles/kindergarten-separation-anxiety',
+    image: separationAnxietyImage,
+    description: 'What parents need to know about kindergarten separation anxiety—in children and in themselves.',
   },
   {
-    title: 'Activities & Games',
-    image: activitiesImage,
-    articles: [
-      { title: 'Fun Learning Activities for Kindergarteners', url: '#' },
-      { title: 'Educational Games That Teach', url: '#' },
-    ]
+    title: 'California\'s Universal TK: Everything Parents Need to Know',
+    url: '/education-articles/california-universal-transitional-kindergarten',
+    image: californiaTkImage,
+    description: 'A comprehensive guide to California\'s Universal Transitional Kindergarten program reaching full implementation in 2025-26.',
   },
   {
-    title: 'Physical Health',
-    image: healthImage,
-    articles: [
-      { title: 'Keeping Your Kindergartener Active', url: '#' },
-      { title: 'Healthy Lunch Ideas for School', url: '#' },
-    ]
+    title: 'What Kindergarten Really Requires',
+    url: '/education-articles/what-kindergarten-really-requires',
+    image: whatKindergartenRequiresImage,
+    description: 'Your child probably doesn\'t need to read yet. But they do need something else.',
   },
   {
-    title: 'Finding a Kindergarten',
-    image: findingImage,
-    articles: [
-      { title: 'Public vs Private Kindergarten', url: '#' },
-      { title: 'What to Look for in a Kindergarten', url: '#' },
-    ]
+    title: 'Kindergarten Age Cutoff Dates by State',
+    url: '/education-articles/kindergarten-age-cutoff-dates-by-state',
+    image: cutoffDatesImage,
+    description: 'The complete 2025 guide for parents covering entrance age requirements for all 50 states.',
   },
   {
-    title: 'Parenting',
-    image: parentingImage,
-    articles: [
-      { title: 'Preparing Your Child for Kindergarten', url: '#' },
-      { title: 'First Day of School Tips', url: '#' },
-    ]
+    title: 'How to Choose the Right Kindergarten',
+    url: '/education-articles/how-to-choose-the-right-kindergarten',
+    image: chooseKindergartenImage,
+    description: '25 essential questions to ask during school visits—a research-informed guide for parents.',
   },
   {
-    title: 'Behavior & Social Health',
-    image: behaviorImage,
-    articles: [
-      { title: 'Building Social Skills in Kindergarten', url: '#' },
-      { title: 'Handling Separation Anxiety', url: '#' },
-    ]
+    title: 'Should You Delay Kindergarten?',
+    url: '/education-articles/should-you-delay-kindergarten',
+    image: delayKindergartenImage,
+    description: 'What research says about academic redshirting—and what it means for your child.',
+  },
+  {
+    title: 'How to Find the Right School for Your Child',
+    url: '/education-articles/how-to-find-the-right-school?from=kindergartens',
+    image: findRightSchoolImage,
+    description: 'School ratings can tell you a lot—but not everything. Here\'s what actually matters when choosing a school.',
+  },
+  {
+    title: 'The Rise of School Choice',
+    url: '/education-articles/the-rise-of-school-choice?from=kindergartens',
+    image: schoolChoiceImage,
+    description: 'Understanding your options: public, private, charter, magnet, and homeschool—and how to decide.',
+  },
+  {
+    title: 'Public vs. Private School',
+    url: '/education-articles/public-vs-private-school?from=kindergartens',
+    image: publicPrivateImage,
+    description: 'What the research really says about costs, performance, class size, and making the right choice for your family.',
+  },
+  {
+    title: 'Charter Schools: What Parents Need to Know',
+    url: '/education-articles/charter-schools-what-parents-need-to-know?from=kindergartens',
+    image: charterSchoolImage,
+    description: 'Understanding how charter schools work, what makes them different, and how to decide if one is right for your child.',
   },
 ];
 ---
@@ -196,46 +214,41 @@ const topics = [
       <div class="lg:w-2/3">
         <!-- Featured Article -->
         <div class="box-rounded mb-5">
-          <div class="flex flex-col md:flex-row gap-4">
-            <div class="md:w-1/3">
-              <img
-                src={featuredImage.src}
-                alt="Kindergarten students"
-                class="w-full aspect-video object-cover rounded"
-              />
-            </div>
-            <div class="md:w-2/3">
-              <h2 class="text-brand-blue text-xl mb-2">
-                <a href="#" class="hover:underline">Preparing Your Child for Kindergarten</a>
-              </h2>
-              <p class="text-gray-600 fs-14">
-                Is your child ready for kindergarten? Learn about the skills and knowledge that will help
-                them succeed in their first year of formal education.
-              </p>
-            </div>
-          </div>
+          <a href="/education-articles/is-my-child-ready-for-kindergarten">
+            <img
+              src={featuredImage.src}
+              alt="Joyful child ready for kindergarten"
+              class="w-full aspect-video object-cover rounded mb-4"
+            />
+          </a>
+          <h2 class="text-brand-blue text-xl mb-2">
+            <a href="/education-articles/is-my-child-ready-for-kindergarten" class="hover:underline">Is My Child Ready for Kindergarten?</a>
+          </h2>
+          <p class="text-gray-600 fs-14">
+            A complete readiness checklist covering the seven key domains of kindergarten readiness—social-emotional skills, fine and gross motor skills, language, pre-academics, self-help skills, and behavioral readiness. <a href="/education-articles/is-my-child-ready-for-kindergarten" class="text-brand-blue hover:underline">Read article &rarr;</a>
+          </p>
         </div>
 
         <!-- Topic Categories -->
         <div class="box-rounded mb-5">
           <h2 class="text-brand-blue text-xl mb-4">Kindergarten Topics</h2>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {topics.map((topic) => (
-              <div class="border border-gray-200 rounded overflow-hidden">
-                <img
-                  src={topic.image.src}
-                  alt={topic.title}
-                  class="w-full aspect-square object-cover"
-                />
-                <div class="p-4">
-                  <h3 class="text-brand-green-text font-bold mb-2 fs-14">{topic.title}</h3>
-                  <ul class="space-y-1 fs-13">
-                    {topic.articles.map((article) => (
-                      <li>
-                        <a href={article.url} class="text-brand-blue hover:underline">{article.title}</a>
-                      </li>
-                    ))}
-                  </ul>
+            {/* Featured Article Cards */}
+            {featuredArticles.map((article) => (
+              <div class="border border-gray-200 rounded overflow-hidden p-4">
+                <a href={article.url}>
+                  <img
+                    src={article.image.src}
+                    alt={article.title}
+                    class="w-full aspect-square object-cover rounded"
+                  />
+                </a>
+                <div class="pt-4">
+                  <h3 class="text-brand-green-text font-bold mb-1 fs-14">
+                    <a href={article.url} class="hover:underline">{article.title}</a>
+                  </h3>
+                  <p class="text-gray-600 fs-12 mb-2 leading-snug">{article.description}</p>
+                  <a href={article.url} class="text-brand-blue hover:underline fs-13">Read article &rarr;</a>
                 </div>
               </div>
             ))}
@@ -244,16 +257,12 @@ const topics = [
 
         <!-- Q&A Section -->
         <div class="box-rounded mb-5 bg-lt-blue">
-          <h2 class="text-brand-blue text-lg mb-3">Kindergarten Q&A</h2>
-          <p class="text-gray-700 fs-14 mb-3">
-            <strong>Question:</strong> What's most important when choosing a kindergarten?
-          </p>
-          <div class="flex gap-2 flex-wrap">
-            <button class="px-3 py-1 bg-white border border-gray-300 rounded text-sm hover:bg-gray-50">Full-day program</button>
-            <button class="px-3 py-1 bg-white border border-gray-300 rounded text-sm hover:bg-gray-50">Class size</button>
-            <button class="px-3 py-1 bg-white border border-gray-300 rounded text-sm hover:bg-gray-50">Teacher experience</button>
-            <button class="px-3 py-1 bg-white border border-gray-300 rounded text-sm hover:bg-gray-50">Curriculum</button>
-          </div>
+          <QAPoll
+            questionId="kindergarten-important-factor"
+            pageSlug="kindergartens"
+            question="What's most important when choosing a kindergarten?"
+            answers={["Full-day program", "Class size", "Teacher experience", "Curriculum"]}
+          />
         </div>
 
         <!-- Browse by State -->
@@ -324,18 +333,13 @@ const topics = [
               <a href="/high-schools">High Schools</a>
             </li>
             <li class="py-2">
-              <a href="/colleges">Colleges & Universities</a>
+              <a href="/colleges-universities">Colleges & Universities</a>
             </li>
           </ul>
         </div>
 
         <!-- Newsletter Signup -->
-        <div class="box-rounded">
-          <h3 class="text-brand-blue mb-3">Newsletter Signup</h3>
-          <p class="fs-13 text-gray-600 mb-3">Get the latest kindergarten news and tips delivered to your inbox.</p>
-          <input type="email" placeholder="Your email address" class="input w-full mb-2" />
-          <button class="btn btn-primary w-full">Subscribe</button>
-        </div>
+        <NewsletterSignup preselected={['kindergarten']} />
       </div>
     </div>
   </div>

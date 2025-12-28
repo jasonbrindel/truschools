@@ -1,0 +1,241 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import heroImage from '@/images/USED-students-walking-to-school-illustration.jpg';
+
+const title = "How to Apply to Charter Schools: The Complete Parent Guide";
+const description = "A national map of a process that often feels like a maze, plus the parts you can actually control.";
+const category = 'Charter Schools';
+---
+
+<Layout title={title} description={description}>
+  <ArticleBreadcrumb title={title} defaultParent={{ label: 'Charter Schools', url: '/charter-schools' }} />
+
+  <!-- Header - Centered, Narrow -->
+  <header class="max-w-[680px] mx-auto px-5 pt-4 md:pt-8">
+    <h1 class="text-4xl md:text-5xl font-bold text-gray-900 leading-tight mb-5">
+      {title}
+    </h1>
+    <p class="text-xl md:text-2xl text-gray-600 italic mb-6">
+      A national map of a process that often feels like a maze, plus the parts you can actually control.
+    </p>
+    <p class="text-base text-gray-500 mb-10">December 26, 2025</p>
+  </header>
+
+  <!-- Hero Image - Container Width -->
+  <div class="container">
+    <img
+      src={heroImage.src}
+      alt="Students walking to school"
+      class="w-full h-[400px] md:h-[500px] object-cover"
+    />
+  </div>
+
+  <!-- Article Container - Centered, Narrow -->
+  <article class="max-w-[680px] mx-auto px-5 py-10 md:py-16">
+    <!-- Article Body -->
+    <div class="article-body text-lg leading-relaxed text-gray-800">
+      <!-- Opening with drop cap -->
+      <p class="first-letter:text-6xl first-letter:font-bold first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:text-gray-900 mb-6">
+        At some point in late fall or early winter, a familiar household drama plays out at a kitchen counter somewhere in America. A parent is trying to cook dinner with one hand and scroll with the other. A friend has texted a link. A neighbor has mentioned a school by name, usually with a mix of awe and urgency: "They have a lottery. You have to apply."
+      </p>
+
+      <p class="mb-6">
+        And suddenly there is a new kind of calendar in your life. Not the school calendar you already juggle, with closures and spirit days and surprise half days, but an admissions calendar that can feel like it was designed by someone who has never met a working parent.
+      </p>
+
+      <p class="mb-6">
+        If you are feeling anxious, it is not because you are bad at research. It is because charter school admissions in the United States are not one system. They are hundreds of systems built on a handful of shared rules and a thousand local variations. Some cities run centralized "common application" portals. Some charter networks run their own. Many schools still expect families to apply one by one. The rules are public, but the experience can feel private and confusing, the way any bureaucracy feels when it lands on your personal life.
+      </p>
+
+      <p class="mb-10">
+        This guide is meant to make the process less opaque by describing it as it actually is: a public system with legal guardrails, operating inside a sometimes messy reality of deadlines, lotteries, and waitlists. It will not tell you which school to choose. It will help you see the shape of the path, so you can move through it with fewer surprises.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <p class="mb-6">
+        The first myth to set down, gently, is that there is a single charter application process. Charter schools are public schools, but they are governed by state law, and states handle enrollment rules differently. Even within one state, the process can feel like patchwork: a large city might have a unified portal, while a suburb fifteen miles away might rely on school by school forms.
+      </p>
+
+      <p class="mb-6">
+        There is a second myth hiding inside the first: that the word "lottery" means the same thing everywhere. Sometimes a charter lottery is a literal drawing for one school. Other times it is part of a larger matching system that tries to honor your ranked choices, then assigns seats based on priorities and availability. Philadelphia's Apply Philly Charter platform, for instance, describes a "rank and match" approach for participating schools, allowing families to rank up to 15 schools and change those rankings until the deadline. Chicago's GoCPS system also asks families to rank programs, and the district explains that applicants can list up to 20 Choice programs for high school and receive a single best offer in that category.
+      </p>
+
+      <p class="mb-6">
+        In a purely school by school process, by contrast, your application is mainly a ticket into that school's selection procedure. If demand exceeds capacity, the school must use a random selection process. If demand is low, the school may offer seats quickly and maintain a smaller waitlist.
+      </p>
+
+      <p class="mb-10">
+        The research on charter schools themselves mirrors that variability. Stanford's Center for Research on Education Outcomes, in its National Charter School Study III (2023), reported positive learning growth on average in reading and math from 2015 to 2019, alongside meaningful variation across charter types and contexts. Lottery based studies in specific settings can also find strong effects for particular models, and other research highlights concerns about access and responsiveness to families with greater needs. The point is not to settle the charter debate at your kitchen counter. The point is to understand that "charter school" is a category, not a guarantee, and the admissions process is where many families first feel that reality.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <p class="mb-6">
+        A useful way to think about applications is to separate "application" from "enrollment." Applications are often light. Enrollment is where paperwork becomes real.
+      </p>
+
+      <p class="mb-6">
+        Many charter schools ask for basic information at the application stage: your child's name, grade, date of birth, and your contact information. Some ask whether you live within a district or boundary. That is usually enough to enter a lottery if the school is oversubscribed. The heavier documentation tends to come after a seat is offered, when the school needs to verify eligibility and complete registration.
+      </p>
+
+      <p class="mb-6">
+        That distinction is not just administrative. It is about access. The National Center for Homeless Education has summarized a key protection of the McKinney Vento Act in plain language: schools must enroll students experiencing homelessness immediately even if they cannot provide documents normally required for enrollment, including proof of residency, age, guardianship, or immunization records. If you are missing paperwork, or if your housing is unstable, that protection matters. It is also a reminder that schools are supposed to help families bridge gaps, not use paperwork as a gate.
+      </p>
+
+      <p class="mb-6">
+        For most families, though, having documents ready reduces stress because offers often arrive with a short window to accept and complete registration. The documents that come up again and again, across states and cities, are proof of age, proof of residency, and immunization records.
+      </p>
+
+      <p class="mb-6">
+        Proof of age is often a birth certificate, passport, or other official document. Proof of residency is typically a lease, mortgage statement, or recent utility bill showing your address. Immunization records matter because every state has school vaccination requirements, though the exact list and exemptions vary. The Centers for Disease Control and Prevention notes that vaccination records may be required for school registration. If you do not have records, pediatric offices and state or local immunization registries are common starting points.
+      </p>
+
+      <p class="mb-6">
+        If your child has an IEP or a 504 plan, you do not need to "sell" the plan to earn a seat. Charter schools cannot exclude students based on disability. But once your child is admitted, having the paperwork ready can speed up practical conversations about services, transportation, and staffing.
+      </p>
+
+      <p class="mb-10">
+        Some families worry that disclosing disability, language needs, or an address will quietly change how schools treat them. That worry is not irrational. It is part of what makes the process feel emotionally high stakes. The best counterweight is information: ask questions early, and notice whether answers are specific and respectful, or vague and evasive. How a school communicates during admissions often predicts how it will communicate when your child is enrolled.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <p class="mb-6">
+        Now for the part that makes parents feel like they are chasing a moving train: timelines.
+      </p>
+
+      <p class="mb-6">
+        There is no national charter admissions calendar. But there are patterns, and there are a few places where official rules create anchor dates.
+      </p>
+
+      <p class="mb-6">
+        In New York City, the Department of Education states that charter law sets a basic rule: the deadline to apply to a charter school cannot be earlier than April 1, though a school may choose a later deadline. The city also notes that each school has its own application, but many use the NYC Charter School Center's common online application, which is designed so families can apply to multiple participating charter schools at once.
+      </p>
+
+      <p class="mb-6">
+        Chicago's GoCPS is earlier and more structured. For the 2025 to 2026 cycle, the district posts an application period that opens in late September and closes in mid November, with high school results released in mid February and an offer acceptance deadline in early March. For many families, the benefit is clarity: one portal, a defined season, and predictable results dates. The cost is that you have to pay attention earlier, often before you feel ready.
+      </p>
+
+      <p class="mb-6">
+        Philadelphia, through Apply Philly Charter, runs a longer window. The platform describes an application period for the 2026 to 2027 school year that begins in September and runs through a January deadline, with rankings locked at the deadline and lottery results posted later. That long runway can be a gift if you need time to visit schools, compare commutes, and talk as a family. It can also make the uncertainty linger.
+      </p>
+
+      <p class="mb-6">
+        In states like California, Texas, Florida, and Arizona, timelines often depend on the charter network and local practice rather than a single citywide portal.
+      </p>
+
+      <p class="mb-6">
+        In Southern California, KIPP SoCal's posted timeline for the 2026 to 2027 school year sets a February deadline for lottery eligibility, with lotteries held in early March. That matches a broader pattern across many large California charters: applications open in the fall, close in the winter, and lotteries run in late winter or early spring for the following school year.
+      </p>
+
+      <p class="mb-6">
+        In Texas, IDEA Public Schools lists a February 21, 2026 lottery date across regions including Austin and Greater Houston, with a cutoff for applications to be entered into the lottery. Texas law also emphasizes that open enrollment charters can have application deadlines and are expected to use a random selection process when oversubscribed.
+      </p>
+
+      <p class="mb-6">
+        In Arizona, Great Hearts Academies, a large network in the Phoenix area, publishes an enrollment timeline with open enrollment in the fall and offers beginning in early to mid January for the next school year. That is a common pattern in Arizona charters: earlier lotteries and earlier offers, often before spring.
+      </p>
+
+      <p class="mb-6">
+        Florida can feel especially varied because charter enrollment is often school by school and can be influenced by district processes. In the Miami area, for example, Doral Academy Preparatory publishes an application period of November 1, 2025 through January 7, 2026, with a random selection lottery scheduled for February 11, 2026 and notifications beginning around February 13. In Broward County, Coral Springs Charter School explains that after its open enrollment window closes, applications may still be accepted, but admission can shift to first come, first served and late applications may be placed on a waitlist in received order if a lottery is required. The best way to handle Florida is to treat each school as its own small system with its own calendar, and to assume that the main application season may arrive earlier than you expect.
+      </p>
+
+      <p class="mb-10">
+        The practical takeaway is not that you need to memorize dates. It is that you should expect a range, and you should ask early where a particular school sits inside it. If you hear "rolling," it often means the school accepts applications as they come, but still runs a lottery for any grade where demand exceeds capacity. If you hear "deadline," it often means your odds improve if you are in before that date, even if late applications are still accepted for the waitlist.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <p class="mb-6">
+        So what happens after you submit?
+      </p>
+
+      <p class="mb-6">
+        In a centralized system, your application becomes a ranked list, and the platform becomes a sorting mechanism. You are rarely competing with a neighbor in a personal way. You are competing with seat counts and priority categories. Chicago, for example, explains that the selection process is designed to offer applicants the highest ranked eligible program with available seats. Philadelphia's platform makes the same logic explicit by asking families to rank schools, then using the ranking to determine which offer you receive if more than one school could admit your child.
+      </p>
+
+      <p class="mb-6">
+        In an individual school application, your application typically sits in a queue until the school runs its lottery, then produces offers and a waitlist. Some schools notify families all at once, by a published "offer day." Others issue offers in waves. Waitlists move when families accept elsewhere, move out of the area, or change plans, which is why a waitlist can feel both hopeful and maddening. It is an answer that keeps becoming a question.
+      </p>
+
+      <p class="mb-6">
+        This is also where preference categories quietly shape outcomes and can make the process feel unfair even when it is legal. Many charter schools give preference to siblings of currently enrolled students. Some give preference to children of staff. Some give preference to students who live within a particular geographic area. New York City, for example, lists enrollment preferences for returning students, siblings, and students who live in the same community school district as the school. Chicago's materials describe priority preferences that can include sibling, staff, and proximity.
+      </p>
+
+      <p class="mb-6">
+        If you have ever heard a parent say, with exhausted clarity, "You need a sibling to get in," this is what they mean. Preferences can make access feel uneven, and in some places they are part of the bargain: stability for enrolled families in exchange for a less pure lottery for newcomers. Whether that feels fair depends on where you stand. But the rules are usually published, and if they are not, that lack of clarity is itself useful information about the school's relationship with families.
+      </p>
+
+      <p class="mb-6">
+        Can you apply to multiple charter schools at once? In most places, yes, and you often should, at least if you have one "reach" school where demand is high. The more important question is how those multiple applications interact. Centralized systems are built for this. New York City's common online charter application is explicitly designed so families can apply to multiple participating schools at once. Chicago allows multiple ranked choices. Philadelphia allows multiple ranked choices. In school by school systems, you can still apply widely, but you have to track separate deadlines, separate lotteries, and separate acceptance windows. Families sometimes accept one offer while staying on another waitlist, which is usually allowed but can carry ethical and logistical complications if you hold a seat you do not intend to take. If you think you might do that, ask directly what the school expects and how long you have to decide.
+      </p>
+
+      <p class="mb-10">
+        Once an offer arrives, the timeline tightens. Most systems require you to accept by a deadline. Then comes enrollment paperwork, sometimes a registration appointment, sometimes an online portal, often a request to submit documents. If you do not accept or do not complete registration, the seat usually moves to the next student on the waitlist. Some cities maintain rolling waitlists after results, so a family may receive an offer weeks or even months later. This can be disruptive, especially if you have already committed to another plan. It is also why many parents describe charter admissions as both hopeful and destabilizing.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <p class="mb-6">
+        If this process feels intimidating, it often does because it asks you to act like an insider. You are expected to understand the language of lotteries, waitlists, authorizers, and preference categories. You are expected to manage deadlines that do not align across schools. You are expected to keep your child steady while you hold uncertainty in your own body.
+      </p>
+
+      <p class="mb-6">
+        One way to reclaim footing is to remember that charter admissions is a public process, not a private favor. Public systems have rules, and rules can be learned. City and state pages often contain the baseline information that matters most: nondiscrimination requirements, timeline constraints, and preference categories that are permitted or required. When a school's answers feel slippery, it is reasonable to ask where the rules are published. When a school's communication feels respectful, specific, and consistent, that is not a minor detail. It is a preview of the relationship.
+      </p>
+
+      <p class="mb-6">
+        Another way is to make peace with what the lottery cannot do: it cannot guarantee a story. Parents often want the admissions process to feel like a moral narrative. If I research enough, if I show up enough, if I love my child hard enough, then the right door opens. A lottery is not that kind of system. It is, at its best, a fairness mechanism for scarce seats.
+      </p>
+
+      <p class="mb-6">
+        The emotional work of charter application season is learning to hold hope without turning it into a verdict on your parenting. Your child is not an application. They are a person who will grow in any environment that offers safety, belonging, and daily attention. Charter school research is strongest at describing averages and weakest at predicting individual fit. That is why it can be useful to treat "fit" as an ongoing observation, not a decision you must perfect in one admissions season.
+      </p>
+
+      <p class="mb-6">
+        If you take one thing from this guide, let it be this: the process is complicated, and your anxiety is a normal response to that complexity. You can learn the rules without letting the rules take over your life. You can apply widely and still be discerning. You can choose a backup plan without giving up on your first choice. And you can keep your household steady while you wait for an email that may or may not change your next year.
+      </p>
+
+      <p class="mb-10">
+        That steadiness, more than any portal or deadline, is what your child will remember.
+      </p>
+
+      <!-- Sources -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
+
+      <ul class="text-sm text-gray-600 space-y-2 mb-10">
+        <li>New York City Department of Education. <em>How to Enroll in Charter Schools.</em> NYC Public Schools (webpage), accessed 2025.</li>
+        <li>Chicago Public Schools. <em>GoCPS High School and Elementary School Application Timeline (2025–26 cycle).</em> CPS GoCPS (webpage), 2025.</li>
+        <li>Chicago Public Schools. <em>How to Apply: Choice Programs (including charters) and Priority Preferences.</em> CPS GoCPS (webpage), 2025.</li>
+        <li>Apply Philly Charter. <em>Apply Philly Charter: Application Window and Rank & Match Guidance.</em> ApplyPhillyCharter.org (webpage), 2025.</li>
+        <li>KIPP SoCal Public Schools. <em>Lottery Dates and Enrollment Timeline (2026–27).</em> KIPPSocal.org (webpage), 2025.</li>
+        <li>IDEA Public Schools. <em>Lottery FAQ and Lottery Dates (Texas regions).</em> IDEAPublicSchools.org (webpage), 2025.</li>
+        <li>Great Hearts Arizona. <em>Enrollment Timeline (Arizona campuses).</em> GreatHeartsAmerica.org (webpage), 2025.</li>
+        <li>Doral Academy Preparatory (Miami). <em>Admissions: Application Period and Lottery Dates (2025–26).</em> DoralAcademyPrep.org (webpage), 2025.</li>
+        <li>Coral Springs Charter School (Broward County). <em>Enrollment: Open Enrollment Window, Lottery, and Waitlist Notes.</em> CoralSpringsCharter.org (webpage), 2025.</li>
+        <li>National Center for Homeless Education. <em>From the School Office to the Classroom: Strategies for Enrolling and Supporting Students Experiencing Homelessness.</em> NCHE (PDF), 2019.</li>
+        <li>U.S. Department of Education. <em>Education for Homeless Children and Youths Program Non-Regulatory Guidance.</em> ED.gov (PDF), 2018.</li>
+        <li>Stanford CREDO. <em>National Charter School Study III.</em> CREDO report, 2023.</li>
+        <li>Centers for Disease Control and Prevention Public Health Law Program. <em>State School Immunization Requirements and Vaccine Exemption Laws.</em> CDC (PDF), 2022.</li>
+        <li>Texas Education Agency. <em>Charter Student Admission Application Forms (CSAA) and TEC §12.1173.</em> tea.texas.gov (webpage), accessed 2025.</li>
+        <li>Arizona Legislature. <em>A.R.S. §15-184 Charter schools; admissions requirements.</em> azleg.gov (webpage), accessed 2025.</li>
+        <li>The Florida Senate. <em>Florida Statutes §1002.33 Charter Schools (enrollment and preferences).</em> flsenate.gov (webpage), 2018.</li>
+        <li>California Legislative framework. <em>California Education Code admissions and preferences (including §47605 and §47605.6).</em> California Education Code (web sources), accessed 2025.</li>
+      </ul>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-16 pt-8 border-t border-gray-200">
+      <p class="text-sm text-gray-500 italic">
+        This article is provided by TruSchools as an educational resource for families exploring charter school options.
+      </p>
+      <div class="mt-6">
+        <a href="/charter-schools" class="text-brand-blue hover:underline font-medium">
+          Browse Charter Schools by State &rarr;
+        </a>
+      </div>
+    </footer>
+  </article>
+</Layout>

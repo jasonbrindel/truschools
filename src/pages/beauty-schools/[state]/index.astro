@@ -52,7 +52,7 @@ if (!stateAbbr || !stateName) {
 const schoolsResult = await db.prepare(`
   SELECT id, institution_name, page_name, city, total_enrollment, tuition_in_state, accreditation
   FROM colleges
-  WHERE state_abbr = ? AND institution_category = 'vocational' AND vocational_type = 'beauty' AND active = 1
+  WHERE state_abbr = ? AND vocational_type = 'beauty' AND active = 1
   ORDER BY institution_name
 `).bind(stateAbbr).all();
 

@@ -1,0 +1,271 @@
+---
+import Layout from '@/layouts/Layout.astro';
+
+const { state, city } = Astro.params;
+
+// Get database connection
+const db = Astro.locals.runtime.env.DB;
+
+// Get state info
+const stateResult = await db.prepare(
+  'SELECT * FROM states WHERE slug = ?'
+).bind(state).first();
+
+if (!stateResult) {
+  return Astro.redirect('/404');
+}
+
+const stateData = stateResult as any;
+
+// Slugify function
+function slugify(text: string): string {
+  return text.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+}
+
+// Get all charter schools in this city
+const schoolsResult = await db.prepare(`
+  SELECT s.*, st.name as state_name, st.slug as state_slug
+  FROM schools s
+  JOIN states st ON s.state = st.abbr
+  WHERE s.is_charter = 1
+    AND st.slug = ?
+  ORDER BY s.school_name
+`).bind(state).all();
+
+// Filter schools by city slug match
+const allSchools = (schoolsResult.results || []) as any[];
+const schools = allSchools.filter(s => slugify(s.city || '') === city);
+
+if (schools.length === 0) {
+  return Astro.redirect('/404');
+}
+
+// Get city name from first school (convert to title case)
+function toTitleCase(str: string): string {
+  return str.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
+}
+const cityName = toTitleCase(schools[0].city || '');
+
+// Get census data for the city (use first school's zip)
+const zipCode = schools[0].zip?.substring(0, 5);
+let censusEconomic = null;
+let censusPopulation = null;
+let censusHousing = null;
+
+if (zipCode) {
+  const [economicResult, populationResult, housingResult] = await Promise.all([
+    db.prepare('SELECT * FROM census_economic WHERE zcta = ?').bind(zipCode).first(),
+    db.prepare('SELECT * FROM census_population WHERE zcta = ?').bind(zipCode).first(),
+    db.prepare('SELECT * FROM census_housing WHERE zcta = ?').bind(zipCode).first()
+  ]);
+  censusEconomic = economicResult;
+  censusPopulation = populationResult;
+  censusHousing = housingResult;
+}
+
+// Format functions
+function formatNumber(num: number | null): string {
+  if (num === null || num === undefined) return 'N/A';
+  return num.toLocaleString();
+}
+
+function formatCurrency(num: number | null): string {
+  if (num === null || num === undefined) return 'N/A';
+  return '$' + num.toLocaleString();
+}
+
+function formatPercent(num: number | null): string {
+  if (num === null || num === undefined) return 'N/A';
+  return num.toFixed(1) + '%';
+}
+
+// Get school type label
+function getSchoolType(school: any): string {
+  const types = ['Charter'];
+  if (school.is_magnet) types.push('Magnet');
+  return types.join(' | ');
+}
+
+// Format grade range
+function formatGradeRange(low: string | null, high: string | null): string {
+  if (!low && !high) return 'N/A';
+
+  const formatGrade = (g: string) => {
+    if (g === 'PK') return 'PK';
+    if (g === 'KG' || g === 'K') return 'K';
+    const num = parseInt(g);
+    if (!isNaN(num)) return num.toString();
+    return g;
+  };
+
+  if (low === high) return `Grade ${formatGrade(low!)}`;
+  return `Grades ${formatGrade(low!)} - ${formatGrade(high!)}`;
+}
+
+// Get school level label
+function getSchoolLevel(school: any): string {
+  const levels = [];
+  if (school.is_elementary) levels.push('Elementary');
+  if (school.is_middle_school) levels.push('Middle');
+  if (school.is_high_school) levels.push('High');
+  return levels.length > 0 ? levels.join('/') : 'K-12';
+}
+
+const pageTitle = `${cityName} Charter Schools - Directory of Charter Schools in ${cityName}, ${stateData.abbr}`;
+const pageDescription = `Find and compare ${schools.length} charter schools in ${cityName}, ${stateData.name}. View school details, contact information, and community demographics.`;
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <div class="container py-5">
+    <!-- Breadcrumb -->
+    <nav class="text-sm mb-4">
+      <ol class="flex flex-wrap items-center gap-2 text-gray-600">
+        <li><a href="/" class="hover:text-brand-blue">Home</a></li>
+        <li class="text-gray-400">/</li>
+        <li><a href="/charter-schools" class="hover:text-brand-blue">Charter Schools</a></li>
+        <li class="text-gray-400">/</li>
+        <li><a href={`/charter-schools/${state}`} class="hover:text-brand-blue">{stateData.name}</a></li>
+        <li class="text-gray-400">/</li>
+        <li class="text-gray-900 font-medium">{cityName}</li>
+      </ol>
+    </nav>
+
+    <div class="flex flex-col lg:flex-row gap-6">
+      <!-- Main Content -->
+      <div class="flex-1">
+        <div class="box-rounded mb-5">
+          <h1 class="text-brand-blue text-2xl mb-2">{cityName} Charter Schools</h1>
+          <p class="text-gray-600 mb-4">Directory of Charter Schools in {cityName}, {stateData.abbr}</p>
+          <p class="text-brand-green-text font-bold">Total Charter Schools Listed: {schools.length}</p>
+        </div>
+
+        <!-- Schools List -->
+        <div class="space-y-4">
+          {schools.map((school) => (
+            <div class="box-rounded hover:shadow-md transition-shadow">
+              <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-3">
+                <div class="flex-1">
+                  <h2 class="text-lg mb-1">
+                    <a href={`/charter-schools/${state}/${city}/${school.page_name}`} class="text-brand-blue hover:underline font-semibold">
+                      {school.school_name}
+                    </a>
+                  </h2>
+                  <p class="text-gray-600 fs-13 mb-2">
+                    <span class="inline-block px-2 py-0.5 bg-gray-100 rounded text-xs font-medium mr-2">{getSchoolType(school)}</span>
+                    <span class="inline-block px-2 py-0.5 bg-blue-50 rounded text-xs font-medium mr-2">{getSchoolLevel(school)}</span>
+                    {school.low_grade && school.high_grade && (
+                      <span class="text-gray-500">{formatGradeRange(school.low_grade, school.high_grade)}</span>
+                    )}
+                  </p>
+                  <p class="text-gray-700 fs-13">
+                    {school.address && <span>{school.address}, </span>}
+                    {school.city}, {school.state} {school.zip?.substring(0, 5)}
+                  </p>
+                  {school.total_students && (
+                    <p class="text-gray-500 fs-12 mt-1">{formatNumber(school.total_students)} students</p>
+                  )}
+                </div>
+                <div class="flex-shrink-0">
+                  <a href={`/charter-schools/${state}/${city}/${school.page_name}`} class="inline-block px-4 py-2 bg-brand-green text-white rounded hover:bg-brand-green-dark transition-colors fs-13">
+                    View Details
+                  </a>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <!-- Related Links -->
+        <div class="box-rounded mt-5">
+          <h3 class="text-brand-green-text font-bold mb-3">More Schools in {cityName}</h3>
+          <ul class="grid grid-cols-2 md:grid-cols-3 gap-2 fs-13">
+            <li><a href={`/magnet-schools/${state}/${city}`} class="text-brand-blue hover:underline">Magnet Schools</a></li>
+            <li><a href={`/elementary-schools/${state}/${city}`} class="text-brand-blue hover:underline">Elementary Schools</a></li>
+            <li><a href={`/middle-schools/${state}/${city}`} class="text-brand-blue hover:underline">Middle Schools</a></li>
+            <li><a href={`/high-schools/${state}/${city}`} class="text-brand-blue hover:underline">High Schools</a></li>
+            <li><a href={`/colleges-universities/${state}`} class="text-brand-blue hover:underline">Colleges in {stateData.name}</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="lg:flex-shrink-0 lg:w-[336px]">
+        <!-- Community Stats -->
+        {(censusEconomic || censusPopulation || censusHousing) && (
+          <div class="box-rounded mb-4">
+            <h3 class="text-brand-green-text font-bold mb-3">{cityName} Demographics</h3>
+            <div class="space-y-3 fs-13">
+              {censusPopulation?.pop_total && (
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Population</span>
+                  <span class="font-medium">{formatNumber(censusPopulation.pop_total)}</span>
+                </div>
+              )}
+              {censusPopulation?.pop_median_age && (
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Median Age</span>
+                  <span class="font-medium">{censusPopulation.pop_median_age}</span>
+                </div>
+              )}
+              {censusEconomic?.income_median_household && (
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Median Household Income</span>
+                  <span class="font-medium">{formatCurrency(censusEconomic.income_median_household)}</span>
+                </div>
+              )}
+              {censusHousing?.housing_median_value && (
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Median Home Value</span>
+                  <span class="font-medium">{formatCurrency(censusHousing.housing_median_value)}</span>
+                </div>
+              )}
+              {censusHousing?.housing_median_rent && (
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Median Rent</span>
+                  <span class="font-medium">{formatCurrency(censusHousing.housing_median_rent)}</span>
+                </div>
+              )}
+              {censusEconomic?.poverty_rate && censusEconomic.poverty_rate > 0 && (
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Poverty Rate</span>
+                  <span class="font-medium">{formatPercent(censusEconomic.poverty_rate)}</span>
+                </div>
+              )}
+              {censusEconomic?.unemployment_rate && (
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Unemployment Rate</span>
+                  <span class="font-medium">{formatPercent(censusEconomic.unemployment_rate)}</span>
+                </div>
+              )}
+            </div>
+            <p class="text-gray-400 fs-11 mt-3">Source: U.S. Census Bureau ACS</p>
+          </div>
+        )}
+
+        <!-- Ad Placeholder -->
+        <div class="box-rounded mb-4">
+          <div class="bg-gray-100 h-[280px] flex items-center justify-center text-gray-400 fs-13">
+            Advertisement
+          </div>
+        </div>
+
+        <!-- Browse by State -->
+        <div class="box-rounded">
+          <h3 class="text-brand-green-text font-bold mb-3">Browse Charter Schools</h3>
+          <ul class="space-y-2 fs-13">
+            <li>
+              <a href={`/charter-schools/${state}`} class="text-brand-blue hover:underline">
+                All Charter Schools in {stateData.name}
+              </a>
+            </li>
+            <li>
+              <a href="/charter-schools" class="text-brand-blue hover:underline">
+                Charter Schools by State
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>

@@ -15,7 +15,7 @@
     <path d="M10 55L60 85L110 55" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
   </g>
   <!-- Text -->
-  <text x="240" y="280" font-family="system-ui, sans-serif" font-size="72" font-weight="700" fill="white">TrueSchools</text>
+  <text x="240" y="280" font-family="system-ui, sans-serif" font-size="72" font-weight="700" fill="white">TruSchools</text>
   <text x="100" y="380" font-family="system-ui, sans-serif" font-size="32" fill="white" opacity="0.9">Find and compare schools across the United States</text>
   <text x="100" y="430" font-family="system-ui, sans-serif" font-size="24" fill="white" opacity="0.7">Preschools  |  Elementary  |  Middle  |  High Schools  |  Colleges</text>
 </svg>

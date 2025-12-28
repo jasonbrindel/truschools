@@ -1,5 +1,6 @@
 ---
 import Layout from '@/layouts/Layout.astro';
+import QAPoll from '@/components/QAPoll.astro';
 
 const db = Astro.locals.runtime.env.DB;
 
@@ -164,6 +165,16 @@ function getStateSlug(abbr: string): string {
 
         <div class="box-rounded mb-4">
           <div class="bg-gray-100 h-[280px] flex items-center justify-center text-gray-400 fs-13">Advertisement</div>
+        </div>
+
+        <!-- Quick Poll -->
+        <div class="box-rounded mb-4">
+          <QAPoll
+            questionId="culinary-career-interest"
+            pageSlug="culinary-schools"
+            question="Which culinary career path interests you most?"
+            answers={["Chef", "Pastry Chef", "Restaurant Manager", "Food Service"]}
+          />
         </div>
 
         <div class="box-rounded">

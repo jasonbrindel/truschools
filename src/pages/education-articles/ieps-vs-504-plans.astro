@@ -1,0 +1,314 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import heroImage from '@/images/USED-classroom-teacher-students-illustration.jpg';
+
+const title = "IEPs vs. 504 Plans: What Every Elementary School Parent Needs to Understand";
+const description = "A definitive guide to the two federal frameworks that provide support for children with learning differences—how they work, what they provide, and how parents can navigate each system effectively.";
+const category = 'Special Education';
+---
+
+<Layout title={title} description={description}>
+  <ArticleBreadcrumb title={title} defaultParent={{ label: 'Elementary Schools', url: '/elementary-schools' }} />
+
+  <!-- Header - Centered, Narrow -->
+  <header class="max-w-[680px] mx-auto px-5 pt-4 md:pt-8">
+    <h1 class="text-4xl md:text-5xl font-bold text-gray-900 leading-tight mb-5">
+      {title}
+    </h1>
+    <p class="text-xl md:text-2xl text-gray-600 italic mb-6">
+      A definitive guide to the two federal frameworks that provide support for children with learning differences—how they work, what they provide, and how parents can navigate each system effectively.
+    </p>
+    <p class="text-base text-gray-500 mb-10">By TruSchools Staff</p>
+  </header>
+
+  <!-- Hero Image - Container Width -->
+  <div class="container">
+    <img
+      src={heroImage.src}
+      alt="Teacher working with students in classroom"
+      class="w-full h-[400px] md:h-[500px] object-cover"
+    />
+  </div>
+
+  <!-- Article Container - Centered, Narrow -->
+  <article class="max-w-[680px] mx-auto px-5 py-10 md:py-16">
+    <!-- Article Body -->
+    <div class="article-body text-lg leading-relaxed text-gray-800">
+
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">The Architecture of Support: Understanding Two Distinct Legal Frameworks</h2>
+
+      <p class="first-letter:text-6xl first-letter:font-bold first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:text-gray-900 mb-6">
+        When educators mention that a child might benefit from "additional support," parents often find themselves navigating unfamiliar acronyms and legal frameworks. The two most important of these—Individualized Education Programs (IEPs) and 504 Plans—represent fundamentally different approaches to supporting students with disabilities, each rooted in distinct federal legislation and offering different levels of intervention.
+      </p>
+
+      <p class="mb-6">
+        The scale of this system is substantial. Approximately 15 percent of K-12 students nationwide now receive services under the Individuals with Disabilities Education Act (IDEA), with that number climbing steadily—projections suggest the population could increase by another million students by 2026. In California alone, about 13 percent of students—roughly 800,000 children—have IEPs, while an additional 85,000 students have 504 Plans. These numbers translate to millions of families across the country seeking guidance on which pathway best serves their child's needs.
+      </p>
+
+      <p class="mb-10">
+        Understanding the distinction between these two systems isn't merely academic—it directly affects what services a child receives, what legal protections the family has, and how parents can advocate effectively when problems arise. The core architectural difference can be stated simply: an IEP changes how a student is taught through specialized instruction, while a 504 Plan changes the conditions around learning so the student can access the same curriculum as peers.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">The Legal Foundations: Two Laws, Two Purposes</h2>
+
+      <p class="mb-6">
+        IEPs and 504 Plans emerge from fundamentally different pieces of federal legislation, each with its own philosophy and requirements. Understanding this distinction is the first step toward navigating either system effectively.
+      </p>
+
+      <h3 class="text-xl font-bold text-gray-900 mb-4">The Individuals with Disabilities Education Act (IDEA)</h3>
+
+      <p class="mb-6">
+        IDEA is an education law, first enacted in 1975 and reauthorized most recently in 2004, that mandates public schools provide a "Free Appropriate Public Education" (FAPE) to students with qualifying disabilities. The law is prescriptive and detailed, specifying 13 disability categories under which students may qualify for services. These categories include specific learning disabilities (the most common, accounting for about 35 percent of all IEPs), speech or language impairments, other health impairments (including ADHD), autism, emotional disturbance, intellectual disability, developmental delay (for younger children), and several others including hearing impairment, visual impairment, orthopedic impairment, traumatic brain injury, multiple disabilities, and deaf-blindness.
+      </p>
+
+      <p class="mb-6">
+        Crucially, IDEA requires not just that a child have a disability, but that the disability "adversely affects" educational performance and that the child needs "specially designed instruction" to benefit from education. This two-part test is more stringent than what's required for a 504 Plan, which explains why some students who don't qualify for an IEP may still be eligible for accommodations under Section 504.
+      </p>
+
+      <h3 class="text-xl font-bold text-gray-900 mb-4">Section 504 of the Rehabilitation Act of 1973</h3>
+
+      <p class="mb-6">
+        Section 504 is a civil rights law—not an education law—that prohibits discrimination against individuals with disabilities in any program or activity receiving federal financial assistance. Since virtually all public schools receive federal funding, they must comply with Section 504 requirements. The definition of disability under Section 504 is considerably broader than under IDEA: a person qualifies if they have a physical or mental impairment that substantially limits one or more major life activities, have a record of such an impairment, or are regarded as having such an impairment.
+      </p>
+
+      <p class="mb-6">
+        "Major life activities" include learning, but also encompass reading, thinking, concentrating, communicating, walking, breathing, seeing, hearing, speaking, and caring for oneself. This broader definition means students with conditions like allergies, diabetes, temporary injuries, or mild attention difficulties may qualify for 504 protections even when they don't meet IDEA's more specific criteria.
+      </p>
+
+      <p class="mb-10 italic text-gray-700 border-l-4 border-brand-blue pl-4">
+        The practical implication: 504 Plans provide a pathway to accommodations for students who have genuine disabilities but don't require specialized instruction. They're designed to level the playing field, not to change what a student learns.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">The Evaluation Process: How Students Qualify</h2>
+
+      <p class="mb-6">
+        The pathway to either an IEP or a 504 Plan begins with evaluation, but the processes differ significantly in their comprehensiveness and procedural requirements.
+      </p>
+
+      <h3 class="text-xl font-bold text-gray-900 mb-4">IEP Evaluation Requirements</h3>
+
+      <p class="mb-6">
+        Under IDEA, the evaluation process is comprehensive and multidisciplinary. Parents or school staff can request an evaluation, and once parental consent is obtained, schools typically have 60 calendar days to complete the process (though timelines vary somewhat by state). The evaluation must assess all areas of suspected disability and cannot rely on any single measure or test.
+      </p>
+
+      <p class="mb-6">
+        A typical IEP evaluation might include cognitive assessments (IQ testing), academic achievement testing, speech and language evaluations, occupational therapy assessments, behavioral evaluations, classroom observations, review of educational records, and input from parents and teachers. The goal is to develop a complete picture of the child's strengths, challenges, and educational needs.
+      </p>
+
+      <p class="mb-6">
+        An important point that parents often misunderstand: a medical diagnosis does not automatically qualify a child for an IEP. A doctor may diagnose a child with autism, ADHD, or a learning disability, but the school must still conduct its own evaluation to determine whether the child meets IDEA's specific criteria. The school's determination focuses on educational impact, not clinical presentation.
+      </p>
+
+      <h3 class="text-xl font-bold text-gray-900 mb-4">504 Plan Evaluation Requirements</h3>
+
+      <p class="mb-10">
+        The evaluation process for 504 Plans is less rigidly defined by federal law. Schools must draw on information from a variety of sources, but there's no mandated comprehensive evaluation battery. In practice, a 504 evaluation might rely on medical documentation from a physician, review of academic records, teacher observations, and parent input. Some districts use the same evaluation process for both 504 and IEP eligibility determinations. The lower procedural threshold for 504 Plans reflects their different purpose: they're designed to identify necessary accommodations, not to develop specialized instructional programs. However, this flexibility can be a double-edged sword—the lack of standardized procedures means the quality and thoroughness of 504 evaluations can vary significantly between districts.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">Team Composition: Who Makes the Decisions</h2>
+
+      <h3 class="text-xl font-bold text-gray-900 mb-4">IEP Team Requirements</h3>
+
+      <p class="mb-6">
+        IDEA specifies mandatory members for IEP teams. At minimum, the team must include: the child's parents or guardians; at least one general education teacher (if the child participates or may participate in general education); at least one special education teacher or provider; a representative of the school district who is qualified to provide or supervise specially designed instruction, knows the general curriculum, and knows about available school resources; an individual who can interpret evaluation results (this person can also fill one of the other roles); and, when appropriate, the student themselves.
+      </p>
+
+      <p class="mb-6">
+        Parents can also invite others with knowledge or expertise about their child, such as advocates, private therapists, or other professionals. When transition planning is being discussed (typically beginning at age 16), representatives from outside agencies may also participate. The law treats parents as equal members of the team, not as observers—their participation is meant to be meaningful and substantive.
+      </p>
+
+      <h3 class="text-xl font-bold text-gray-900 mb-4">504 Plan Team Composition</h3>
+
+      <p class="mb-10">
+        Section 504 does not mandate specific team membership. The law requires that decisions be made by "a group of persons knowledgeable about the child, the meaning of the evaluation data, and the placement options." In practice, this often means a smaller, less formal team—perhaps a school counselor or 504 coordinator, the classroom teacher, a school nurse (if medical issues are involved), and the parent. While parent participation is encouraged as best practice, Section 504 does not contain the same explicit protections for parental involvement that IDEA does. This difference can affect a parent's ability to influence outcomes, particularly if disagreements arise.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">What Each Document Contains</h2>
+
+      <p class="mb-6">
+        The IEP is a substantially more detailed document than a 504 Plan, reflecting its role as a comprehensive educational roadmap.
+      </p>
+
+      <h3 class="text-xl font-bold text-gray-900 mb-4">Components of an IEP</h3>
+
+      <p class="mb-6">
+        A compliant IEP must include: present levels of academic achievement and functional performance (establishing a baseline); measurable annual goals that the child can reasonably accomplish within a school year; a description of special education services, related services (such as speech therapy, occupational therapy, or counseling), and supplementary aids and services the child will receive; an explanation of the extent to which the child will not participate with nondisabled peers; accommodations for state and district assessments; the projected date for beginning services and their anticipated frequency, location, and duration; and, beginning at age 16, transition services addressing post-secondary goals.
+      </p>
+
+      <p class="mb-6">
+        IEPs are extensive documents—often 10 to 20 pages or more—and must be reviewed and updated at least annually. Students must be reevaluated at least every three years to determine whether they continue to qualify for services.
+      </p>
+
+      <h3 class="text-xl font-bold text-gray-900 mb-4">Components of a 504 Plan</h3>
+
+      <p class="mb-10">
+        There is no federally mandated format for 504 Plans, which means they vary considerably in structure and detail across districts. A typical 504 Plan might include: identification of the student's disability; how the disability affects a major life activity; a list of accommodations the student will receive; the names of individuals responsible for implementing each accommodation; and a timeline for review. Unlike IEPs, 504 Plans generally do not include measurable goals, specialized instruction, or related services. They focus on accommodations—adjustments to how education is delivered rather than what is taught. Plans are typically reviewed annually, with reevaluations conducted every three years or when needed.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">Real-World Examples: Accommodations vs. Specialized Instruction</h2>
+
+      <p class="mb-6">
+        Understanding the practical difference between these two systems becomes clearer through specific examples.
+      </p>
+
+      <h3 class="text-xl font-bold text-gray-900 mb-4">Typical 504 Plan Accommodations</h3>
+
+      <p class="mb-6">
+        504 accommodations focus on providing equal access without changing curriculum expectations. Common examples include: extended time on tests and assignments (often 50 percent additional time); preferential seating near the teacher or away from distractions; use of audiobooks, text-to-speech technology, or large-print materials; permission to take breaks for focus, medical needs, or anxiety management; a quiet setting for testing; use of a calculator, note-taker, or scribe; modified homework assignments (reduced quantity, not difficulty); access to class notes or outlines; permission to use fidget tools or take movement breaks; flexible deadlines for students with chronic health conditions; and elevator access or modified physical education for students with orthopedic impairments.
+      </p>
+
+      <p class="mb-6">
+        These accommodations don't change what the student is expected to learn—they change the conditions under which learning happens.
+      </p>
+
+      <h3 class="text-xl font-bold text-gray-900 mb-4">IEP Services and Supports</h3>
+
+      <p class="mb-6">
+        IEPs can include all the accommodations available through 504 Plans, plus specialized instruction and related services. Examples include: speech-language therapy (individual or small group sessions); occupational therapy to develop fine motor skills, sensory processing, or daily living skills; physical therapy; specially designed reading instruction using evidence-based approaches for students with dyslexia; modified curriculum with different learning objectives; one-on-one or small-group instruction with a special education teacher; behavioral intervention plans with specific strategies for managing challenging behaviors; a one-on-one paraprofessional or instructional aide; counseling or social work services; assistive technology devices and training; and transition services preparing older students for post-secondary education, employment, or independent living.
+      </p>
+
+      <p class="mb-10 italic text-gray-700 border-l-4 border-brand-blue pl-4">
+        The key distinction: IEP services involve specially designed instruction intended to teach new skills and help students make progress on individualized goals. A child who cannot read won't learn to read through accommodations alone—they need explicit, targeted instruction from qualified professionals.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">Procedural Safeguards: Your Rights Under Each System</h2>
+
+      <p class="mb-6">
+        One of the most significant differences between IEPs and 504 Plans lies in the procedural protections available to families. IDEA contains extensive, explicit safeguards; Section 504's protections, while real, are less robust.
+      </p>
+
+      <h3 class="text-xl font-bold text-gray-900 mb-4">IDEA Procedural Safeguards</h3>
+
+      <p class="mb-6">
+        Parents of children with IEPs have numerous legally protected rights. These include: the right to receive a complete written explanation of procedural safeguards at least once per year; the right to participate in all meetings regarding identification, evaluation, placement, and provision of FAPE; the right to inspect and review all educational records; the right to an Independent Educational Evaluation (IEE) at public expense if you disagree with the school's evaluation; the right to "prior written notice" before the school proposes or refuses to change identification, evaluation, placement, or services; the right to give or deny consent for evaluations and initial placement; "stay put" rights that keep the current IEP in place during disputes; and access to multiple dispute resolution options including mediation, state complaints, and due process hearings.
+      </p>
+
+      <p class="mb-6">
+        These protections are substantial. If you disagree with the school about your child's services, IDEA provides clear, legally defined pathways to challenge decisions. Due process hearings, while complex, allow families to present evidence before an impartial hearing officer who can order schools to provide services or compensatory education.
+      </p>
+
+      <h3 class="text-xl font-bold text-gray-900 mb-4">Section 504 Procedural Safeguards</h3>
+
+      <p class="mb-10">
+        Section 504 also requires procedural safeguards, but they are less detailed. Schools must provide notice of parental rights and must offer an impartial hearing procedure if parents disagree with decisions. Parents can also file complaints with the U.S. Department of Education's Office for Civil Rights (OCR), which investigates discrimination claims. However, 504 proceedings typically lack the formality and specificity of IDEA due process. There's no explicit "stay put" protection, meaning the school may implement changes while a dispute is ongoing. The burden often falls more heavily on parents to demonstrate that their child's rights have been violated.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">Taking Action: How to Request an Evaluation</h2>
+
+      <p class="mb-6">
+        If you suspect your child needs additional support, the first step is requesting an evaluation. This request should always be made in writing, which creates a documented record and triggers the school's legal obligation to respond.
+      </p>
+
+      <h3 class="text-xl font-bold text-gray-900 mb-4">Writing Your Request</h3>
+
+      <p class="mb-6">
+        A written request for evaluation should include: the date; your child's full name, grade, and teacher; a clear statement that you are requesting an evaluation for special education services under IDEA (for an IEP) or an evaluation to determine eligibility for accommodations under Section 504; specific concerns about your child's performance, with observable examples; any relevant diagnoses or outside evaluations you have; and a request for response within a specific timeframe.
+      </p>
+
+      <p class="mb-10">
+        Send your request to the school principal or special education coordinator. Consider sending it via email (which provides automatic documentation) and certified mail. Keep copies of everything. The school must respond. For IEP requests, schools typically have 15 to 30 school days (depending on state law) to either agree to evaluate or provide written notice refusing the request. If they agree, you'll receive an assessment plan to review and sign. Once you provide consent, the evaluation must be completed within 60 days (in most states), and an IEP must be developed within 30 calendar days if the student qualifies.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">When Services Are Denied: Your Options</h2>
+
+      <p class="mb-6">
+        If the school denies your request for an evaluation or finds your child ineligible for services, you have options.
+      </p>
+
+      <h3 class="text-xl font-bold text-gray-900 mb-4">Request an Independent Educational Evaluation</h3>
+
+      <p class="mb-6">
+        If you disagree with the school's evaluation, you can request an Independent Educational Evaluation (IEE) at public expense. The school must either fund the IEE or file for a due process hearing to demonstrate that its own evaluation was appropriate. You are not required to explain why you disagree, and the school cannot cause unreasonable delays.
+      </p>
+
+      <p class="mb-6">
+        The IEE is conducted by a qualified professional not employed by the school district. The results must be considered by the school in making decisions about your child's education, though the school is not required to accept the findings. If the IEE supports your concerns, it provides powerful evidence in any subsequent dispute.
+      </p>
+
+      <h3 class="text-xl font-bold text-gray-900 mb-4">Dispute Resolution Options</h3>
+
+      <p class="mb-10">
+        Under IDEA, you can pursue several formal dispute resolution options: mediation (voluntary for both parties, conducted by a neutral third party); state complaints (filed with your state education agency, which must investigate and issue findings within 60 days); and due process hearings (formal proceedings before an impartial hearing officer, with rights to present evidence, call witnesses, and be represented by counsel). For 504 disputes, you can request an impartial hearing at the district level or file a complaint with the U.S. Department of Education's Office for Civil Rights. OCR investigates discrimination claims and can require schools to provide remedies if violations are found.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">Advocating Effectively at IEP Meetings</h2>
+
+      <p class="mb-6">
+        Successful advocacy begins before the meeting starts. Come prepared with documentation of your child's challenges: examples of work, teacher communications, report cards, outside evaluations, and your own observations. Write down specific, observable examples rather than general concerns—"Sarah spent 3 hours on math homework that should take 30 minutes" is more useful than "Sarah struggles with math."
+      </p>
+
+      <p class="mb-6">
+        You have the right to bring advocates, attorneys, or other supporters to IEP meetings. Many Parent Training and Information Centers (PTIs) offer free guidance and can help you prepare. Consider bringing someone to take notes so you can focus on the discussion.
+      </p>
+
+      <p class="mb-10">
+        During the meeting, ask questions and request explanations in plain language. If you don't understand something, say so. If you disagree with a proposal, you don't have to sign immediately—you can request time to review and respond. The IEP is meant to be developed collaboratively, with parents as equal participants. If you disagree with the final IEP, you can sign it while noting your disagreement in writing, request a follow-up meeting, or pursue dispute resolution. Your child's services continue under the existing IEP while disputes are being resolved.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">Looking Ahead: Choosing the Right Path</h2>
+
+      <p class="mb-6">
+        For parents just beginning this journey, the complexity can feel overwhelming. But the fundamental question is straightforward: Does your child need accommodations to access the same curriculum as peers, or do they need specialized instruction that changes how they're taught?
+      </p>
+
+      <p class="mb-6">
+        If your child has a disability that makes classroom learning more difficult but can succeed with adjustments like extra time, preferential seating, or assistive technology, a 504 Plan may be appropriate. If your child needs a different instructional approach—such as explicit reading intervention for dyslexia, targeted social skills instruction for autism, or specialized academic instruction in a smaller setting—an IEP provides the framework for that specialized support.
+      </p>
+
+      <p class="mb-10">
+        When in doubt, request a comprehensive evaluation. The data will help the team—and you—understand what your child truly needs. A 504 Plan was never intended to be "IEP-lite" or a stepping stone to an IEP; each serves a distinct purpose. Choosing the right framework from the start helps ensure your child receives appropriate support without unnecessary delays. The special education landscape continues to evolve. With student populations growing, due process complaints increasing, and persistent teacher shortages affecting service delivery, families must be informed advocates. Understanding the architecture of support—the laws, the processes, the protections—is the foundation for ensuring your child receives the education they deserve.
+      </p>
+
+      <!-- Sources -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
+
+      <ul class="text-sm text-gray-600 space-y-2 mb-10">
+        <li>U.S. Department of Education, Office of Special Education Programs. <em>IDEA regulations, 34 C.F.R. Part 300.</em></li>
+        <li>U.S. Department of Education. <em>"A Guide to the Individualized Education Program."</em> ED Pubs.</li>
+        <li>U.S. Department of Education, Office for Civil Rights. <em>"Protecting Students with Disabilities: Frequently Asked Questions About Section 504 and the Education of Children with Disabilities."</em></li>
+        <li>National Center for Education Statistics. <em>"Students with Disabilities."</em> Condition of Education, 2024.</li>
+        <li>California Department of Education. Special Education Data Reports and Enrollment Statistics.</li>
+        <li>The Advocacy Institute. Analysis of IDEA Part B Child Count Data, 2023-2024.</li>
+        <li>Center for Parent Information and Resources. <em>"Procedural Safeguards"</em> and <em>"The IEP Team."</em> parentcenterhub.org</li>
+        <li>National Center for Learning Disabilities. <em>"IEPs vs. 504 Plans."</em> ncld.org</li>
+        <li>Disability Rights California. <em>"How to Obtain an Independent Educational Evaluation at Public Expense."</em></li>
+        <li>EdSource. <em>"Parents' guide to 504 plans and IEPs: What they are and how they're different."</em> 2022.</li>
+        <li>K-12 Dive. <em>"Special education enrollment climbs to nearly 8M."</em> February 2025.</li>
+        <li>Center for Appropriate Dispute Resolution in Special Education. Due Process Complaint Analysis, 2022-23.</li>
+      </ul>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-16 pt-8 border-t border-gray-200">
+      <p class="text-sm text-gray-500 italic">
+        This article is provided by TruSchools as an educational resource for families navigating special education services.
+      </p>
+      <div class="mt-6">
+        <a href="/elementary-schools" class="text-brand-blue hover:underline font-medium">
+          Browse Elementary Schools by State &rarr;
+        </a>
+      </div>
+    </footer>
+  </article>
+</Layout>

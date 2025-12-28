@@ -1,5 +1,6 @@
 ---
 import Layout from '@/layouts/Layout.astro';
+import NewsletterSignup from '@/components/NewsletterSignup.astro';
 
 const { dept, course } = Astro.params;
 const db = Astro.locals.runtime.env.DB;
@@ -183,12 +184,7 @@ const firstVideo = videos.length > 0 ? videos[0] : null;
           </ul>
         </div>
 
-        <div class="box-rounded">
-          <h3 class="text-brand-blue mb-3">Newsletter Signup</h3>
-          <p class="fs-13 text-gray-600 mb-3">Get notified when we add new classes and tutorials.</p>
-          <input type="email" placeholder="Your email address" class="input w-full mb-2" />
-          <button class="btn btn-primary w-full">Subscribe</button>
-        </div>
+        <NewsletterSignup />
       </div>
     </div>
   </div>

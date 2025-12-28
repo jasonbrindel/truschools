@@ -1,5 +1,6 @@
 ---
 import Layout from '@/layouts/Layout.astro';
+import QAPoll from '@/components/QAPoll.astro';
 
 const db = Astro.locals.runtime.env.DB;
 
@@ -7,7 +8,7 @@ const db = Astro.locals.runtime.env.DB;
 const stateCountsResult = await db.prepare(`
   SELECT state_abbr, COUNT(*) as count
   FROM colleges
-  WHERE institution_category = 'vocational' AND vocational_type = 'beauty' AND active = 1
+  WHERE vocational_type = 'beauty' AND active = 1
   GROUP BY state_abbr
   ORDER BY count DESC
 `).all();
@@ -17,7 +18,7 @@ const stateCounts = stateCountsResult.results;
 // Get total beauty schools
 const totalResult = await db.prepare(`
   SELECT COUNT(*) as total FROM colleges
-  WHERE institution_category = 'vocational' AND vocational_type = 'beauty' AND active = 1
+  WHERE vocational_type = 'beauty' AND active = 1
 `).first() as { total: number };
 const totalSchools = totalResult?.total || 0;
 
@@ -25,7 +26,7 @@ const totalSchools = totalResult?.total || 0;
 const featuredResult = await db.prepare(`
   SELECT id, institution_name, page_name, city, state_abbr, total_enrollment, tuition_in_state
   FROM colleges
-  WHERE institution_category = 'vocational' AND vocational_type = 'beauty' AND active = 1
+  WHERE vocational_type = 'beauty' AND active = 1
     AND total_enrollment IS NOT NULL
   ORDER BY total_enrollment DESC
   LIMIT 10
@@ -198,6 +199,16 @@ function getStateSlug(abbr: string): string {
             <li>Spa Manager</li>
             <li>Beauty Educator</li>
           </ul>
+        </div>
+
+        <!-- Quick Poll -->
+        <div class="box-rounded mb-4">
+          <QAPoll
+            questionId="beauty-career-interest"
+            pageSlug="beauty-schools"
+            question="Which beauty career interests you most?"
+            answers={["Hair Stylist", "Esthetician", "Nail Technician", "Makeup Artist"]}
+          />
         </div>
 
         <!-- Related Categories -->

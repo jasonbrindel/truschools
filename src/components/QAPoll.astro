@@ -1,0 +1,214 @@
+---
+interface Props {
+  questionId: string;
+  pageSlug: string;
+  question: string;
+  answers: string[];
+}
+
+const { questionId, pageSlug, question, answers } = Astro.props;
+---
+
+<div class="qa-poll" data-question-id={questionId} data-page-slug={pageSlug} data-question-text={question}>
+  <h2 class="text-brand-blue text-lg mb-3">Quick Poll</h2>
+  <p class="text-gray-700 fs-14 mb-3">
+    <strong>Question:</strong> {question}
+  </p>
+
+  <!-- Voting buttons (shown before voting) -->
+  <div class="poll-options flex gap-2 flex-wrap">
+    {answers.map((answer) => (
+      <button
+        type="button"
+        class="poll-btn px-3 py-1 bg-white border border-gray-300 rounded text-sm hover:bg-gray-50 hover:border-brand-blue transition-colors cursor-pointer"
+        data-answer={answer}
+      >
+        {answer}
+      </button>
+    ))}
+  </div>
+
+  <!-- Results (shown after voting, only if enough responses) -->
+  <div class="poll-results hidden">
+    <div class="results-container space-y-2">
+      {answers.map((answer) => (
+        <div class="result-bar" data-answer={answer}>
+          <div class="flex justify-between items-center mb-1">
+            <span class="text-sm text-gray-700 answer-label">{answer}</span>
+            <span class="text-sm font-medium text-brand-blue percentage-label">0%</span>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-2">
+            <div class="bg-brand-blue h-2 rounded-full transition-all duration-500 percentage-bar" style="width: 0%"></div>
+          </div>
+        </div>
+      ))}
+    </div>
+    <p class="text-xs text-gray-500 mt-3 total-votes">0 responses</p>
+  </div>
+
+  <!-- Thank you message (shown when not enough votes to display results) -->
+  <div class="thank-you-only hidden">
+    <p class="text-sm text-green-600">Thanks for your response!</p>
+  </div>
+
+  <!-- Thank you message (shown alongside results) -->
+  <p class="thank-you-msg hidden text-sm text-green-600 mt-2">Thanks for your response!</p>
+</div>
+
+<script>
+  // Session storage key for poll sessions
+  const POLL_SESSION_KEY = 'truschools_poll_session';
+  const MIN_VOTES_TO_SHOW_RESULTS = 10;
+
+  // Get or create session ID
+  function getSessionId(): string {
+    let sessionId = localStorage.getItem(POLL_SESSION_KEY);
+    if (!sessionId) {
+      sessionId = Math.random().toString(36).substring(2) + Date.now().toString(36);
+      localStorage.setItem(POLL_SESSION_KEY, sessionId);
+    }
+    return sessionId;
+  }
+
+  // Check if user already voted and show results if so
+  async function checkExistingVote(pollContainer: HTMLElement) {
+    const questionId = pollContainer.dataset.questionId;
+    const sessionId = getSessionId();
+
+    try {
+      const response = await fetch(`/api/poll/vote?questionId=${questionId}&sessionId=${sessionId}`);
+      const data = await response.json();
+
+      if (data.success && data.hasVoted) {
+        if (data.totalVotes >= MIN_VOTES_TO_SHOW_RESULTS) {
+          showResults(pollContainer, data.results, data.totalVotes, false);
+        } else {
+          showThankYouOnly(pollContainer);
+        }
+      }
+    } catch (error) {
+      console.error('Error checking vote status:', error);
+    }
+  }
+
+  // Submit vote
+  async function submitVote(pollContainer: HTMLElement, answerText: string) {
+    const questionId = pollContainer.dataset.questionId;
+    const pageSlug = pollContainer.dataset.pageSlug;
+    const questionText = pollContainer.dataset.questionText;
+    const sessionId = getSessionId();
+
+    // Disable buttons immediately
+    const buttons = pollContainer.querySelectorAll('.poll-btn');
+    buttons.forEach(btn => {
+      (btn as HTMLButtonElement).disabled = true;
+      btn.classList.add('opacity-50', 'cursor-not-allowed');
+    });
+
+    try {
+      const response = await fetch('/api/poll/vote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          questionId,
+          pageSlug,
+          questionText,
+          answerText,
+          sessionId
+        })
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        if (data.totalVotes >= MIN_VOTES_TO_SHOW_RESULTS) {
+          showResults(pollContainer, data.results, data.totalVotes, !data.alreadyVoted);
+        } else {
+          showThankYouOnly(pollContainer);
+        }
+      }
+    } catch (error) {
+      console.error('Error submitting vote:', error);
+      // Re-enable buttons on error
+      buttons.forEach(btn => {
+        (btn as HTMLButtonElement).disabled = false;
+        btn.classList.remove('opacity-50', 'cursor-not-allowed');
+      });
+    }
+  }
+
+  // Show only thank you message (not enough votes yet)
+  function showThankYouOnly(pollContainer: HTMLElement) {
+    const optionsContainer = pollContainer.querySelector('.poll-options');
+    optionsContainer?.classList.add('hidden');
+
+    const thankYouOnly = pollContainer.querySelector('.thank-you-only');
+    thankYouOnly?.classList.remove('hidden');
+  }
+
+  // Display results
+  function showResults(pollContainer: HTMLElement, results: Array<{answer: string, votes: number, percentage: number}>, totalVotes: number, isNewVote: boolean) {
+    // Hide voting buttons
+    const optionsContainer = pollContainer.querySelector('.poll-options');
+    optionsContainer?.classList.add('hidden');
+
+    // Show results
+    const resultsContainer = pollContainer.querySelector('.poll-results');
+    resultsContainer?.classList.remove('hidden');
+
+    // Update each result bar
+    results.forEach(result => {
+      const resultBar = pollContainer.querySelector(`.result-bar[data-answer="${result.answer}"]`);
+      if (resultBar) {
+        const percentageLabel = resultBar.querySelector('.percentage-label');
+        const percentageBar = resultBar.querySelector('.percentage-bar') as HTMLElement;
+
+        if (percentageLabel) percentageLabel.textContent = `${result.percentage}%`;
+        if (percentageBar) percentageBar.style.width = `${result.percentage}%`;
+      }
+    });
+
+    // Update total votes
+    const totalVotesEl = pollContainer.querySelector('.total-votes');
+    if (totalVotesEl) {
+      totalVotesEl.textContent = `${totalVotes.toLocaleString()} ${totalVotes === 1 ? 'response' : 'responses'}`;
+    }
+
+    // Show thank you message if this was a new vote
+    if (isNewVote) {
+      const thankYouMsg = pollContainer.querySelector('.thank-you-msg');
+      thankYouMsg?.classList.remove('hidden');
+    }
+  }
+
+  // Initialize all polls on the page
+  function initPolls() {
+    const polls = document.querySelectorAll('.qa-poll');
+
+    polls.forEach(poll => {
+      const pollContainer = poll as HTMLElement;
+
+      // Check for existing votes
+      checkExistingVote(pollContainer);
+
+      // Add click handlers to buttons
+      const buttons = pollContainer.querySelectorAll('.poll-btn');
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const answer = (btn as HTMLElement).dataset.answer;
+          if (answer) {
+            submitVote(pollContainer, answer);
+          }
+        });
+      });
+    });
+  }
+
+  // Run on page load
+  document.addEventListener('DOMContentLoaded', initPolls);
+
+  // Also run immediately in case DOM is already loaded
+  if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    initPolls();
+  }
+</script>

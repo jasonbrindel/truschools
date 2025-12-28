@@ -1,0 +1,427 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import heroImage from '@/images/USED-school-hallway-students-painting.jpg';
+
+const title = "Magnet Schools: What They Are, How They Work, and How to Apply";
+const description = "A comprehensive guide to magnet schools covering their history, program types, how they differ from charter and private schools, and the application process.";
+const category = 'Magnet Schools';
+---
+
+<Layout title={title} description={description}>
+  <ArticleBreadcrumb title={title} defaultParent={{ label: 'Magnet Schools', url: '/magnet-schools' }} />
+
+  <header class="max-w-[680px] mx-auto px-5 pt-4 md:pt-8">
+    <h1 class="text-4xl md:text-5xl font-bold text-gray-900 leading-tight mb-5">{title}</h1>
+    <p class="text-xl md:text-2xl text-gray-600 italic mb-6">A Comprehensive Guide for Parents Exploring Specialized Public Education</p>
+    <p class="text-base text-gray-500 mb-10">By TruSchools Staff</p>
+  </header>
+
+  <div class="container">
+    <img src={heroImage.src} alt="School hallway with students and colorful artwork" class="w-full h-[400px] md:h-[500px] object-cover" />
+  </div>
+
+  <article class="max-w-[680px] mx-auto px-5 py-10 md:py-16">
+    <div class="article-body text-lg leading-relaxed text-gray-800">
+      <p class="first-letter:text-6xl first-letter:font-bold first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:text-gray-900 mb-6">
+        Magnet schools represent one of the oldest and most successful forms of school choice in American public education. These specialized public schools, which draw students from across district boundaries through voluntary enrollment rather than neighborhood assignment, have been educating students since the early 1970s. Today, more than 3,600 magnet schools serve approximately 3.5 million students nationwide, offering everything from intensive STEM programs to performing arts conservatories to International Baccalaureate curricula.
+      </p>
+
+      <p class="mb-6">
+        For parents navigating school options, magnet schools offer compelling possibilities: rigorous academics, specialized instruction, diverse student bodies, and—critically—no tuition costs. But understanding what magnet schools actually are, how they differ from other choice options, and how to successfully apply requires wading through considerable complexity. This guide aims to clarify the magnet landscape and help families determine whether these programs might be right for their children.
+      </p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">What Is a Magnet School?</h2>
+
+      <p class="mb-6">
+        A magnet school is a public school with specialized courses or curricula, designed to attract students from across an entire district or region rather than serving only the immediate neighborhood. The name reflects the original intent: to act as a "magnet" drawing students toward a particular educational focus while simultaneously promoting voluntary integration.
+      </p>
+
+      <p class="mb-6">
+        The defining characteristics of magnet schools include:
+      </p>
+
+      <ul class="list-disc pl-6 mb-6 space-y-2">
+        <li><strong>Public school status:</strong> Magnet schools are part of the public school system, funded by tax dollars and overseen by local school districts. They cannot charge tuition.</li>
+        <li><strong>Specialized focus:</strong> Each magnet school organizes its curriculum around a particular theme—STEM, performing arts, health sciences, world languages, or dozens of other specializations.</li>
+        <li><strong>District-wide enrollment:</strong> Unlike neighborhood schools where attendance is determined by address, magnet schools accept students from throughout the district (and sometimes from multiple districts).</li>
+        <li><strong>Selective or lottery admission:</strong> Because demand often exceeds capacity, magnet schools typically use either random lotteries or academic criteria to select students.</li>
+        <li><strong>Transportation options:</strong> Most districts provide transportation for magnet students, though policies vary significantly.</li>
+      </ul>
+
+      <p class="mb-6">
+        Magnet schools operate within the same regulatory framework as other public schools. They must administer state assessments, employ certified teachers, and serve all students including those with disabilities and English language learners. What distinguishes them is their thematic focus and their draw from a broader geographic area.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">A Brief History of Magnet Schools</h2>
+
+      <p class="mb-6">
+        Magnet schools emerged in the late 1960s and early 1970s as a voluntary approach to school desegregation. Following Brown v. Board of Education, districts across the country struggled with court-ordered integration. Forced busing programs generated significant controversy and "white flight" as families moved to avoid assignment to integrated schools.
+      </p>
+
+      <p class="mb-6">
+        The magnet concept offered an alternative: create schools so appealing that families of all backgrounds would voluntarily choose to attend, achieving integration through attraction rather than mandate. The first magnet programs appeared in cities like Dallas, Houston, and Milwaukee, focusing initially on career-themed curricula and gifted education.
+      </p>
+
+      <p class="mb-6">
+        Federal support arrived in 1976 with the Emergency School Aid Act, which provided funding for magnet programs as desegregation tools. The Magnet Schools Assistance Program (MSAP), established in 1984 and still operating today, has distributed billions of dollars to help districts develop and expand magnet offerings.
+      </p>
+
+      <p class="mb-6">
+        By the 1990s, magnet schools had evolved beyond their desegregation origins. While diversity remained a goal, academic excellence and specialized instruction became equally important drivers. The number of magnet schools grew from roughly 1,400 in 1991 to more than 3,600 today, with enrollment nearly tripling.
+      </p>
+
+      <p class="mb-6">
+        Court decisions in the 2000s complicated the use of race in magnet admissions. In 2007, the Supreme Court's ruling in Parents Involved in Community Schools v. Seattle School District limited how districts could consider race in school assignments. Many districts responded by shifting to socioeconomic-based diversity policies or purely lottery-based admissions, while others continued using race-conscious approaches within legal boundaries.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">How Magnet Schools Differ from Charter Schools</h2>
+
+      <p class="mb-6">
+        Families exploring school choice often encounter both magnet and charter schools, and the distinction between them can be confusing. While both offer alternatives to traditional neighborhood school assignment, they differ fundamentally in governance, accountability, and operation.
+      </p>
+
+      <h3 class="text-xl font-bold text-gray-900 mt-8 mb-4">Governance and Oversight</h3>
+
+      <p class="mb-6">
+        Magnet schools operate within existing school district structures. They answer to the same school board, superintendent, and administrative hierarchy as other district schools. Personnel policies, union contracts, and operational procedures generally mirror district standards.
+      </p>
+
+      <p class="mb-6">
+        Charter schools, by contrast, operate semi-independently under charters granted by state-designated authorizers (which might be districts, universities, or state agencies). Each charter school has its own governing board that makes decisions about curriculum, staffing, budgets, and operations. Charter schools typically have more flexibility than district schools but face renewal reviews where their charters can be revoked for poor performance.
+      </p>
+
+      <h3 class="text-xl font-bold text-gray-900 mt-8 mb-4">Funding and Resources</h3>
+
+      <p class="mb-6">
+        Magnet schools receive funding through their districts, often supplemented by federal grants from the Magnet Schools Assistance Program. They typically access the same facilities, support services, and resources as other district schools, though popular magnet programs may receive additional investment to maintain their specialized offerings.
+      </p>
+
+      <p class="mb-6">
+        Charter schools receive per-pupil funding that follows enrolled students, but often at rates lower than traditional public schools receive. They may or may not have access to district facilities and must often find and fund their own buildings. Some charter networks have developed substantial private fundraising capacity; others operate on shoestring budgets.
+      </p>
+
+      <h3 class="text-xl font-bold text-gray-900 mt-8 mb-4">Teacher Qualifications</h3>
+
+      <p class="mb-6">
+        Magnet school teachers must hold the same certifications required of all public school teachers in their state. Union membership and contract provisions typically apply just as they do in neighborhood schools.
+      </p>
+
+      <p class="mb-6">
+        Charter schools in many states have more flexibility in hiring. Some require standard teaching certifications; others allow professionals with subject-matter expertise to teach without traditional credentials. This flexibility can attract industry professionals into classrooms but has also drawn criticism about teacher preparation and quality.
+      </p>
+
+      <h3 class="text-xl font-bold text-gray-900 mt-8 mb-4">Admissions</h3>
+
+      <p class="mb-6">
+        Both magnet and charter schools use lotteries when applications exceed available seats. However, magnet schools more often incorporate academic criteria—test scores, grades, attendance records—into their admissions processes. Charter schools are generally prohibited from using academic selection (with exceptions for certain specialized programs in some states).
+      </p>
+
+      <p class="mb-6">
+        Some families prefer magnet schools precisely because academic criteria can create more homogeneous learning environments with similarly-motivated students. Others prefer charter schools' more open admissions, which give all students equal chances regardless of academic background.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">How Magnet Schools Differ from Private Schools</h2>
+
+      <p class="mb-6">
+        The comparison between magnet and private schools often comes down to one fundamental factor: cost. Beyond tuition, however, significant differences exist in curriculum, admissions, and accountability.
+      </p>
+
+      <h3 class="text-xl font-bold text-gray-900 mt-8 mb-4">Cost</h3>
+
+      <p class="mb-6">
+        Magnet schools are free. As public schools, they cannot charge tuition, and while some may have activity fees for specialized equipment or programs, basic education costs nothing to families.
+      </p>
+
+      <p class="mb-6">
+        Private school tuition varies enormously—from a few thousand dollars annually at religious schools to $50,000 or more at elite independent schools. Financial aid exists but rarely covers full costs, making private education inaccessible for many families.
+      </p>
+
+      <h3 class="text-xl font-bold text-gray-900 mt-8 mb-4">Curriculum and Standards</h3>
+
+      <p class="mb-6">
+        Magnet schools must follow state curriculum standards and administer state assessments. Their specialized focuses supplement rather than replace standard public school requirements—a STEM magnet student still takes English, history, and physical education alongside their advanced science courses.
+      </p>
+
+      <p class="mb-6">
+        Private schools set their own curricula. Some align with state standards; others follow entirely independent programs. Religious schools may integrate faith-based instruction throughout their curricula. This autonomy allows for pedagogical innovation but means families must evaluate each school's academic program individually.
+      </p>
+
+      <h3 class="text-xl font-bold text-gray-900 mt-8 mb-4">Admissions</h3>
+
+      <p class="mb-6">
+        Magnet schools must accept all students who meet their published criteria, and when oversubscribed, they use lotteries to select among qualified applicants. Discrimination based on race, religion, or disability is prohibited (though magnet programs for students with disabilities may limit enrollment to eligible students).
+      </p>
+
+      <p class="mb-6">
+        Private schools can set their own admissions criteria and accept or reject applicants at their discretion. Some are highly selective; others accept nearly all applicants. Religious schools may give preference to families of their faith or require participation in religious activities.
+      </p>
+
+      <h3 class="text-xl font-bold text-gray-900 mt-8 mb-4">Services for Students with Disabilities</h3>
+
+      <p class="mb-6">
+        As public schools, magnets must provide special education services under IDEA (Individuals with Disabilities Education Act). Students with IEPs (Individualized Education Programs) are entitled to appropriate accommodations and services.
+      </p>
+
+      <p class="mb-6">
+        Private schools have no legal obligation to provide special education services, though many do offer learning support programs. Families of students with significant disabilities often find public school options—including magnets—provide more comprehensive support.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Types of Magnet Programs</h2>
+
+      <p class="mb-6">
+        Magnet schools organize around countless themes, but several major categories encompass most programs. Understanding these types helps families identify schools matching their children's interests and strengths.
+      </p>
+
+      <h3 class="text-xl font-bold text-gray-900 mt-8 mb-4">STEM Magnets</h3>
+
+      <p class="mb-6">
+        Science, technology, engineering, and mathematics magnets have proliferated in recent decades as workforce demands have shifted toward technical fields. These schools typically offer advanced coursework in sciences and mathematics, laboratory experiences beyond standard science classes, and often partnerships with universities or technology companies.
+      </p>
+
+      <p class="mb-6">
+        Examples include Thomas Jefferson High School for Science and Technology in Virginia, consistently ranked among America's best public high schools, and Brooklyn Technical High School in New York, one of the city's specialized high schools. STEM magnets often have competitive admissions based on test scores and grades.
+      </p>
+
+      <h3 class="text-xl font-bold text-gray-900 mt-8 mb-4">Performing and Visual Arts Magnets</h3>
+
+      <p class="mb-6">
+        Arts magnets provide intensive training in dance, theater, instrumental and vocal music, visual arts, creative writing, and related disciplines. Students typically major in a specific art form while completing standard academic requirements.
+      </p>
+
+      <p class="mb-6">
+        These programs often require auditions for admission. Schools like LaGuardia High School in New York (the "Fame" school), Los Angeles County High School for the Arts, and Chicago High School for the Arts attract nationally competitive applicants. Many arts magnet graduates pursue professional careers or continue to conservatory programs at the collegiate level.
+      </p>
+
+      <h3 class="text-xl font-bold text-gray-900 mt-8 mb-4">International Baccalaureate (IB) Magnets</h3>
+
+      <p class="mb-6">
+        IB magnets offer the International Baccalaureate curriculum, a rigorous academic program developed in Switzerland and now implemented in schools worldwide. IB programs emphasize critical thinking, international-mindedness, and research skills.
+      </p>
+
+      <p class="mb-6">
+        The IB Diploma Programme (for high school students) requires completion of courses across six subject groups plus a theory of knowledge course, an extended essay, and community service. Students who complete the full diploma often receive college credit and demonstrate readiness for university-level work.
+      </p>
+
+      <h3 class="text-xl font-bold text-gray-900 mt-8 mb-4">Language Immersion Magnets</h3>
+
+      <p class="mb-6">
+        Language immersion magnets conduct instruction partially or entirely in a language other than English. Students become bilingual and biliterate while completing standard academic content. Spanish immersion programs are most common, but Mandarin, French, German, Arabic, and other languages also appear in magnet offerings.
+      </p>
+
+      <p class="mb-6">
+        Immersion models vary: some use 90/10 approaches (90 percent target language in early grades, gradually shifting toward 50/50); others maintain 50/50 throughout. Research consistently shows cognitive benefits from bilingual education, and immersion graduates often develop near-native proficiency.
+      </p>
+
+      <h3 class="text-xl font-bold text-gray-900 mt-8 mb-4">Career and Technical Education (CTE) Magnets</h3>
+
+      <p class="mb-6">
+        CTE magnets prepare students for specific career pathways—health sciences, engineering, information technology, business, hospitality, and dozens of other fields. Programs often include internships, industry certifications, and partnerships with employers.
+      </p>
+
+      <p class="mb-6">
+        Unlike the vocational education of previous generations, modern CTE magnets maintain strong academic standards while adding career-focused components. Students may graduate with medical assistant certifications, IT credentials, or other industry-recognized qualifications alongside their diplomas.
+      </p>
+
+      <h3 class="text-xl font-bold text-gray-900 mt-8 mb-4">Gifted and Talented Magnets</h3>
+
+      <p class="mb-6">
+        Some magnet schools focus on serving academically gifted students through accelerated curricula and enrichment opportunities. These schools may require IQ testing or academic assessments for admission and provide instruction paced for rapid learners.
+      </p>
+
+      <p class="mb-6">
+        Gifted magnets have faced criticism for potentially exacerbating educational inequality—students from affluent families often have more access to test preparation and enrichment activities that affect admissions. Some districts have modified or eliminated gifted magnet programs in response to these concerns.
+      </p>
+
+      <h3 class="text-xl font-bold text-gray-900 mt-8 mb-4">Montessori and Other Pedagogical Magnets</h3>
+
+      <p class="mb-6">
+        Some magnets organize around specific teaching philosophies rather than subject-area themes. Montessori magnets implement the child-centered, mixed-age approach developed by Maria Montessori. Other schools may use project-based learning, Waldorf methods, or classical education approaches.
+      </p>
+
+      <p class="mb-6">
+        These pedagogical magnets appeal to families seeking particular learning environments for their children, regardless of subject-area specialization.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">The Application Process</h2>
+
+      <p class="mb-6">
+        Applying to magnet schools requires attention to deadlines, documentation, and—for many programs—strategic choices about where to apply. While specifics vary by district, common elements appear across most magnet application processes.
+      </p>
+
+      <h3 class="text-xl font-bold text-gray-900 mt-8 mb-4">Timeline</h3>
+
+      <p class="mb-6">
+        Application windows typically open in the fall for the following school year. Deadlines commonly fall between November and January, though this varies significantly by district. Results arrive in late winter or early spring, usually February through April.
+      </p>
+
+      <p class="mb-6">
+        Families should research their district's specific timeline well in advance. Missing a deadline may mean waiting an entire year for another opportunity, as most magnet programs do not accept mid-year transfers except for open seats.
+      </p>
+
+      <h3 class="text-xl font-bold text-gray-900 mt-8 mb-4">Documentation</h3>
+
+      <p class="mb-6">
+        Standard magnet applications require proof of residency (utility bills, lease agreements, or property records) and proof of age (birth certificates). Some districts verify enrollment status or require transcripts showing current grades.
+      </p>
+
+      <p class="mb-6">
+        Criteria-based programs require additional documentation: report cards, standardized test scores, attendance records, and sometimes teacher recommendations. Arts programs require audition scheduling and often portfolio submissions. Gathering these materials takes time; starting early prevents last-minute scrambles.
+      </p>
+
+      <h3 class="text-xl font-bold text-gray-900 mt-8 mb-4">Lottery vs. Criteria-Based Admission</h3>
+
+      <p class="mb-6">
+        Interest-based magnets admit students through random lottery. Every eligible applicant has an equal chance, regardless of academic record. When districts receive more applications than seats, computer systems randomly assign lottery positions.
+      </p>
+
+      <p class="mb-6">
+        Criteria-based magnets evaluate applicants against academic standards before lottery entry or instead of lotteries. Students may need minimum GPAs (often 2.5 to 3.0), proficient standardized test scores, satisfactory attendance records, and clean disciplinary histories. Arts magnets add auditions or portfolio reviews.
+      </p>
+
+      <p class="mb-6">
+        Some programs combine approaches: students meeting minimum criteria enter a lottery for available seats. This ensures academic readiness while maintaining fairness among qualified applicants.
+      </p>
+
+      <h3 class="text-xl font-bold text-gray-900 mt-8 mb-4">Ranking Multiple Choices</h3>
+
+      <p class="mb-6">
+        Most districts allow families to apply to multiple magnet programs, ranking them in order of preference. Under "single best offer" systems—common in large districts—families receive only their highest-ranked acceptance if selected for multiple programs.
+      </p>
+
+      <p class="mb-6">
+        This system encourages genuine preference rankings. Listing a less-preferred "safety" school first means receiving that offer even if selected for a higher-ranked choice. Families should only apply to schools they would genuinely want to attend and rank them honestly.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Transportation Considerations</h2>
+
+      <p class="mb-6">
+        Because magnet schools draw students from across districts, transportation becomes a critical practical consideration. Policies vary dramatically, and families should investigate logistics thoroughly before committing to distant programs.
+      </p>
+
+      <p class="mb-6">
+        Most districts provide some form of magnet transportation—dedicated bus routes, hub-based pickup systems, or public transit passes. Distance thresholds typically apply: students living within one to two miles may be expected to walk or receive family transportation.
+      </p>
+
+      <p class="mb-6">
+        Ride times for magnet students often exceed neighborhood school commutes, sometimes substantially. Students attending popular magnets across large districts may spend sixty to ninety minutes each way on buses. Before applying, families should realistically assess whether their children can handle extended commutes and whether the family schedule accommodates early pickup times.
+      </p>
+
+      <p class="mb-6">
+        Bus driver shortages, which have affected districts nationwide, can impact magnet transportation reliability. Talking to current magnet families about their actual transportation experiences provides more realistic expectations than official policy documents.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">What Research Says About Magnet Schools</h2>
+
+      <p class="mb-6">
+        Decades of research have examined magnet school effectiveness, with generally positive findings tempered by important caveats.
+      </p>
+
+      <h3 class="text-xl font-bold text-gray-900 mt-8 mb-4">Academic Outcomes</h3>
+
+      <p class="mb-6">
+        Studies consistently find that magnet school students, on average, outperform peers in traditional public schools on academic measures. However, interpreting these findings requires caution: families who apply to magnets may differ systematically from those who don't. Self-selection effects—where more motivated families pursue magnet enrollment—complicate attempts to isolate the impact of magnet attendance itself.
+      </p>
+
+      <p class="mb-6">
+        Research using lottery-based methods (comparing students who won magnet lotteries to those who didn't) provides cleaner evidence. These studies generally find positive effects, though magnitudes vary. A 2017 study of New York City's exam schools found significant positive effects on college enrollment and completion. Studies of specific magnet programs in Chicago, Charlotte, and other cities have found graduation rate improvements and increased college attendance.
+      </p>
+
+      <h3 class="text-xl font-bold text-gray-900 mt-8 mb-4">Diversity and Integration</h3>
+
+      <p class="mb-6">
+        Evidence on magnet schools' integration effects is mixed. At their best, magnet programs create remarkably diverse learning environments that would not occur through neighborhood school assignment. Schools with strong themes and adequate transportation draw students across demographic lines.
+      </p>
+
+      <p class="mb-6">
+        However, some magnet schools—particularly those with criteria-based admissions—have become less diverse over time. When academic requirements advantage students from better-resourced backgrounds, magnet enrollment can skew toward whiter and more affluent populations. Districts implementing weighted lotteries or socioeconomic preferences attempt to counteract this tendency.
+      </p>
+
+      <h3 class="text-xl font-bold text-gray-900 mt-8 mb-4">Student Satisfaction</h3>
+
+      <p class="mb-6">
+        Surveys of magnet students and families consistently show high satisfaction. Students report engagement with specialized curricula, strong relationships with teachers who share their interests, and positive peer environments with similarly-motivated classmates. These factors may matter as much as measurable academic outcomes for student wellbeing and development.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Questions to Ask When Evaluating Magnet Schools</h2>
+
+      <p class="mb-6">
+        Visiting schools and attending information sessions helps families assess fit. These questions can guide your research:
+      </p>
+
+      <ul class="list-disc pl-6 mb-6 space-y-2">
+        <li>What makes this program's approach to [theme] distinctive? How does it differ from what my child could access at a neighborhood school?</li>
+        <li>What are the admission criteria, and how competitive is admission? What percentage of applicants receive offers?</li>
+        <li>How is transportation provided, and what would my child's commute realistically look like?</li>
+        <li>What academic outcomes does this school achieve? Graduation rates? College attendance? Test scores?</li>
+        <li>How diverse is the student body, and what does the school do to maintain diversity?</li>
+        <li>What support exists for students who struggle academically or need additional services?</li>
+        <li>What extracurricular activities are available? Do transportation constraints affect participation?</li>
+        <li>What happens if my child decides the program isn't the right fit? Can they transfer back to their neighborhood school?</li>
+      </ul>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">The Bottom Line</h2>
+
+      <p class="mb-6">
+        Magnet schools offer exceptional opportunities for students whose interests align with specialized programs. The combination of focused curriculum, motivated peers, and expert teachers creates learning environments that can ignite passion and accelerate growth in ways neighborhood schools may not match.
+      </p>
+
+      <p class="mb-6">
+        Yet magnet schools aren't right for every student or family. Long commutes, competitive admissions, and specialized focuses that may not match a child's evolving interests all deserve consideration. A student forced into an intensive STEM program by well-meaning parents may thrive less than they would at a neighborhood school with strong general academics.
+      </p>
+
+      <p class="mb-6">
+        The best approach is honest assessment: What does your child genuinely love? What learning environment helps them flourish? What practical constraints—transportation, siblings, family schedules—affect your options? When answers to these questions align with what a magnet program offers, the result can be transformative. When they don't, other paths may serve your family better.
+      </p>
+
+      <p class="mb-6">
+        Magnet schools have spent fifty years proving that public education can be specialized, innovative, and excellent. For the millions of students who attend them, these programs represent some of the best options in American education. Whether they represent the best option for your child is a question only you can answer—but it's a question worth asking.
+      </p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
+      <ul class="text-sm text-gray-600 space-y-2 mb-10">
+        <li>Magnet Schools of America, "What Are Magnet Schools?"</li>
+        <li>National Center for Education Statistics, Digest of Education Statistics, 2022</li>
+        <li>U.S. Department of Education, Magnet Schools Assistance Program</li>
+        <li>Rossell, Christine H., "The Desegregation Efficiency of Magnet Schools," Urban Affairs Review, 2005</li>
+        <li>Bifulco, Robert, et al., "Can Interdistrict Choice Boost Student Achievement?" Journal of Policy Analysis and Management, 2009</li>
+        <li>Abdulkadiroglu, Atila, et al., "The Elite Illusion: Achievement Effects at Boston and New York Exam Schools," Econometrica, 2014</li>
+        <li>Dobbie, Will and Roland G. Fryer Jr., "Exam High Schools and Academic Achievement," American Economic Journal: Applied Economics, 2014</li>
+        <li>The Century Foundation, "The Benefits of Socioeconomically and Racially Integrated Schools and Classrooms," 2019</li>
+        <li>Archbald, Douglas, "Magnet Schools, Voluntary Desegregation, and Public Choice Theory," Education and Urban Society, 2004</li>
+        <li>Parents Involved in Community Schools v. Seattle School District No. 1, 551 U.S. 701 (2007)</li>
+        <li>International Baccalaureate Organization, "IB Programme Standards and Practices"</li>
+        <li>American Montessori Society, "Montessori Schools in the Public Sector"</li>
+      </ul>
+    </div>
+
+    <footer class="mt-16 pt-8 border-t border-gray-200">
+      <p class="text-sm text-gray-500 italic">
+        This article is provided by TruSchools as an educational resource for families exploring magnet school options.
+      </p>
+      <div class="mt-6">
+        <a href="/magnet-schools" class="text-brand-blue hover:underline font-medium">
+          Back to Magnet Schools &rarr;
+        </a>
+      </div>
+    </footer>
+  </article>
+</Layout>

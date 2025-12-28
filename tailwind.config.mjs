@@ -4,7 +4,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        // TrueSchools brand colors from original site
+        // TruSchools brand colors from original site
         brand: {
           blue: '#0d83dd',
           'blue-light': '#3fa9f5',
@@ -28,7 +28,7 @@ export default {
         sans: ['Arial', 'Helvetica', 'sans-serif'],
       },
       maxWidth: {
-        'container': '1124px',
+        'container': '1170px',
         'container-lg': '1200px',
       },
       borderRadius: {

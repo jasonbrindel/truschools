@@ -1,35 +1,216 @@
 ---
 import Layout from '@/layouts/Layout.astro';
-import featuredImage from '@/images/teaching-middle-school-1.jpg';
-import kindergartenImage from '@/images/kindergarten-2.jpg';
+import featuredImage from '@/images/USED-teaching-middle-school-1.jpg';
+import kindergartenImage from '@/images/USED-a_bright_and_cheerful_25_SQM_cr_e2ec6cf1-7695-4d10-a4ed-df37241d42d2_1.jpg';
 import elementaryImage from '@/images/elementary-school-2.jpg';
 import highSchoolImage from '@/images/high-school-1.jpg';
 import collegeImage from '@/images/college-1.jpg';
-import preschoolImage from '@/images/preschool-1.jpg';
+import preschoolImage from '@/images/USED-preschool-1.jpg';
 import middleSchoolImage from '@/images/middle-school-1.jpg';
+import privateSchoolImage from '@/images/USED-closeup_of_three_happy_diverse_private_school_stud_08d90804-c48d-46e1-a602-bd01f03b1668_2.jpg';
+import charterSchoolImage from '@/images/USED-happy-student-school-uniform.jpg';
+import magnetSchoolImage from '@/images/USED-ai-classroom-technology-students.jpg';
+import vocationalSchoolImage from '@/images/USED-female_healthcare_technician_in_scrubs_holding_a_c71628ab-5351-47a5-b215-6e2b5021cbb9_3.jpg';
 import sampleAdLeaderboard from '@/images/sample-ad-728x90.png';
 import sampleAdSidebar from '@/images/sample-ad-336x280.png';
 
+// Article images
+import articleCharterImage from '@/images/USED-student-thoughtful-classroom-portrait.jpg';
+import articleFinancialAidImage from '@/images/USED-price-of-admission-financial-aid-2.jpg';
+import articlePreschoolImage from '@/images/USED-kindergarten-classroom-environment.jpg';
+import articleKindergartenImage from '@/images/USED-kindergarten-readiness-joyful-child.jpg';
+import articleHighSchoolImage from '@/images/USED-high-school-graduation-requirements.jpg';
+import articleCollegeMajorImage from '@/images/USED-choosing-college-major.jpg';
+
 const db = Astro.locals.runtime?.env?.DB;
+
+// Rotating questions for Q&A section (changes weekly)
+const weeklyQuestions = [
+  "What's your #1 tip for finding the right school?",
+  "How far is too far for a school commute?",
+  "What do you wish you knew before choosing a school?",
+  "Best question to ask on a school tour?",
+  "How do you stay involved in your child's education?",
+  "How do you handle homework battles?",
+  "How do you choose extracurriculars?",
+  "How are you saving for college?",
+];
+
+// Get week number of the year to rotate questions
+const now = new Date();
+const startOfYear = new Date(now.getFullYear(), 0, 1);
+const weekNumber = Math.floor((now.getTime() - startOfYear.getTime()) / (7 * 24 * 60 * 60 * 1000));
+const currentQuestion = weeklyQuestions[weekNumber % weeklyQuestions.length];
 
 // Get stats for homepage
 let stats = {
   totalSchools: 0,
   totalColleges: 0,
+  publicSchools: 0,
+  privateSchools: 0,
+  charterSchools: 0,
+  magnetSchools: 0,
+  highSchools: 0,
+  middleSchools: 0,
+  elementarySchools: 0,
+  preschools: 0,
+  totalStates: 0,
+  vocationalTotal: 0,
+  beautySchools: 0,
+  culinarySchools: 0,
+  healthcareSchools: 0,
+  technologySchools: 0,
+  tradeSchools: 0,
 };
 
 if (db) {
   try {
-    const schoolCount = await db.prepare('SELECT COUNT(*) as count FROM schools WHERE active = 1').first();
-    const collegeCount = await db.prepare('SELECT COUNT(*) as count FROM colleges WHERE active = 1').first();
-    stats.totalSchools = schoolCount?.count || 0;
-    stats.totalColleges = collegeCount?.count || 0;
+    const [schoolCount, collegeCount, publicCount, privateCount, charterCount, magnetCount, highCount, middleCount, elemCount, preCount, stateCount, vocationalCount, beautyCount, culinaryCount, healthcareCount, technologyCount, tradeCount] = await Promise.all([
+      db.prepare('SELECT COUNT(*) as count FROM schools WHERE active = 1').first(),
+      db.prepare('SELECT COUNT(*) as count FROM colleges WHERE active = 1').first(),
+      db.prepare('SELECT COUNT(*) as count FROM schools WHERE is_public = 1 AND active = 1').first(),
+      db.prepare('SELECT COUNT(*) as count FROM schools WHERE is_public = 0 AND active = 1').first(),
+      db.prepare('SELECT COUNT(*) as count FROM schools WHERE is_charter = 1 AND active = 1').first(),
+      db.prepare('SELECT COUNT(*) as count FROM schools WHERE is_magnet = 1 AND active = 1').first(),
+      db.prepare('SELECT COUNT(*) as count FROM schools WHERE is_high_school = 1 AND active = 1').first(),
+      db.prepare('SELECT COUNT(*) as count FROM schools WHERE is_middle_school = 1 AND active = 1').first(),
+      db.prepare('SELECT COUNT(*) as count FROM schools WHERE is_elementary = 1 AND active = 1').first(),
+      db.prepare('SELECT COUNT(*) as count FROM schools WHERE is_preschool = 1 AND active = 1').first(),
+      db.prepare('SELECT COUNT(DISTINCT state) as count FROM schools WHERE active = 1').first(),
+      db.prepare("SELECT COUNT(*) as count FROM colleges WHERE vocational_type IS NOT NULL AND active = 1").first(),
+      db.prepare("SELECT COUNT(*) as count FROM colleges WHERE vocational_type = 'beauty' AND active = 1").first(),
+      db.prepare("SELECT COUNT(*) as count FROM colleges WHERE vocational_type = 'culinary' AND active = 1").first(),
+      db.prepare("SELECT COUNT(*) as count FROM colleges WHERE vocational_type = 'healthcare' AND active = 1").first(),
+      db.prepare("SELECT COUNT(*) as count FROM colleges WHERE vocational_type = 'technology' AND active = 1").first(),
+      db.prepare("SELECT COUNT(*) as count FROM colleges WHERE vocational_type = 'trade' AND active = 1").first(),
+    ]);
+    stats.totalSchools = (schoolCount as any)?.count || 0;
+    stats.totalColleges = (collegeCount as any)?.count || 0;
+    stats.publicSchools = (publicCount as any)?.count || 0;
+    stats.privateSchools = (privateCount as any)?.count || 0;
+    stats.charterSchools = (charterCount as any)?.count || 0;
+    stats.magnetSchools = (magnetCount as any)?.count || 0;
+    stats.highSchools = (highCount as any)?.count || 0;
+    stats.middleSchools = (middleCount as any)?.count || 0;
+    stats.elementarySchools = (elemCount as any)?.count || 0;
+    stats.preschools = (preCount as any)?.count || 0;
+    stats.totalStates = (stateCount as any)?.count || 0;
+    stats.vocationalTotal = (vocationalCount as any)?.count || 0;
+    stats.beautySchools = (beautyCount as any)?.count || 0;
+    stats.culinarySchools = (culinaryCount as any)?.count || 0;
+    stats.healthcareSchools = (healthcareCount as any)?.count || 0;
+    stats.technologySchools = (technologyCount as any)?.count || 0;
+    stats.tradeSchools = (tradeCount as any)?.count || 0;
   } catch (e) {
     // Database not yet set up
   }
 }
 
-// All US states for dropdowns
+// School types - matching original site layout
+const schoolTypes = [
+  {
+    title: 'Preschools',
+    href: '/preschools',
+    description: 'Comprehensive listings of all public and private preschools plus articles and other helpful information.',
+    image: preschoolImage.src,
+  },
+  {
+    title: 'Kindergartens',
+    href: '/kindergartens',
+    description: 'Listings of all public and private kindergartens plus articles and other helpful information.',
+    image: kindergartenImage.src,
+  },
+  {
+    title: 'Elementary Schools',
+    href: '/elementary-schools',
+    description: 'Comprehensive listings of all elementary schools plus articles and other helpful information.',
+    image: elementaryImage.src,
+  },
+  {
+    title: 'Middle Schools',
+    href: '/middle-schools',
+    description: 'Listings of all middle and junior high schools plus articles and other helpful information.',
+    image: middleSchoolImage.src,
+  },
+  {
+    title: 'High Schools',
+    href: '/high-schools',
+    description: 'Comprehensive listings of all high schools plus articles and other helpful information.',
+    image: highSchoolImage.src,
+  },
+  {
+    title: 'Private Schools',
+    href: '/private-schools',
+    description: 'Comprehensive listings of all private schools plus articles and other helpful information.',
+    image: privateSchoolImage.src,
+  },
+  {
+    title: 'Charter Schools',
+    href: '/charter-schools',
+    description: 'Comprehensive listings of all charter schools plus articles and other helpful information.',
+    image: charterSchoolImage.src,
+  },
+  {
+    title: 'Magnet Schools',
+    href: '/magnet-schools',
+    description: 'Comprehensive listings of all magnet schools plus articles and other helpful information.',
+    image: magnetSchoolImage.src,
+  },
+  {
+    title: 'Vocational Schools',
+    href: '/vocational-schools',
+    description: 'Listings of all vocational and trade schools plus articles and other helpful information.',
+    image: vocationalSchoolImage.src,
+  },
+  {
+    title: 'Colleges & Universities',
+    href: '/colleges-universities',
+    description: 'Listings of all colleges and universities plus articles and other helpful information.',
+    image: collegeImage.src,
+  },
+];
+
+// Featured articles for homepage
+const featuredArticles = [
+  {
+    title: 'Is a Charter School Right for Your Child?',
+    url: '/education-articles/is-a-charter-school-right-for-your-child',
+    image: articleCharterImage,
+    description: 'Charter schools offer unique educational approaches, but they\'re not for everyone. Here\'s what to consider.',
+  },
+  {
+    title: 'The Price of Admission: Financial Aid 101',
+    url: '/education-articles/the-price-of-admission',
+    image: articleFinancialAidImage,
+    description: 'For millions of families, navigating college financial aid has become a labyrinth of forms and formulas.',
+  },
+  {
+    title: 'What Does a Good Preschool Look Like?',
+    url: '/education-articles/what-does-a-good-preschool-look-like',
+    image: articlePreschoolImage,
+    description: 'Beyond the colorful walls and tiny chairs, what actually matters when choosing a preschool.',
+  },
+  {
+    title: 'Is My Child Ready for Kindergarten?',
+    url: '/education-articles/is-my-child-ready-for-kindergarten',
+    image: articleKindergartenImage,
+    description: 'Signs of readiness, what schools look for, and how to prepare your child for this milestone.',
+  },
+  {
+    title: 'High School Graduation Requirements by State',
+    url: '/education-articles/high-school-graduation-requirements-by-state',
+    image: articleHighSchoolImage,
+    description: 'A state-by-state guide to credits, courses, and testing requirements for earning a diploma.',
+  },
+  {
+    title: 'How to Choose a College Major',
+    url: '/education-articles/choosing-a-college-major',
+    image: articleCollegeMajorImage,
+    description: 'From exploring interests to understanding career outcomes, a practical guide for students.',
+  },
+];
+
+// States for browse by state dropdown
 const states = [
   { name: 'Alabama', slug: 'alabama' },
   { name: 'Alaska', slug: 'alaska' },
@@ -70,7 +251,6 @@ const states = [
   { name: 'Oklahoma', slug: 'oklahoma' },
   { name: 'Oregon', slug: 'oregon' },
   { name: 'Pennsylvania', slug: 'pennsylvania' },
-  { name: 'Puerto Rico', slug: 'puerto-rico' },
   { name: 'Rhode Island', slug: 'rhode-island' },
   { name: 'South Carolina', slug: 'south-carolina' },
   { name: 'South Dakota', slug: 'south-dakota' },
@@ -83,46 +263,6 @@ const states = [
   { name: 'West Virginia', slug: 'west-virginia' },
   { name: 'Wisconsin', slug: 'wisconsin' },
   { name: 'Wyoming', slug: 'wyoming' },
-];
-
-// School types - matching original site layout
-const schoolTypes = [
-  {
-    title: 'Preschools',
-    href: '/preschools',
-    description: 'Comprehensive listings of all public and private preschools plus articles and other helpful information.',
-    image: preschoolImage.src,
-  },
-  {
-    title: 'Elementary Schools',
-    href: '/elementary-schools',
-    description: 'Comprehensive listings of all public & private elementary schools plus articles and other helpful information.',
-    image: elementaryImage.src,
-  },
-  {
-    title: 'High Schools',
-    href: '/high-schools',
-    description: 'Comprehensive listings of all public and private high schools plus articles and other helpful information.',
-    image: highSchoolImage.src,
-  },
-  {
-    title: 'Kindergartens',
-    href: '/kindergartens',
-    description: 'Listings of all public and private kindergartens plus articles and other helpful information.',
-    image: kindergartenImage.src,
-  },
-  {
-    title: 'Middle Schools',
-    href: '/middle-schools',
-    description: 'Comprehensive listings of all public and private middle schools plus articles and other helpful information.',
-    image: middleSchoolImage.src,
-  },
-  {
-    title: 'Colleges & Universities',
-    href: '/colleges',
-    description: 'Listings of all colleges and universities plus articles and other helpful information.',
-    image: collegeImage.src,
-  },
 ];
 ---
 
@@ -137,29 +277,26 @@ const schoolTypes = [
   <div class="container py-5">
     <!-- Two Column Layout like original -->
     <div class="flex flex-col lg:flex-row gap-5">
-      <!-- Left Column - Main Content (728px for ad compatibility) -->
-      <div class="lg:w-[728px] lg:flex-shrink-0">
+      <!-- Left Column - Main Content -->
+      <div class="flex-1 min-w-0">
         <!-- Main Content Ad -->
         <div class="mb-5">
-          <a href="#" class="hidden md:block">
-            <img src={sampleAdLeaderboard.src} alt="Advertisement" class="w-[728px] h-[90px]" />
-          </a>
-          <a href="#" class="block md:hidden mx-auto w-[320px]">
-            <img src={sampleAdLeaderboard.src} alt="Advertisement" class="w-[320px] h-[50px] object-cover object-left" />
+          <a href="#">
+            <img src={sampleAdLeaderboard.src} alt="Advertisement" class="max-w-full h-auto" />
           </a>
         </div>
 
         <!-- Featured Article Box -->
         <div class="box-rounded">
-          <a href="/resources/find-schools/how-to-find-right-school-for-your-child">
+          <a href="/schools">
             <img src={featuredImage.src} alt="Finding & Evaluating Schools for Your Child" class="w-full h-auto mb-4 rounded-box" />
           </a>
           <h2 class="space-0">
-            <a href="/resources/find-schools/how-to-find-right-school-for-your-child">Finding & Evaluating Schools for Your Child</a>
+            <a href="/schools">Finding & Evaluating Schools for Your Child</a>
           </h2>
           <p class="space-0">
             Choosing the right school for your child is one of the most important decisions you will make when it comes to your child's future. Follow these tips to help you choose wisely...
-            <a href="/resources/find-schools/how-to-find-right-school-for-your-child">&gt;&gt; Read more</a>
+            <a href="/schools">Read more &rarr;</a>
           </p>
         </div>
 
@@ -177,19 +314,8 @@ const schoolTypes = [
                       <a href={type.href}>{type.title}</a>
                     </h3>
                     <p class="mb-2">{type.description}</p>
-                    <p class="fs-12 space-0 text-brand-green-text">
-                      View schools by state:
-                      <select
-                        class="state-select ml-1"
-                        onchange={`if(this.value) window.location.href=this.value`}
-                      >
-                        <option value="">-- Select Your State --</option>
-                        {states.map((state) => (
-                          <option value={`${type.href}/${state.slug}`}>
-                            {state.name} {type.title}
-                          </option>
-                        ))}
-                      </select>
+                    <p class="fs-12 space-0">
+                      <a href={type.href} class="text-brand-green-text hover:underline">Browse {type.title} &rarr;</a>
                     </p>
                   </div>
                 </div>
@@ -198,39 +324,260 @@ const schoolTypes = [
           </div>
         </div>
 
-        <!-- Education Q&A Section -->
-        <div class="box-rounded bg-lt-green">
-          <div class="flex items-center gap-2 mb-2">
-            <span class="text-brand-green-dark text-xl">❓</span>
-            <h3 class="text-brand-green-dark mb-0 font-bold">Education Q&A</h3>
-          </div>
-          <div class="line-dotted mb-3"></div>
-          <p class="text-brand-green-text italic fs-13 mb-3">
-            Q: What number one tip would you give to other parents to help them find the right school?
-          </p>
-          <form action="/qa/submit" method="POST">
-            <label class="block text-brand-green-text font-bold fs-13 mb-1">Your Answer:</label>
-            <textarea
-              name="answer"
-              rows="3"
-              class="input w-full mb-2 resize-none"
-              placeholder="Share your advice..."
-            ></textarea>
-            <div class="flex justify-end">
-              <button type="submit" class="btn-green text-sm px-4 py-1.5">
-                Submit
-              </button>
+        <!-- Free Classes Section -->
+        <div class="box-rounded bg-gradient-to-r from-brand-blue to-blue-600 text-white">
+          <div class="flex flex-col md:flex-row items-center gap-4 mb-4">
+            <div class="flex-shrink-0">
+              <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
             </div>
-          </form>
+            <div class="flex-1 text-center md:text-left">
+              <h2 class="text-white text-xl font-bold mb-1">Free Online Classes</h2>
+              <p class="text-white/80 fs-14 mb-0">Access hundreds of free video tutorials in math, science, history, economics, and SAT prep.</p>
+            </div>
+            <div class="flex-shrink-0">
+              <a href="/classes" class="inline-block bg-white text-brand-blue font-bold px-5 py-2 rounded hover:bg-gray-100 transition-colors">
+                Start Learning &rarr;
+              </a>
+            </div>
+          </div>
+
+          <!-- Video Carousel -->
+          <div class="video-carousel relative overflow-hidden">
+            <div class="video-carousel-track grid grid-cols-3 gap-2 transition-opacity duration-500" id="video-carousel">
+              <!-- Videos will be inserted by JavaScript -->
+            </div>
+            <!-- Carousel indicators -->
+            <div class="flex justify-center gap-1.5 mt-3" id="carousel-dots">
+              <!-- Dots will be inserted by JavaScript -->
+            </div>
+          </div>
+
+          <script>
+            (function() {
+              const featuredVideos = [
+                // Set 1: Science, Math, History
+                { id: 'GcjgWov7mTM', title: 'Introduction to Evolution', dept: 'Science', url: '/classes/science/khan-academy-biology/introduction-to-evolution-and-natural-selection' },
+                { id: 'kpCJyQ2usJ4', title: 'The Beauty of Algebra', dept: 'Math', url: '/classes/math/algebra-introduction-to-algebra/the-beauty-of-algebra' },
+                { id: 'ghgPq2wjQUQ', title: 'US History Overview', dept: 'History', url: '/classes/history/khan-academy-history-of-the-world/us-history-overview-1' },
+                // Set 2: Economics, Math, Science
+                { id: 'vTs2IQ8OefQ', title: 'Why Finance?', dept: 'Economics', url: '/classes/economics/financial-theory-with-john-geanakoplos-yale/1-why-finance' },
+                { id: 'WqzK3UAXaHs', title: 'Euclid: Father of Geometry', dept: 'Math', url: '/classes/math/geometry-introduction-to-euclidean-geometry/euclid-as-the-father-of-geometry' },
+                { id: 'eEUvRrhmcxM', title: 'Introduction to Heredity', dept: 'Science', url: '/classes/science/khan-academy-biology/introduction-to-heredity' },
+                // Set 3: Math, History, CA Standards
+                { id: 'LoaBd-sPzkU', title: 'Perimeter and Area Basics', dept: 'Math', url: '/classes/math/geometry-basic-geometry/perimeter-and-area-basics' },
+                { id: 'VO40SpSBjbc', title: 'Cuban Missile Crisis', dept: 'History', url: '/classes/history/khan-academy-history-of-the-world/cuban-missile-crisis' },
+                { id: 'K5ggNnKTmNM', title: 'Factoring Quadratics', dept: 'CA Standards', url: '/classes/california-standards-test/algebra-i/ca-algebra-i-factoring-quadratics' },
+                // Set 4: Math, Science, History
+                { id: 'AuX7nPBqDts', title: 'Basic Addition', dept: 'Math', url: '/classes/math/arithmetic-and-pre-algebra-addition-and-subtraction/basic-addition' },
+                { id: '_-vZ_g7K6P0', title: 'DNA', dept: 'Science', url: '/classes/science/khan-academy-biology/dna' },
+                { id: 'MEGyRgYJKEY', title: 'Korean War Overview', dept: 'History', url: '/classes/history/khan-academy-history-of-the-world/korean-war-overview' },
+                // Set 5: Math, Economics, Math
+                { id: 'H-de6Tkxej8', title: 'Angle Basics', dept: 'Math', url: '/classes/math/geometry-angles/angle-basics' },
+                { id: 'IVxmtb3zTlk', title: 'Present Value & Interest', dept: 'Economics', url: '/classes/economics/financial-theory-with-john-geanakoplos-yale/5-present-value-prices-and-the-real-rate-of-interest' },
+                { id: 'jyLRpr2P0MQ', title: 'Circles: Radius & Diameter', dept: 'Math', url: '/classes/math/geometry-basic-geometry/circles-radius-diameter-and-circumference' },
+              ];
+
+              let currentSet = 0;
+              const videosPerSet = 3;
+              const totalSets = Math.ceil(featuredVideos.length / videosPerSet);
+              const carousel = document.getElementById('video-carousel') as HTMLElement | null;
+              const dotsContainer = document.getElementById('carousel-dots') as HTMLElement | null;
+
+              if (!carousel || !dotsContainer) return;
+
+              function renderVideos(setIndex: number) {
+                const startIdx = setIndex * videosPerSet;
+                const videos = featuredVideos.slice(startIdx, startIdx + videosPerSet);
+
+                if (carousel) {
+                  carousel.innerHTML = videos.map(video => `
+                    <a href="${video.url}" class="block bg-white/10 rounded overflow-hidden hover:bg-white/20 transition-colors group">
+                      <div class="aspect-video relative">
+                        <img src="https://img.youtube.com/vi/${video.id}/mqdefault.jpg" alt="${video.title}" class="w-full h-full object-cover" />
+                        <div class="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/40 transition-colors">
+                          <svg class="w-8 h-8 text-white/90" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                        </div>
+                      </div>
+                      <div class="p-1.5">
+                        <span class="text-white/60 fs-10">${video.dept}</span>
+                        <p class="text-white fs-11 font-medium truncate">${video.title}</p>
+                      </div>
+                    </a>
+                  `).join('');
+                }
+              }
+
+              function renderDots() {
+                if (!dotsContainer) return;
+                let dotsHtml = '';
+                for (let i = 0; i < totalSets; i++) {
+                  dotsHtml += `<button class="carousel-dot w-2 h-2 rounded-full transition-colors ${i === 0 ? 'bg-white' : 'bg-white/40'}" data-index="${i}"></button>`;
+                }
+                dotsContainer.innerHTML = dotsHtml;
+
+                dotsContainer.querySelectorAll('.carousel-dot').forEach(dot => {
+                  dot.addEventListener('click', () => {
+                    currentSet = parseInt((dot as HTMLElement).dataset.index || '0');
+                    updateCarousel();
+                  });
+                });
+              }
+
+              function updateDots() {
+                if (!dotsContainer) return;
+                dotsContainer.querySelectorAll('.carousel-dot').forEach((dot, i) => {
+                  dot.classList.toggle('bg-white', i === currentSet);
+                  dot.classList.toggle('bg-white/40', i !== currentSet);
+                });
+              }
+
+              function updateCarousel() {
+                if (!carousel) return;
+                carousel.style.opacity = '0';
+                setTimeout(() => {
+                  renderVideos(currentSet);
+                  updateDots();
+                  if (carousel) carousel.style.opacity = '1';
+                }, 250);
+              }
+
+              function nextSet() {
+                currentSet = (currentSet + 1) % totalSets;
+                updateCarousel();
+              }
+
+              // Initialize
+              renderVideos(0);
+              renderDots();
+
+              // Auto-rotate every 10 seconds
+              setInterval(nextSet, 10000);
+            })();
+          </script>
         </div>
+
+        <!-- Featured Articles Section -->
+        <div class="box-rounded">
+          <h2 class="text-brand-blue mb-1">Latest Education Articles</h2>
+          <p class="text-gray-500 fs-13 mb-4">Expert guides and insights to help you navigate school choices, financial aid, and your child's education journey.</p>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {featuredArticles.map((article) => (
+              <div class="flex gap-3">
+                <a href={article.url} class="flex-shrink-0">
+                  <img src={article.image.src} alt={article.title} class="w-[100px] h-[100px] object-cover rounded" />
+                </a>
+                <div class="fs-13">
+                  <h3 class="text-brand-green-text font-bold mb-1 fs-14 leading-tight">
+                    <a href={article.url} class="hover:underline">{article.title}</a>
+                  </h3>
+                  <p class="text-gray-600 mb-1 leading-snug">{article.description}</p>
+                  <a href={article.url} class="text-brand-blue hover:underline fs-12">Read more &rarr;</a>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div class="mt-4 pt-3 border-t border-gray-200 text-center">
+            <a href="/education-articles" class="text-brand-blue hover:underline font-medium">Browse All Articles &rarr;</a>
+          </div>
+        </div>
+
+        <!-- Browse Schools by State -->
+        <div class="box-rounded bg-gradient-to-br from-slate-50 to-blue-50 border border-blue-100">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 bg-brand-blue rounded-lg flex items-center justify-center flex-shrink-0">
+              <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            </div>
+            <div>
+              <h2 class="text-brand-blue text-xl mb-0">Find Schools in Your State</h2>
+              <p class="text-gray-500 fs-13 mb-0">Browse schools, colleges, and vocational programs by location.</p>
+            </div>
+          </div>
+
+          <!-- Search Field -->
+          <div class="mb-4">
+            <form action="/search" method="GET" class="relative">
+              <input
+                type="text"
+                name="q"
+                placeholder="Search by school name, city, or ZIP code..."
+                class="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-200 bg-white text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-transparent transition-shadow"
+              />
+              <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </form>
+          </div>
+
+          <!-- State Dropdowns -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div class="state-select-wrapper">
+              <label class="block text-gray-600 font-medium fs-12 mb-1.5 uppercase tracking-wide">K-12 Schools</label>
+              <div class="relative">
+                <select class="w-full appearance-none pl-4 pr-10 py-3 rounded-lg border border-gray-200 bg-white text-gray-700 cursor-pointer hover:border-brand-blue focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-transparent transition-all" onchange="if(this.value) window.location.href=this.value">
+                  <option value="">Select a State</option>
+                  {states.map((state) => (
+                    <option value={`/schools/${state.slug}`}>{state.name}</option>
+                  ))}
+                </select>
+                <svg class="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+              </div>
+            </div>
+            <div class="state-select-wrapper">
+              <label class="block text-gray-600 font-medium fs-12 mb-1.5 uppercase tracking-wide">Colleges & Universities</label>
+              <div class="relative">
+                <select class="w-full appearance-none pl-4 pr-10 py-3 rounded-lg border border-gray-200 bg-white text-gray-700 cursor-pointer hover:border-brand-blue focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-transparent transition-all" onchange="if(this.value) window.location.href=this.value">
+                  <option value="">Select a State</option>
+                  {states.map((state) => (
+                    <option value={`/colleges-universities/${state.slug}`}>{state.name}</option>
+                  ))}
+                </select>
+                <svg class="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+              </div>
+            </div>
+            <div class="state-select-wrapper">
+              <label class="block text-gray-600 font-medium fs-12 mb-1.5 uppercase tracking-wide">Vocational Schools</label>
+              <div class="relative">
+                <select class="w-full appearance-none pl-4 pr-10 py-3 rounded-lg border border-gray-200 bg-white text-gray-700 cursor-pointer hover:border-brand-blue focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-transparent transition-all" onchange="if(this.value) window.location.href=this.value">
+                  <option value="">Select a State</option>
+                  {states.map((state) => (
+                    <option value={`/trade-schools/${state.slug}`}>{state.name}</option>
+                  ))}
+                </select>
+                <svg class="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick links -->
+          <div class="mt-4 pt-3 border-t border-blue-100 flex flex-wrap gap-x-4 gap-y-1 fs-13">
+            <a href="/schools" class="text-brand-blue hover:underline">All K-12 Schools</a>
+            <a href="/colleges-universities" class="text-brand-blue hover:underline">All Colleges</a>
+            <a href="/vocational-schools" class="text-brand-blue hover:underline">All Vocational</a>
+          </div>
+        </div>
+
       </div>
 
-      <!-- Right Column - Sidebar (fills remaining space) -->
-      <div class="lg:flex-shrink-0 lg:w-[336px]">
+      <!-- Right Column - Sidebar -->
+      <div class="lg:w-[336px] lg:flex-shrink-0">
         <!-- Sidebar Ad 1 -->
         <div class="mb-5 flex justify-center">
           <a href="#">
-            <img src={sampleAdSidebar.src} alt="Advertisement" class="w-[336px] h-[280px]" />
+            <img src={sampleAdSidebar.src} alt="Advertisement" class="max-w-full h-auto" />
           </a>
         </div>
 
@@ -250,64 +597,207 @@ const schoolTypes = [
           </form>
         </div>
 
-        <!-- Quick Stats -->
-        <div class="box-rounded">
-          <h3 class="text-brand-blue mb-3">Site Statistics</h3>
-          <ul class="list-none m-0 p-0 fs-13">
-            <li class="py-2 line-dotted">
-              <strong class="text-brand-blue">{stats.totalSchools > 0 ? stats.totalSchools.toLocaleString() : '130,000+'}</strong> K-12 Schools
-            </li>
-            <li class="py-2 line-dotted">
-              <strong class="text-brand-blue">{stats.totalColleges > 0 ? stats.totalColleges.toLocaleString() : '7,000+'}</strong> Colleges & Universities
-            </li>
-            <li class="py-2 line-dotted">
-              <strong class="text-brand-blue">50+</strong> States & Territories
-            </li>
-            <li class="py-2">
-              <strong class="text-brand-green">Free</strong> to use - always!
-            </li>
-          </ul>
+        <!-- Site Statistics -->
+        <div class="box-rounded bg-gradient-to-br from-slate-50 to-slate-100 border border-slate-200">
+          <div class="flex items-center gap-2 mb-4">
+            <div class="w-8 h-8 bg-brand-blue rounded-lg flex items-center justify-center flex-shrink-0">
+              <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+              </svg>
+            </div>
+            <h3 class="text-brand-blue mb-0 text-lg">Our Database</h3>
+          </div>
+
+          <!-- Primary Stats - Large Numbers -->
+          <div class="grid grid-cols-3 gap-2 mb-4">
+            <div class="bg-white rounded-lg p-2.5 text-center shadow-sm border border-slate-100">
+              <div class="text-xl font-bold text-brand-blue">{stats.totalSchools > 0 ? stats.totalSchools.toLocaleString() : '121K+'}</div>
+              <div class="text-[10px] text-gray-500 uppercase tracking-wide">K-12 Schools</div>
+            </div>
+            <div class="bg-white rounded-lg p-2.5 text-center shadow-sm border border-slate-100">
+              <div class="text-xl font-bold text-brand-blue">{stats.totalColleges > 0 ? stats.totalColleges.toLocaleString() : '7,900+'}</div>
+              <div class="text-[10px] text-gray-500 uppercase tracking-wide">Colleges</div>
+            </div>
+            <div class="bg-white rounded-lg p-2.5 text-center shadow-sm border border-slate-100">
+              <div class="text-xl font-bold text-brand-blue">{stats.vocationalTotal > 0 ? stats.vocationalTotal.toLocaleString() : '2,400+'}</div>
+              <div class="text-[10px] text-gray-500 uppercase tracking-wide">Vocational</div>
+            </div>
+          </div>
+
+          <!-- Detailed Breakdown -->
+          <div class="space-y-2 mb-4">
+            <div class="flex items-center justify-between py-1.5 border-b border-slate-200">
+              <span class="text-gray-600 fs-12">Public Schools</span>
+              <span class="font-semibold text-gray-800 fs-12">{stats.publicSchools > 0 ? stats.publicSchools.toLocaleString() : '90,000+'}</span>
+            </div>
+            <div class="flex items-center justify-between py-1.5 border-b border-slate-200">
+              <span class="text-gray-600 fs-12">Private Schools</span>
+              <span class="font-semibold text-gray-800 fs-12">{stats.privateSchools > 0 ? stats.privateSchools.toLocaleString() : '30,000+'}</span>
+            </div>
+            <div class="flex items-center justify-between py-1.5 border-b border-slate-200">
+              <span class="text-gray-600 fs-12">Charter Schools</span>
+              <span class="font-semibold text-gray-800 fs-12">{stats.charterSchools > 0 ? stats.charterSchools.toLocaleString() : '7,600+'}</span>
+            </div>
+            <div class="flex items-center justify-between py-1.5 border-b border-slate-200">
+              <span class="text-gray-600 fs-12">Magnet Schools</span>
+              <span class="font-semibold text-gray-800 fs-12">{stats.magnetSchools > 0 ? stats.magnetSchools.toLocaleString() : '3,400+'}</span>
+            </div>
+          </div>
+
+          <!-- Grade Level Breakdown -->
+          <div class="bg-white rounded-lg p-3 shadow-sm border border-slate-100 mb-3">
+            <div class="text-xs text-gray-500 uppercase tracking-wide mb-2">By Grade Level</div>
+            <div class="grid grid-cols-2 gap-x-4 gap-y-1 fs-12">
+              <div class="flex justify-between">
+                <span class="text-gray-600">Preschools</span>
+                <span class="font-medium text-gray-800">{stats.preschools > 0 ? stats.preschools.toLocaleString() : '32K+'}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-600">Elementary</span>
+                <span class="font-medium text-gray-800">{stats.elementarySchools > 0 ? stats.elementarySchools.toLocaleString() : '63K+'}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-600">Middle</span>
+                <span class="font-medium text-gray-800">{stats.middleSchools > 0 ? stats.middleSchools.toLocaleString() : '34K+'}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-600">High School</span>
+                <span class="font-medium text-gray-800">{stats.highSchools > 0 ? stats.highSchools.toLocaleString() : '46K+'}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Vocational Schools Breakdown -->
+          <div class="bg-white rounded-lg p-3 shadow-sm border border-slate-100 mb-3">
+            <div class="text-xs text-gray-500 uppercase tracking-wide mb-2">Vocational Schools</div>
+            <div class="grid grid-cols-2 gap-x-4 gap-y-1 fs-12">
+              <div class="flex justify-between">
+                <span class="text-gray-600">Beauty</span>
+                <span class="font-medium text-gray-800">{stats.beautySchools > 0 ? stats.beautySchools.toLocaleString() : '949'}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-600">Culinary</span>
+                <span class="font-medium text-gray-800">{stats.culinarySchools > 0 ? stats.culinarySchools.toLocaleString() : '637'}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-600">Healthcare</span>
+                <span class="font-medium text-gray-800">{stats.healthcareSchools > 0 ? stats.healthcareSchools.toLocaleString() : '125'}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-600">Technology</span>
+                <span class="font-medium text-gray-800">{stats.technologySchools > 0 ? stats.technologySchools.toLocaleString() : '74'}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-600">Trade</span>
+                <span class="font-medium text-gray-800">{stats.tradeSchools > 0 ? stats.tradeSchools.toLocaleString() : '40'}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Coverage Badge -->
+          <div class="flex items-center justify-center gap-2 py-2 bg-brand-green/10 rounded-lg">
+            <svg class="w-4 h-4 text-brand-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span class="text-brand-green-dark font-medium fs-12">{stats.totalStates > 0 ? stats.totalStates : '50+'} States & Territories Covered</span>
+          </div>
         </div>
 
-        <!-- Special School Types -->
-        <div class="box-rounded">
-          <h3 class="text-brand-blue mb-3">School Types</h3>
-          <ul class="list-none m-0 p-0 fs-13">
-            <li class="py-1">
-              <a href="/charter-schools">Charter Schools</a>
-            </li>
-            <li class="py-1">
-              <a href="/magnet-schools">Magnet Schools</a>
-            </li>
-            <li class="py-1">
-              <a href="/private-schools">Private Schools</a>
-            </li>
-            <li class="py-1">
-              <a href="/public-schools">Public Schools</a>
-            </li>
-          </ul>
+        <!-- Financial Aid Section -->
+        <div class="box-rounded bg-gradient-to-r from-brand-blue to-blue-600 text-white">
+          <h3 class="text-white mb-1 font-bold">Financial Aid</h3>
+          <p class="text-white/80 fs-12 mb-3">Over $150 billion in financial aid is awarded annually. Find FAFSA school codes, federal and state grants, and scholarship opportunities to help pay for college.</p>
+          <div class="grid grid-cols-2 gap-2 fs-13">
+            <a href="/financial-aid/fafsa/fafsa-school-codes" class="bg-white/15 p-2.5 rounded text-center hover:bg-white/25 transition-colors">
+              <svg class="w-5 h-5 mx-auto mb-1 text-white/90" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25z" />
+              </svg>
+              <div class="font-semibold text-white">FAFSA</div>
+              <div class="text-white/60 fs-10">School Codes</div>
+            </a>
+            <a href="/financial-aid/grants" class="bg-white/15 p-2.5 rounded text-center hover:bg-white/25 transition-colors">
+              <svg class="w-5 h-5 mx-auto mb-1 text-white/90" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <div class="font-semibold text-white">Grants</div>
+              <div class="text-white/60 fs-10">112 Programs</div>
+            </a>
+            <a href="/financial-aid/scholarships" class="bg-white/15 p-2.5 rounded text-center hover:bg-white/25 transition-colors">
+              <svg class="w-5 h-5 mx-auto mb-1 text-white/90" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5" />
+              </svg>
+              <div class="font-semibold text-white">Scholarships</div>
+              <div class="text-white/60 fs-10">By State</div>
+            </a>
+            <a href="/financial-aid" class="bg-white/15 p-2.5 rounded text-center hover:bg-white/25 transition-colors">
+              <svg class="w-5 h-5 mx-auto mb-1 text-white/90" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+              </svg>
+              <div class="font-semibold text-white">Guide</div>
+              <div class="text-white/60 fs-10">Full Resources</div>
+            </a>
+          </div>
         </div>
 
-        <!-- Resources -->
-        <div class="box-rounded bg-lt-green">
-          <h3 class="text-brand-green-dark mb-3">Resources</h3>
-          <ul class="list-none m-0 p-0 fs-13">
-            <li class="py-1">
-              <a href="/resources/financial-aid">Financial Aid Information</a>
-            </li>
-            <li class="py-1">
-              <a href="/resources/school-choice">School Choice Guide</a>
-            </li>
-            <li class="py-1">
-              <a href="/resources/special-education">Special Education</a>
-            </li>
-          </ul>
+        <!-- Education Q&A Section -->
+        <div class="box-rounded bg-lt-green" id="qa-section">
+          <h3 class="text-brand-green-dark mb-3 font-bold">Question of the Week</h3>
+
+          <!-- Question bubble -->
+          <div class="relative bg-white rounded-lg p-3 mb-3 shadow-sm">
+            <p class="text-brand-green-text fs-13 mb-0 font-medium">
+              {currentQuestion}
+            </p>
+            <!-- Bubble tail -->
+            <div class="absolute -bottom-2 left-4 w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-t-[8px] border-t-white"></div>
+          </div>
+
+          <!-- Avatar row to show community -->
+          <div class="flex items-center gap-2 mb-3 ml-1" id="qa-avatars">
+            <div class="flex -space-x-2">
+              <div class="w-6 h-6 rounded-full bg-brand-green text-white text-xs flex items-center justify-center font-medium border-2 border-[#EAFBEA]">S</div>
+              <div class="w-6 h-6 rounded-full bg-brand-blue text-white text-xs flex items-center justify-center font-medium border-2 border-[#EAFBEA]">M</div>
+              <div class="w-6 h-6 rounded-full bg-orange-400 text-white text-xs flex items-center justify-center font-medium border-2 border-[#EAFBEA]">J</div>
+            </div>
+            <span class="text-gray-500 fs-11">Join the conversation</span>
+          </div>
+
+          <!-- Response form styled as chat input -->
+          <form id="qa-form">
+            <textarea
+              name="answer"
+              rows="2"
+              class="input w-full resize-none fs-13 mb-2"
+              placeholder="Share your advice..."
+              required
+            ></textarea>
+            <div class="flex justify-end">
+              <button type="submit" class="btn-green text-sm px-4 py-1.5">
+                Reply
+              </button>
+            </div>
+          </form>
+
+          <!-- Thank you message (hidden by default) -->
+          <div id="qa-thanks" class="hidden text-center py-4">
+            <p class="text-brand-green-dark font-medium mb-1">Thank you for sharing!</p>
+            <p class="text-gray-500 fs-12">Your response has been submitted.</p>
+          </div>
         </div>
+
+        <script>
+          document.getElementById('qa-form')?.addEventListener('submit', function(e) {
+            e.preventDefault();
+            document.getElementById('qa-form')?.classList.add('hidden');
+            document.getElementById('qa-avatars')?.classList.add('hidden');
+            document.getElementById('qa-thanks')?.classList.remove('hidden');
+          });
+        </script>
 
         <!-- Sidebar Ad 2 -->
         <div class="mt-5 flex justify-center">
           <a href="#">
-            <img src={sampleAdSidebar.src} alt="Advertisement" class="w-[336px] h-[280px]" />
+            <img src={sampleAdSidebar.src} alt="Advertisement" class="max-w-full h-auto" />
           </a>
         </div>
       </div>

@@ -1,0 +1,340 @@
+---
+import Layout from '@/layouts/Layout.astro';
+
+const title = "FAFSA Deadlines 2025-2026 - Federal and State Financial Aid Deadlines";
+const description = "Complete list of FAFSA deadlines for 2025-2026, including federal deadlines and state-by-state financial aid deadlines. Don't miss out on grants and scholarships.";
+
+// State deadline data for 2025-26 academic year
+// Note: These deadlines are subject to change. Always verify with state agencies.
+const stateDeadlines = [
+  { state: 'Alabama', abbr: 'AL', deadline: 'No state deadline', priority: null, notes: 'Apply as early as possible for institutional aid', url: null },
+  { state: 'Alaska', abbr: 'AK', deadline: 'No state deadline', priority: null, notes: 'Alaska Performance Scholarship has separate application', url: 'https://acpe.alaska.gov' },
+  { state: 'Arizona', abbr: 'AZ', deadline: 'No state deadline', priority: null, notes: 'Check individual school deadlines', url: null },
+  { state: 'Arkansas', abbr: 'AR', deadline: 'June 1, 2025', priority: 'January 15, 2025', notes: 'Academic Challenge Scholarship priority deadline', url: 'https://scholarships.adhe.edu' },
+  { state: 'California', abbr: 'CA', deadline: 'March 2, 2025', priority: null, notes: 'Cal Grant deadline. Some programs have earlier deadlines.', url: 'https://www.csac.ca.gov' },
+  { state: 'Colorado', abbr: 'CO', deadline: 'No state deadline', priority: null, notes: 'Apply early for best consideration', url: 'https://cdhe.colorado.gov' },
+  { state: 'Connecticut', abbr: 'CT', deadline: 'February 15, 2025', priority: null, notes: 'For CT state grants and scholarships', url: 'https://www.ctohe.org' },
+  { state: 'Delaware', abbr: 'DE', deadline: 'April 15, 2025', priority: null, notes: 'Delaware SEED Scholarship deadline', url: 'https://www.delawarestudentsuccess.org' },
+  { state: 'District of Columbia', abbr: 'DC', deadline: 'June 30, 2025', priority: 'May 1, 2025', notes: 'DC TAG and DC CAP programs', url: 'https://osse.dc.gov' },
+  { state: 'Florida', abbr: 'FL', deadline: 'May 15, 2025', priority: null, notes: 'Florida Student Assistance Grant', url: 'https://www.floridastudentfinancialaidsg.org' },
+  { state: 'Georgia', abbr: 'GA', deadline: 'No state deadline', priority: null, notes: 'HOPE and Zell Miller Scholarships have GPA requirements', url: 'https://www.gafutures.org' },
+  { state: 'Hawaii', abbr: 'HI', deadline: 'No state deadline', priority: null, notes: 'Check UH system deadlines', url: null },
+  { state: 'Idaho', abbr: 'ID', deadline: 'March 1, 2025', priority: null, notes: 'Idaho Opportunity Scholarship', url: 'https://boardofed.idaho.gov' },
+  { state: 'Illinois', abbr: 'IL', deadline: 'As soon as possible', priority: null, notes: 'MAP Grant - funds limited, apply early', url: 'https://www.isac.org' },
+  { state: 'Indiana', abbr: 'IN', deadline: 'April 15, 2025', priority: null, notes: 'Frank O\'Bannon Grant and 21st Century Scholars', url: 'https://www.in.gov/che' },
+  { state: 'Iowa', abbr: 'IA', deadline: 'July 1, 2025', priority: null, notes: 'Iowa Tuition Grant', url: 'https://iowacollegeaid.gov' },
+  { state: 'Kansas', abbr: 'KS', deadline: 'April 1, 2025', priority: null, notes: 'Kansas Comprehensive Grant', url: 'https://www.kansasregents.org' },
+  { state: 'Kentucky', abbr: 'KY', deadline: 'As soon as possible', priority: null, notes: 'CAP and KTG programs - funds limited', url: 'https://www.kheaa.com' },
+  { state: 'Louisiana', abbr: 'LA', deadline: 'July 1, 2025', priority: null, notes: 'TOPS Scholarship - additional requirements apply', url: 'https://mylosfa.la.gov' },
+  { state: 'Maine', abbr: 'ME', deadline: 'May 1, 2025', priority: null, notes: 'Maine State Grant Program', url: 'https://www.famemaine.com' },
+  { state: 'Maryland', abbr: 'MD', deadline: 'March 1, 2025', priority: null, notes: 'Maryland State Scholarships', url: 'https://mhec.maryland.gov' },
+  { state: 'Massachusetts', abbr: 'MA', deadline: 'May 1, 2025', priority: null, notes: 'MASSGrant and other state aid', url: 'https://www.mass.edu/osfa' },
+  { state: 'Michigan', abbr: 'MI', deadline: 'March 1, 2025', priority: null, notes: 'Michigan Competitive Scholarship', url: 'https://www.michigan.gov/mistudentaid' },
+  { state: 'Minnesota', abbr: 'MN', deadline: '30 days after start of term', priority: null, notes: 'Minnesota State Grant', url: 'https://www.ohe.state.mn.us' },
+  { state: 'Mississippi', abbr: 'MS', deadline: 'March 31, 2025', priority: null, notes: 'MTAG and MESG programs', url: 'https://www.msfinancialaid.org' },
+  { state: 'Missouri', abbr: 'MO', deadline: 'February 1, 2025', priority: null, notes: 'Access Missouri and Bright Flight', url: 'https://dhewd.mo.gov' },
+  { state: 'Montana', abbr: 'MT', deadline: 'March 1, 2025', priority: null, notes: 'Montana Higher Education Grant', url: 'https://mus.edu' },
+  { state: 'Nebraska', abbr: 'NE', deadline: 'No state deadline', priority: null, notes: 'Nebraska Opportunity Grant - apply early', url: 'https://ccpe.nebraska.gov' },
+  { state: 'Nevada', abbr: 'NV', deadline: 'As soon as possible', priority: null, notes: 'Nevada Promise Scholarship has separate deadline', url: 'https://nshe.nevada.edu' },
+  { state: 'New Hampshire', abbr: 'NH', deadline: 'No state deadline', priority: null, notes: 'Granite State Grant - apply early', url: 'https://www.ccsnh.edu' },
+  { state: 'New Jersey', abbr: 'NJ', deadline: 'April 15, 2025', priority: 'September 15, 2024', notes: 'Tuition Aid Grant (TAG) - September priority for renewal', url: 'https://www.hesaa.org' },
+  { state: 'New Mexico', abbr: 'NM', deadline: 'No state deadline', priority: null, notes: 'Lottery Scholarship and Opportunity Scholarship', url: 'https://hed.nm.gov' },
+  { state: 'New York', abbr: 'NY', deadline: 'June 30, 2025', priority: null, notes: 'TAP and Excelsior Scholarship', url: 'https://www.hesc.ny.gov' },
+  { state: 'North Carolina', abbr: 'NC', deadline: 'As soon as possible', priority: null, notes: 'NC Need-Based Scholarship - funds limited', url: 'https://www.cfnc.org' },
+  { state: 'North Dakota', abbr: 'ND', deadline: 'April 15, 2025', priority: null, notes: 'ND State Grant and Scholarships', url: 'https://ndus.edu' },
+  { state: 'Ohio', abbr: 'OH', deadline: 'October 1, 2025', priority: null, notes: 'Ohio College Opportunity Grant', url: 'https://www.ohiohighered.org' },
+  { state: 'Oklahoma', abbr: 'OK', deadline: 'As soon as possible', priority: null, notes: 'Oklahoma Tuition Aid Grant - funds limited', url: 'https://www.okhighered.org' },
+  { state: 'Oregon', abbr: 'OR', deadline: 'As soon as possible', priority: null, notes: 'Oregon Opportunity Grant - funds limited', url: 'https://oregonstudentaid.gov' },
+  { state: 'Pennsylvania', abbr: 'PA', deadline: 'May 1, 2025', priority: null, notes: 'PA State Grant Program', url: 'https://www.pheaa.org' },
+  { state: 'Rhode Island', abbr: 'RI', deadline: 'March 1, 2025', priority: null, notes: 'Rhode Island State Grant', url: 'https://www.riopc.edu' },
+  { state: 'South Carolina', abbr: 'SC', deadline: 'June 30, 2025', priority: null, notes: 'Tuition Grants and LIFE Scholarship', url: 'https://www.che.sc.gov' },
+  { state: 'South Dakota', abbr: 'SD', deadline: 'No state deadline', priority: null, notes: 'Check institutional deadlines', url: null },
+  { state: 'Tennessee', abbr: 'TN', deadline: 'February 1, 2025', priority: 'January 15, 2025', notes: 'Tennessee Student Assistance Award', url: 'https://www.tn.gov/collegepays' },
+  { state: 'Texas', abbr: 'TX', deadline: 'January 15, 2025', priority: null, notes: 'TEXAS Grant - priority deadline', url: 'https://www.highered.texas.gov' },
+  { state: 'Utah', abbr: 'UT', deadline: 'No state deadline', priority: null, notes: 'Check individual institution deadlines', url: null },
+  { state: 'Vermont', abbr: 'VT', deadline: 'As soon as possible', priority: null, notes: 'Vermont State Grant - funds limited', url: 'https://www.vsac.org' },
+  { state: 'Virginia', abbr: 'VA', deadline: 'As soon as possible', priority: null, notes: 'Virginia Tuition Assistance Grant - funds limited', url: 'https://www.schev.edu' },
+  { state: 'Washington', abbr: 'WA', deadline: 'As soon as possible', priority: null, notes: 'Washington College Grant - funds limited', url: 'https://wsac.wa.gov' },
+  { state: 'West Virginia', abbr: 'WV', deadline: 'April 15, 2025', priority: null, notes: 'WV Higher Education Grant and PROMISE', url: 'https://www.wvhepc.edu' },
+  { state: 'Wisconsin', abbr: 'WI', deadline: 'As soon as possible', priority: null, notes: 'Wisconsin Grant - funds limited', url: 'https://heab.wi.gov' },
+  { state: 'Wyoming', abbr: 'WY', deadline: 'No state deadline', priority: null, notes: 'Hathaway Scholarship has separate requirements', url: null },
+];
+
+// Group states by deadline type for summary
+const urgentDeadlines = stateDeadlines.filter(s =>
+  s.deadline.includes('January') || s.deadline.includes('February')
+);
+const springDeadlines = stateDeadlines.filter(s =>
+  s.deadline.includes('March') || s.deadline.includes('April') || s.deadline.includes('May')
+);
+const noDeadline = stateDeadlines.filter(s =>
+  s.deadline.includes('No state deadline') || s.deadline.includes('As soon as possible')
+);
+---
+
+<Layout title={title} description={description}>
+  <div class="container py-5">
+    <!-- Breadcrumb -->
+    <nav class="text-sm mb-4">
+      <ol class="flex flex-wrap items-center gap-2 text-gray-600">
+        <li><a href="/" class="hover:text-brand-blue">Home</a></li>
+        <li class="text-gray-400">/</li>
+        <li><a href="/financial-aid" class="hover:text-brand-blue">Financial Aid</a></li>
+        <li class="text-gray-400">/</li>
+        <li class="text-gray-900 font-medium">FAFSA Deadlines</li>
+      </ol>
+    </nav>
+
+    <div class="max-w-5xl">
+      <!-- Header -->
+      <header class="mb-8">
+        <h1 class="text-brand-green-text mb-3">FAFSA Deadlines 2025-2026</h1>
+        <p class="text-xl text-gray-600">Federal and state deadlines for the 2025-26 academic year</p>
+      </header>
+
+      <!-- Alert Box -->
+      <div class="bg-red-50 border-l-4 border-red-500 p-5 mb-8">
+        <div class="flex items-start gap-3">
+          <div class="text-red-500 text-2xl">⚠️</div>
+          <div>
+            <h2 class="font-bold text-red-800 mb-1">Apply Early — Many Programs Run Out of Funds</h2>
+            <p class="text-red-900 text-sm">
+              The FAFSA opens on <strong>October 1, 2024</strong> for the 2025-26 school year. Many state grants and institutional scholarships are awarded on a first-come, first-served basis.
+              Filing early maximizes your chances of receiving the most aid.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Federal Deadlines -->
+      <section class="box-rounded mb-8">
+        <h2 class="text-2xl font-bold text-brand-blue mb-4">Federal FAFSA Deadlines</h2>
+
+        <div class="grid md:grid-cols-3 gap-6">
+          <div class="bg-green-50 p-5 rounded-lg border border-green-200">
+            <div class="text-3xl mb-2">📅</div>
+            <h3 class="font-bold text-green-800 mb-2">October 1, 2024</h3>
+            <p class="text-sm text-green-900"><strong>FAFSA Opens</strong></p>
+            <p class="text-sm text-green-700 mt-2">The earliest you can submit your FAFSA for the 2025-26 academic year.</p>
+          </div>
+
+          <div class="bg-amber-50 p-5 rounded-lg border border-amber-200">
+            <div class="text-3xl mb-2">⏰</div>
+            <h3 class="font-bold text-amber-800 mb-2">June 30, 2026</h3>
+            <p class="text-sm text-amber-900"><strong>Federal Deadline</strong></p>
+            <p class="text-sm text-amber-700 mt-2">Last day to submit FAFSA for the 2025-26 year. State and school deadlines are much earlier.</p>
+          </div>
+
+          <div class="bg-blue-50 p-5 rounded-lg border border-blue-200">
+            <div class="text-3xl mb-2">🔄</div>
+            <h3 class="font-bold text-blue-800 mb-2">September 14, 2026</h3>
+            <p class="text-sm text-blue-900"><strong>Corrections Deadline</strong></p>
+            <p class="text-sm text-blue-700 mt-2">Last day to make corrections or updates to your 2025-26 FAFSA.</p>
+          </div>
+        </div>
+
+        <div class="mt-6 p-4 bg-gray-50 rounded">
+          <p class="text-sm text-gray-700">
+            <strong>Important:</strong> While the federal deadline is June 30, 2026, applying this late will cause you to miss most state aid and many institutional scholarships.
+            Aim to submit your FAFSA as close to October 1 as possible.
+          </p>
+        </div>
+      </section>
+
+      <!-- Quick State Summary -->
+      <section class="box-rounded mb-8">
+        <h2 class="text-2xl font-bold text-brand-blue mb-4">State Deadline Overview</h2>
+
+        <div class="grid md:grid-cols-3 gap-6 mb-6">
+          <div class="text-center p-4 bg-red-50 rounded-lg">
+            <div class="text-3xl font-bold text-red-600">{urgentDeadlines.length}</div>
+            <div class="text-sm text-red-800">States with Jan/Feb Deadlines</div>
+          </div>
+          <div class="text-center p-4 bg-amber-50 rounded-lg">
+            <div class="text-3xl font-bold text-amber-600">{springDeadlines.length}</div>
+            <div class="text-sm text-amber-800">States with Mar-May Deadlines</div>
+          </div>
+          <div class="text-center p-4 bg-gray-100 rounded-lg">
+            <div class="text-3xl font-bold text-gray-600">{noDeadline.length}</div>
+            <div class="text-sm text-gray-700">"Apply ASAP" or No Deadline</div>
+          </div>
+        </div>
+
+        <p class="text-gray-600 text-sm">
+          Many states award aid on a first-come, first-served basis until funds are exhausted. Even states without formal deadlines strongly encourage early application.
+        </p>
+      </section>
+
+      <!-- Jump Menu -->
+      <div class="box-rounded bg-gray-50 mb-8">
+        <h2 class="text-brand-blue text-lg mb-3">Jump to State</h2>
+        <div class="flex flex-wrap gap-2">
+          {stateDeadlines.map((state) => (
+            <a
+              href={`#state-${state.abbr}`}
+              class="px-2 py-1 bg-white hover:bg-brand-blue hover:text-white rounded text-sm font-medium transition-colors border border-gray-200"
+            >
+              {state.abbr}
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <!-- State-by-State Table -->
+      <section class="mb-8">
+        <h2 class="text-2xl font-bold text-brand-blue mb-4">State-by-State FAFSA Deadlines</h2>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm border border-gray-200 rounded-lg overflow-hidden">
+            <thead class="bg-gray-100">
+              <tr>
+                <th class="text-left p-4 font-semibold text-gray-700">State</th>
+                <th class="text-left p-4 font-semibold text-gray-700">Deadline</th>
+                <th class="text-left p-4 font-semibold text-gray-700">Priority Date</th>
+                <th class="text-left p-4 font-semibold text-gray-700">Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              {stateDeadlines.map((state, index) => (
+                <tr id={`state-${state.abbr}`} class={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                  <td class="p-4 font-medium">
+                    {state.url ? (
+                      <a href={state.url} target="_blank" rel="noopener" class="text-brand-blue hover:underline">
+                        {state.state}
+                      </a>
+                    ) : (
+                      state.state
+                    )}
+                  </td>
+                  <td class="p-4">
+                    <span class={`inline-block px-2 py-1 rounded text-xs font-medium ${
+                      state.deadline.includes('January') || state.deadline.includes('February')
+                        ? 'bg-red-100 text-red-800'
+                        : state.deadline.includes('March') || state.deadline.includes('April') || state.deadline.includes('May')
+                        ? 'bg-amber-100 text-amber-800'
+                        : state.deadline.includes('As soon as possible')
+                        ? 'bg-blue-100 text-blue-800'
+                        : 'bg-gray-100 text-gray-700'
+                    }`}>
+                      {state.deadline}
+                    </span>
+                  </td>
+                  <td class="p-4 text-gray-600">
+                    {state.priority || '—'}
+                  </td>
+                  <td class="p-4 text-gray-600 text-xs">
+                    {state.notes}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <p class="text-xs text-gray-500 mt-4">
+          <strong>Disclaimer:</strong> Deadlines are subject to change. Always verify current deadlines with your state's higher education agency or financial aid office.
+          This information is for the 2025-26 academic year.
+        </p>
+      </section>
+
+      <!-- Tips Section -->
+      <section class="box-rounded bg-lt-blue mb-8">
+        <h2 class="text-xl font-bold text-brand-blue mb-4">Tips for Meeting FAFSA Deadlines</h2>
+
+        <div class="space-y-4">
+          <div class="flex gap-3">
+            <div class="text-brand-green-text font-bold">1.</div>
+            <div>
+              <h3 class="font-bold text-gray-900">Create Your FSA ID Early</h3>
+              <p class="text-sm text-gray-700">Create your FSA ID at <a href="https://studentaid.gov/fsa-id" target="_blank" rel="noopener" class="text-brand-blue hover:underline">studentaid.gov</a> before the FAFSA opens. Parents of dependent students need their own FSA ID too.</p>
+            </div>
+          </div>
+
+          <div class="flex gap-3">
+            <div class="text-brand-green-text font-bold">2.</div>
+            <div>
+              <h3 class="font-bold text-gray-900">Gather Documents in Advance</h3>
+              <p class="text-sm text-gray-700">Have tax returns, W-2s, and bank statements ready. The FAFSA uses "prior-prior year" taxes (2023 taxes for 2025-26 FAFSA).</p>
+            </div>
+          </div>
+
+          <div class="flex gap-3">
+            <div class="text-brand-green-text font-bold">3.</div>
+            <div>
+              <h3 class="font-bold text-gray-900">Use the IRS Data Retrieval Tool</h3>
+              <p class="text-sm text-gray-700">Import tax information directly from the IRS to save time and reduce errors.</p>
+            </div>
+          </div>
+
+          <div class="flex gap-3">
+            <div class="text-brand-green-text font-bold">4.</div>
+            <div>
+              <h3 class="font-bold text-gray-900">Know ALL Your Deadlines</h3>
+              <p class="text-sm text-gray-700">You may have three different deadlines: federal, state, and institutional. Your college may have the earliest deadline of all.</p>
+            </div>
+          </div>
+
+          <div class="flex gap-3">
+            <div class="text-brand-green-text font-bold">5.</div>
+            <div>
+              <h3 class="font-bold text-gray-900">Submit, Then Make Corrections</h3>
+              <p class="text-sm text-gray-700">It's better to submit on time with estimates than to miss a deadline. You can make corrections after submitting.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- What If You Miss Section -->
+      <section class="box-rounded mb-8">
+        <h2 class="text-xl font-bold text-brand-blue mb-4">What If You Miss a Deadline?</h2>
+
+        <div class="prose max-w-none text-gray-700">
+          <p class="mb-4">
+            Missing a deadline doesn't mean you can't receive any aid, but your options may be limited:
+          </p>
+
+          <ul class="list-disc pl-5 space-y-2">
+            <li><strong>Federal Aid:</strong> As long as you apply before June 30, 2026, you can still receive federal Pell Grants and student loans for the 2025-26 year.</li>
+            <li><strong>State Aid:</strong> Many state programs cannot accept late applications. However, some states have remaining funds after initial awards. Contact your state agency directly.</li>
+            <li><strong>Institutional Aid:</strong> Contact your school's financial aid office immediately. Some schools reserve funds for late applicants or have appeals processes.</li>
+            <li><strong>Private Scholarships:</strong> Many private scholarships have their own deadlines and don't require the FAFSA. Continue searching and applying.</li>
+          </ul>
+
+          <div class="bg-amber-50 border-l-4 border-amber-400 p-4 mt-6">
+            <p class="text-amber-900 text-sm">
+              <strong>Pro Tip:</strong> Even if you've missed state deadlines, still submit your FAFSA. You'll need it for federal aid, and your school may have institutional funds available.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA Box -->
+      <div class="bg-brand-blue text-white p-8 rounded-lg">
+        <h2 class="text-2xl font-bold mb-3">Don't Wait — Start Your FAFSA Today</h2>
+        <p class="mb-6 opacity-90">
+          The earlier you file, the more aid you may receive. Many programs award funds until they run out.
+        </p>
+        <div class="flex flex-wrap gap-4">
+          <a href="https://studentaid.gov/h/apply-for-aid/fafsa" target="_blank" rel="noopener" class="bg-white text-brand-blue px-6 py-3 rounded font-bold hover:bg-gray-100 transition-colors">
+            Start Your FAFSA →
+          </a>
+          <a href="/financial-aid/fafsa/application-guide" class="border-2 border-white text-white px-6 py-3 rounded font-bold hover:bg-white hover:text-brand-blue transition-colors">
+            Read the Application Guide
+          </a>
+        </div>
+      </div>
+
+      <!-- Related Links -->
+      <div class="mt-8 pt-8 border-t border-gray-200">
+        <h3 class="text-lg font-bold text-gray-900 mb-4">Related Resources</h3>
+        <ul class="space-y-2">
+          <li><a href="/financial-aid/fafsa/application-guide" class="text-brand-blue hover:underline">FAFSA Application Guide →</a></li>
+          <li><a href="/financial-aid/fafsa/fafsa-school-codes" class="text-brand-blue hover:underline">FAFSA School Codes →</a></li>
+          <li><a href="/financial-aid/fafsa/common-mistakes" class="text-brand-blue hover:underline">Common FAFSA Mistakes to Avoid →</a></li>
+          <li><a href="/financial-aid" class="text-brand-blue hover:underline">← Back to Financial Aid</a></li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</Layout>

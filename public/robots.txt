@@ -1,6 +1,6 @@
 User-agent: *
 Allow: /
-Sitemap: https://trueschools.com/sitemap.xml
+Sitemap: https://truschools.com/sitemap.xml
 Crawl-delay: 1
 
 # Block admin and API paths

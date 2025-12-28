@@ -1,5 +1,6 @@
 ---
 import Layout from '@/layouts/Layout.astro';
+import QAPoll from '@/components/QAPoll.astro';
 
 const db = Astro.locals.runtime.env.DB;
 
@@ -11,7 +12,7 @@ const categoryDescription = 'HVAC, welding, electrical, plumbing, automotive, an
 const stateCountsResult = await db.prepare(`
   SELECT state_abbr, COUNT(*) as count
   FROM colleges
-  WHERE institution_category = 'vocational' AND vocational_type = ? AND active = 1
+  WHERE vocational_type = ? AND active = 1
   GROUP BY state_abbr
   ORDER BY count DESC
 `).bind(vocationalType).all();
@@ -21,7 +22,7 @@ const stateCounts = stateCountsResult.results;
 // Get total schools
 const totalResult = await db.prepare(`
   SELECT COUNT(*) as total FROM colleges
-  WHERE institution_category = 'vocational' AND vocational_type = ? AND active = 1
+  WHERE vocational_type = ? AND active = 1
 `).bind(vocationalType).first() as { total: number };
 const totalSchools = totalResult?.total || 0;
 
@@ -29,7 +30,7 @@ const totalSchools = totalResult?.total || 0;
 const featuredResult = await db.prepare(`
   SELECT id, institution_name, page_name, city, state_abbr, total_enrollment, tuition_in_state
   FROM colleges
-  WHERE institution_category = 'vocational' AND vocational_type = ? AND active = 1
+  WHERE vocational_type = ? AND active = 1
     AND total_enrollment IS NOT NULL
   ORDER BY total_enrollment DESC
   LIMIT 10
@@ -164,6 +165,16 @@ function getStateSlug(abbr: string): string {
             <li><a href="/education-articles/the-diploma-and-the-torque-wrench" class="text-brand-blue hover:underline">The Diploma and the Torque Wrench</a></li>
             <li><a href="/education-articles/the-comeback-of-vocational-schools" class="text-brand-blue hover:underline">The Comeback of Vocational Schools</a></li>
           </ul>
+        </div>
+
+        <!-- Quick Poll -->
+        <div class="box-rounded mb-4">
+          <QAPoll
+            questionId="trade-career-interest"
+            pageSlug="trade-schools"
+            question="Which trade career interests you most?"
+            answers={["HVAC Technician", "Electrician", "Welder", "Plumber"]}
+          />
         </div>
 
         <div class="box-rounded">

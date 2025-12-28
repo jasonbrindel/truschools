@@ -1,0 +1,179 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import heroImage from '@/images/USED-school-entrance-students-abstract.jpg';
+
+const title = "What to Really Ask When You Walk Through Those Charter School Doors";
+const description = "A parent's guide to finding the questions that matter—and learning to trust what you observe.";
+const category = 'Charter Schools';
+---
+
+<Layout title={title} description={description}>
+  <ArticleBreadcrumb title={title} defaultParent={{ label: 'Charter Schools', url: '/charter-schools' }} />
+
+  <!-- Header - Centered, Narrow -->
+  <header class="max-w-[680px] mx-auto px-5 pt-4 md:pt-8">
+    <h1 class="text-4xl md:text-5xl font-bold text-gray-900 leading-tight mb-5">
+      {title}
+    </h1>
+    <p class="text-xl md:text-2xl text-gray-600 italic mb-6">
+      A parent's guide to finding the questions that matter—and learning to trust what you observe
+    </p>
+    <p class="text-base text-gray-500 mb-10">By TruSchools Staff</p>
+  </header>
+
+  <!-- Hero Image - Container Width -->
+  <div class="container">
+    <img
+      src={heroImage.src}
+      alt="Students at school entrance"
+      class="w-full h-[400px] md:h-[500px] object-cover"
+    />
+  </div>
+
+  <!-- Article Container - Centered, Narrow -->
+  <article class="max-w-[680px] mx-auto px-5 py-10 md:py-16">
+    <!-- Article Body -->
+    <div class="article-body text-lg leading-relaxed text-gray-800">
+      <!-- Opening with drop cap -->
+      <p class="first-letter:text-6xl first-letter:font-bold first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:text-gray-900 mb-6">
+        You've done the research. You've scrolled through test scores, read the mission statements, maybe even driven past the building a few times. But now you're standing in the lobby of a charter school, a clipboard in your hand and your child's future somewhere in the back of your mind, and suddenly all those carefully prepared questions feel either too aggressive or too polite. The admissions coordinator is smiling. A student ambassador is ready to show you around. And you're wondering: What should I actually be looking for here?
+      </p>
+
+      <p class="mb-6">
+        This is the moment that trips up even the most prepared parents. Charter schools—independent public schools that operate with more autonomy than traditional district schools in exchange for accountability to their authorizing body—now enroll about 3.7 million students across nearly 7,800 schools nationwide. That's roughly 7 percent of all public school students, up from 4 percent in 2010, according to MIT Blueprint Labs' Charter School Research Collaborative. The sector has matured considerably since the first charter opened in Minnesota in 1992, but the sheer variety of what's out there can be dizzying. Some charters are run by large networks with polished operations; others are scrappy single-site schools founded by a group of passionate educators. Some emphasize classical education or STEM; others focus on arts integration or project-based learning.
+      </p>
+
+      <p class="mb-10">
+        The good news, according to Stanford University's Center for Research on Education Outcomes, is that charter school students now outperform their peers in traditional public schools by the equivalent of 16 days of learning in reading and 6 days in math annually. But that's an average—and averages can obscure enormous variation. About 36 percent of charter schools show stronger gains than their local traditional public schools in both subjects, while roughly 17 to 25 percent show weaker gains. Your job on a tour isn't to verify that a school matches some abstract ideal. It's to figure out whether this particular school is right for your particular child.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <p class="mb-6">
+        The first thing worth understanding is that a school tour is not just an information-gathering exercise. It's also an exercise in observation—and in trusting what you observe. "A school can paint a picture online that might be pretty," notes Laura Harney, director of enrollment and community engagement for Rocky Mountain Prep charter schools in Denver, "but you won't know if it's the right school until you see it, walk around, peek into classrooms, meet teachers, and get a feel for whether your child could make it their home away from home."
+      </p>
+
+      <p class="mb-6">
+        This means arriving with your senses alert. Before you even begin asking questions, pay attention to how you're greeted. Does the front office staff seem harried or welcoming? Does someone know your name? These small details reveal something about a school's culture—whether it's oriented toward relationships or toward processing applications. Notice the hallways as you walk through. Is student work displayed, and does it seem to reflect genuine effort rather than identical templates? Are the bathrooms clean? (This sounds mundane, but well-maintained facilities signal that someone is paying attention to the basics.) When you pass classrooms, observe whether students seem engaged or zoned out, whether the teacher is animated or reading from a script.
+      </p>
+
+      <p class="mb-10">
+        Camilla Modesitt, who oversees tours at Denver Language School, suggests cutting through the jargon with a simple question: "Why do you do what you do?" The answer will tell you more about a school's philosophy than any mission statement. If the response is vague or sounds like marketing copy, that's worth noting. If it's specific and passionate—this is why we believe in dual-language immersion, this is how we think about building critical thinking—you're probably talking to people who have thought carefully about their approach.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <p class="mb-6">
+        When it comes to academics, the questions that matter most are often the ones that feel hardest to ask. Test scores are publicly available, so you don't need to inquire about those during a tour. What you need to understand is how the school responds when students struggle. "My child has difficulty with reading," Harney suggests saying. "Can you tell me about the experience of a student who is similar?" A school that can answer this question with specifics—here's our intervention process, here's how we monitor progress, here's how we communicate with parents—is a school that has thought carefully about differentiation. A school that gives you generalities or seems uncomfortable may not have robust systems in place.
+      </p>
+
+      <p class="mb-6">
+        For families with children who receive special education services, this line of questioning becomes even more critical. Research from the Center for Learner Equity, released in 2024, found that charter schools on the whole do not outperform their district counterparts when it comes to providing high-quality special education. Stanford's CREDO study similarly found that students with disabilities in charter schools lag by the equivalent of about 13 to 14 days of learning compared to their peers in traditional public schools. This doesn't mean charter schools can't serve students with disabilities well—some do so exceptionally—but it does mean parents should ask pointed questions. Who is the special education coordinator, and can I meet with them? How many students currently receive services? What does the process look like for developing and updating an IEP? How do you handle requests for evaluations?
+      </p>
+
+      <p class="mb-10">
+        The homework question is another one that reveals more than it appears to. Rather than asking "How much homework do students have?"—which invites a straightforward answer—try asking about the school's homework philosophy. Why does the school assign homework? What do they believe it accomplishes? Some schools believe in minimal homework to preserve family time; others believe rigorous practice at home is essential to mastery. Neither approach is inherently right or wrong, but one may be a better fit for your child and your family's rhythms.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <p class="mb-6">
+        School culture is one of those intangible things that everyone agrees matters enormously but that's difficult to assess from a single visit. Discipline policies are one window into culture. Charter schools have historically faced scrutiny over suspension and expulsion rates, with some research suggesting higher rates than traditional public schools—though more recent analyses, including work by the American Enterprise Institute, suggest the picture is more nuanced when you compare charters to nearby district schools serving similar populations.
+      </p>
+
+      <p class="mb-6">
+        What you want to understand is not just the rules but the approach. Does the school use restorative practices, which emphasize repairing harm and rebuilding relationships? Or does it rely primarily on exclusionary discipline—suspensions and expulsions? Research from the Learning Policy Institute has found that exclusionary discipline is ineffective at improving school safety and can have lasting negative consequences for students who are suspended. But some charter schools have built their reputations on strict behavioral expectations, and some parents actively seek that out. The question isn't whether a school's approach is fashionable; it's whether it aligns with your values and will work for your child.
+      </p>
+
+      <p class="mb-6">
+        Ask about what happens when a student makes a mistake. Ask about how conflicts between students are resolved. If the school uses a behavioral system—demerits, merits, color-coded charts—ask how it works in practice. And pay attention to the vibe during your visit. Do students seem relaxed and purposeful, or anxious and performative? Do teachers seem to genuinely like the kids they're teaching?
+      </p>
+
+      <p class="mb-10">
+        Parent involvement is another cultural marker worth exploring. A 2020 study published in the American Educational Research Journal found that charter school parents reported higher levels of satisfaction than district school parents, and that charter parents communicated more frequently with school staff about volunteering and their children's accomplishments. But parent involvement can also tip into obligation. Some charter schools require volunteer hours or attendance at events as a condition of enrollment—a practice that has drawn criticism for potentially excluding families who lack the time or flexibility to participate. Ask what's expected and what's encouraged. Ask whether the parent community reflects the diversity of the student body, and whether parents have meaningful input into school decisions.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <p class="mb-6">
+        The operational questions—transportation, before- and after-care, food—may seem prosaic, but they matter enormously to daily life. Charter schools, unlike district schools, often do not provide transportation, which can create real barriers for families without reliable car access. Some charters partner with public transit or organize carpools; others simply expect families to figure it out. Ask specifically how students get to school and what happens if you're running late for pickup.
+      </p>
+
+      <p class="mb-6">
+        Before- and after-school care is similarly variable. Some charters operate extended-day programs; others end at 3 p.m. with nothing available. If you're a working parent, you need to know this before you fall in love with a school's academic program. And while you're at it, ask about food. Is breakfast provided? Is lunch included in the school day, and if so, what does it look like? Some charters have invested in quality food programs; others serve the same commodity foods as district schools; still others expect families to pack lunches.
+      </p>
+
+      <p class="mb-6">
+        Staffing is where things can get genuinely uncomfortable, but this information matters. Teacher turnover in charter schools has historically been higher than in traditional public schools. A Fordham Institute analysis noted that about a third of charter school teachers have fewer than three years of teaching experience, compared to about a fifth in traditional public schools. High turnover can undermine instructional continuity and institutional memory, but it can also mean a school is willing to part ways with teachers who aren't performing. Ask about class sizes and student-to-teacher ratios. Ask how long the principal has been in the role and how long the average teacher has been at the school. If there's significant turnover, ask why—and listen carefully to the answer.
+      </p>
+
+      <p class="mb-10">
+        The question about teacher credentials can feel awkward, but it's worth asking. Charter schools in many states have flexibility to hire teachers without traditional certification, which can be a feature or a bug depending on your perspective. What matters more than a credential per se is evidence that teachers are well-trained, well-supported, and continuously developing. Ask about professional development. Ask how teachers are evaluated and how struggling teachers are supported.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <p class="mb-6">
+        There's a category of questions that might be called "fit" questions—the ones designed to help you figure out whether this particular school will work for your particular child. These are less about evaluating the school objectively and more about understanding whether the match is right. What kind of student thrives here? What kind of student struggles? How would you describe the typical family in your community? These questions can surface information that a school might not volunteer but that could be decisive for your decision.
+      </p>
+
+      <p class="mb-6">
+        If your child has specific needs or interests—an athlete who needs flexibility for practice, a performer who wants opportunities on stage, a quiet kid who gets overwhelmed in loud environments—name those needs explicitly and ask how the school would accommodate them. A good school will be honest about what it can and can't provide.
+      </p>
+
+      <p class="mb-6">
+        And then there are the questions designed to surface problems—the ones that many parents are afraid to ask but that can be the most valuable. If you've heard rumors about bullying, ask about them directly. If the school's rating dropped last year, ask why. "Don't shy away from questions that might feel uncomfortable," advises one Denver school choice specialist, "because not asking the hard questions could leave you with incorrect assumptions. In my experience, school leaders want to address the rumor." A school that becomes defensive or evasive when asked about challenges is telling you something important about its culture.
+      </p>
+
+      <p class="mb-10">
+        Ask about what happens after students leave. For elementary and middle schools, this means asking about high school placement—where do students go, and how does the school support that transition? For high schools, ask about graduation rates and college acceptance. But be wary of schools that only highlight their most impressive outcomes. Ask about the full range of what happens to students. A school that's honest about its challenges is often a school you can trust.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <p class="mb-6">
+        Here's the thing that's easy to forget when you're clutching that clipboard: you are also evaluating whether this school wants your child. The best school relationships are mutual. A school that seems eager to recruit you but uninterested in learning about your child's specific needs is a school that may disappoint you down the road. Pay attention to whether the people you meet ask questions about your child, or whether they're simply delivering a sales pitch.
+      </p>
+
+      <p class="mb-6">
+        After the tour ends and you're back in your car, take a few minutes to jot down your impressions while they're fresh. What did you notice? What felt right? What gave you pause? Talk to your child if they were with you—their instincts matter, even if they can't fully articulate them. And then, if possible, talk to current parents. Ask the school to connect you with families whose children are similar to yours. The most valuable information often comes not from the official tour but from the unguarded conversations afterward.
+      </p>
+
+      <p class="mb-10">
+        No school will be perfect. Every school involves trade-offs. The goal isn't to find a school without flaws; it's to find a school whose strengths align with what your child needs and whose weaknesses you can live with. Trust your observations. Trust your instincts. And trust that asking good questions—even the uncomfortable ones—is exactly what a thoughtful parent should do.
+      </p>
+
+      <!-- Sources -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
+
+      <ul class="text-sm text-gray-600 space-y-2 mb-10">
+        <li>Center for Research on Education Outcomes (CREDO), Stanford University. <em>"As a Matter of Fact: The National Charter School Study III."</em> 2023.</li>
+        <li>MIT Blueprint Labs. Charter School Research Collaborative data on charter school enrollment. 2024.</li>
+        <li>EdChoice and Braun Research. <em>"Schooling in America Survey."</em> 2024.</li>
+        <li>National Alliance for Public Charter Schools. <em>"Never Going Back: An Analysis of Parent Sentiment on Education."</em> 2022.</li>
+        <li>Center for Learner Equity. Report on charter schools and special education services. 2024.</li>
+        <li>Learning Policy Institute. <em>"Pushed Out: Trends and Disparities in Out-of-School Suspension."</em> 2024.</li>
+        <li>RAND Corporation. <em>"Educator Turnover Continues Decline Toward Prepandemic Levels."</em> 2024.</li>
+        <li>Oberfield, Zachary W. <em>"Parent Engagement and Satisfaction in Public Charter and District Schools."</em> American Educational Research Journal. 2020.</li>
+        <li>Thomas B. Fordham Institute. Analysis of teacher turnover in charter schools. 2023.</li>
+        <li>American Enterprise Institute. Research on charter school discipline practices. 2022.</li>
+        <li>National Center for Education Statistics. Teacher Attrition and Mobility: Results from the 2021-22 Teacher Follow-up Survey. 2024.</li>
+        <li>GreatSchools.org. <em>"How to Make the Most of a School Visit."</em> 2025.</li>
+        <li>Chalkbeat. <em>"School Choice: Eight Tips to Get the Most Out of School Tours."</em> 2019.</li>
+      </ul>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-16 pt-8 border-t border-gray-200">
+      <p class="text-sm text-gray-500 italic">
+        This article is provided by TruSchools as an educational resource for families exploring charter school options.
+      </p>
+      <div class="mt-6">
+        <a href="/charter-schools" class="text-brand-blue hover:underline font-medium">
+          Back to Charter Schools &rarr;
+        </a>
+      </div>
+    </footer>
+  </article>
+</Layout>

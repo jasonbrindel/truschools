@@ -1,5 +1,5 @@
 /**
- * TrueSchools Data Import Script
+ * TruSchools Data Import Script
  *
  * This script imports school data from the MySQL SQL dump files
  * into the Cloudflare D1 SQLite database.
@@ -15,7 +15,7 @@ import { readFileSync } from 'fs';
 import { execSync } from 'child_process';
 
 // Path to the SQL backup files
-const SQL_BACKUP_PATH = '/Users/softdev/Library/Mobile Documents/com~apple~CloudDocs/Work/Websites & projects/Trueschools.com/00Archives/2025-05-29full bkup/httpdocs/_db';
+const SQL_BACKUP_PATH = '/Users/softdev/Library/Mobile Documents/com~apple~CloudDocs/Work/Websites & projects/Truschools.com/00Archives/2025-05-29full bkup/httpdocs/_db';
 
 /**
  * Parse INSERT statements from MySQL dump and convert to SQLite-compatible format
@@ -100,7 +100,7 @@ function generateSchoolInserts(mysqlInserts) {
  * Main import function
  */
 async function importData() {
-  console.log('TrueSchools Data Import Script');
+  console.log('TruSchools Data Import Script');
   console.log('==============================\n');
 
   console.log('Reading SQL backup files...');

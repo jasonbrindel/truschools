@@ -1,0 +1,571 @@
+---
+import Layout from '@/layouts/Layout.astro';
+
+const title = "FAFSA Application Guide - How to Complete the FAFSA Step by Step";
+const description = "Complete guide to filling out the FAFSA (Free Application for Federal Student Aid). Learn what documents you need, how to create an FSA ID, and step-by-step instructions for completing your application.";
+---
+
+<Layout title={title} description={description}>
+  <div class="container py-5">
+    <!-- Breadcrumb -->
+    <nav class="text-sm mb-4">
+      <ol class="flex flex-wrap items-center gap-2 text-gray-600">
+        <li><a href="/" class="hover:text-brand-blue">Home</a></li>
+        <li class="text-gray-400">/</li>
+        <li><a href="/financial-aid" class="hover:text-brand-blue">Financial Aid</a></li>
+        <li class="text-gray-400">/</li>
+        <li class="text-gray-900 font-medium">FAFSA Application Guide</li>
+      </ol>
+    </nav>
+
+    <div class="max-w-4xl">
+      <!-- Header -->
+      <header class="mb-8">
+        <h1 class="text-brand-green-text mb-3">FAFSA Application Guide</h1>
+        <p class="text-xl text-gray-600">Everything you need to know to complete the Free Application for Federal Student Aid</p>
+      </header>
+
+      <!-- Quick Stats -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <div class="bg-lt-blue p-4 rounded-lg text-center">
+          <div class="text-2xl font-bold text-brand-green-text">30-60</div>
+          <div class="text-sm text-gray-600">Minutes to Complete</div>
+        </div>
+        <div class="bg-lt-blue p-4 rounded-lg text-center">
+          <div class="text-2xl font-bold text-brand-green-text">Free</div>
+          <div class="text-sm text-gray-600">No Application Fee</div>
+        </div>
+        <div class="bg-lt-blue p-4 rounded-lg text-center">
+          <div class="text-2xl font-bold text-brand-green-text">20</div>
+          <div class="text-sm text-gray-600">Schools You Can List</div>
+        </div>
+        <div class="bg-lt-blue p-4 rounded-lg text-center">
+          <div class="text-2xl font-bold text-brand-green-text">Oct 1</div>
+          <div class="text-sm text-gray-600">Opens Each Year</div>
+        </div>
+      </div>
+
+      <!-- Table of Contents -->
+      <div class="box-rounded bg-gray-50 mb-8">
+        <h2 class="text-brand-blue text-lg mb-3">On This Page</h2>
+        <ul class="space-y-2 text-sm">
+          <li><a href="#what-is-fafsa" class="text-brand-blue hover:underline">What is the FAFSA?</a></li>
+          <li><a href="#who-should-apply" class="text-brand-blue hover:underline">Who Should Apply?</a></li>
+          <li><a href="#before-you-start" class="text-brand-blue hover:underline">Before You Start: Documents You'll Need</a></li>
+          <li><a href="#create-fsa-id" class="text-brand-blue hover:underline">Step 1: Create Your FSA ID</a></li>
+          <li><a href="#start-application" class="text-brand-blue hover:underline">Step 2: Start Your Application</a></li>
+          <li><a href="#student-info" class="text-brand-blue hover:underline">Step 3: Student Information</a></li>
+          <li><a href="#dependency-status" class="text-brand-blue hover:underline">Step 4: Dependency Status</a></li>
+          <li><a href="#parent-info" class="text-brand-blue hover:underline">Step 5: Parent Information (If Dependent)</a></li>
+          <li><a href="#financial-info" class="text-brand-blue hover:underline">Step 6: Financial Information</a></li>
+          <li><a href="#school-selection" class="text-brand-blue hover:underline">Step 7: Select Your Schools</a></li>
+          <li><a href="#sign-submit" class="text-brand-blue hover:underline">Step 8: Sign and Submit</a></li>
+          <li><a href="#after-submitting" class="text-brand-blue hover:underline">What Happens After You Submit</a></li>
+          <li><a href="#special-circumstances" class="text-brand-blue hover:underline">Special Circumstances</a></li>
+        </ul>
+      </div>
+
+      <!-- Content Sections -->
+      <div class="space-y-10">
+
+        <!-- What is FAFSA -->
+        <section id="what-is-fafsa">
+          <h2 class="text-2xl font-bold text-brand-blue mb-4">What is the FAFSA?</h2>
+          <div class="prose max-w-none text-gray-700">
+            <p class="mb-4">
+              The Free Application for Federal Student Aid (FAFSA) is the gateway to federal financial aid for college. Completing the FAFSA is required to be considered for:
+            </p>
+            <ul class="list-disc pl-5 space-y-2 mb-4">
+              <li><strong>Federal Pell Grants</strong> — Up to $7,395 for 2024-25 (no repayment required)</li>
+              <li><strong>Federal Student Loans</strong> — Direct Subsidized and Unsubsidized Loans</li>
+              <li><strong>Federal Work-Study</strong> — Part-time employment while enrolled</li>
+              <li><strong>State Grants</strong> — Many states use FAFSA data for their own aid programs</li>
+              <li><strong>Institutional Aid</strong> — Many colleges require the FAFSA for their own scholarships and grants</li>
+            </ul>
+            <p>
+              The FAFSA collects information about your family's finances to calculate your Student Aid Index (SAI), formerly known as the Expected Family Contribution (EFC). Schools use this number to determine how much financial aid you're eligible to receive.
+            </p>
+          </div>
+        </section>
+
+        <!-- Who Should Apply -->
+        <section id="who-should-apply">
+          <h2 class="text-2xl font-bold text-brand-blue mb-4">Who Should Apply?</h2>
+          <div class="prose max-w-none text-gray-700">
+            <p class="mb-4">
+              <strong>Almost everyone should complete the FAFSA.</strong> Even if you think your family earns too much to qualify for need-based aid, filing the FAFSA is still worthwhile because:
+            </p>
+            <ul class="list-disc pl-5 space-y-2 mb-4">
+              <li>You may qualify for unsubsidized federal loans regardless of income</li>
+              <li>Many merit-based scholarships require a FAFSA on file</li>
+              <li>Your financial situation may change during the school year</li>
+              <li>Some state aid programs have different eligibility criteria than federal programs</li>
+            </ul>
+
+            <div class="bg-amber-50 border-l-4 border-amber-400 p-4 my-6">
+              <p class="font-semibold text-amber-800 mb-2">Eligibility Requirements</p>
+              <p class="text-amber-900 text-sm">
+                To receive federal student aid, you must be a U.S. citizen or eligible noncitizen, have a valid Social Security number, be enrolled or accepted in an eligible degree or certificate program, and maintain satisfactory academic progress. Male students must be registered with Selective Service if required.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Before You Start -->
+        <section id="before-you-start">
+          <h2 class="text-2xl font-bold text-brand-blue mb-4">Before You Start: Documents You'll Need</h2>
+          <div class="prose max-w-none text-gray-700">
+            <p class="mb-4">Gathering these documents before you begin will make the process much faster:</p>
+
+            <div class="grid md:grid-cols-2 gap-6">
+              <div class="bg-gray-50 p-5 rounded-lg">
+                <h3 class="font-bold text-brand-green-text mb-3">Student Documents</h3>
+                <ul class="text-sm space-y-2">
+                  <li class="flex items-start gap-2">
+                    <span class="text-green-600">✓</span>
+                    <span>Social Security number</span>
+                  </li>
+                  <li class="flex items-start gap-2">
+                    <span class="text-green-600">✓</span>
+                    <span>Driver's license number (if you have one)</span>
+                  </li>
+                  <li class="flex items-start gap-2">
+                    <span class="text-green-600">✓</span>
+                    <span>Federal tax returns from 2 years prior</span>
+                  </li>
+                  <li class="flex items-start gap-2">
+                    <span class="text-green-600">✓</span>
+                    <span>W-2 forms and other income records</span>
+                  </li>
+                  <li class="flex items-start gap-2">
+                    <span class="text-green-600">✓</span>
+                    <span>Bank statements and investment records</span>
+                  </li>
+                  <li class="flex items-start gap-2">
+                    <span class="text-green-600">✓</span>
+                    <span>Records of untaxed income</span>
+                  </li>
+                  <li class="flex items-start gap-2">
+                    <span class="text-green-600">✓</span>
+                    <span>Alien Registration Number (if not a U.S. citizen)</span>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="bg-gray-50 p-5 rounded-lg">
+                <h3 class="font-bold text-brand-green-text mb-3">Parent Documents (If Dependent)</h3>
+                <ul class="text-sm space-y-2">
+                  <li class="flex items-start gap-2">
+                    <span class="text-green-600">✓</span>
+                    <span>Social Security numbers for both parents</span>
+                  </li>
+                  <li class="flex items-start gap-2">
+                    <span class="text-green-600">✓</span>
+                    <span>Federal tax returns from 2 years prior</span>
+                  </li>
+                  <li class="flex items-start gap-2">
+                    <span class="text-green-600">✓</span>
+                    <span>W-2 forms and other income records</span>
+                  </li>
+                  <li class="flex items-start gap-2">
+                    <span class="text-green-600">✓</span>
+                    <span>Bank statements and investment records</span>
+                  </li>
+                  <li class="flex items-start gap-2">
+                    <span class="text-green-600">✓</span>
+                    <span>Business or farm records (if applicable)</span>
+                  </li>
+                  <li class="flex items-start gap-2">
+                    <span class="text-green-600">✓</span>
+                    <span>Records of child support paid or received</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="bg-blue-50 border-l-4 border-blue-400 p-4 mt-6">
+              <p class="font-semibold text-blue-800 mb-2">Pro Tip: Use the IRS Data Retrieval Tool</p>
+              <p class="text-blue-900 text-sm">
+                The FAFSA allows you to import tax information directly from the IRS, which saves time and reduces errors. This option is available for most applicants who have already filed their federal tax returns.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Step 1: Create FSA ID -->
+        <section id="create-fsa-id">
+          <h2 class="text-2xl font-bold text-brand-blue mb-4">Step 1: Create Your FSA ID</h2>
+          <div class="prose max-w-none text-gray-700">
+            <p class="mb-4">
+              Before you can complete the FAFSA, you need an FSA ID — a username and password that serves as your legal signature. If you're a dependent student, your parent will also need their own FSA ID.
+            </p>
+
+            <div class="bg-gray-50 p-5 rounded-lg mb-4">
+              <h3 class="font-bold text-brand-green-text mb-3">To Create Your FSA ID:</h3>
+              <ol class="list-decimal pl-5 space-y-2 text-sm">
+                <li>Go to <a href="https://studentaid.gov/fsa-id/create-account" target="_blank" rel="noopener" class="text-brand-blue hover:underline">studentaid.gov/fsa-id/create-account</a></li>
+                <li>Enter your Social Security number, name, and date of birth</li>
+                <li>Create a username and password</li>
+                <li>Provide your email address and mobile phone number</li>
+                <li>Answer challenge questions for account recovery</li>
+                <li>Agree to the terms and conditions</li>
+                <li>Verify your email address</li>
+              </ol>
+            </div>
+
+            <div class="bg-red-50 border-l-4 border-red-400 p-4">
+              <p class="font-semibold text-red-800 mb-2">Important</p>
+              <p class="text-red-900 text-sm">
+                Each person must create their own FSA ID using their own email address. Parents and students cannot share an FSA ID. Creating an FSA ID for someone else is a federal crime.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Step 2: Start Application -->
+        <section id="start-application">
+          <h2 class="text-2xl font-bold text-brand-blue mb-4">Step 2: Start Your Application</h2>
+          <div class="prose max-w-none text-gray-700">
+            <ol class="list-decimal pl-5 space-y-3 mb-4">
+              <li>Go to <a href="https://studentaid.gov/h/apply-for-aid/fafsa" target="_blank" rel="noopener" class="text-brand-blue hover:underline">studentaid.gov/h/apply-for-aid/fafsa</a></li>
+              <li>Log in with your FSA ID</li>
+              <li>Select "Start New FAFSA" or "Renew FAFSA" if you filed last year</li>
+              <li>Select the correct academic year (the year you'll be attending school)</li>
+            </ol>
+
+            <div class="bg-amber-50 border-l-4 border-amber-400 p-4">
+              <p class="font-semibold text-amber-800 mb-2">Renewal Applicants</p>
+              <p class="text-amber-900 text-sm">
+                If you filed the FAFSA last year, you can select "Renew FAFSA" to pre-populate much of your information. However, you'll still need to update your financial information and school selections.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Step 3: Student Information -->
+        <section id="student-info">
+          <h2 class="text-2xl font-bold text-brand-blue mb-4">Step 3: Student Information</h2>
+          <div class="prose max-w-none text-gray-700">
+            <p class="mb-4">In this section, you'll provide basic information about yourself:</p>
+            <ul class="list-disc pl-5 space-y-2 mb-4">
+              <li><strong>Personal Information:</strong> Name, Social Security number, date of birth, contact information</li>
+              <li><strong>Citizenship Status:</strong> U.S. citizen, eligible noncitizen, or neither</li>
+              <li><strong>Marital Status:</strong> As of the date you sign the FAFSA</li>
+              <li><strong>High School Completion:</strong> Diploma, GED, or homeschool status</li>
+              <li><strong>Grade Level:</strong> Your expected grade level for the upcoming school year</li>
+              <li><strong>Degree/Certificate:</strong> What type of degree you're pursuing</li>
+            </ul>
+
+            <div class="bg-blue-50 border-l-4 border-blue-400 p-4">
+              <p class="font-semibold text-blue-800 mb-2">Name Matching</p>
+              <p class="text-blue-900 text-sm">
+                Your name must match exactly what's on your Social Security card. If there's a mismatch, your FAFSA may be rejected or delayed.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Step 4: Dependency Status -->
+        <section id="dependency-status">
+          <h2 class="text-2xl font-bold text-brand-blue mb-4">Step 4: Dependency Status</h2>
+          <div class="prose max-w-none text-gray-700">
+            <p class="mb-4">
+              The FAFSA will ask a series of questions to determine if you're a dependent or independent student. This is not based on whether your parents claim you on their taxes — it's based on specific federal criteria.
+            </p>
+
+            <div class="bg-gray-50 p-5 rounded-lg mb-4">
+              <h3 class="font-bold text-brand-green-text mb-3">You're Automatically Independent If You:</h3>
+              <ul class="text-sm space-y-2">
+                <li class="flex items-start gap-2">
+                  <span class="text-green-600">✓</span>
+                  <span>Are 24 years of age or older by December 31 of the award year</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-green-600">✓</span>
+                  <span>Are married or separated (but not divorced)</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-green-600">✓</span>
+                  <span>Are enrolled in a master's or doctoral program</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-green-600">✓</span>
+                  <span>Are a veteran or currently serving on active duty</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-green-600">✓</span>
+                  <span>Have legal dependents other than a spouse</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-green-600">✓</span>
+                  <span>Were an orphan, ward of the court, or in foster care at age 13 or older</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-green-600">✓</span>
+                  <span>Are an emancipated minor or homeless/at risk of homelessness</span>
+                </li>
+              </ul>
+            </div>
+
+            <p>
+              If none of these apply, you're considered a dependent student and must provide parent information, even if you don't live with your parents or they don't support you financially.
+            </p>
+          </div>
+        </section>
+
+        <!-- Step 5: Parent Information -->
+        <section id="parent-info">
+          <h2 class="text-2xl font-bold text-brand-blue mb-4">Step 5: Parent Information (If Dependent)</h2>
+          <div class="prose max-w-none text-gray-700">
+            <p class="mb-4">
+              If you're a dependent student, you'll need to provide information about your parent(s). The FAFSA defines "parent" based on your living situation:
+            </p>
+
+            <div class="overflow-x-auto mb-6">
+              <table class="w-full text-sm">
+                <thead class="bg-gray-100">
+                  <tr>
+                    <th class="text-left p-3">Your Situation</th>
+                    <th class="text-left p-3">Whose Information to Report</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="border-b">
+                    <td class="p-3">Married parents living together</td>
+                    <td class="p-3">Both parents</td>
+                  </tr>
+                  <tr class="border-b bg-gray-50">
+                    <td class="p-3">Divorced/separated parents</td>
+                    <td class="p-3">The parent you lived with more in the past 12 months</td>
+                  </tr>
+                  <tr class="border-b">
+                    <td class="p-3">Single parent remarried</td>
+                    <td class="p-3">Your parent and stepparent</td>
+                  </tr>
+                  <tr class="border-b bg-gray-50">
+                    <td class="p-3">Unmarried parents living together</td>
+                    <td class="p-3">Both parents</td>
+                  </tr>
+                  <tr class="border-b">
+                    <td class="p-3">Equal time with divorced parents</td>
+                    <td class="p-3">The parent who provided more financial support</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p>
+              Your parent will need to log in with their own FSA ID to complete their portion of the FAFSA and sign the application.
+            </p>
+          </div>
+        </section>
+
+        <!-- Step 6: Financial Information -->
+        <section id="financial-info">
+          <h2 class="text-2xl font-bold text-brand-blue mb-4">Step 6: Financial Information</h2>
+          <div class="prose max-w-none text-gray-700">
+            <p class="mb-4">
+              The FAFSA uses "prior-prior year" tax information. For example, if you're applying for the 2025-26 school year, you'll report 2023 tax information.
+            </p>
+
+            <div class="grid md:grid-cols-2 gap-6 mb-6">
+              <div class="bg-gray-50 p-5 rounded-lg">
+                <h3 class="font-bold text-brand-green-text mb-3">Income Information</h3>
+                <ul class="text-sm space-y-2">
+                  <li>Adjusted Gross Income (AGI)</li>
+                  <li>Income tax paid</li>
+                  <li>Wages, salaries, and tips</li>
+                  <li>Untaxed income (child support, housing allowances, etc.)</li>
+                  <li>Education credits</li>
+                  <li>IRA deductions and payments</li>
+                </ul>
+              </div>
+
+              <div class="bg-gray-50 p-5 rounded-lg">
+                <h3 class="font-bold text-brand-green-text mb-3">Asset Information</h3>
+                <ul class="text-sm space-y-2">
+                  <li>Cash and savings accounts</li>
+                  <li>Checking account balances</li>
+                  <li>Investments (stocks, bonds, mutual funds)</li>
+                  <li>Real estate (not your primary home)</li>
+                  <li>Business and farm assets</li>
+                  <li>529 plan balances</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="bg-green-50 border-l-4 border-green-400 p-4">
+              <p class="font-semibold text-green-800 mb-2">What's NOT Counted as Assets</p>
+              <p class="text-green-900 text-sm">
+                Your primary home, retirement accounts (401k, IRA, pension plans), the cash value of life insurance, and ABLE accounts are not reported on the FAFSA.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Step 7: School Selection -->
+        <section id="school-selection">
+          <h2 class="text-2xl font-bold text-brand-blue mb-4">Step 7: Select Your Schools</h2>
+          <div class="prose max-w-none text-gray-700">
+            <p class="mb-4">
+              You can list up to 20 schools on your FAFSA. Each school will receive your FAFSA information and use it to create a financial aid package for you.
+            </p>
+
+            <ul class="list-disc pl-5 space-y-2 mb-4">
+              <li>Search for schools by name or use their <a href="/financial-aid/fafsa/fafsa-school-codes" class="text-brand-blue hover:underline">Federal School Code</a></li>
+              <li>Add all schools you're considering — there's no penalty for listing more schools</li>
+              <li>You can add, remove, or change schools after submitting</li>
+              <li>Schools cannot see what other schools are on your list</li>
+            </ul>
+
+            <div class="bg-amber-50 border-l-4 border-amber-400 p-4">
+              <p class="font-semibold text-amber-800 mb-2">State Aid Consideration</p>
+              <p class="text-amber-900 text-sm">
+                Some states provide aid only to students attending in-state schools, or prioritize based on the order schools are listed. Check your state's requirements at <a href="/financial-aid/fafsa/deadlines" class="text-amber-700 hover:underline">FAFSA Deadlines</a>.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Step 8: Sign and Submit -->
+        <section id="sign-submit">
+          <h2 class="text-2xl font-bold text-brand-blue mb-4">Step 8: Sign and Submit</h2>
+          <div class="prose max-w-none text-gray-700">
+            <p class="mb-4">
+              Before submitting, review all information carefully. Both the student and one parent (for dependent students) must sign the FAFSA using their FSA IDs.
+            </p>
+
+            <div class="bg-gray-50 p-5 rounded-lg mb-4">
+              <h3 class="font-bold text-brand-green-text mb-3">Signing Process:</h3>
+              <ol class="list-decimal pl-5 space-y-2 text-sm">
+                <li>The student signs first using their FSA ID</li>
+                <li>If dependent, the parent signs using their FSA ID</li>
+                <li>Both parties can sign at different times — the FAFSA saves your progress</li>
+                <li>The application is not submitted until both required signatures are complete</li>
+              </ol>
+            </div>
+
+            <p>
+              After submitting, you'll see a confirmation page. Save or print this page for your records. You'll also receive a confirmation email.
+            </p>
+          </div>
+        </section>
+
+        <!-- After Submitting -->
+        <section id="after-submitting">
+          <h2 class="text-2xl font-bold text-brand-blue mb-4">What Happens After You Submit</h2>
+          <div class="prose max-w-none text-gray-700">
+
+            <div class="space-y-4">
+              <div class="flex gap-4 items-start">
+                <div class="bg-brand-blue text-white rounded-full w-8 h-8 flex items-center justify-center font-bold shrink-0">1</div>
+                <div>
+                  <h3 class="font-bold text-gray-900">Processing (1-3 Days)</h3>
+                  <p class="text-sm">Your FAFSA is processed by the Department of Education. Most applications are processed within 3-5 days for online submissions.</p>
+                </div>
+              </div>
+
+              <div class="flex gap-4 items-start">
+                <div class="bg-brand-blue text-white rounded-full w-8 h-8 flex items-center justify-center font-bold shrink-0">2</div>
+                <div>
+                  <h3 class="font-bold text-gray-900">FAFSA Submission Summary (FSS)</h3>
+                  <p class="text-sm">You'll receive an FSS (formerly called SAR) with your Student Aid Index (SAI). Review it for accuracy and make corrections if needed.</p>
+                </div>
+              </div>
+
+              <div class="flex gap-4 items-start">
+                <div class="bg-brand-blue text-white rounded-full w-8 h-8 flex items-center justify-center font-bold shrink-0">3</div>
+                <div>
+                  <h3 class="font-bold text-gray-900">Schools Receive Your Information</h3>
+                  <p class="text-sm">Your selected schools receive your FAFSA data and begin preparing financial aid offers.</p>
+                </div>
+              </div>
+
+              <div class="flex gap-4 items-start">
+                <div class="bg-brand-blue text-white rounded-full w-8 h-8 flex items-center justify-center font-bold shrink-0">4</div>
+                <div>
+                  <h3 class="font-bold text-gray-900">Financial Aid Award Letters</h3>
+                  <p class="text-sm">Schools will send you financial aid award letters. Timing varies by school — some send awards within weeks, others not until spring.</p>
+                </div>
+              </div>
+
+              <div class="flex gap-4 items-start">
+                <div class="bg-brand-blue text-white rounded-full w-8 h-8 flex items-center justify-center font-bold shrink-0">5</div>
+                <div>
+                  <h3 class="font-bold text-gray-900">Accept Your Aid</h3>
+                  <p class="text-sm">Review offers carefully, comparing net costs. Accept the aid you want and decline what you don't need (you can accept grants but decline loans, for example).</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Special Circumstances -->
+        <section id="special-circumstances">
+          <h2 class="text-2xl font-bold text-brand-blue mb-4">Special Circumstances</h2>
+          <div class="prose max-w-none text-gray-700">
+
+            <div class="space-y-6">
+              <div class="border-l-4 border-gray-300 pl-4">
+                <h3 class="font-bold text-gray-900 mb-2">Income Changed Significantly</h3>
+                <p class="text-sm">
+                  If your family's income has dropped due to job loss, death, or other circumstances since the tax year reported, contact the financial aid office at your school(s). They can perform a "professional judgment" to adjust your aid based on current circumstances.
+                </p>
+              </div>
+
+              <div class="border-l-4 border-gray-300 pl-4">
+                <h3 class="font-bold text-gray-900 mb-2">Parents Won't Provide Information</h3>
+                <p class="text-sm">
+                  If you're a dependent student and your parents refuse to provide information, you can still submit the FAFSA. You'll only be eligible for unsubsidized loans, but schools may be able to help in documented cases of estrangement or abuse.
+                </p>
+              </div>
+
+              <div class="border-l-4 border-gray-300 pl-4">
+                <h3 class="font-bold text-gray-900 mb-2">Homeless or Unaccompanied Youth</h3>
+                <p class="text-sm">
+                  If you're homeless or at risk of homelessness, you may qualify as an independent student. Your high school counselor, homeless shelter director, or financial aid administrator can verify your status.
+                </p>
+              </div>
+
+              <div class="border-l-4 border-gray-300 pl-4">
+                <h3 class="font-bold text-gray-900 mb-2">Unusual Family Situations</h3>
+                <p class="text-sm">
+                  Divorced parents, incarcerated parents, undocumented parents, or other complex family situations each have specific guidance. The FAFSA help resources and your school's financial aid office can provide assistance.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- CTA Box -->
+      <div class="mt-12 bg-brand-blue text-white p-8 rounded-lg">
+        <h2 class="text-2xl font-bold mb-3">Ready to Get Started?</h2>
+        <p class="mb-6 opacity-90">
+          The sooner you file, the better your chances of receiving the maximum aid available. Many state and institutional programs are first-come, first-served.
+        </p>
+        <div class="flex flex-wrap gap-4">
+          <a href="https://studentaid.gov/h/apply-for-aid/fafsa" target="_blank" rel="noopener" class="bg-white text-brand-blue px-6 py-3 rounded font-bold hover:bg-gray-100 transition-colors">
+            Start Your FAFSA →
+          </a>
+          <a href="/financial-aid/fafsa/deadlines" class="border-2 border-white text-white px-6 py-3 rounded font-bold hover:bg-white hover:text-brand-blue transition-colors">
+            Check Deadlines
+          </a>
+        </div>
+      </div>
+
+      <!-- Related Links -->
+      <div class="mt-8 pt-8 border-t border-gray-200">
+        <h3 class="text-lg font-bold text-gray-900 mb-4">Related Resources</h3>
+        <ul class="space-y-2">
+          <li><a href="/financial-aid/fafsa/fafsa-school-codes" class="text-brand-blue hover:underline">FAFSA School Codes →</a></li>
+          <li><a href="/financial-aid/fafsa/deadlines" class="text-brand-blue hover:underline">FAFSA Deadlines by State →</a></li>
+          <li><a href="/financial-aid/fafsa/common-mistakes" class="text-brand-blue hover:underline">Common FAFSA Mistakes to Avoid →</a></li>
+          <li><a href="/financial-aid" class="text-brand-blue hover:underline">← Back to Financial Aid</a></li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</Layout>

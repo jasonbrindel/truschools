@@ -1,0 +1,240 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import heroImage from '@/images/USED-elementary-students-writing-classroom.jpg';
+
+const title = "How to Choose the Right Elementary School";
+const description = "Finding the right elementary school means looking beyond test scores to understand how a school's culture, teaching approach, and community will support your unique child.";
+const category = 'Elementary School';
+---
+
+<Layout title={title} description={description}>
+  <ArticleBreadcrumb title={title} defaultParent={{ label: 'Elementary Schools', url: '/elementary-schools' }} />
+
+  <!-- Header - Centered, Narrow -->
+  <header class="max-w-[680px] mx-auto px-5 pt-4 md:pt-8">
+    <h1 class="text-4xl md:text-5xl font-bold text-gray-900 leading-tight mb-5">
+      {title}
+    </h1>
+    <p class="text-xl md:text-2xl text-gray-600 italic mb-6">
+      Finding the right elementary school means looking beyond test scores to understand how a school's culture, teaching approach, and community will support your unique child.
+    </p>
+    <p class="text-base text-gray-500 mb-10">By TruSchools Staff</p>
+  </header>
+
+  <!-- Hero Image - Container Width -->
+  <div class="container">
+    <img
+      src={heroImage.src}
+      alt="Elementary students engaged in classroom learning"
+      class="w-full h-[400px] md:h-[500px] object-cover"
+    />
+  </div>
+
+  <!-- Article Container - Centered, Narrow -->
+  <article class="max-w-[680px] mx-auto px-5 py-10 md:py-16">
+    <!-- Article Body -->
+    <div class="article-body text-lg leading-relaxed text-gray-800">
+      <!-- Opening with drop cap -->
+      <p class="first-letter:text-6xl first-letter:font-bold first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:text-gray-900 mb-6">
+        The decision feels momentous because it is. Where your child spends their elementary years—roughly ages five through eleven—shapes not just what they learn but how they feel about learning itself. These are the years when children develop their identities as students, when they discover whether school is a place that understands them or one they must endure. No pressure.
+      </p>
+
+      <p class="mb-6">
+        And yet parents often approach this decision with surprisingly little information. They tour a school for an hour, glance at test scores online, and talk to a few neighbors. This is roughly equivalent to buying a house based on the listing photos and one quick walkthrough—possible, but not ideal. The good news is that with a bit more intentionality, you can gather the information you actually need to make a confident choice.
+      </p>
+
+      <p class="mb-10">
+        This guide walks you through what to look for, what questions to ask, and how to weigh the factors that matter most for your particular child.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">Start with Your Child, Not the School</h2>
+
+      <p class="mb-6">
+        Before you read a single school review or schedule a tour, spend some time thinking about your child. Not the child you wish you had or the child you're hoping school will mold them into—the child sitting across from you at breakfast.
+      </p>
+
+      <p class="mb-6">
+        How does your child learn best? Some children thrive with structure and clear expectations; they like knowing what comes next and having explicit rules to follow. Others wilt under too much structure and need more freedom to explore, move around, and learn at their own pace. Neither learning style is better—but a mismatch between your child's needs and a school's approach can make for a miserable few years.
+      </p>
+
+      <p class="mb-6">
+        Consider your child's social temperament. A shy, sensitive child might flourish in a smaller school where teachers know every student by name and friendships form naturally within a tight community. Or that same child might feel too visible in a small setting and prefer the relative anonymity of a larger school where there are more potential friends to find. An outgoing, energetic child might love a bustling school with lots of activity—or might need a calmer environment to help them focus.
+      </p>
+
+      <p class="mb-10">
+        Think about your child's specific needs. Do they have a learning difference that requires specialized support? Are they academically advanced and in need of challenge? Do they have intense interests—art, science, music—that would benefit from a school with strong programming in those areas? Write these characteristics down. They'll become your filter for evaluating every school you consider.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">Understanding What Test Scores Actually Tell You</h2>
+
+      <p class="mb-6">
+        Let's address the elephant in the room: standardized test scores. They're the first thing many parents look at, and they're readily available online. Higher scores are better, right?
+      </p>
+
+      <p class="mb-6">
+        It's not that simple. Test scores primarily reflect the demographics of the student population—family income, parental education levels, neighborhood resources. Research consistently shows that socioeconomic factors explain most of the variation in school test scores. A school in an affluent suburb isn't necessarily doing a better job teaching; it's serving students who arrive with more advantages.
+      </p>
+
+      <p class="mb-6">
+        What's more useful is looking at growth metrics when they're available. How much progress are students making from year to year? A school that moves students forward significantly—even if absolute scores aren't at the top—may be doing excellent work. Some states publish growth data alongside proficiency rates; seek it out if you can.
+      </p>
+
+      <p class="mb-10">
+        Also consider what test scores don't measure: creativity, curiosity, social-emotional development, love of learning, critical thinking, collaboration skills. These qualities matter enormously for your child's long-term success, and they won't show up in any standardized assessment.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">The School Tour: What to Actually Look For</h2>
+
+      <p class="mb-6">
+        A school tour is theater. The school knows you're coming and has prepared accordingly. The principal is on their best behavior, the hallways have been tidied, and you're being shown the most impressive classrooms. This doesn't mean tours are useless—but you need to look past the performance.
+      </p>
+
+      <p class="mb-6">
+        Pay attention to what's on the walls. Are student work displays cookie-cutter identical (suggesting everyone did the same assignment the same way) or do they show genuine diversity of thought and approach? Is there current student work, or has that art been hanging since September? Walls tell you what a school values and how much student voice matters.
+      </p>
+
+      <p class="mb-6">
+        Watch the students. Do they seem engaged or compliant? There's a difference. Engaged students are leaning in, asking questions, talking with each other about their work. Compliant students are quiet and orderly but not particularly animated. Both can indicate a functional school, but they suggest different educational philosophies.
+      </p>
+
+      <p class="mb-6">
+        Notice how adults interact with children in the hallways. Do teachers greet students by name? When a child needs help, how do adults respond? Is there warmth, or is the atmosphere transactional? The informal moments often reveal more than the formal presentation.
+      </p>
+
+      <p class="mb-10">
+        If possible, visit during arrival or dismissal. These unscripted moments show you how the school really operates. Is there calm or chaos? How are parents and caregivers welcomed? How do staff handle the inevitable minor crises of dropped backpacks and forgotten lunches?
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">Questions Worth Asking</h2>
+
+      <p class="mb-6">
+        Skip the softballs ("What's your teaching philosophy?") and ask questions that require specific answers. Here are some that actually reveal something:
+      </p>
+
+      <p class="mb-6">
+        <strong>About differentiation:</strong> "If my child is struggling with reading, what specifically happens? Walk me through the process from identification to intervention." A good school will have a clear, concrete answer. Vague promises to "meet every child where they are" without explaining how should raise questions.
+      </p>
+
+      <p class="mb-6">
+        <strong>About challenge:</strong> "If my child finishes their work quickly and needs more challenge, what happens?" Again, look for specifics. Some schools have robust enrichment programs; others rely on teachers to differentiate in the moment (which may or may not actually happen).
+      </p>
+
+      <p class="mb-6">
+        <strong>About discipline:</strong> "Tell me about a recent behavior issue and how it was handled." This reveals both the school's discipline philosophy and their willingness to be transparent with you. Schools that use restorative practices will have a different answer than those with zero-tolerance policies. Neither is inherently right or wrong, but one may fit your values better.
+      </p>
+
+      <p class="mb-6">
+        <strong>About teacher retention:</strong> "How many teachers left last year, and why?" High turnover can signal problems with leadership, working conditions, or school culture. Stable faculties tend to mean happier teachers, which tends to mean better outcomes for students.
+      </p>
+
+      <p class="mb-10">
+        <strong>About parent involvement:</strong> "What does meaningful parent engagement look like here?" Some schools want parents deeply involved; others prefer professional boundaries. Know what you're getting into and whether it matches your capacity and preference.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">Talk to Other Parents—Carefully</h2>
+
+      <p class="mb-6">
+        Parent opinions are valuable but limited. Every parent experiences a school through the lens of their own child, and that experience may not predict yours. The parent who raves about the gifted program has a gifted child. The parent who complains about lack of support has a child who needed support the school couldn't provide. Both are telling the truth; neither truth is complete.
+      </p>
+
+      <p class="mb-6">
+        When talking to other parents, ask specific questions rather than soliciting general opinions. "Has your child ever struggled with something, and how did the school respond?" is more useful than "Do you like the school?" Ask about communication: "When there's been a problem, how quickly did the school get in touch?" Ask about the intangibles: "Does your child look forward to going to school?"
+      </p>
+
+      <p class="mb-10">
+        Seek out parents whose children are similar to yours. If your child has ADHD, find parents of kids with ADHD. If your child is an introvert, ask other introvert parents about their experience. The school that works beautifully for a neurotypical extrovert may be a poor fit for a sensitive child who needs more support.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">The Practical Considerations That Actually Matter</h2>
+
+      <p class="mb-6">
+        Sometimes parents feel guilty factoring logistics into an educational decision. Don't. The best school in the world isn't the best school for your family if getting there destroys your morning routine and leaves everyone stressed before the day begins.
+      </p>
+
+      <p class="mb-6">
+        <strong>Transportation:</strong> How will your child get to school? If you're relying on a commute, think about the cumulative toll of that drive—not just once, but five days a week, 180 days a year. What happens when you're sick, or traffic is bad, or there's an early dismissal and you're at work? Proximity isn't everything, but it's not nothing either.
+      </p>
+
+      <p class="mb-6">
+        <strong>Before and after care:</strong> Does the school offer it? What hours? What's the quality like? For working families, this can be as important as the academic program. A school with excellent instruction but limited after-care may not be practical.
+      </p>
+
+      <p class="mb-6">
+        <strong>Cost:</strong> Public schools are free, but many have significant "extras"—field trips, supplies, fundraisers, activities. Private schools have tuition, but also varying levels of financial aid. Be honest about what you can afford and what trade-offs you're willing to make.
+      </p>
+
+      <p class="mb-10">
+        <strong>Siblings:</strong> If you have multiple children, consider how each school would work for all of them—now and in the future. One school that serves everyone may be worth more than separate "perfect" schools that complicate logistics.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">Trust Your Gut—To a Point</h2>
+
+      <p class="mb-6">
+        After all the research and tours and conversations, you'll have a feeling. That feeling matters. If something felt off about a school—even if you can't articulate why—pay attention. Parents often pick up on subtle cues that their conscious mind hasn't processed yet.
+      </p>
+
+      <p class="mb-6">
+        But also check your gut against your biases. Are you drawn to a school because it feels familiar, or because it's actually right for your child? Are you avoiding a school because of outdated reputation or demographic assumptions? Our instincts can be wise, but they can also lead us astray.
+      </p>
+
+      <p class="mb-10">
+        The goal is to find a school where your child will feel known, challenged appropriately, and supported when they struggle. Where teachers will see your particular child and help them grow. Where the culture aligns with your family's values. This school exists—you just have to find it.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">Remember: You Can Change Course</h2>
+
+      <p class="mb-6">
+        Here's the most reassuring truth about elementary school: it's not permanent. If you choose a school and it's not working, you can make a change. Many families switch schools mid-elementary, and children adapt better than adults often expect.
+      </p>
+
+      <p class="mb-6">
+        This doesn't mean you should choose carelessly. But it does mean you don't have to find the one perfect school or ruin your child's future. You're making the best decision you can with the information you have. As your child grows and you learn more, that decision can evolve.
+      </p>
+
+      <p class="mb-10">
+        The fact that you're reading this guide—that you're thinking carefully about your child's education—already puts you ahead. Choose thoughtfully, then commit fully. Your engagement as a parent will matter more than any single school choice ever could.
+      </p>
+
+      <!-- Sources -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
+
+      <ul class="text-sm text-gray-600 space-y-2 mb-10">
+        <li>National Center for Education Statistics. <em>"Digest of Education Statistics."</em> 2023.</li>
+        <li>Chetty, Raj et al. <em>"Measuring the Impacts of Teachers."</em> American Economic Review. 2014.</li>
+        <li>Reardon, Sean F. <em>"The Widening Academic Achievement Gap Between the Rich and the Poor."</em> Stanford University. 2011.</li>
+        <li>Learning Policy Institute. <em>"What Makes a Great School?"</em> 2021.</li>
+        <li>Education Week Research Center. <em>"Parents' Perspectives on School Choice."</em> 2023.</li>
+        <li>Phi Delta Kappan. <em>"The PDK Poll of the Public's Attitudes Toward the Public Schools."</em> 2024.</li>
+      </ul>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-16 pt-8 border-t border-gray-200">
+      <p class="text-sm text-gray-500 italic">
+        This article is provided by TruSchools as an educational resource for families exploring elementary school options.
+      </p>
+      <div class="mt-6">
+        <a href="/elementary-schools" class="text-brand-blue hover:underline font-medium">
+          Browse Elementary Schools by State &rarr;
+        </a>
+      </div>
+    </footer>
+  </article>
+</Layout>

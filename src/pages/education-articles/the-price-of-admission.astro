@@ -1,15 +1,16 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
-import heroImage from '@/images/university-campus-students-walking.jpg';
+import heroImage from '@/images/USED-price-of-admission-financial-aid-2.jpg';
 
 const title = "The Price of Admission";
 const subtitle = "Financial 101 for College-Bound Families";
 const description = "For millions of American families, the path to college has become a labyrinth of forms, formulas, and financial gambles. A guide to navigating the maze.";
+const category = 'Financial Aid';
 ---
 
 <Layout title={`${title}: ${subtitle}`} description={description}>
-  <ArticleBreadcrumb title={title} defaultParent={{ label: 'Colleges', url: '/colleges' }} />
+  <ArticleBreadcrumb title={title} defaultParent={{ label: 'Colleges', url: '/colleges-universities' }} />
 
   <!-- Header - Centered, Narrow -->
   <header class="max-w-[680px] mx-auto px-5 pt-4 md:pt-8">
@@ -268,7 +269,7 @@ const description = "For millions of American families, the path to college has 
         This article is provided by TruSchools as an educational resource for college-bound families.
       </p>
       <div class="mt-6">
-        <a href="/colleges" class="text-brand-blue hover:underline font-medium">
+        <a href="/colleges-universities" class="text-brand-blue hover:underline font-medium">
           Browse Colleges & Universities by State &rarr;
         </a>
       </div>

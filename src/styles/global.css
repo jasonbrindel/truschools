@@ -2,16 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
-/* TrueSchools - Using system fonts like original site */
+/* TruSchools - Using system fonts like original site */
 
 @layer base {
   html {
-    @apply antialiased;
+    @apply antialiased overflow-x-hidden;
     scroll-behavior: smooth;
   }
 
   body {
-    @apply font-sans text-body bg-white text-[15px] leading-[18px];
+    @apply font-sans text-body bg-white text-[15px] leading-[18px] overflow-x-hidden;
   }
 
   h1 {
@@ -92,7 +92,7 @@
     @apply bg-[#EAFBEA];
   }
 
-  /* Buttons - Original TrueSchools style */
+  /* Buttons - Original TruSchools style */
   .btn-blue {
     @apply inline-block px-4 py-2.5 bg-brand-blue text-white text-base rounded
            border border-[#20538D] shadow-[inset_0_1px_0_rgba(255,255,255,0.4),0_1px_1px_rgba(0,0,0,0.2)]

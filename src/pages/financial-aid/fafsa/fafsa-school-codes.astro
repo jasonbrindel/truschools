@@ -1,0 +1,401 @@
+---
+import Layout from '@/layouts/Layout.astro';
+
+// Get database connection
+const runtime = Astro.locals.runtime;
+const db = runtime?.env?.DB;
+
+// State name mapping
+const stateNames: Record<string, string> = {
+  'AL': 'Alabama', 'AK': 'Alaska', 'AZ': 'Arizona', 'AR': 'Arkansas', 'CA': 'California',
+  'CO': 'Colorado', 'CT': 'Connecticut', 'DE': 'Delaware', 'DC': 'District of Columbia',
+  'FL': 'Florida', 'GA': 'Georgia', 'HI': 'Hawaii', 'ID': 'Idaho', 'IL': 'Illinois',
+  'IN': 'Indiana', 'IA': 'Iowa', 'KS': 'Kansas', 'KY': 'Kentucky', 'LA': 'Louisiana',
+  'ME': 'Maine', 'MD': 'Maryland', 'MA': 'Massachusetts', 'MI': 'Michigan', 'MN': 'Minnesota',
+  'MS': 'Mississippi', 'MO': 'Missouri', 'MT': 'Montana', 'NE': 'Nebraska', 'NV': 'Nevada',
+  'NH': 'New Hampshire', 'NJ': 'New Jersey', 'NM': 'New Mexico', 'NY': 'New York',
+  'NC': 'North Carolina', 'ND': 'North Dakota', 'OH': 'Ohio', 'OK': 'Oklahoma', 'OR': 'Oregon',
+  'PA': 'Pennsylvania', 'PR': 'Puerto Rico', 'RI': 'Rhode Island', 'SC': 'South Carolina',
+  'SD': 'South Dakota', 'TN': 'Tennessee', 'TX': 'Texas', 'UT': 'Utah', 'VT': 'Vermont',
+  'VA': 'Virginia', 'WA': 'Washington', 'WV': 'West Virginia', 'WI': 'Wisconsin', 'WY': 'Wyoming',
+  'AS': 'American Samoa', 'FM': 'Federated States of Micronesia', 'GU': 'Guam',
+  'MH': 'Marshall Islands', 'MP': 'Northern Mariana Islands', 'PW': 'Palau', 'VI': 'Virgin Islands'
+};
+
+// Fetch all schools from database
+let schoolsByState: Record<string, Array<{school_code: string, school_name: string, city: string, address: string, zip_code: string}>> = {};
+let totalSchools = 0;
+let internationalSchools: Array<{school_code: string, school_name: string, city: string, country: string, province: string}> = [];
+
+if (db) {
+  try {
+    const result = await db.prepare(`
+      SELECT school_code, school_name, city, state_code, address, zip_code, country, province
+      FROM fafsa_school_codes
+      ORDER BY state_code, school_name
+    `).all();
+
+    if (result.results) {
+      for (const school of result.results as any[]) {
+        // Check if it's an international school (has country that's not N/A or null)
+        if (school.country && school.country !== 'N/A' && school.country !== 'USA') {
+          internationalSchools.push({
+            school_code: school.school_code,
+            school_name: school.school_name,
+            city: school.city || '',
+            country: school.country,
+            province: school.province || ''
+          });
+        } else if (school.state_code && school.state_code !== 'N/A') {
+          if (!schoolsByState[school.state_code]) {
+            schoolsByState[school.state_code] = [];
+          }
+          schoolsByState[school.state_code].push({
+            school_code: school.school_code,
+            school_name: school.school_name,
+            city: school.city || '',
+            address: school.address || '',
+            zip_code: school.zip_code || ''
+          });
+          totalSchools++;
+        }
+      }
+    }
+  } catch (error) {
+    console.error('Error fetching FAFSA codes:', error);
+  }
+}
+
+// Sort states alphabetically by full name
+const sortedStates = Object.keys(schoolsByState).sort((a, b) => {
+  const nameA = stateNames[a] || a;
+  const nameB = stateNames[b] || b;
+  return nameA.localeCompare(nameB);
+});
+
+const title = "FAFSA School Codes - Federal School Code List 2026-27";
+const description = "Complete list of FAFSA school codes for all colleges and universities participating in federal student aid programs. Find your school's Federal School Code for your FAFSA application.";
+---
+
+<Layout title={title} description={description}>
+  <div class="container py-5">
+    <!-- Breadcrumb -->
+    <nav class="text-sm mb-4">
+      <ol class="flex flex-wrap items-center gap-2 text-gray-600">
+        <li><a href="/" class="hover:text-brand-blue">Home</a></li>
+        <li class="text-gray-400">/</li>
+        <li><a href="/financial-aid" class="hover:text-brand-blue">Financial Aid</a></li>
+        <li class="text-gray-400">/</li>
+        <li class="text-gray-900 font-medium">FAFSA School Codes</li>
+      </ol>
+    </nav>
+
+    <!-- Header -->
+    <header class="mb-6">
+      <h1 class="text-brand-green-text mb-2">FAFSA School Codes</h1>
+      <p class="text-xl text-gray-600 mb-4">Federal School Code List 2026-27</p>
+      <p class="text-gray-700 max-w-3xl">
+        Find the Federal School Code for any college, university, or career school that participates in federal student aid programs.
+        You'll need this 6-digit code when completing your <a href="https://studentaid.gov/h/apply-for-aid/fafsa" target="_blank" rel="noopener" class="text-brand-blue hover:underline">FAFSA application</a>
+        to have your financial aid information sent to your chosen schools.
+      </p>
+    </header>
+
+    <!-- Search Box -->
+    <div class="box-rounded bg-lt-blue mb-6">
+      <div class="max-w-xl">
+        <label for="school-search" class="block text-brand-blue font-bold mb-2">Search for a School</label>
+        <input
+          type="text"
+          id="school-search"
+          placeholder="Enter school name or city..."
+          class="input w-full text-lg"
+          autocomplete="off"
+        />
+        <p class="text-sm text-gray-500 mt-2">Type at least 2 characters to search {totalSchools.toLocaleString()} schools</p>
+      </div>
+      <!-- Search Results -->
+      <div id="search-results" class="mt-4 hidden">
+        <div class="bg-white rounded border border-gray-200 max-h-96 overflow-y-auto">
+          <table class="w-full">
+            <thead class="bg-gray-50 sticky top-0">
+              <tr>
+                <th class="text-left p-3 text-sm font-semibold text-gray-700">School Code</th>
+                <th class="text-left p-3 text-sm font-semibold text-gray-700">School Name</th>
+                <th class="text-left p-3 text-sm font-semibold text-gray-700">City, State</th>
+              </tr>
+            </thead>
+            <tbody id="search-results-body">
+            </tbody>
+          </table>
+        </div>
+        <p id="search-count" class="text-sm text-gray-500 mt-2"></p>
+      </div>
+    </div>
+
+    <!-- Jump Menu -->
+    <div class="box-rounded mb-6">
+      <h2 class="text-brand-blue text-lg mb-3">Jump to State</h2>
+      <div class="flex flex-wrap gap-2">
+        {sortedStates.map((stateCode) => (
+          <a
+            href={`#state-${stateCode}`}
+            class="px-3 py-1 bg-gray-100 hover:bg-brand-blue hover:text-white rounded text-sm font-medium transition-colors"
+          >
+            {stateCode} <span class="text-gray-500 text-xs">({schoolsByState[stateCode].length})</span>
+          </a>
+        ))}
+        {internationalSchools.length > 0 && (
+          <a
+            href="#state-INTL"
+            class="px-3 py-1 bg-gray-100 hover:bg-brand-blue hover:text-white rounded text-sm font-medium transition-colors"
+          >
+            International <span class="text-gray-500 text-xs">({internationalSchools.length})</span>
+          </a>
+        )}
+      </div>
+    </div>
+
+    <!-- School Count -->
+    <p class="text-gray-600 mb-6">
+      Showing <strong>{totalSchools.toLocaleString()}</strong> schools across <strong>{sortedStates.length}</strong> states and territories.
+      {internationalSchools.length > 0 && (
+        <span>Plus <strong>{internationalSchools.length}</strong> international schools.</span>
+      )}
+    </p>
+
+    <!-- State Accordions -->
+    <div class="space-y-3" id="state-accordions">
+      {sortedStates.map((stateCode) => {
+        const schools = schoolsByState[stateCode];
+        const stateName = stateNames[stateCode] || stateCode;
+        return (
+          <div class="border border-gray-200 rounded-lg overflow-hidden" id={`state-${stateCode}`}>
+            <button
+              class="accordion-trigger w-full flex items-center justify-between p-4 bg-gray-50 hover:bg-gray-100 transition-colors text-left"
+              data-state={stateCode}
+              aria-expanded="false"
+            >
+              <span class="font-bold text-brand-green-text">
+                {stateName} <span class="font-normal text-gray-500">({schools.length} schools)</span>
+              </span>
+              <svg class="accordion-icon w-5 h-5 text-gray-500 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </button>
+            <div class="accordion-content hidden" data-state={stateCode}>
+              <div class="overflow-x-auto">
+                <table class="w-full">
+                  <thead class="bg-gray-50">
+                    <tr>
+                      <th class="text-left p-3 text-sm font-semibold text-gray-700 w-28">Code</th>
+                      <th class="text-left p-3 text-sm font-semibold text-gray-700">School Name</th>
+                      <th class="text-left p-3 text-sm font-semibold text-gray-700">City</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {schools.map((school, index) => (
+                      <tr class={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                        <td class="p-3 font-mono text-brand-blue font-bold">{school.school_code}</td>
+                        <td class="p-3">{school.school_name}</td>
+                        <td class="p-3 text-gray-600">{school.city}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        );
+      })}
+
+      <!-- International Schools Section -->
+      {internationalSchools.length > 0 && (
+        <div class="border border-gray-200 rounded-lg overflow-hidden" id="state-INTL">
+          <button
+            class="accordion-trigger w-full flex items-center justify-between p-4 bg-gray-50 hover:bg-gray-100 transition-colors text-left"
+            data-state="INTL"
+            aria-expanded="false"
+          >
+            <span class="font-bold text-brand-green-text">
+              International Schools <span class="font-normal text-gray-500">({internationalSchools.length} schools)</span>
+            </span>
+            <svg class="accordion-icon w-5 h-5 text-gray-500 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+          <div class="accordion-content hidden" data-state="INTL">
+            <div class="overflow-x-auto">
+              <table class="w-full">
+                <thead class="bg-gray-50">
+                  <tr>
+                    <th class="text-left p-3 text-sm font-semibold text-gray-700 w-28">Code</th>
+                    <th class="text-left p-3 text-sm font-semibold text-gray-700">School Name</th>
+                    <th class="text-left p-3 text-sm font-semibold text-gray-700">Location</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {internationalSchools.map((school, index) => (
+                    <tr class={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                      <td class="p-3 font-mono text-brand-blue font-bold">{school.school_code}</td>
+                      <td class="p-3">{school.school_name}</td>
+                      <td class="p-3 text-gray-600">
+                        {[school.city, school.province, school.country].filter(Boolean).join(', ')}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+
+    <!-- Source Attribution -->
+    <div class="mt-8 p-4 bg-gray-50 rounded-lg text-sm text-gray-600">
+      <p class="mb-2">
+        <strong>Source:</strong> U.S. Department of Education, Federal Student Aid.
+        <a href="https://fsapartners.ed.gov/knowledge-center/library/resource-type/Federal%20School%20Code%20Lists" target="_blank" rel="noopener" class="text-brand-blue hover:underline">
+          Federal School Code Lists
+        </a>
+      </p>
+      <p class="mb-2">
+        <strong>Data Version:</strong> 2026-27 Federal School Code List (November 2025)
+      </p>
+      <p>
+        The Federal School Code List is updated quarterly. For the most current information, visit
+        <a href="https://studentaid.gov/fafsa-app/FSCsearch" target="_blank" rel="noopener" class="text-brand-blue hover:underline">studentaid.gov</a>.
+      </p>
+    </div>
+
+    <!-- Back to Financial Aid -->
+    <div class="mt-6">
+      <a href="/financial-aid" class="text-brand-blue hover:underline font-medium">&larr; Back to Financial Aid</a>
+    </div>
+  </div>
+
+  <!-- Store all schools data for search -->
+  <script define:vars={{ schoolsByState, stateNames, internationalSchools }}>
+    window.fafsaData = {
+      schoolsByState,
+      stateNames,
+      internationalSchools
+    };
+  </script>
+
+  <script>
+    // Accordion functionality
+    document.querySelectorAll('.accordion-trigger').forEach(trigger => {
+      trigger.addEventListener('click', () => {
+        const state = trigger.getAttribute('data-state');
+        const content = document.querySelector(`.accordion-content[data-state="${state}"]`);
+        const icon = trigger.querySelector('.accordion-icon');
+        const isExpanded = trigger.getAttribute('aria-expanded') === 'true';
+
+        // Toggle this accordion
+        trigger.setAttribute('aria-expanded', (!isExpanded).toString());
+        content?.classList.toggle('hidden');
+        icon?.classList.toggle('rotate-180');
+      });
+    });
+
+    // Open accordion if URL has hash
+    const hash = window.location.hash;
+    if (hash && hash.startsWith('#state-')) {
+      const stateCode = hash.replace('#state-', '');
+      const trigger = document.querySelector(`.accordion-trigger[data-state="${stateCode}"]`) as HTMLButtonElement;
+      if (trigger) {
+        trigger.click();
+        setTimeout(() => {
+          trigger.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
+      }
+    }
+
+    // Search functionality
+    const searchInput = document.getElementById('school-search') as HTMLInputElement;
+    const searchResults = document.getElementById('search-results');
+    const searchResultsBody = document.getElementById('search-results-body');
+    const searchCount = document.getElementById('search-count');
+
+    if (searchInput && searchResults && searchResultsBody && searchCount) {
+      let debounceTimer: ReturnType<typeof setTimeout>;
+
+      searchInput.addEventListener('input', () => {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+          const query = searchInput.value.toLowerCase().trim();
+
+          if (query.length < 2) {
+            searchResults.classList.add('hidden');
+            return;
+          }
+
+          const data = (window as any).fafsaData;
+          const results: Array<{code: string, name: string, location: string}> = [];
+
+          // Search US schools
+          for (const [stateCode, schools] of Object.entries(data.schoolsByState)) {
+            const stateName = data.stateNames[stateCode] || stateCode;
+            for (const school of schools as any[]) {
+              if (
+                school.school_name.toLowerCase().includes(query) ||
+                school.city.toLowerCase().includes(query) ||
+                school.school_code.includes(query)
+              ) {
+                results.push({
+                  code: school.school_code,
+                  name: school.school_name,
+                  location: `${school.city}, ${stateCode}`
+                });
+              }
+            }
+          }
+
+          // Search international schools
+          for (const school of data.internationalSchools) {
+            if (
+              school.school_name.toLowerCase().includes(query) ||
+              school.city.toLowerCase().includes(query) ||
+              school.school_code.includes(query)
+            ) {
+              results.push({
+                code: school.school_code,
+                name: school.school_name,
+                location: [school.city, school.country].filter(Boolean).join(', ')
+              });
+            }
+          }
+
+          // Sort by name
+          results.sort((a, b) => a.name.localeCompare(b.name));
+
+          // Limit to first 100 results for performance
+          const displayResults = results.slice(0, 100);
+
+          // Render results
+          searchResultsBody.innerHTML = displayResults.map((school, index) => `
+            <tr class="${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}">
+              <td class="p-3 font-mono text-brand-blue font-bold">${school.code}</td>
+              <td class="p-3">${school.name}</td>
+              <td class="p-3 text-gray-600">${school.location}</td>
+            </tr>
+          `).join('');
+
+          searchCount.textContent = results.length > 100
+            ? `Showing first 100 of ${results.length} results`
+            : `${results.length} result${results.length === 1 ? '' : 's'} found`;
+
+          searchResults.classList.remove('hidden');
+        }, 200);
+      });
+    }
+  </script>
+
+  <style>
+    .accordion-icon.rotate-180 {
+      transform: rotate(180deg);
+    }
+  </style>
+</Layout>

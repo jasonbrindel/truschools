@@ -1,0 +1,362 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import NewsletterSignup from '@/components/NewsletterSignup.astro';
+
+// Get grants from database
+const runtime = Astro.locals.runtime;
+let studentAidGrants: any[] = [];
+let trioPrograms: any[] = [];
+let higherEdGrants: any[] = [];
+let allGrantsCount = 0;
+let stateScholarships: any[] = [];
+
+if (runtime?.env?.DB) {
+  try {
+    // Get direct student aid programs
+    const studentAidResult = await runtime.env.DB.prepare(`
+      SELECT * FROM federal_grants
+      WHERE is_student_aid = 1
+      ORDER BY cfda_number
+    `).all();
+    studentAidGrants = studentAidResult.results || [];
+
+    // Get TRIO and student support programs
+    const trioResult = await runtime.env.DB.prepare(`
+      SELECT * FROM federal_grants
+      WHERE cfda_number IN ('84.042', '84.044', '84.047', '84.066', '84.217', '84.334', '84.335')
+      ORDER BY cfda_number
+    `).all();
+    trioPrograms = trioResult.results || [];
+
+    // Get other higher ed grants (excluding student aid and TRIO)
+    const higherEdResult = await runtime.env.DB.prepare(`
+      SELECT * FROM federal_grants
+      WHERE is_higher_ed = 1
+      AND is_student_aid = 0
+      AND cfda_number NOT IN ('84.042', '84.044', '84.047', '84.066', '84.217', '84.334', '84.335')
+      ORDER BY title
+      LIMIT 20
+    `).all();
+    higherEdGrants = higherEdResult.results || [];
+
+    // Get total count
+    const countResult = await runtime.env.DB.prepare(`
+      SELECT COUNT(*) as count FROM federal_grants
+    `).first();
+    allGrantsCount = countResult?.count || 0;
+
+    // Get state scholarship programs (most recent year, top programs by expenditure)
+    const stateResult = await runtime.env.DB.prepare(`
+      SELECT state, program_name, expenditures, recipients, year
+      FROM state_scholarships
+      WHERE year = (SELECT MAX(year) FROM state_scholarships)
+      ORDER BY expenditures DESC
+      LIMIT 10
+    `).all();
+    stateScholarships = stateResult.results || [];
+  } catch (e) {
+    console.error('Error fetching grants:', e);
+  }
+}
+
+// All US states for state grants section
+const states = [
+  { name: 'Alabama', slug: 'alabama', abbr: 'AL' },
+  { name: 'Alaska', slug: 'alaska', abbr: 'AK' },
+  { name: 'Arizona', slug: 'arizona', abbr: 'AZ' },
+  { name: 'Arkansas', slug: 'arkansas', abbr: 'AR' },
+  { name: 'California', slug: 'california', abbr: 'CA' },
+  { name: 'Colorado', slug: 'colorado', abbr: 'CO' },
+  { name: 'Connecticut', slug: 'connecticut', abbr: 'CT' },
+  { name: 'Delaware', slug: 'delaware', abbr: 'DE' },
+  { name: 'Florida', slug: 'florida', abbr: 'FL' },
+  { name: 'Georgia', slug: 'georgia', abbr: 'GA' },
+  { name: 'Hawaii', slug: 'hawaii', abbr: 'HI' },
+  { name: 'Idaho', slug: 'idaho', abbr: 'ID' },
+  { name: 'Illinois', slug: 'illinois', abbr: 'IL' },
+  { name: 'Indiana', slug: 'indiana', abbr: 'IN' },
+  { name: 'Iowa', slug: 'iowa', abbr: 'IA' },
+  { name: 'Kansas', slug: 'kansas', abbr: 'KS' },
+  { name: 'Kentucky', slug: 'kentucky', abbr: 'KY' },
+  { name: 'Louisiana', slug: 'louisiana', abbr: 'LA' },
+  { name: 'Maine', slug: 'maine', abbr: 'ME' },
+  { name: 'Maryland', slug: 'maryland', abbr: 'MD' },
+  { name: 'Massachusetts', slug: 'massachusetts', abbr: 'MA' },
+  { name: 'Michigan', slug: 'michigan', abbr: 'MI' },
+  { name: 'Minnesota', slug: 'minnesota', abbr: 'MN' },
+  { name: 'Mississippi', slug: 'mississippi', abbr: 'MS' },
+  { name: 'Missouri', slug: 'missouri', abbr: 'MO' },
+  { name: 'Montana', slug: 'montana', abbr: 'MT' },
+  { name: 'Nebraska', slug: 'nebraska', abbr: 'NE' },
+  { name: 'Nevada', slug: 'nevada', abbr: 'NV' },
+  { name: 'New Hampshire', slug: 'new-hampshire', abbr: 'NH' },
+  { name: 'New Jersey', slug: 'new-jersey', abbr: 'NJ' },
+  { name: 'New Mexico', slug: 'new-mexico', abbr: 'NM' },
+  { name: 'New York', slug: 'new-york', abbr: 'NY' },
+  { name: 'North Carolina', slug: 'north-carolina', abbr: 'NC' },
+  { name: 'North Dakota', slug: 'north-dakota', abbr: 'ND' },
+  { name: 'Ohio', slug: 'ohio', abbr: 'OH' },
+  { name: 'Oklahoma', slug: 'oklahoma', abbr: 'OK' },
+  { name: 'Oregon', slug: 'oregon', abbr: 'OR' },
+  { name: 'Pennsylvania', slug: 'pennsylvania', abbr: 'PA' },
+  { name: 'Rhode Island', slug: 'rhode-island', abbr: 'RI' },
+  { name: 'South Carolina', slug: 'south-carolina', abbr: 'SC' },
+  { name: 'South Dakota', slug: 'south-dakota', abbr: 'SD' },
+  { name: 'Tennessee', slug: 'tennessee', abbr: 'TN' },
+  { name: 'Texas', slug: 'texas', abbr: 'TX' },
+  { name: 'Utah', slug: 'utah', abbr: 'UT' },
+  { name: 'Vermont', slug: 'vermont', abbr: 'VT' },
+  { name: 'Virginia', slug: 'virginia', abbr: 'VA' },
+  { name: 'Washington', slug: 'washington', abbr: 'WA' },
+  { name: 'West Virginia', slug: 'west-virginia', abbr: 'WV' },
+  { name: 'Wisconsin', slug: 'wisconsin', abbr: 'WI' },
+  { name: 'Wyoming', slug: 'wyoming', abbr: 'WY' },
+];
+
+function formatCfdaSlug(cfda: string): string {
+  return cfda.replace('.', '-');
+}
+
+// Strip parentheses from popular_name (SAM.gov data includes them)
+function cleanPopularName(name: string | null): string | null {
+  if (!name) return null;
+  return name.replace(/^\((.+)\)$/, '$1').trim();
+}
+---
+
+<Layout title="Federal Education Grants & Student Aid Programs" description="Explore federal grants for college students including Pell Grants, FSEOG, Work-Study, TRIO programs, and other Department of Education financial aid programs.">
+  <div class="container py-5">
+    <!-- Breadcrumb -->
+    <nav class="text-sm mb-4">
+      <ol class="flex flex-wrap items-center gap-2 text-gray-600">
+        <li><a href="/" class="hover:text-brand-blue">Home</a></li>
+        <li class="text-gray-400">/</li>
+        <li><a href="/financial-aid" class="hover:text-brand-blue">Financial Aid</a></li>
+        <li class="text-gray-400">/</li>
+        <li class="text-gray-900 font-medium">Grants</li>
+      </ol>
+    </nav>
+
+    <h1 class="text-brand-green-text mb-2">Federal Education Grants</h1>
+    <p class="fs-14 text-gray-500 mb-5">
+      The U.S. Department of Education administers {allGrantsCount} grant programs to support students and educational institutions.
+      Unlike loans, grants do not need to be repaid.
+    </p>
+
+    <div class="flex flex-col lg:flex-row gap-5">
+      <!-- Main Content -->
+      <div class="lg:w-2/3">
+        <!-- Student Financial Aid Programs -->
+        <div class="box-rounded mb-5">
+          <h2 class="text-brand-blue text-xl mb-2">Student Financial Aid Grants</h2>
+          <p class="text-gray-600 fs-14 mb-4">
+            These programs provide direct financial assistance to eligible students to help pay for college.
+            Most require completing the <a href="/financial-aid/fafsa/fafsa-school-codes" class="text-brand-blue hover:underline">FAFSA</a>.
+          </p>
+
+          <div class="space-y-4">
+            {studentAidGrants.map((grant) => (
+              <div class="border border-gray-200 rounded p-4 hover:border-brand-blue transition-colors">
+                <div class="flex items-start justify-between gap-4">
+                  <div class="flex-1">
+                    <h3 class="text-brand-green-text font-bold mb-1">
+                      <a href={`/financial-aid/grants/${formatCfdaSlug(grant.cfda_number)}`} class="hover:underline">
+                        {cleanPopularName(grant.popular_name) || grant.title}
+                      </a>
+                    </h3>
+                    {grant.popular_name && (
+                      <p class="text-gray-500 fs-12 mb-2">{grant.title}</p>
+                    )}
+                    <p class="text-gray-600 fs-13 mb-2 line-clamp-2">{grant.objectives}</p>
+                    <div class="flex items-center gap-3 fs-12 text-gray-500">
+                      <span class="bg-gray-100 px-2 py-0.5 rounded">CFDA {grant.cfda_number}</span>
+                      <span class="bg-green-50 text-green-700 px-2 py-0.5 rounded">{grant.assistance_type}</span>
+                    </div>
+                  </div>
+                  <a
+                    href={`/financial-aid/grants/${formatCfdaSlug(grant.cfda_number)}`}
+                    class="text-brand-blue hover:underline fs-13 whitespace-nowrap"
+                  >
+                    Details &rarr;
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <!-- TRIO Programs -->
+        <div class="box-rounded mb-5">
+          <h2 class="text-brand-blue text-xl mb-2">TRIO & Student Support Programs</h2>
+          <p class="text-gray-600 fs-14 mb-4">
+            TRIO programs help students from disadvantaged backgrounds access and succeed in higher education.
+            These are typically administered through colleges and community organizations.
+          </p>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {trioPrograms.map((grant) => (
+              <div class="border border-gray-200 rounded p-4 hover:border-brand-blue transition-colors">
+                <h3 class="text-brand-green-text font-bold mb-1 fs-14">
+                  <a href={`/financial-aid/grants/${formatCfdaSlug(grant.cfda_number)}`} class="hover:underline">
+                    {cleanPopularName(grant.popular_name) || grant.title}
+                  </a>
+                </h3>
+                <p class="text-gray-600 fs-12 mb-2 line-clamp-2">{grant.objectives}</p>
+                <span class="bg-gray-100 px-2 py-0.5 rounded fs-11 text-gray-500">CFDA {grant.cfda_number}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <!-- Other Higher Education Grants -->
+        {higherEdGrants.length > 0 && (
+          <div class="box-rounded mb-5">
+            <h2 class="text-brand-blue text-xl mb-2">Other Higher Education Grants</h2>
+            <p class="text-gray-600 fs-14 mb-4">
+              Additional federal programs supporting colleges, universities, and postsecondary education.
+            </p>
+
+            <div class="grid grid-cols-1 gap-3">
+              {higherEdGrants.map((grant) => (
+                <a
+                  href={`/financial-aid/grants/${formatCfdaSlug(grant.cfda_number)}`}
+                  class="flex items-center justify-between p-3 border border-gray-200 rounded hover:border-brand-blue transition-colors"
+                >
+                  <div>
+                    <span class="text-gray-800 fs-14">{grant.title}</span>
+                    <span class="text-gray-400 fs-12 ml-2">(CFDA {grant.cfda_number})</span>
+                  </div>
+                  <span class="text-brand-blue fs-13">&rarr;</span>
+                </a>
+              ))}
+            </div>
+
+            <div class="mt-4 pt-4 border-t border-gray-200">
+              <a href="/financial-aid/grants/all" class="text-brand-blue hover:underline font-medium fs-14">
+                View all {allGrantsCount} federal education grants &rarr;
+              </a>
+            </div>
+          </div>
+        )}
+
+        <!-- How to Apply -->
+        <div class="box-rounded mb-5 bg-lt-blue">
+          <h2 class="text-brand-blue text-xl mb-3">How to Apply for Federal Grants</h2>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="bg-white p-4 rounded">
+              <div class="text-2xl font-bold text-brand-blue mb-2">1</div>
+              <h3 class="font-bold text-gray-800 mb-1 fs-14">Complete the FAFSA</h3>
+              <p class="text-gray-600 fs-13">
+                File the Free Application for Federal Student Aid at
+                <a href="https://studentaid.gov" target="_blank" rel="noopener" class="text-brand-blue hover:underline">StudentAid.gov</a>
+              </p>
+            </div>
+            <div class="bg-white p-4 rounded">
+              <div class="text-2xl font-bold text-brand-blue mb-2">2</div>
+              <h3 class="font-bold text-gray-800 mb-1 fs-14">Review Your SAR</h3>
+              <p class="text-gray-600 fs-13">
+                Check your Student Aid Report for your Expected Family Contribution (EFC) and eligibility
+              </p>
+            </div>
+            <div class="bg-white p-4 rounded">
+              <div class="text-2xl font-bold text-brand-blue mb-2">3</div>
+              <h3 class="font-bold text-gray-800 mb-1 fs-14">Accept Your Award</h3>
+              <p class="text-gray-600 fs-13">
+                Review and accept your financial aid package through your school's portal
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="lg:w-1/3">
+        <!-- Quick Links -->
+        <div class="box-rounded bg-lt-blue mb-4">
+          <h3 class="text-brand-blue mb-3">Quick Links</h3>
+          <ul class="space-y-2 fs-14">
+            <li>
+              <a href="https://studentaid.gov/h/apply-for-aid/fafsa" target="_blank" rel="noopener" class="text-brand-blue hover:underline flex items-center gap-1">
+                <span>&rarr;</span> Apply for FAFSA
+              </a>
+            </li>
+            <li>
+              <a href="/financial-aid/fafsa/fafsa-school-codes" class="text-brand-blue hover:underline flex items-center gap-1">
+                <span>&rarr;</span> FAFSA School Codes
+              </a>
+            </li>
+            <li>
+              <a href="https://studentaid.gov/aid-estimator/" target="_blank" rel="noopener" class="text-brand-blue hover:underline flex items-center gap-1">
+                <span>&rarr;</span> Federal Aid Estimator
+              </a>
+            </li>
+            <li>
+              <a href="/financial-aid" class="text-brand-blue hover:underline flex items-center gap-1">
+                <span>&rarr;</span> Financial Aid Overview
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Ad Placeholder -->
+        <div class="box-rounded mb-4">
+          <div class="bg-gray-100 h-[280px] flex items-center justify-center text-gray-400 fs-13">
+            Advertisement
+          </div>
+        </div>
+
+        <!-- State Grant Programs -->
+        <div class="box-rounded mb-4">
+          <h3 class="text-brand-blue mb-2">State Grant Programs</h3>
+          <p class="text-gray-600 fs-13 mb-3">
+            Many states offer their own grant and scholarship programs. Here are some of the largest:
+          </p>
+          {stateScholarships.length > 0 ? (
+            <ul class="space-y-2 fs-13">
+              {stateScholarships.map((prog) => (
+                <li class="border-b border-gray-100 pb-2">
+                  <div class="font-medium text-gray-800">{prog.program_name}</div>
+                  <div class="text-gray-500 fs-12 flex items-center gap-2">
+                    <span>{prog.state}</span>
+                    {prog.expenditures > 0 && (
+                      <span>• ${(prog.expenditures / 1000000).toFixed(0)}M</span>
+                    )}
+                    {prog.recipients > 0 && (
+                      <span>• {prog.recipients.toLocaleString()} recipients</span>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p class="text-gray-500 fs-12 italic">State grant data loading...</p>
+          )}
+          <p class="text-gray-400 fs-11 mt-3 italic">
+            Source: NASSGAP Annual Survey ({stateScholarships[0]?.year || '2024'})
+          </p>
+        </div>
+
+        <!-- Data Source -->
+        <div class="box-rounded mb-4 bg-gray-50">
+          <h3 class="text-gray-700 mb-2 fs-14">Data Source</h3>
+          <p class="text-gray-500 fs-12">
+            Grant information from the <a href="https://sam.gov/content/assistance-listings" target="_blank" rel="noopener" class="text-brand-blue hover:underline">SAM.gov Assistance Listings</a>
+            (formerly CFDA - Catalog of Federal Domestic Assistance).
+          </p>
+        </div>
+
+        <!-- Newsletter -->
+        <NewsletterSignup preselected={['financial-aid']} />
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>

@@ -1,14 +1,18 @@
 ---
 import Layout from '@/layouts/Layout.astro';
+import QAPoll from '@/components/QAPoll.astro';
+import NewsletterSignup from '@/components/NewsletterSignup.astro';
 
 // Images for featured article and topic cards
-import featuredImage from '@/images/student-looking-up-wonder.jpg';
-import learningImage from '@/images/elementary-classroom-students-learning.jpg';
-import activitiesImage from '@/images/colorful-school-campus-illustration.jpg';
-import healthImage from '@/images/school-playground-sunset-illustration.jpg';
-import findingImage from '@/images/modern-elementary-school-building-illustration.jpg';
-import parentingImage from '@/images/student-first-day-school-illustration.jpg';
-import behaviorImage from '@/images/elementary-students-smiling-classroom.jpg';
+import featuredImage from '@/images/USED-preschool-1.jpg';
+import choosingImage from '@/images/USED-preschool-teacher-reading.jpg';
+import worthItImage from '@/images/USED-preschool-girl-classroom.jpg';
+import iepImage from '@/images/USED-preschool-girl-bench.jpg';
+import goodPreschoolImage from '@/images/USED-kindergarten-classroom-environment.jpg';
+import whatMattersImage from '@/images/USED-preschool-teacher-reading-children.jpg';
+import montessoriVsTraditionalImage from '@/images/USED-preschool-classroom-toys.jpg';
+import findRightSchoolImage from '@/images/USED-students-walking-to-school-illustration.jpg';
+import schoolChoiceImage from '@/images/USED-school-courtyard-students-illustration.jpg';
 
 // All US states
 const states = [
@@ -124,55 +128,55 @@ function slugify(text: string): string {
   return text.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
 }
 
-// Topic categories with placeholder articles
-const topics = [
+// Featured articles for the topic cards
+const featuredArticles = [
   {
-    title: 'Learning for Preschoolers',
-    image: learningImage,
-    articles: [
-      { title: '14 Homework Tips for Parents', url: '#' },
-      { title: 'Early Reading Activities', url: '#' },
-    ]
+    title: 'Choosing a Preschool When Everything Feels Like It Matters',
+    url: '/education-articles/choosing-a-preschool',
+    image: choosingImage,
+    description: 'The research on what actually matters in early childhood education—and how to find it during a 30-minute tour.',
   },
   {
-    title: 'Activities & Games',
-    image: activitiesImage,
-    articles: [
-      { title: 'Fun Activities for Kids', url: '#' },
-      { title: 'Educational Games for Toddlers', url: '#' },
-    ]
+    title: 'Is Preschool Worth It?',
+    url: '/education-articles/is-preschool-worth-it',
+    image: worthItImage,
+    description: 'What six decades of research actually tells us about early childhood education—the benefits, the limits, and what it means for your family.',
   },
   {
-    title: 'Physical Health',
-    image: healthImage,
-    articles: [
-      { title: 'Preventing Childhood Obesity', url: '#' },
-      { title: 'Healthy Snacks for Preschoolers', url: '#' },
-    ]
+    title: 'When Your Preschooler Needs More Help',
+    url: '/education-articles/when-your-preschooler-needs-more-help',
+    image: iepImage,
+    description: 'Navigating the path from early concerns to an IEP—and learning to advocate for your child along the way.',
   },
   {
-    title: 'Finding a Preschool',
-    image: findingImage,
-    articles: [
-      { title: 'Finding & Evaluating Schools for Your Child', url: '#' },
-      { title: 'Questions to Ask When Touring Preschools', url: '#' },
-    ]
+    title: 'What Does a Good Preschool Actually Look Like?',
+    url: '/education-articles/what-does-a-good-preschool-look-like',
+    image: goodPreschoolImage,
+    description: 'The search for the right early learning environment is more nuanced than checklists suggest—and more forgiving than anxious parents might fear.',
   },
   {
-    title: 'Parenting a Preschooler',
-    image: parentingImage,
-    articles: [
-      { title: 'Parenting Styles: What\'s Your Style?', url: '#' },
-      { title: 'Building Independence in Young Children', url: '#' },
-    ]
+    title: 'What Actually Matters in Preschool',
+    url: '/education-articles/what-actually-matters-in-preschool',
+    image: whatMattersImage,
+    description: 'Research shows that the quality of teacher-child relationships matters more than educational philosophy.',
   },
   {
-    title: 'Behavior & Social Health',
-    image: behaviorImage,
-    articles: [
-      { title: 'Helping Your Child Deal with Bullying', url: '#' },
-      { title: 'Teaching Social Skills to Preschoolers', url: '#' },
-    ]
+    title: 'Montessori vs. Traditional Preschool: Which Is Right for Your Child?',
+    url: '/education-articles/montessori-vs-traditional-preschool',
+    image: montessoriVsTraditionalImage,
+    description: 'The research is promising but complicated. What actually matters is finding the right fit for your particular child.',
+  },
+  {
+    title: 'How to Find the Right School for Your Child',
+    url: '/education-articles/how-to-find-the-right-school?from=preschools',
+    image: findRightSchoolImage,
+    description: 'School ratings can tell you a lot—but not everything. Here\'s what actually matters when choosing a school.',
+  },
+  {
+    title: 'The Rise of School Choice',
+    url: '/education-articles/the-rise-of-school-choice?from=preschools',
+    image: schoolChoiceImage,
+    description: 'Understanding your options: public, private, charter, magnet, and homeschool—and how to decide.',
   },
 ];
 ---
@@ -196,46 +200,39 @@ const topics = [
       <div class="lg:w-2/3">
         <!-- Featured Article -->
         <div class="box-rounded mb-5">
-          <div class="flex flex-col md:flex-row gap-4">
-            <div class="md:w-1/3">
-              <img
-                src={featuredImage.src}
-                alt="Preschool child"
-                class="w-full aspect-video object-cover rounded"
-              />
-            </div>
-            <div class="md:w-2/3">
-              <h2 class="text-brand-blue text-xl mb-2">
-                <a href="#" class="hover:underline">Discover Fun Activities for Kids</a>
-              </h2>
-              <p class="text-gray-600 fs-14">
-                Looking for ways to keep your preschooler engaged and learning? Explore our collection of
-                fun, educational activities perfect for young children.
-              </p>
-            </div>
-          </div>
+          <img
+            src={featuredImage.src}
+            alt="Preschool children learning"
+            class="w-full aspect-video object-cover rounded mb-4"
+          />
+          <h2 class="text-brand-blue text-xl mb-2">
+            <a href="/education-articles/how-to-choose-a-preschool" class="hover:underline">The First Classroom: What Really Matters When Choosing a Preschool</a>
+          </h2>
+          <p class="text-gray-600 fs-14">
+            Research from the Harvard Center on the Developing Child confirms what parents intuit: the early years matter profoundly. Learn what quality actually looks like in early childhood education, from teacher-child interactions to safety and licensing. <a href="/education-articles/how-to-choose-a-preschool" class="text-brand-blue hover:underline">Read article &rarr;</a>
+          </p>
         </div>
 
         <!-- Topic Categories -->
         <div class="box-rounded mb-5">
           <h2 class="text-brand-blue text-xl mb-4">Preschool Topics</h2>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {topics.map((topic) => (
-              <div class="border border-gray-200 rounded overflow-hidden">
-                <img
-                  src={topic.image.src}
-                  alt={topic.title}
-                  class="w-full aspect-square object-cover"
-                />
-                <div class="p-4">
-                  <h3 class="text-brand-green-text font-bold mb-2 fs-14">{topic.title}</h3>
-                  <ul class="space-y-1 fs-13">
-                    {topic.articles.map((article) => (
-                      <li>
-                        <a href={article.url} class="text-brand-blue hover:underline">{article.title}</a>
-                      </li>
-                    ))}
-                  </ul>
+            <!-- Featured Article Cards -->
+            {featuredArticles.map((article) => (
+              <div class="border border-gray-200 rounded overflow-hidden p-4">
+                <a href={article.url}>
+                  <img
+                    src={article.image.src}
+                    alt={article.title}
+                    class="w-full aspect-square object-cover rounded"
+                  />
+                </a>
+                <div class="pt-4">
+                  <h3 class="text-brand-green-text font-bold mb-1 fs-14">
+                    <a href={article.url} class="hover:underline">{article.title}</a>
+                  </h3>
+                  <p class="text-gray-600 fs-12 mb-2 leading-snug">{article.description}</p>
+                  <a href={article.url} class="text-brand-blue hover:underline fs-13">Read article &rarr;</a>
                 </div>
               </div>
             ))}
@@ -244,16 +241,12 @@ const topics = [
 
         <!-- Q&A Section -->
         <div class="box-rounded mb-5 bg-lt-blue">
-          <h2 class="text-brand-blue text-lg mb-3">Preschool Q&A</h2>
-          <p class="text-gray-700 fs-14 mb-3">
-            <strong>Question:</strong> What do you look for when choosing a preschool for your child?
-          </p>
-          <div class="flex gap-2 flex-wrap">
-            <button class="px-3 py-1 bg-white border border-gray-300 rounded text-sm hover:bg-gray-50">Location</button>
-            <button class="px-3 py-1 bg-white border border-gray-300 rounded text-sm hover:bg-gray-50">Curriculum</button>
-            <button class="px-3 py-1 bg-white border border-gray-300 rounded text-sm hover:bg-gray-50">Cost</button>
-            <button class="px-3 py-1 bg-white border border-gray-300 rounded text-sm hover:bg-gray-50">Teacher Quality</button>
-          </div>
+          <QAPoll
+            questionId="preschool-important-factor"
+            pageSlug="preschools"
+            question="What do you look for when choosing a preschool for your child?"
+            answers={["Location", "Curriculum", "Cost", "Teacher Quality"]}
+          />
         </div>
 
         <!-- Browse by State -->
@@ -324,18 +317,13 @@ const topics = [
               <a href="/high-schools">High Schools</a>
             </li>
             <li class="py-2">
-              <a href="/colleges">Colleges & Universities</a>
+              <a href="/colleges-universities">Colleges & Universities</a>
             </li>
           </ul>
         </div>
 
         <!-- Newsletter Signup -->
-        <div class="box-rounded">
-          <h3 class="text-brand-blue mb-3">Newsletter Signup</h3>
-          <p class="fs-13 text-gray-600 mb-3">Get the latest preschool news and tips delivered to your inbox.</p>
-          <input type="email" placeholder="Your email address" class="input w-full mb-2" />
-          <button class="btn btn-primary w-full">Subscribe</button>
-        </div>
+        <NewsletterSignup preselected={['preschool']} />
       </div>
     </div>
   </div>

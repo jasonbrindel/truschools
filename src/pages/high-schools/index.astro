@@ -1,14 +1,18 @@
 ---
 import Layout from '@/layouts/Layout.astro';
+import QAPoll from '@/components/QAPoll.astro';
+import NewsletterSignup from '@/components/NewsletterSignup.astro';
 
 // Images for featured article and topic cards
-import featuredImage from '@/images/high-school-student-crowd.jpg';
-import academicsImage from '@/images/high-school-students-classroom-vintage.jpg';
-import collegePrepImage from '@/images/student-backpack-walking-school.jpg';
-import extracurricularsImage from '@/images/school-basketball-court-illustration.jpg';
-import findingSchoolsImage from '@/images/american-high-school-campus-vintage.jpg';
-import parentingImage from '@/images/school-hallway-lockers-illustration.jpg';
-import healthImage from '@/images/student-peer-group-school.jpg';
+import featuredImage from '@/images/USED-high-school-graduation-requirements.jpg';
+import apClassesImage from '@/images/USED-ap-classes-explained.jpg';
+import gpaImage from '@/images/USED-weighted-unweighted-gpa.jpg';
+import mentalHealthImage from '@/images/USED-teen-mental-health-warning-signs.jpg';
+import findRightSchoolImage from '@/images/USED-students-walking-to-school-illustration.jpg';
+import publicPrivateImage from '@/images/USED-colorful-school-campus-illustration.jpg';
+import magnetSchoolsImage from '@/images/USED-modern-school-building-field.jpg';
+import stemSchoolImage from '@/images/USED-students-science-education-hologram.jpg';
+import charterSchoolImage from '@/images/USED-school-campus-colorful-illustration.jpg';
 
 // All US states
 const states = [
@@ -124,59 +128,55 @@ function slugify(text: string): string {
   return text.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
 }
 
-// Topic categories with placeholder articles
-const topics = [
+// Featured articles for the topic cards
+const featuredArticles = [
   {
-    title: 'High School Academics',
-    image: academicsImage,
-    articles: [
-      { title: 'What to Teach When AI Does the Work', url: '/education-articles/what-to-teach-when-ai-does-the-work?from=high-schools' },
-      { title: 'AP Classes: Are They Right for Your Teen?', url: '#' },
-    ]
+    title: 'AP Classes Explained',
+    url: '/education-articles/ap-classes-explained',
+    image: apClassesImage,
+    description: 'How many to take, which ones matter, and what colleges really want from AP coursework.',
   },
   {
-    title: 'College Prep',
-    image: collegePrepImage,
-    articles: [
-      { title: 'The Diploma and the Torque Wrench', url: '/education-articles/the-diploma-and-the-torque-wrench?from=high-schools' },
-      { title: 'The Comeback of Vocational Schools', url: '/education-articles/the-comeback-of-vocational-schools?from=high-schools' },
-      { title: 'College Admissions Essays', url: '#' },
-    ]
+    title: 'Weighted vs. Unweighted GPA',
+    url: '/education-articles/weighted-vs-unweighted-gpa',
+    image: gpaImage,
+    description: 'Why your 4.3 weighted GPA might mean less than you think—and why a 3.8 with the right courses could mean more.',
   },
   {
-    title: 'Extracurriculars',
-    image: extracurricularsImage,
-    articles: [
-      { title: 'Sports and College Scholarships', url: '#' },
-      { title: 'Building a Strong Resume', url: '#' },
-    ]
+    title: 'When Worry Becomes Something More',
+    url: '/education-articles/when-worry-becomes-something-more',
+    image: mentalHealthImage,
+    description: 'Understanding the warning signs of teen mental health struggles—and what parents can actually do about them.',
   },
   {
-    title: 'Finding Schools',
-    image: findingSchoolsImage,
-    articles: [
-      { title: 'How to Find the Right School', url: '/education-articles/how-to-find-the-right-school?from=high-schools' },
-      { title: 'The Rise of School Choice', url: '/education-articles/the-rise-of-school-choice?from=high-schools' },
-      { title: 'Public vs. Private School', url: '/education-articles/public-vs-private-school?from=high-schools' },
-      { title: 'What Is a STEM School?', url: '/education-articles/what-is-a-stem-school?from=high-schools' },
-      { title: 'Understanding Magnet Schools', url: '/education-articles/understanding-magnet-schools?from=high-schools' },
-    ]
+    title: 'How to Find the Right School for Your Child',
+    url: '/education-articles/how-to-find-the-right-school?from=high-schools',
+    image: findRightSchoolImage,
+    description: 'School ratings can tell you a lot—but not everything. Here\'s what actually matters when choosing a school.',
   },
   {
-    title: 'Parenting Teens',
-    image: parentingImage,
-    articles: [
-      { title: 'Communicating with Your Teenager', url: '#' },
-      { title: 'Setting Expectations and Boundaries', url: '#' },
-    ]
+    title: 'Public vs. Private School',
+    url: '/education-articles/public-vs-private-school?from=high-schools',
+    image: publicPrivateImage,
+    description: 'What the research really says about costs, performance, class size, and making the right choice for your family.',
   },
   {
-    title: 'Health & Wellness',
-    image: healthImage,
-    articles: [
-      { title: 'The Stillness Epidemic', url: '/education-articles/the-stillness-epidemic?from=high-schools' },
-      { title: 'Teen Mental Health Awareness', url: '#' },
-    ]
+    title: 'Understanding Magnet Schools',
+    url: '/education-articles/understanding-magnet-schools?from=high-schools',
+    image: magnetSchoolsImage,
+    description: 'What magnet schools offer, how to apply, and whether they\'re worth the commute.',
+  },
+  {
+    title: 'What Is a STEM School?',
+    url: '/education-articles/what-is-a-stem-school?from=high-schools',
+    image: stemSchoolImage,
+    description: 'Beyond the buzzword: what STEM-focused schools actually teach and who they\'re best for.',
+  },
+  {
+    title: 'Charter Schools: What Parents Need to Know',
+    url: '/education-articles/charter-schools-what-parents-need-to-know?from=high-schools',
+    image: charterSchoolImage,
+    description: 'Understanding how charter schools work, what makes them different, and how to decide if one is right for your child.',
   },
 ];
 ---
@@ -200,46 +200,42 @@ const topics = [
       <div class="lg:w-2/3">
         <!-- Featured Article -->
         <div class="box-rounded mb-5">
-          <div class="flex flex-col md:flex-row gap-4">
-            <div class="md:w-1/3">
-              <img
-                src={featuredImage.src}
-                alt="High school students"
-                class="w-full aspect-video object-cover rounded"
-              />
-            </div>
-            <div class="md:w-2/3">
-              <h2 class="text-brand-blue text-xl mb-2">
-                <a href="#" class="hover:underline">Preparing Your Teen for College</a>
-              </h2>
-              <p class="text-gray-600 fs-14">
-                The high school years are critical for college preparation. Learn what steps your teen
-                should take to build a competitive college application.
-              </p>
-            </div>
-          </div>
+          <a href="/education-articles/high-school-graduation-requirements-by-state">
+            <img
+              src={featuredImage.src}
+              alt="High school students preparing for graduation"
+              class="w-full aspect-video object-cover rounded mb-4"
+            />
+          </a>
+          <h2 class="text-brand-blue text-xl mb-2">
+            <a href="/education-articles/high-school-graduation-requirements-by-state" class="hover:underline">High School Graduation Requirements by State: What Your Teen Actually Needs to Graduate</a>
+          </h2>
+          <p class="text-gray-600 fs-14">
+            From 13 credits in Wyoming to 26 in Texas, the requirements for a high school diploma vary dramatically across the country. Understanding your state's specific rules—and how local districts may add their own—is essential for planning your student's path to graduation and beyond. <a href="/education-articles/high-school-graduation-requirements-by-state" class="text-brand-blue hover:underline">Read article &rarr;</a>
+          </p>
         </div>
 
-        <!-- Topic Categories -->
+        <!-- Articles & Guides -->
         <div class="box-rounded mb-5">
-          <h2 class="text-brand-blue text-xl mb-4">High School Topics</h2>
+          <h2 class="text-brand-blue text-xl mb-2">Articles & Guides for Parents & Students</h2>
+          <p class="text-gray-600 fs-14 mb-4">Explore our collection of articles covering everything from graduation requirements and AP courses to college prep, extracurriculars, and the social side of high school. Whether you're planning ahead or navigating challenges right now, we're here to help.</p>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {topics.map((topic) => (
-              <div class="border border-gray-200 rounded overflow-hidden">
-                <img
-                  src={topic.image.src}
-                  alt={topic.title}
-                  class="w-full aspect-square object-cover"
-                />
-                <div class="p-4">
-                  <h3 class="text-brand-green-text font-bold mb-2 fs-14">{topic.title}</h3>
-                  <ul class="space-y-1 fs-13">
-                    {topic.articles.map((article) => (
-                      <li>
-                        <a href={article.url} class="text-brand-blue hover:underline">{article.title}</a>
-                      </li>
-                    ))}
-                  </ul>
+            {/* Featured Article Cards */}
+            {featuredArticles.map((article) => (
+              <div class="border border-gray-200 rounded overflow-hidden p-4">
+                <a href={article.url}>
+                  <img
+                    src={article.image.src}
+                    alt={article.title}
+                    class="w-full aspect-square object-cover rounded"
+                  />
+                </a>
+                <div class="pt-4">
+                  <h3 class="text-brand-green-text font-bold mb-1 fs-14">
+                    <a href={article.url} class="hover:underline">{article.title}</a>
+                  </h3>
+                  <p class="text-gray-600 fs-12 mb-2 leading-snug">{article.description}</p>
+                  <a href={article.url} class="text-brand-blue hover:underline fs-13">Read article &rarr;</a>
                 </div>
               </div>
             ))}
@@ -248,16 +244,12 @@ const topics = [
 
         <!-- Q&A Section -->
         <div class="box-rounded mb-5 bg-lt-blue">
-          <h2 class="text-brand-blue text-lg mb-3">High School Q&A</h2>
-          <p class="text-gray-700 fs-14 mb-3">
-            <strong>Question:</strong> What's most important when choosing a high school?
-          </p>
-          <div class="flex gap-2 flex-wrap">
-            <button class="px-3 py-1 bg-white border border-gray-300 rounded text-sm hover:bg-gray-50">Academic programs</button>
-            <button class="px-3 py-1 bg-white border border-gray-300 rounded text-sm hover:bg-gray-50">College prep</button>
-            <button class="px-3 py-1 bg-white border border-gray-300 rounded text-sm hover:bg-gray-50">Sports programs</button>
-            <button class="px-3 py-1 bg-white border border-gray-300 rounded text-sm hover:bg-gray-50">Location</button>
-          </div>
+          <QAPoll
+            questionId="high-school-important-factor"
+            pageSlug="high-schools"
+            question="What's most important when choosing a high school?"
+            answers={["Academic programs", "College prep", "Sports programs", "Location"]}
+          />
         </div>
 
         <!-- Browse by State -->
@@ -328,18 +320,13 @@ const topics = [
               <a href="/middle-schools">Middle Schools</a>
             </li>
             <li class="py-2">
-              <a href="/colleges">Colleges & Universities</a>
+              <a href="/colleges-universities">Colleges & Universities</a>
             </li>
           </ul>
         </div>
 
         <!-- Newsletter Signup -->
-        <div class="box-rounded">
-          <h3 class="text-brand-blue mb-3">Newsletter Signup</h3>
-          <p class="fs-13 text-gray-600 mb-3">Get the latest high school news and college prep tips delivered to your inbox.</p>
-          <input type="email" placeholder="Your email address" class="input w-full mb-2" />
-          <button class="btn btn-primary w-full">Subscribe</button>
-        </div>
+        <NewsletterSignup preselected={['high']} />
       </div>
     </div>
   </div>

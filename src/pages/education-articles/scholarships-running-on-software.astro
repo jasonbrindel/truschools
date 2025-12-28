@@ -1,0 +1,334 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import heroImage from '@/images/USED-scholarships-running-on-software.jpg';
+
+const title = "Scholarships, Now Running on Software";
+const description = "The emerging stack behind college and graduate funding—how discovery, eligibility, verification, and review are being transformed by technology.";
+const category = 'Financial Aid';
+---
+
+<Layout title={title} description={description}>
+  <ArticleBreadcrumb title={title} defaultParent={{ label: 'Financial Aid', url: '/financial-aid' }} />
+
+  <!-- Header - Centered, Narrow -->
+  <header class="max-w-[680px] mx-auto px-5 pt-4 md:pt-8">
+    <p class="text-sm font-semibold tracking-wide text-brand-green-text uppercase mb-4">Scholarships</p>
+    <h1 class="text-4xl md:text-5xl font-bold text-gray-900 leading-tight mb-5">
+      Scholarships, Now Running on Software
+    </h1>
+    <p class="text-xl md:text-2xl text-gray-600 italic mb-6">
+      The emerging stack behind college and graduate funding
+    </p>
+    <p class="text-base text-gray-500 mb-10">By TruSchools Staff</p>
+  </header>
+
+  <!-- Hero Image - Container Width -->
+  <div class="container">
+    <img
+      src={heroImage.src}
+      alt="Technology and education funding intersection"
+      class="w-full h-[400px] md:h-[500px] object-cover"
+    />
+  </div>
+
+  <!-- Article Container - Centered, Narrow -->
+  <article class="max-w-[680px] mx-auto px-5 py-10 md:py-16">
+    <!-- Article Body -->
+    <div class="article-body text-lg leading-relaxed text-gray-800">
+      <!-- Opening with drop cap -->
+      <p class="first-letter:text-6xl first-letter:font-bold first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:text-gray-900 mb-6">
+        When families talk about scholarships, they talk about essays, deadlines, and luck. Underneath, a different story is taking shape: scholarships are being rebuilt as software systems. Discovery is shifting from web search to recommendation feeds. Eligibility is being encoded as rules and schemas. Verification is moving from document uploads to data exchange. And review workflows are being shaped by enterprise platforms that look a lot like customer relationship management, except the "customers" are students and the stakes are a semester of rent.
+      </p>
+
+      <p class="mb-6">
+        This matters because the scale is large enough that infrastructure choices become policy. College Board estimates total grant aid reached about $173.7 billion in 2024–25. The FAFSA itself now relies on a "direct data exchange" to transfer federal tax information in real time from the IRS into the aid process, with consent and approval requirements that are now baked into eligibility. When money moves through wired systems, the limiting factor stops being a single committee's bandwidth and becomes the quality of data, the correctness of eligibility logic, and the reliability of integrations.
+      </p>
+
+      <p class="mb-10">
+        This article maps the new scholarship stack. It explains what is changing, how the core components work, where they fail, and what milestones to watch next.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">1. Why scholarships are getting "stacky"</h2>
+
+      <p class="mb-6">
+        For decades, scholarship administration was a local craft. A department managed a handful of donor funds, students found them through word of mouth, and a committee made selections with a spreadsheet and a stack of PDFs. The internet globalized discovery, but not operations. It created more "places to apply," without making it easier to verify eligibility, route applications, or disburse funds at scale.
+      </p>
+
+      <p class="mb-6">
+        Two forces are turning scholarships into infrastructure.
+      </p>
+
+      <p class="mb-6">
+        The first is <strong>data integration</strong>, driven by federal student aid modernization. Beginning with the 2024–25 award year, the FAFSA shifted to the FUTURE Act Direct Data Exchange (FA-DDX), which replaced the older IRS Data Retrieval Tool for importing certain federal tax information. The requirement is not merely "use the system if you can." Federal guidance makes consent a condition of eligibility: if required contributors do not provide consent and approval for their federal tax information to be used, the student's aid eligibility is affected. In other words, aid is now computed by a multi-party data workflow, not by a single person typing numbers into a form.
+      </p>
+
+      <p class="mb-6">
+        The second force is <strong>operations</strong>. Universities and scholarship foundations have discovered that their processes do not scale. That can show up as unspent funds, underuse of specialized scholarships, or staff overwhelmed by review cycles. Vendors now sell scholarship platforms that promise centralized applications, automated matching, configurable review workflows, and integration with student information systems. Ellucian's Scholarship Universe, for example, is positioned as a matching and management platform, and it publishes a formal "vetting process" for external scholarships to reduce scams.
+      </p>
+
+      <p class="mb-10">
+        The result is a recognizable stack: <strong>Discovery</strong> (databases and recommendation interfaces), <strong>Application</strong> (portals, document collection, and deadline automation), <strong>Eligibility logic</strong> (rules, schemas, and constraint filters), <strong>Verification</strong> (identity, enrollment, and financial data checks), <strong>Review</strong> (routing, scoring rubrics, committees, and audit trails), and <strong>Disbursement and reporting</strong> (payments, reconciliation, and donor reporting). Each layer creates new capabilities, and new failure modes.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">2. Discovery is becoming recommendation</h2>
+
+      <p class="mb-6">
+        A scholarship database is not difficult to build. The difficult part is matching. Scholarship eligibility is closer to a constraint satisfaction problem than a simple search problem. Requirements can include grade level, residency, major, GPA thresholds, timing constraints, demographic criteria, and donor-specific rules. Many requirements live in natural language and resist clean categorization.
+      </p>
+
+      <p class="mb-6">
+        Modern scholarship tools increasingly behave like recommendation engines. University guidance around Scholarship Universe, for instance, describes it as using student-provided profile information to match students with relevant scholarships. Ellucian markets it as "adaptive student matching" and emphasizes its internal vetting of external opportunities.
+      </p>
+
+      <p class="mb-6">
+        Technically, there are three common approaches:
+      </p>
+
+      <p class="mb-6">
+        <strong>Rules-first matching:</strong> Scholarships are represented as a set of structured criteria (GPA cutoff, residency, major codes) and sometimes a free-text description. Student profiles are structured in the same way. Matching is then boolean filtering. This design is fast, interpretable, and audit-friendly. But it struggles with criteria that are inherently qualitative ("demonstrated leadership") and with programs whose "rules" are buried in prose.
+      </p>
+
+      <p class="mb-6">
+        <strong>Hybrid retrieval plus rules:</strong> Here the system first uses information retrieval to narrow the candidate set, then applies rules for strict constraints. A scholarship's eligibility text is indexed, often using keyword and semantic techniques; the student profile becomes a query that retrieves "likely relevant" scholarships. A rule engine then enforces the hard requirements. This hybrid architecture is popular because it tolerates messy language while still preventing obvious mismatches.
+      </p>
+
+      <p class="mb-6">
+        <strong>Model-assisted matching:</strong> The newest experiments use machine learning models, including large language models, to parse scholarship descriptions, extract eligibility constraints, and map them into a structured schema. In theory, an LLM can read "open to first-generation students pursuing teaching" and populate specific fields. In practice, this is where hallucinations and subtle extraction errors become expensive. The engineering challenge is not just the model. It is the surrounding guardrails: confidence scoring, human review for extracted rules, and continuous evaluation against real award outcomes.
+      </p>
+
+      <p class="mb-10">
+        For scholarship matching, the meaningful metrics are precision and recall under asymmetric costs. False positives waste student time and overwhelm reviewers. False negatives leave money on the table and, more importantly, preserve inequity because only students with counseling and time find the "hidden" opportunities. Good systems usually bias toward higher recall but must provide transparency about why a match happened and what evidence supports it.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">3. The verification layer: "prove it," at scale</h2>
+
+      <p class="mb-6">
+        Scholarships sit at the intersection of trust and money. A program wants to fund students quickly, but it also needs to prevent fraud, comply with donor constraints, and satisfy auditors. Verification becomes the bottleneck.
+      </p>
+
+      <p class="mb-6">
+        In federal aid, verification is increasingly a data integration problem. StudentAid.gov explains that, with consent and approval, the Department of Education can obtain federal tax information automatically from the IRS for the FAFSA. Federal guidance also describes how the FA-DDX replaces the IRS DRT beginning in 2024–25. The underlying idea is familiar to anyone who has built an integration: eliminate manual entry, reduce errors, and standardize the pipeline.
+      </p>
+
+      <p class="mb-6">
+        But integrations fail, and the FAFSA system has made that visible at national scale. In June 2025, TIGTA reported that the IRS transferred incorrect federal tax information to the Department of Education for some FAFSA requests, affecting forms and triggering reprocessing of millions of requests. The significance is not just the incident itself. It is the architectural lesson: when an aid system becomes "live," upstream data quality becomes a student's lived experience.
+      </p>
+
+      <p class="mb-6">
+        Outside federal aid, scholarship verification is more fragmented, but the same patterns appear:
+      </p>
+
+      <ul class="list-disc pl-6 mb-6 space-y-2">
+        <li><strong>Identity verification:</strong> At universities, this is often handled through single sign-on and institution accounts. For external scholarships, it can involve email, phone verification, or KYC-style checks.</li>
+        <li><strong>Enrollment verification:</strong> Scholarships frequently require proof of enrollment and program status. Some systems integrate with student information systems; others rely on registrar letters or enrollment verification services.</li>
+        <li><strong>Academic verification:</strong> GPA, major, credits completed, and standing. Again, this can be API-based (when integrated) or document-based (when not).</li>
+        <li><strong>Financial need verification:</strong> Some scholarships use FAFSA-derived measures; others rely on tax returns, income statements, or institutional forms.</li>
+      </ul>
+
+      <p class="mb-10">
+        Verification creates a privacy trade-off. Integration enables automation and reduces student friction. But it also centralizes sensitive data, increasing breach impact and surveillance risk. That is why the more mature systems adopt "minimum necessary" design patterns: collect only what you need, when you need it, limit access by role, and prefer verified attributes over raw documents.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">4. Digital credentials and machine-readable eligibility</h2>
+
+      <p class="mb-6">
+        If the scholarship stack has a missing piece, it is a standard way to represent proof across organizations. Today, students repeatedly upload the same transcript, the same enrollment letter, and the same identity documents because each portal is a silo. The friction is partly economic and partly technical: there is no widely adopted interoperable credential format for these claims.
+      </p>
+
+      <p class="mb-6">
+        That is changing, slowly, through standards that emerged from digital identity work. The W3C Verifiable Credentials specifications define a way for an issuer (say, a university) to create a cryptographically verifiable credential about a holder (a student) that can be presented to a verifier (a scholarship foundation). The Verifiable Credentials Overview frames the family of specifications as a roadmap for expressing and verifying digital credentials. The Verifiable Credentials Data Model v2.0 describes the core issuer-holder-verifier ecosystem and how credentials can be made tamper-evident and machine-verifiable. In 2025, W3C published Verifiable Credentials 2.0 as a W3C Standard, emphasizing security and privacy-respecting verification.
+      </p>
+
+      <p class="mb-6">
+        In scholarship terms, a verifiable credential could represent: enrollment status (without requiring a letter), a degree or certificate, a GPA band (above 3.5) rather than the exact number, or completion of a prerequisite course or training.
+      </p>
+
+      <p class="mb-6">
+        The most important technical frontier is <strong>selective disclosure</strong>. Many scholarship decisions need one attribute, not a full record. Modern VC approaches can support proving "I meet this threshold" without revealing everything else. That reduces data hoarding and makes privacy a functional property of the system rather than a policy promise.
+      </p>
+
+      <p class="mb-10">
+        The limiting factor is governance, not cryptography. Credential Engine and the Digital Credentials Consortium have argued that scalable trust requires issuer identity registries and governance frameworks that let verifiers confirm that credential issuers are legitimate. Without trust infrastructure, a "verifiable" credential is only as meaningful as the verifier's ability to know who issued it. If credential wallets become common in education, scholarship applications could shift from document uploads to presenting verified claims. The UX becomes simpler. The security boundary becomes clearer. But the politics of adoption, across thousands of institutions, will be slow.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">5. Review at scale: workflow software meets values</h2>
+
+      <p class="mb-6">
+        Even as discovery and verification improve, many scholarship decisions remain human. Committees read essays, weigh trade-offs, and decide what "merit" and "need" mean in context. Software cannot remove that normative layer. What it can do is structure the work.
+      </p>
+
+      <p class="mb-6">
+        Scholarship platforms typically provide a centralized portal, configurable review workflows, and scoring rubrics. Ellucian, for example, positions its tools as streamlining matching and simplifying scholarship management. Other enterprise products market features such as automated matching, configurable committees, and permission controls. Under the hood, this is workflow technology: ticket queues, role-based routing, templated communications, and dashboards.
+      </p>
+
+      <p class="mb-6">
+        The interesting question is where machine assistance enters the human process. Some programs now use automated summarization to help reviewers skim applications, or automated checks to flag missing requirements, or clustering to group candidates by eligibility. These tools can reduce time, but they can also distort signal. Summaries omit nuance; clusters can amplify whatever features the system finds easiest to quantify. The biggest risk is false authority: a model's output can feel objective because it is produced by a system, even when it is merely a transformation of imperfect inputs.
+      </p>
+
+      <p class="mb-10">
+        A grounded rule: software can solve queueing problems more reliably than it can solve judgment problems. Routing and reminders are engineering. Deciding "leadership potential" is values.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">6. Generative AI enters the application, and detection does not solve it</h2>
+
+      <p class="mb-6">
+        Scholarship essays have always been coached. The change now is that coaching can be automated, on demand, at scale. Students use large language models to brainstorm, outline, rephrase, and polish. That can help students who lack access to paid counselors. It can also flatten essays into generic prose that gives reviewers less signal.
+      </p>
+
+      <p class="mb-6">
+        Institutions and scholarship providers have tried to detect AI-generated writing, but the evidence base is cautious. Turnitin has published survey work on AI in education and has also emphasized responsible adoption. Meanwhile, major reporting has highlighted the unreliability of AI detectors and the stress they create for students who fear false accusations.
+      </p>
+
+      <p class="mb-6">
+        In scholarship contexts, this creates an authenticity arms race with no stable end state: penalizing AI-assisted writing risks punishing students for using tools that are rapidly becoming standard. Ignoring AI entirely risks a flood of low-signal submissions. Relying on detectors can introduce opaque, appeal-resistant errors.
+      </p>
+
+      <p class="mb-10">
+        A more engineering-minded response is to redesign for signal rather than attempt perfect detection. That can mean shorter prompts that demand concrete detail, structured questions with verifiable claims, portfolios and artifacts, or interviews for finalists. The evaluation layer changes when writing becomes cheap.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">7. Graduate funding already runs on platforms</h2>
+
+      <p class="mb-6">
+        Graduate scholarships and fellowships look different from undergraduate awards. They are often tied to research output, professional pipelines, or national priorities. They also tend to have clearer rubrics and higher dollar values, which drives more formal process design and compliance.
+      </p>
+
+      <p class="mb-6">
+        Consider NSF's Graduate Research Fellowship Program. NSF's official funding page and program solicitation describe benefits of a $37,000 annual stipend and a $16,000 cost-of-education allowance for each of three years of support within a five-year window, with funds awarded to the institution for disbursement and the fellowship described as portable. The review pipeline is standardized around NSF's merit review criteria, including "Intellectual Merit" and "Broader Impacts."
+      </p>
+
+      <p class="mb-6">
+        NIH's Ruth L. Kirschstein National Research Service Award (NRSA) fellowships operate through a different kind of machinery: stipends are published as official pay scales, updated through NIH notices, and embedded in the grants management ecosystem. Fulbright's U.S. Student Program, in turn, runs on a multi-stage selection pipeline with award benefits described in categories such as a cost-of-living stipend and health benefits, with variations by country and award type.
+      </p>
+
+      <p class="mb-10">
+        These programs show why the scholarship stack matters. The "front end" is still an application. The "back end" is a pipeline: identity checks, document handling, reviewer assignment, conflict of interest rules, scoring aggregation, and post-award compliance. Software design choices shape how that pipeline treats applicants, how quickly it moves, and how legible decisions are.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">8. Failure modes you can name</h2>
+
+      <p class="mb-6">
+        As scholarships become software, their failures become more legible, and sometimes more damaging.
+      </p>
+
+      <ul class="list-disc pl-6 mb-6 space-y-3">
+        <li><strong>Schema drift:</strong> Eligibility concepts change. The FAFSA's move from the Expected Family Contribution to the Student Aid Index is a schema event. Platforms that hardcode old fields will miscompute eligibility or miscommunicate requirements.</li>
+        <li><strong>Data mismatch and provenance:</strong> Integrations inherit upstream definitions and bugs. The TIGTA report on incorrect tax data transfers is an extreme example. Smaller mismatches are everyday realities: major code mappings, GPA scale differences, timing mismatches between enrollment status and term dates.</li>
+        <li><strong>Bias in proxies:</strong> If systems use convenience signals like zip code, school attended, or language patterns to triage applicants, they can encode socioeconomic bias even without explicit protected-class fields.</li>
+        <li><strong>Security and privacy risk:</strong> Scholarship portals can contain identity documents, financial data, and educational records. Centralization reduces friction but increases the blast radius of a breach.</li>
+        <li><strong>Operational overload:</strong> High-recall matching can swamp reviewers if the workflow lacks triage stages. A platform that surfaces "everything you qualify for" can turn into a new kind of inbox chaos.</li>
+      </ul>
+
+      <p class="mb-10">
+        Naming these failure modes is useful because it lets students and institutions ask better questions about tools.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">9. Using the stack safely: what students can do now</h2>
+
+      <p class="mb-6">
+        Students do not control the scholarship stack, but they can navigate it strategically.
+      </p>
+
+      <p class="mb-6">
+        <strong>Prefer programs with clear provenance:</strong> Scholarships surfaced through universities, state agencies, or established national programs usually have clearer verification and dispute pathways. For independent offers, use scam guidance from authoritative sources. The FTC warns that guaranteed scholarships, requests for payment, and demands for bank account information are common scam signals. StudentAid.gov also maintains a page on avoiding scams tied to student aid.
+      </p>
+
+      <p class="mb-6">
+        <strong>Treat profile data like a security boundary:</strong> Matching tools ask for personal information. Provide what is necessary for matching, but be cautious with sensitive documents until you have verified the legitimacy of the program and the organization.
+      </p>
+
+      <p class="mb-6">
+        <strong>Use AI as an assistant, not a ventriloquist:</strong> AI can help with structure and clarity. But reviewers still respond to specificity. A good test is whether every paragraph contains at least one detail only you could know, and at least one claim you could prove if asked.
+      </p>
+
+      <p class="mb-6">
+        <strong>Build a reusable "credential packet":</strong> Even before verifiable credentials become mainstream, reduce friction by organizing transcripts, enrollment letters, portfolios, and key data fields (GPA, service hours, job history) so forms do not become an error-prone retyping exercise.
+      </p>
+
+      <p class="mb-10">
+        <strong>Think in pipelines:</strong> Many scholarships use multi-stage filtering. Optimize first for completeness and eligibility clarity, then for differentiation in later stages.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">10. What to watch next</h2>
+
+      <p class="mb-6">
+        The scholarship ecosystem is converging on a few trajectories.
+      </p>
+
+      <p class="mb-6">
+        <strong>Machine-readable scholarship criteria:</strong> If eligibility descriptions are published as structured metadata, matching becomes cheaper and more reliable. Watch for efforts to standardize scholarship schemas and require structured rule definitions instead of free-text PDFs.
+      </p>
+
+      <p class="mb-6">
+        <strong>Verified attributes instead of raw documents:</strong> Credential wallets and W3C VC standards could make "prove you qualify" a one-click flow. The milestones will be trust registries, schema adoption, and institutional buy-in, not flashier cryptography.
+      </p>
+
+      <p class="mb-6">
+        <strong>Privacy-preserving matching:</strong> Selective disclosure and local matching could let a student compute which scholarships match them without uploading sensitive profiles to third parties. That would shift power toward the applicant.
+      </p>
+
+      <p class="mb-6">
+        <strong>Auditability for AI-assisted review:</strong> If AI summarization and triage become normal, expect pressure for transparent logs: what the system saw, what it produced, and how humans overrode it. In high-stakes allocation, audit trails become a governance requirement.
+      </p>
+
+      <p class="mb-6">
+        <strong>Consolidation of scholarship infrastructure:</strong> Scholarship management increasingly resembles other enterprise markets: a few dominant platforms, deep integrations with student information systems, and lock-in via workflows and data. Institutions will need to balance convenience against dependency.
+      </p>
+
+      <p class="mb-10">
+        Scholarships will always be partly about narrative: who a student is, what they want to do, who chooses to invest in them. But the route from narrative to funding is now paved with software. The question is whether that software becomes a bridge to opportunity, or just a more efficient maze.
+      </p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
+      <ul class="text-sm text-gray-600 space-y-2 mb-10">
+        <li>College Board, Trends in College Pricing and Student Aid 2025 (grant aid totals for 2024–25).</li>
+        <li>StudentAid.gov, "What does it mean to provide consent and approval to share federal tax information?"</li>
+        <li>Federal Student Aid (FSA Partner Connect), "FAFSA Simplification Act Changes for Implementation in 2024–25" (Dear Colleague Letter, Aug 4, 2023).</li>
+        <li>Federal Student Aid (FSA Handbook), Application and Verification Guide (2024–25 and 2025–26).</li>
+        <li>Ellucian, Scholarship Universe product page and "Scholarship Universe Vetting Process" (PDF).</li>
+        <li>Treasury Inspector General for Tax Administration, "The IRS Transferred Incorrect Federal Tax Information to the Department of Education for Federal Student Aid" (Report 2025-2S0-029, Jun 30, 2025).</li>
+        <li>W3C, Verifiable Credentials Overview (Sept 24, 2025).</li>
+        <li>W3C, Verifiable Credentials Data Model v2.0 (W3C Recommendation, May 15, 2025).</li>
+        <li>Credential Engine and Digital Credentials Consortium, Issuer Identity Registry Research Report (PDF, Jun 9, 2025).</li>
+        <li>Turnitin, "Crossroads: Navigating the intersection of AI in education" (Apr 14, 2025).</li>
+        <li>NSF, Graduate Research Fellowship Program (GRFP) funding page and Program Solicitation.</li>
+        <li>NIH, Notice NOT-OD-25-105, "Ruth L. Kirschstein NRSA Stipend Levels for FY 2025" (May 16, 2025).</li>
+        <li>Fulbright U.S. Student Program, Award Benefits.</li>
+        <li>FTC (Consumer Advice), "How To Avoid Scholarship and Financial Aid Scams."</li>
+        <li>StudentAid.gov, "Avoiding Student Aid Scams."</li>
+      </ul>
+    </div>
+
+    <footer class="mt-16 pt-8 border-t border-gray-200">
+      <p class="text-sm text-gray-500 italic">
+        This article is provided by TruSchools as an educational resource for families navigating the college financial aid process.
+      </p>
+      <div class="mt-6">
+        <a href="/financial-aid" class="text-brand-blue hover:underline font-medium">
+          Back to Financial Aid &rarr;
+        </a>
+      </div>
+    </footer>
+  </article>
+</Layout>

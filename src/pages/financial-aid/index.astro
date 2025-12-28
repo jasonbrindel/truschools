@@ -1,5 +1,12 @@
 ---
 import Layout from '@/layouts/Layout.astro';
+import QAPoll from '@/components/QAPoll.astro';
+import NewsletterSignup from '@/components/NewsletterSignup.astro';
+import LoanCalculator from '@/components/LoanCalculator.astro';
+import priceOfAdmissionImage from '@/images/USED-price-of-admission-financial-aid-2.jpg';
+import grantsArticleImage from '@/images/USED-architecture-college-funding-grants.jpg';
+import loansArticleImage from '@/images/USED-student-loan-infrastructure-guide.jpg';
+import scholarshipsArticleImage from '@/images/USED-scholarships-running-on-software.jpg';
 
 // All US states for college lookup
 const states = [
@@ -57,65 +64,30 @@ const states = [
   { name: 'Wyoming', slug: 'wyoming', abbr: 'WY' },
 ];
 
-// Financial aid topic categories
-const topics = [
+// Featured articles
+const featuredArticles = [
   {
-    title: 'Financial Aid Basics',
-    description: 'Understanding the fundamentals of college financial aid, including grants, loans, and work-study programs.',
-    articles: [
-      { title: 'The Price of Admission: Financial 101', url: '/education-articles/the-price-of-admission?from=financial-aid' },
-      { title: 'How Financial Aid Works', url: '#' },
-      { title: 'Types of Financial Aid Explained', url: '#' },
-    ]
+    title: 'The Architecture of College Funding: How Technology Is Reshaping Educational Grants',
+    url: '/education-articles/architecture-of-college-funding-grants',
+    image: grantsArticleImage,
+    description: 'From FAFSA modernization to AI-powered scholarship matching, the infrastructure of financial aid is undergoing its most significant transformation in decades.',
   },
   {
-    title: 'College Grants',
-    description: 'Grants are free money that does not need to be repaid. Learn about federal, state, and institutional grant programs.',
-    articles: [
-      { title: 'Federal Pell Grants', url: '#' },
-      { title: 'State Grant Programs', url: '#' },
-      { title: 'Institutional Grants', url: '#' },
-    ]
+    title: 'The $1.8 Trillion Machine: How Student Loan Infrastructure Is Being Rebuilt',
+    url: '/education-articles/student-loan-infrastructure-guide',
+    image: loansArticleImage,
+    description: 'Federal policy overhauls, servicer meltdowns, and fintech disruption are forcing a fundamental rethinking of how Americans finance higher education.',
   },
   {
-    title: 'Student Loans',
-    description: 'Student loans are the most common form of financial aid. Understand the differences between federal and private loans.',
-    articles: [
-      { title: 'Federal vs. Private Loans', url: '#' },
-      { title: 'Understanding Loan Repayment', url: '#' },
-      { title: 'Loan Forgiveness Programs', url: '#' },
-    ]
-  },
-  {
-    title: 'College Scholarships',
-    description: 'Scholarships are awarded based on merit, need, or specific criteria. They do not need to be repaid.',
-    articles: [
-      { title: 'Finding Scholarships', url: '#' },
-      { title: 'Writing Scholarship Essays', url: '#' },
-      { title: 'Scholarship Deadlines', url: '#' },
-    ]
-  },
-  {
-    title: 'Work-Study Programs',
-    description: 'Federal Work-Study provides part-time jobs for students with financial need, helping cover education expenses.',
-    articles: [
-      { title: 'How Work-Study Works', url: '#' },
-      { title: 'Finding Work-Study Jobs', url: '#' },
-    ]
-  },
-  {
-    title: 'FAFSA',
-    description: 'The Free Application for Federal Student Aid (FAFSA) is required for most financial aid programs.',
-    articles: [
-      { title: 'FAFSA Application Guide', url: '#' },
-      { title: 'FAFSA Deadlines', url: '#' },
-      { title: 'Common FAFSA Mistakes', url: '#' },
-    ]
+    title: 'Scholarships, Now Running on Software',
+    url: '/education-articles/scholarships-running-on-software',
+    image: scholarshipsArticleImage,
+    description: 'The emerging stack behind college and graduate funding—how discovery, eligibility, verification, and review are being transformed by technology.',
   },
 ];
 ---
 
-<Layout title="Financial Aid for College" description="Everything you need to know about financial aid for college, including grants, loans, scholarships, work-study, and the FAFSA application process.">
+<Layout title="Financial Aid for College & Graduate School" description="Everything you need to know about financial aid for college, including grants, loans, scholarships, work-study, and the FAFSA application process.">
   <div class="container py-5">
     <!-- Breadcrumb -->
     <nav class="text-sm mb-4">
@@ -126,7 +98,7 @@ const topics = [
       </ol>
     </nav>
 
-    <h1 class="text-brand-green-text mb-2">Financial Aid for College</h1>
+    <h1 class="text-brand-green-text mb-2">Financial Aid for College & Graduate School</h1>
     <p class="fs-14 text-gray-500 mb-5">Everything you need to know about paying for higher education.</p>
 
     <div class="flex flex-col lg:flex-row gap-5">
@@ -134,22 +106,21 @@ const topics = [
       <div class="lg:w-2/3">
         <!-- Featured Article -->
         <div class="box-rounded mb-5">
-          <div class="flex flex-col md:flex-row gap-4">
-            <div class="md:w-1/3">
-              <div class="bg-gray-200 aspect-video rounded flex items-center justify-center text-gray-400">
-                Featured Image
-              </div>
-            </div>
-            <div class="md:w-2/3">
-              <h2 class="text-brand-blue text-xl mb-2">
-                <a href="/education-articles/the-price-of-admission?from=financial-aid" class="hover:underline">The Price of Admission: Financial 101 for College-Bound Families</a>
-              </h2>
-              <p class="text-gray-600 fs-14">
-                For millions of American families, the path to college has become a labyrinth of forms, formulas, and financial gambles.
-                Understanding financial aid terminology is essential: grants, loans, and work-study are the three main types of aid available.
-              </p>
-            </div>
-          </div>
+          <a href="/education-articles/the-price-of-admission?from=financial-aid">
+            <img
+              src={priceOfAdmissionImage.src}
+              alt="College campus with stacks of cash representing financial aid"
+              class="w-full aspect-video object-cover rounded mb-4"
+            />
+          </a>
+          <h2 class="text-brand-blue text-xl mb-2">
+            <a href="/education-articles/the-price-of-admission?from=financial-aid" class="hover:underline">The Price of Admission: Financial 101 for College-Bound Families</a>
+          </h2>
+          <p class="text-gray-600 fs-14">
+            For millions of American families, the path to college has become a labyrinth of forms, formulas, and financial gambles.
+            Understanding financial aid terminology is essential: grants, loans, and work-study are the three main types of aid available.
+            <a href="/education-articles/the-price-of-admission?from=financial-aid" class="text-brand-blue hover:underline">Read article &rarr;</a>
+          </p>
         </div>
 
         <!-- Introduction -->
@@ -166,21 +137,146 @@ const topics = [
           </ul>
         </div>
 
-        <!-- Topic Categories -->
+        <!-- FAFSA Section -->
         <div class="box-rounded mb-5">
-          <h2 class="text-brand-blue text-xl mb-4">Financial Aid Topics</h2>
+          <h2 class="text-brand-blue mb-3">FAFSA (Free Application for Federal Student Aid)</h2>
+          <p class="text-gray-700 mb-4">
+            The FAFSA is the gateway to federal financial aid, including Pell Grants, federal student loans, and work-study programs.
+            Most colleges also use it to determine eligibility for institutional aid. Filing early is crucial—some states and schools
+            award aid on a first-come, first-served basis.
+          </p>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div class="bg-gray-50 p-4 rounded">
+              <h3 class="text-brand-green-text font-bold mb-2 fs-14">What You'll Need</h3>
+              <ul class="text-gray-600 fs-13 space-y-1">
+                <li>Social Security Number</li>
+                <li>Federal tax returns (or tax transcripts)</li>
+                <li>Records of untaxed income</li>
+                <li>Bank statements and investment records</li>
+                <li>FSA ID (create at StudentAid.gov)</li>
+              </ul>
+            </div>
+            <div class="bg-gray-50 p-4 rounded">
+              <h3 class="text-brand-green-text font-bold mb-2 fs-14">Key Dates for 2025-26</h3>
+              <ul class="text-gray-600 fs-13 space-y-1">
+                <li><strong>Dec 1, 2024:</strong> FAFSA opens</li>
+                <li><strong>Varies:</strong> State priority deadlines</li>
+                <li><strong>Varies:</strong> College deadlines</li>
+                <li><strong>June 30, 2025:</strong> Federal deadline</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="border-t border-gray-200 pt-4">
+            <h3 class="text-brand-green-text font-bold mb-3 fs-14">FAFSA Resources</h3>
+            <div class="grid grid-cols-2 gap-2 fs-14">
+              <a href="/financial-aid/fafsa/fafsa-school-codes" class="text-brand-blue hover:underline flex items-center gap-1">
+                <span>&#8594;</span> FAFSA School Codes
+              </a>
+              <a href="/education-articles/fafsa-2026-2027-parents-guide" class="text-brand-blue hover:underline flex items-center gap-1">
+                <span>&#8594;</span> Parent's Guide to FAFSA
+              </a>
+              <a href="/financial-aid/fafsa/deadlines" class="text-brand-blue hover:underline flex items-center gap-1">
+                <span>&#8594;</span> FAFSA Deadlines
+              </a>
+              <a href="/financial-aid/fafsa/common-mistakes" class="text-brand-blue hover:underline flex items-center gap-1">
+                <span>&#8594;</span> Common FAFSA Mistakes
+              </a>
+            </div>
+          </div>
+
+          <div class="mt-4 pt-4 border-t border-gray-200">
+            <a href="https://studentaid.gov/h/apply-for-aid/fafsa" target="_blank" rel="noopener" class="inline-flex items-center gap-2 bg-brand-blue text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors fs-14 font-medium">
+              Apply for FAFSA at StudentAid.gov
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Federal Grants Section -->
+        <div class="box-rounded mb-5">
+          <h2 class="text-brand-blue mb-3">Federal Education Grants</h2>
+          <p class="text-gray-700 mb-4">
+            Unlike loans, grants are free money that doesn't need to be repaid. The U.S. Department of Education administers
+            over 100 grant programs for students, schools, and educational institutions.
+          </p>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+            <a href="/financial-aid/grants/84-063" class="bg-gray-50 p-3 rounded hover:bg-gray-100 transition-colors block">
+              <h3 class="text-brand-green-text font-bold fs-14 mb-1">Pell Grants</h3>
+              <p class="text-gray-600 fs-12">Up to $7,395 for undergraduates with financial need. Based on FAFSA.</p>
+            </a>
+            <a href="/financial-aid/grants/84-007" class="bg-gray-50 p-3 rounded hover:bg-gray-100 transition-colors block">
+              <h3 class="text-brand-green-text font-bold fs-14 mb-1">FSEOG</h3>
+              <p class="text-gray-600 fs-12">Supplemental grants up to $4,000 for students with exceptional need.</p>
+            </a>
+            <a href="/financial-aid/grants/84-379" class="bg-gray-50 p-3 rounded hover:bg-gray-100 transition-colors block">
+              <h3 class="text-brand-green-text font-bold fs-14 mb-1">TEACH Grants</h3>
+              <p class="text-gray-600 fs-12">Up to $4,000/year for students agreeing to teach in high-need areas.</p>
+            </a>
+            <a href="/financial-aid/grants/84-408" class="bg-gray-50 p-3 rounded hover:bg-gray-100 transition-colors block">
+              <h3 class="text-brand-green-text font-bold fs-14 mb-1">Iraq & Afghanistan Service</h3>
+              <p class="text-gray-600 fs-12">For students whose parent/guardian died in military service post-9/11.</p>
+            </a>
+          </div>
+          <div class="flex flex-wrap gap-3">
+            <a href="/financial-aid/grants" class="inline-flex items-center gap-1 text-brand-blue hover:underline font-medium fs-14">
+              Browse All Federal Grants &rarr;
+            </a>
+            <a href="/financial-aid/grants/all" class="inline-flex items-center gap-1 text-gray-600 hover:text-brand-blue fs-13">
+              View Complete List (112 programs)
+            </a>
+          </div>
+        </div>
+
+        <!-- State Scholarships Section -->
+        <div class="box-rounded mb-5 bg-green-50">
+          <h2 class="text-brand-blue mb-3">State Scholarship Programs</h2>
+          <p class="text-gray-700 mb-4">
+            Many states offer their own scholarship and grant programs for residents attending in-state colleges.
+            These can be combined with federal aid to maximize your financial support.
+          </p>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+            <a href="/financial-aid/scholarships/georgia" class="bg-white p-3 rounded border border-gray-200 hover:border-brand-blue transition-colors block text-center">
+              <span class="text-brand-green-text font-bold fs-14 block">Georgia</span>
+              <span class="text-gray-500 fs-11">HOPE Scholarship</span>
+            </a>
+            <a href="/financial-aid/scholarships/florida" class="bg-white p-3 rounded border border-gray-200 hover:border-brand-blue transition-colors block text-center">
+              <span class="text-brand-green-text font-bold fs-14 block">Florida</span>
+              <span class="text-gray-500 fs-11">Bright Futures</span>
+            </a>
+            <a href="/financial-aid/scholarships/tennessee" class="bg-white p-3 rounded border border-gray-200 hover:border-brand-blue transition-colors block text-center">
+              <span class="text-brand-green-text font-bold fs-14 block">Tennessee</span>
+              <span class="text-gray-500 fs-11">TN Promise</span>
+            </a>
+            <a href="/financial-aid/scholarships/kentucky" class="bg-white p-3 rounded border border-gray-200 hover:border-brand-blue transition-colors block text-center">
+              <span class="text-brand-green-text font-bold fs-14 block">Kentucky</span>
+              <span class="text-gray-500 fs-11">KEES Scholarship</span>
+            </a>
+          </div>
+          <a href="/financial-aid/scholarships" class="inline-flex items-center gap-1 text-brand-blue hover:underline font-medium fs-14">
+            Browse All State Programs &rarr;
+          </a>
+        </div>
+
+        <!-- Financial Aid Articles -->
+        <div class="box-rounded mb-5">
+          <h2 class="text-brand-blue text-xl mb-4">Financial Aid Articles</h2>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {topics.map((topic) => (
-              <div class="border border-gray-200 rounded p-4">
-                <h3 class="text-brand-green-text font-bold mb-2 fs-14">{topic.title}</h3>
-                <p class="text-gray-600 fs-13 mb-3">{topic.description}</p>
-                <ul class="space-y-1 fs-13">
-                  {topic.articles.map((article) => (
-                    <li>
-                      <a href={article.url} class="text-brand-blue hover:underline">{article.title}</a>
-                    </li>
-                  ))}
-                </ul>
+            {featuredArticles.map((article) => (
+              <div class="border border-gray-200 rounded overflow-hidden p-4">
+                <a href={article.url}>
+                  <img src={article.image.src} alt={article.title} class="w-full aspect-square object-cover rounded" />
+                </a>
+                <div class="pt-4">
+                  <h3 class="text-brand-green-text font-bold mb-1 fs-14">
+                    <a href={article.url} class="hover:underline">{article.title}</a>
+                  </h3>
+                  <p class="text-gray-600 fs-12 mb-2 leading-snug">{article.description}</p>
+                  <a href={article.url} class="text-brand-blue hover:underline fs-13">Read article &rarr;</a>
+                </div>
               </div>
             ))}
           </div>
@@ -188,16 +284,12 @@ const topics = [
 
         <!-- Q&A Section -->
         <div class="box-rounded mb-5 bg-lt-blue">
-          <h2 class="text-brand-blue text-lg mb-3">College Q&A</h2>
-          <p class="text-gray-700 fs-14 mb-3">
-            <strong>Question:</strong> Would you assume significant student debt for your dream school?
-          </p>
-          <div class="flex gap-2 flex-wrap">
-            <button class="px-3 py-1 bg-white border border-gray-300 rounded text-sm hover:bg-gray-50">Yes, it's worth it</button>
-            <button class="px-3 py-1 bg-white border border-gray-300 rounded text-sm hover:bg-gray-50">Only for a top school</button>
-            <button class="px-3 py-1 bg-white border border-gray-300 rounded text-sm hover:bg-gray-50">I'd choose affordability</button>
-            <button class="px-3 py-1 bg-white border border-gray-300 rounded text-sm hover:bg-gray-50">Depends on my major</button>
-          </div>
+          <QAPoll
+            questionId="financial-aid-student-debt"
+            pageSlug="financial-aid"
+            question="Would you assume significant student debt for your dream school?"
+            answers={["Yes, it's worth it", "Only for a top school", "I'd choose affordability", "Depends on my major"]}
+          />
         </div>
 
         <!-- Key Statistics -->
@@ -229,13 +321,13 @@ const topics = [
           <p class="text-gray-600 fs-14 mb-4">Research colleges and their financial aid offerings in your state.</p>
           <div class="grid grid-cols-2 md:grid-cols-4 gap-2 fs-13">
             {states.slice(0, 20).map((state) => (
-              <a href={`/colleges/${state.slug}`} class="text-brand-blue hover:underline py-1">
+              <a href={`/colleges-universities/${state.slug}`} class="text-brand-blue hover:underline py-1">
                 {state.name}
               </a>
             ))}
           </div>
           <div class="mt-4 text-center">
-            <a href="/colleges" class="text-brand-blue hover:underline font-medium">View All States &rarr;</a>
+            <a href="/colleges-universities" class="text-brand-blue hover:underline font-medium">View All States &rarr;</a>
           </div>
         </div>
       </div>
@@ -243,22 +335,135 @@ const topics = [
       <!-- Sidebar -->
       <div class="lg:w-1/3">
         <!-- Quick Links -->
-        <div class="box-rounded bg-lt-blue mb-4">
-          <h3 class="text-brand-blue mb-3">Quick Links</h3>
-          <ul class="list-none m-0 p-0 space-y-2 fs-13">
-            <li>
-              <a href="https://studentaid.gov/h/apply-for-aid/fafsa" target="_blank" rel="noopener" class="text-brand-blue hover:underline">Apply for FAFSA</a>
-            </li>
-            <li>
-              <a href="https://studentaid.gov" target="_blank" rel="noopener" class="text-brand-blue hover:underline">Federal Student Aid</a>
-            </li>
-            <li>
-              <a href="#" class="text-brand-blue hover:underline">Scholarship Search</a>
-            </li>
-            <li>
-              <a href="#" class="text-brand-blue hover:underline">Loan Calculators</a>
-            </li>
-          </ul>
+        <div class="box-rounded bg-gradient-to-br from-slate-50 to-blue-50 border border-blue-100 mb-4">
+          <div class="flex items-center gap-2 mb-4">
+            <div class="w-8 h-8 bg-brand-blue rounded-lg flex items-center justify-center flex-shrink-0">
+              <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+              </svg>
+            </div>
+            <h3 class="text-brand-blue mb-0 text-lg">Quick Links</h3>
+          </div>
+
+          <!-- Government Resources -->
+          <div class="mb-4">
+            <p class="text-gray-500 fs-11 uppercase tracking-wide font-semibold mb-2">Government Resources</p>
+            <div class="space-y-1">
+              <a href="https://studentaid.gov/h/apply-for-aid/fafsa" target="_blank" rel="noopener" class="flex items-center justify-between p-2 rounded-lg bg-white border border-gray-200 hover:border-brand-blue hover:shadow-sm transition-all">
+                <div class="flex items-center gap-2">
+                  <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <svg class="w-4 h-4 text-brand-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                  </div>
+                  <span class="text-brand-blue font-medium fs-13">Apply for FAFSA</span>
+                </div>
+                <svg class="w-3.5 h-3.5 text-gray-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+              </a>
+              <a href="https://studentaid.gov" target="_blank" rel="noopener" class="flex items-center justify-between p-2 rounded-lg bg-white border border-gray-200 hover:border-brand-blue hover:shadow-sm transition-all">
+                <div class="flex items-center gap-2">
+                  <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <svg class="w-4 h-4 text-brand-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
+                  </div>
+                  <span class="text-brand-blue font-medium fs-13">Federal Student Aid</span>
+                </div>
+                <svg class="w-3.5 h-3.5 text-gray-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+              </a>
+              <a href="https://studentaid.gov/loan-simulator/" target="_blank" rel="noopener" class="flex items-center justify-between p-2 rounded-lg bg-white border border-gray-200 hover:border-brand-blue hover:shadow-sm transition-all">
+                <div class="flex items-center gap-2">
+                  <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <svg class="w-4 h-4 text-brand-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
+                  </div>
+                  <span class="text-brand-blue font-medium fs-13">Loan Simulator</span>
+                </div>
+                <svg class="w-3.5 h-3.5 text-gray-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+              </a>
+              <a href="https://www.irs.gov/credits-deductions/individuals/education-credits-aotc-llc" target="_blank" rel="noopener" class="flex items-center justify-between p-2 rounded-lg bg-white border border-gray-200 hover:border-brand-blue hover:shadow-sm transition-all">
+                <div class="flex items-center gap-2">
+                  <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <svg class="w-4 h-4 text-brand-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z" /></svg>
+                  </div>
+                  <span class="text-brand-blue font-medium fs-13">Education Tax Credits</span>
+                </div>
+                <svg class="w-3.5 h-3.5 text-gray-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- TruSchools Resources -->
+          <div class="mb-4">
+            <p class="text-gray-500 fs-11 uppercase tracking-wide font-semibold mb-2">TruSchools Resources</p>
+            <div class="space-y-1">
+              <a href="#loan-calculator" class="flex items-center justify-between p-2 rounded-lg bg-white border border-gray-200 hover:border-brand-green hover:shadow-sm transition-all">
+                <div class="flex items-center gap-2">
+                  <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <svg class="w-4 h-4 text-brand-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
+                  </div>
+                  <span class="text-brand-blue font-medium fs-13">Loan Calculator</span>
+                </div>
+                <svg class="w-3.5 h-3.5 text-gray-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg>
+              </a>
+              <a href="/financial-aid/fafsa/fafsa-school-codes" class="flex items-center justify-between p-2 rounded-lg bg-white border border-gray-200 hover:border-brand-green hover:shadow-sm transition-all">
+                <div class="flex items-center gap-2">
+                  <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <svg class="w-4 h-4 text-brand-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" /></svg>
+                  </div>
+                  <span class="text-brand-blue font-medium fs-13">FAFSA School Codes</span>
+                </div>
+                <svg class="w-3.5 h-3.5 text-gray-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg>
+              </a>
+              <a href="/financial-aid/grants" class="flex items-center justify-between p-2 rounded-lg bg-white border border-gray-200 hover:border-brand-green hover:shadow-sm transition-all">
+                <div class="flex items-center gap-2">
+                  <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <svg class="w-4 h-4 text-brand-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                  </div>
+                  <span class="text-brand-blue font-medium fs-13">Federal Grants</span>
+                </div>
+                <svg class="w-3.5 h-3.5 text-gray-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg>
+              </a>
+              <a href="/financial-aid/scholarships" class="flex items-center justify-between p-2 rounded-lg bg-white border border-gray-200 hover:border-brand-green hover:shadow-sm transition-all">
+                <div class="flex items-center gap-2">
+                  <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <svg class="w-4 h-4 text-brand-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>
+                  </div>
+                  <span class="text-brand-blue font-medium fs-13">State Scholarships</span>
+                </div>
+                <svg class="w-3.5 h-3.5 text-gray-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- Helpful Tools -->
+          <div>
+            <p class="text-gray-500 fs-11 uppercase tracking-wide font-semibold mb-2">Helpful Tools</p>
+            <div class="space-y-1">
+              <a href="https://bigfuture.collegeboard.org/pay-for-college/scholarship-search" target="_blank" rel="noopener" class="flex items-center justify-between p-2 rounded-lg bg-white border border-gray-200 hover:border-brand-blue hover:shadow-sm transition-all">
+                <div class="flex items-center gap-2">
+                  <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <svg class="w-4 h-4 text-brand-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                  </div>
+                  <span class="text-brand-blue font-medium fs-13">Scholarship Search</span>
+                </div>
+                <svg class="w-3.5 h-3.5 text-gray-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+              </a>
+              <a href="https://collegescorecard.ed.gov/" target="_blank" rel="noopener" class="flex items-center justify-between p-2 rounded-lg bg-white border border-gray-200 hover:border-brand-blue hover:shadow-sm transition-all">
+                <div class="flex items-center gap-2">
+                  <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <svg class="w-4 h-4 text-brand-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
+                  </div>
+                  <span class="text-brand-blue font-medium fs-13">College Scorecard</span>
+                </div>
+                <svg class="w-3.5 h-3.5 text-gray-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+              </a>
+              <a href="https://www.savingforcollege.com/529-plans" target="_blank" rel="noopener" class="flex items-center justify-between p-2 rounded-lg bg-white border border-gray-200 hover:border-brand-blue hover:shadow-sm transition-all">
+                <div class="flex items-center gap-2">
+                  <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <svg class="w-4 h-4 text-brand-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+                  </div>
+                  <span class="text-brand-blue font-medium fs-13">529 Plan Finder</span>
+                </div>
+                <svg class="w-3.5 h-3.5 text-gray-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+              </a>
+            </div>
+          </div>
         </div>
 
         <!-- College Search -->
@@ -270,18 +475,16 @@ const topics = [
           >
             <option value="">-- Select a State --</option>
             {states.map((state) => (
-              <option value={`/colleges/${state.slug}`}>
+              <option value={`/colleges-universities/${state.slug}`}>
                 {state.name} Colleges
               </option>
             ))}
           </select>
         </div>
 
-        <!-- Ad Placeholder -->
-        <div class="box-rounded mb-4">
-          <div class="bg-gray-100 h-[280px] flex items-center justify-center text-gray-400 fs-13">
-            Advertisement
-          </div>
+        <!-- Loan Calculator -->
+        <div id="loan-calculator" class="mb-4">
+          <LoanCalculator compact={true} variant="blue" />
         </div>
 
         <!-- Important Dates -->
@@ -312,7 +515,7 @@ const topics = [
           <h3 class="text-brand-blue mb-3">Related Resources</h3>
           <ul class="list-none m-0 p-0 fs-13">
             <li class="py-2 border-b border-dotted border-[#c1c1c1]">
-              <a href="/colleges">Colleges & Universities</a>
+              <a href="/colleges-universities">Colleges & Universities</a>
             </li>
             <li class="py-2 border-b border-dotted border-[#c1c1c1]">
               <a href="/vocational-schools">Vocational Schools</a>
@@ -327,12 +530,7 @@ const topics = [
         </div>
 
         <!-- Newsletter Signup -->
-        <div class="box-rounded">
-          <h3 class="text-brand-blue mb-3">Newsletter Signup</h3>
-          <p class="fs-13 text-gray-600 mb-3">Get financial aid tips and deadline reminders delivered to your inbox.</p>
-          <input type="email" placeholder="Your email address" class="input w-full mb-2" />
-          <button class="btn btn-primary w-full">Subscribe</button>
-        </div>
+        <NewsletterSignup preselected={['financial-aid']} />
       </div>
     </div>
   </div>

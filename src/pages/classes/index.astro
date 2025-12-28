@@ -1,5 +1,6 @@
 ---
 import Layout from '@/layouts/Layout.astro';
+import NewsletterSignup from '@/components/NewsletterSignup.astro';
 
 interface Department {
   dept: string;
@@ -212,7 +213,7 @@ const deptDescriptions: Record<string, string> = {
               <a href="/schools">K-12 Schools</a>
             </li>
             <li class="py-2 border-b border-dotted border-[#c1c1c1]">
-              <a href="/colleges">Colleges & Universities</a>
+              <a href="/colleges-universities">Colleges & Universities</a>
             </li>
             <li class="py-2 border-b border-dotted border-[#c1c1c1]">
               <a href="/preschools">Preschools</a>
@@ -230,12 +231,7 @@ const deptDescriptions: Record<string, string> = {
         </div>
 
         <!-- Newsletter Signup -->
-        <div class="box-rounded">
-          <h3 class="text-brand-blue mb-3">Newsletter Signup</h3>
-          <p class="fs-13 text-gray-600 mb-3">Get notified when we add new classes and tutorials.</p>
-          <input type="email" placeholder="Your email address" class="input w-full mb-2" />
-          <button class="btn btn-primary w-full">Subscribe</button>
-        </div>
+        <NewsletterSignup />
       </div>
     </div>
   </div>

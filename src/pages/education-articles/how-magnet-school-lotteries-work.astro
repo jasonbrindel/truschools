@@ -1,0 +1,296 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import heroImage from '@/images/USED-students-entering-school-artistic.jpg';
+
+const title = "How Magnet School Lotteries Work";
+const subtitle = "Understanding Waitlists, Second Lotteries, and What Your Number Really Means";
+const description = "A comprehensive guide to magnet school lottery systems, explaining how random selection works, weighted preferences, waitlist dynamics, and strategies for managing the process.";
+const category = 'Magnet Schools';
+---
+
+<Layout title={`${title}: ${subtitle}`} description={description}>
+  <ArticleBreadcrumb title={title} defaultParent={{ label: 'Magnet Schools', url: '/magnet-schools' }} />
+
+  <header class="max-w-[680px] mx-auto px-5 pt-4 md:pt-8">
+    <p class="text-sm font-semibold tracking-wide text-brand-green-text uppercase mb-4">Parent Resource Guide</p>
+    <h1 class="text-4xl md:text-5xl font-bold text-gray-900 leading-tight mb-5">{title}</h1>
+    <p class="text-xl md:text-2xl text-gray-600 italic mb-6">{subtitle}</p>
+    <p class="text-base text-gray-500 mb-10">By TruSchools Staff</p>
+  </header>
+
+  <div class="container">
+    <img src={heroImage.src} alt="Students entering school" class="w-full h-[400px] md:h-[500px] object-cover" />
+  </div>
+
+  <article class="max-w-[680px] mx-auto px-5 py-10 md:py-16">
+    <div class="article-body text-lg leading-relaxed text-gray-800">
+      <p class="first-letter:text-6xl first-letter:font-bold first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:text-gray-900 mb-6">
+        Few experiences in a parent's educational journey combine hope, anxiety, and mathematical confusion quite like the magnet school lottery. You've researched programs, attended open houses, and submitted applications by the deadline—and now your child's educational future seems to rest on a computerized random number generator. Understanding how these systems actually work can transform lottery season from a period of helpless waiting into an informed, strategic process.
+      </p>
+
+      <p class="mb-6">
+        The reality is that magnet school lotteries operate according to precise, documented procedures that districts must follow by law. These aren't arbitrary drawings but carefully designed allocation systems meant to balance access, diversity, and family preferences. Whether you're staring at a waitlist number wondering what it means, considering whether to apply to multiple programs, or trying to decode your district's preference categories, the mechanics matter enormously for managing expectations and making informed decisions.
+      </p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">The Mechanics of Random Selection</h2>
+
+      <p class="mb-6">
+        Modern magnet school lotteries bear little resemblance to pulling names from a hat. Most districts now use sophisticated software platforms like SchoolMint, LotterEase, or proprietary systems that generate random numbers for each applicant and process them through complex allocation algorithms. New York City's Department of Education, one of the largest choice systems in the country, generates what it calls a "lottery ID" for each student using Python's random number generation capabilities. These identifiers appear as 32-character hexadecimal strings—sequences like "B51920AF-F1C6-40EC-8E9A-3E1E50CB13BB" that determine a student's position in the selection order.
+      </p>
+
+      <p class="mb-6">
+        The technical terminology matters here because it illuminates what's actually happening. Most systems use what computer scientists call pseudo-random number generators, algorithms that produce sequences of numbers appearing statistically random. These generators begin with a "seed" value—often derived from the system clock or other unpredictable sources—and apply mathematical transformations to generate unique numbers for each applicant. While not "truly" random in a philosophical sense, these systems meet rigorous statistical standards for fairness, producing uniform distributions where every applicant genuinely has an equal initial chance of receiving any given number.
+      </p>
+
+      <p class="mb-10">
+        Some districts have gone further to ensure transparency. Lafayette Parish School System in Louisiana conducts third-party audits of its magnet academies application and selection process annually. Arlington Public Schools in Virginia describes its lottery as "double-blind," meaning neither the people running the lottery nor the applicants know who will be chosen during the selection process. Clark County School District in Nevada, serving the Las Vegas area, explicitly states that its SchoolMint platform "randomly generates the list of applicants to be awarded seats" only after applications close and scores are calculated.
+      </p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Why Timing Doesn't Matter (And When It Does)</h2>
+
+      <p class="mb-6">
+        One of the most persistent misconceptions about magnet lotteries is that applying early improves your chances. In a true random lottery system, this is categorically false. Houston ISD's magnet program documentation states explicitly that residents "who apply at any time during the Phase 1 window have an equal chance in the admissions lottery." Miami-Dade County Public Schools notes that its selection process occurs only "after the application deadline period." The application window exists to collect all eligible entries, not to establish any ordering among them.
+      </p>
+
+      <p class="mb-10">
+        However, timing becomes critically important in a different sense: missing the deadline. Houston ISD's materials couldn't be clearer on this point: "You have absolutely no chance of getting into a popular school if you miss the Phase 1 deadline. Do not miss the Phase 1 deadline." Late applications in most districts are processed separately from the main lottery, typically placed at the bottom of existing waitlists in the order received, with no opportunity to participate in the random selection that fills most seats. Clark County confirms this approach, noting that late applications "will only be processed if a school has available seats after the annual lottery" and that "preferences are not utilized during the late lottery process."
+      </p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">When Not All Numbers Are Equal: Understanding Weighted Lotteries</h2>
+
+      <p class="mb-6">
+        While the basic lottery is random, most districts layer preferences on top that dramatically affect individual students' chances. These weighted lottery systems have become increasingly common as districts attempt to balance competing goals of equal access and intentional diversity. The mechanics vary considerably, but understanding your district's specific approach is essential for realistic expectations.
+      </p>
+
+      <p class="mb-6">
+        Sibling preference represents the most universal form of weighting. Houston ISD reserves 25 percent of available seats at prime entry levels for siblings of currently enrolled students. Cedar Rapids Community School District grants "sibling legacy placement" to applicants with siblings already attending a magnet school. Los Angeles Unified assigns three points to applicants applying to the same magnet program as a continuing sibling, while overcrowded school points earn four points. In Elgin, Illinois, School District U-46's magnet academies grant automatic acceptance to siblings of current students who meet minimum qualifications.
+      </p>
+
+      <p class="mb-6">
+        Geographic and socioeconomic preferences have become more prominent as districts grapple with integration goals. Philadelphia's criteria-based schools like Central, Masterman, and Carver use a weighted lottery giving preference to students from six historically underrepresented zip codes. High Tech High in San Diego weights its lottery by zip code "to draw from a balanced cross section of San Diego neighborhoods" while also giving statistical advantage to students receiving free and reduced-price meals. DSST Public Schools in Denver reserves 40 to 70 percent of seats for students of low socioeconomic status.
+      </p>
+
+      <p class="mb-10">
+        These weighting mechanisms work through several technical approaches. Some districts, like Clark County, reserve up to 25 percent of seats for students with qualifying preferences, running a separate preference lottery before the general lottery for remaining seats. Others, like some charter schools in Nevada, use multipliers—a student qualifying as economically disadvantaged might have their name entered two or three times instead of once, effectively doubling or tripling their chances. Still others establish strict priority tiers, processing all sibling applicants before any general applicants regardless of random numbers.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">The Anatomy of a Waitlist</h2>
+
+      <p class="mb-6">
+        Receiving a waitlist number can feel like a consolation prize, but understanding how waitlists actually function reveals they're a dynamic system with real possibilities—and real limitations. Your waitlist position represents your place in line after the lottery's random number assignments, but that number alone doesn't tell the complete story of your chances.
+      </p>
+
+      <p class="mb-6">
+        The fundamental mechanism is straightforward: as accepted students decline their offers, seats become available and are offered to waitlisted students in order. Jefferson County Public Schools in Kentucky explains that "your child's wait list number will not change even though the number of students on the wait list may decrease as placements are offered." In other words, if you're number 15, you'll stay number 15 even as students ahead of you receive and decline offers—but the operative number indicating who's next in line advances past those who've been offered seats.
+      </p>
+
+      <p class="mb-10">
+        This seemingly simple system becomes considerably more complex in practice. Anne Arundel County Public Schools in Maryland notes that "wait-list movement is affected by the number of students on the waitlist, the number of programs each student applied to, and individual student preference." Because students often apply to multiple programs and can only accept one offer, a single student accepting an offer elsewhere creates ripple effects across multiple waitlists. The Baltimore County FAQ acknowledges this complexity: "If an applicant is offered placement in a magnet program and declines the seat, the BCPS Magnet Programs' staff will contact the next applicant on the wait list. This process continues until the close of business on the last day of the first quarter."
+      </p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Realistic Expectations: How Far Do Waitlists Actually Move?</h2>
+
+      <p class="mb-6">
+        Districts are generally reluctant to publish historical waitlist movement data, making it difficult to assess realistic chances for any given position. However, several factors provide insight into probable outcomes. The most important consideration is class size relative to application volume. Houston ISD provides one stark example: "more than 600 students usually apply for about 50 seats at River Oaks Elementary," meaning even a robust waitlist movement of 20-30 students would leave hundreds still waiting.
+      </p>
+
+      <p class="mb-6">
+        Chicago Public Schools offers perhaps the most sophisticated waitlist system, with rolling waitlists updated nightly throughout the summer and into the school year. Forum discussions from Chicago families describe moving 9 to 15 spots on waitlists for competitive schools like Lane Tech and Northside, suggesting meaningful but not dramatic movement. The district's explanation for most waitlist activity is revealing: "Because CPS is funded on a per pupil spending model and their budgeting is set by the 20th day of school, most waitlist movement is seen at the end of the summer, just before school starts."
+      </p>
+
+      <p class="mb-10">
+        My School DC, the unified lottery system for Washington, D.C., provides perhaps the most transparent approach, publishing "historic waitlist length at each school at the time of results" alongside information about spaces made available in past lottery years. This allows families to compare their current waitlist position against historical patterns—though the system cautions that "there is no guarantee that schools will make waitlist offers."
+      </p>
+
+      <blockquote class="border-l-4 border-gray-300 pl-6 my-10 text-xl italic text-gray-700">
+        "The honest answer for most families is that low waitlist numbers at moderately competitive programs offer reasonable hope, while high numbers at extremely competitive programs should prompt serious backup planning."
+      </blockquote>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Numeric Versus Non-Numeric Waitlists</h2>
+
+      <p class="mb-6">
+        Not all waitlists work the same way, and the distinction matters significantly for family planning. Most districts use numeric waitlists that assign specific positions—number 7, number 23, number 156—allowing families to track their relative standing. Wake County Public Schools in North Carolina, however, uses what it calls an "applicant pool," described as a "non-numeric waiting list" for students not selected to their first-choice schools. This approach means families cannot know their exact position, only that they remain in consideration should seats become available.
+      </p>
+
+      <p class="mb-10">
+        The non-numeric approach reflects a different philosophy about waitlist management. Rather than processing applicants strictly in lottery order, schools with applicant pools may consider factors like maintaining demographic balance or timing of withdrawals when filling seats. For families, this creates uncertainty but also, theoretically, the possibility of selection even without having received a favorable lottery number. Wake County explicitly notes that students "remain in the applicant pool for your first choice magnet, early college, or year-round school even if you request to be assigned back to your base school"—hedging without burning bridges.
+      </p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">When Waitlist Numbers Go Up Instead of Down</h2>
+
+      <p class="mb-6">
+        One of the most disconcerting experiences for families watching waitlists is seeing their number increase rather than decrease. While this seems counterintuitive—shouldn't waitlists only shrink as seats are filled?—it reflects the reality of systems that allow ongoing additions or recalculations.
+      </p>
+
+      <p class="mb-6">
+        Chicago's rolling waitlist system explicitly allows this possibility, explaining that "waitlists will re-sort every evening and those based on a point system can cause a student's waitlist position to go up or down depending on the scores of new waitlist students." Forum posts from Chicago parents reflect this frustration: "My child's wait-list number went up for three of the SES. How is that possible?" The answer lies in Chicago's tier-based admissions system, which assigns points based on socioeconomic and geographic factors—a new applicant with more points bumps ahead of existing waitlist members with fewer.
+      </p>
+
+      <p class="mb-10">
+        My School DC's system similarly notes that "your student's waitlist number can move up and down as post-lottery applicants with preferences apply." The sibling preference creates particularly dynamic effects: "one child receiving a waitlist offer at a school may result in their sibling moving up on the waitlist" for that same school, as the newly enrolled student creates a sibling preference for the waiting family member.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Second Rounds, Late Lotteries, and Open Enrollment</h2>
+
+      <p class="mb-6">
+        The possibility of a second lottery round gives hope to families who missed the initial deadline or whose children weren't selected in the first round. However, these subsequent opportunities typically operate under different—and usually less favorable—terms than the primary lottery.
+      </p>
+
+      <p class="mb-6">
+        Houston ISD's Phase 2 provides a useful model for understanding second-round processes. Beginning after Phase 1 results are announced, Phase 2 applications are processed on a rolling basis rather than through a new lottery. The district's explanation is telling: "While the odds of enrollment in the most desirable magnet programs are very low here, spots in certain programs will still be available because not all of the students selected in the sibling lottery and the general lottery will accept their offers." Phase 2, in other words, is about filling the gaps left by declined Phase 1 offers—and at popular programs, those gaps may be minimal or nonexistent.
+      </p>
+
+      <p class="mb-10">
+        St. Louis Public Schools took an even more definitive approach for the 2025-2026 school year, announcing that "there will be no 2nd lottery held in January 2025 as in past years. All applications submitted after November 8, 2024 will be processed on a first come-first served basis." This shift from lottery to queue for late applicants represents a trend in some districts toward simplifying post-deadline processing while maintaining the random lottery for on-time applications.
+      </p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">The Critical Decision: What Happens When You Accept or Decline</h2>
+
+      <p class="mb-6">
+        Understanding the implications of accepting or declining offers is essential for families managing multiple applications. District policies vary significantly, and missteps can eliminate options or create unexpected complications.
+      </p>
+
+      <p class="mb-6">
+        Miami-Dade County's approach represents a common model: accepting one school's offer declines all other acceptances, but you "remain on the waitlist for any schools they are currently waitlisted for." This allows families to accept a second-choice offer while maintaining hope for a first-choice waitlist offer. Los Angeles Unified follows similar logic but with an important caveat: "Current magnet students that apply to another magnet program and are selected will automatically lose their seat regardless of whether or not they accept"—meaning an existing magnet student cannot simply explore alternatives without risk.
+      </p>
+
+      <p class="mb-6">
+        Baltimore County spells out the mechanics precisely: "Your child will remain on the other wait list(s) until you are offered a seat, until the wait list is no longer active, or until you request your child to be removed from the wait list. If you decline a placement offer for a program, your child will only be removed from that program's list." This means declining an offer has no negative effect on other pending waitlist positions—a crucial reassurance for families weighing a sure thing against continued waiting.
+      </p>
+
+      <p class="mb-10">
+        Tulsa Public Schools introduces a ranking-based system that automatically manages multiple waitlist positions: "If a student receives a waitlist offer for a program, the student will automatically be removed from the waitlists for any programs that were ranked lower than the offered program but will remain on the waitlists for any programs that were ranked higher." This prevents students from blocking seats they wouldn't actually accept while preserving chances at preferred programs.
+      </p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Response Deadlines and What "No Response" Means</h2>
+
+      <p class="mb-6">
+        Lottery and waitlist offers come with strict response deadlines that families must take seriously. Houston ISD gives accepted Phase 1 students two weeks (10 business days) to log in and accept their offer; for later offers from Phase 2 or Phase 3, the window shrinks to one week. Baltimore County allows three days to respond to waitlist offers. Cedar Rapids Community School District requires acceptance within 72 hours of a lottery offer.
+      </p>
+
+      <p class="mb-10">
+        Failure to respond within the deadline universally results in forfeiture. Los Angeles Unified states flatly that "if no response is received by the deadline, it is considered a decline. All declines are final." Fairfax County confirms that non-response means "the space will be given to the next student on the waiting list." This creates pressure for families to monitor their email and parent portal accounts actively during decision periods—and to ensure contact information is current and accurate.
+      </p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">How and When You'll Hear: Notification Methods and Timing</h2>
+
+      <p class="mb-6">
+        Districts use various notification methods, and understanding your district's approach helps ensure you don't miss critical communications. Email has become the primary notification channel for most systems. Lake Washington School District specifies that "lottery notifications will be emailed to the PRIMARY EMAIL ADDRESS attached to the student's application." IDEA Public Schools notes that families "will receive a notification of their status via the preferred method of communication indicated on their application (email and/or text)."
+      </p>
+
+      <p class="mb-6">
+        Parent portal systems increasingly serve as the authoritative source for lottery results, with email notifications directing families to log in for details. St. Louis Public Schools posts placement offers "on the parent dashboard," while Columbus City Schools' lottery system allows families to "submit your application(s), track waitlist numbers and accept or decline offers" all within the parent portal. This centralization makes checking your portal account regularly during lottery season essential.
+      </p>
+
+      <p class="mb-10">
+        Waitlist notifications present additional challenges because they can come at any time throughout the summer or even into the school year. Some districts, like Miami Southridge Senior High, ask families to "please refrain from contacting the school to ask about your child's waitlist number" because "the spaces are automatically populated once a seat becomes available"—families are contacted when and if their turn comes, not before. Anne Arundel County updates waitlists and may offer seats throughout spring and summer, noting that "some students may move off the wait-list throughout the spring and summer."
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Debunking Common Misconceptions</h2>
+
+      <p class="mb-6">
+        <strong>"Applying early improves my chances."</strong> In a true random lottery, timing within the application window has zero effect on selection odds. Every on-time application receives an equal chance in the random number assignment regardless of whether it was submitted on day one or day last. The only timing that matters is the deadline itself—miss it, and you're typically relegated to post-lottery processing with dramatically reduced options.
+      </p>
+
+      <p class="mb-6">
+        <strong>"My waitlist number guarantees eventual admission."</strong> Waitlist numbers indicate order, not certainty. A number 5 waitlist position at a school experiencing 10 declines virtually guarantees an offer; the same position at a school with only 2 declines means you'll never reach the front of the line. Historical patterns provide guidance, but each year's movement depends on that year's acceptances and declines. As multiple districts note, there is "no guarantee that schools will make waitlist offers."
+      </p>
+
+      <p class="mb-6">
+        <strong>"Declining one offer hurts my chances elsewhere."</strong> Most district policies explicitly protect other waitlist positions when you decline an offer. Baltimore County confirms that "if you decline a placement offer for a program, your child will only be removed from that program's list." You can safely decline a less-preferred offer while remaining on waitlists for preferred schools without penalty.
+      </p>
+
+      <p class="mb-6">
+        <strong>"The lottery is rigged or can be influenced."</strong> Modern lottery systems undergo scrutiny and auditing specifically because fairness concerns are taken seriously. Tulsa Public Schools' policy explicitly states that "no individual, whether a District employee, board member or otherwise, may assert pressure or attempt to unduly influence the admission of any student. Any interference with the admission processes must be reported to the superintendent" and may result in applicant disqualification. The random number generation systems used are the same class of algorithms that undergird casino gaming and financial systems—not easily manipulated.
+      </p>
+
+      <p class="mb-10">
+        <strong>"I should only apply to my top choice to show commitment."</strong> This may be the most damaging misconception. Schools generally cannot see what other programs you've applied to during the lottery phase. Applying to multiple programs increases your chances of receiving at least one offer without reducing your chances at any individual school. Houston ISD explicitly encourages families to "apply to as many schools as possible, and apply to less-selective and less-coveted schools in addition to your top choices."
+      </p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Practical Strategies for Managing the Lottery Process</h2>
+
+      <p class="mb-6">
+        Given the inherent uncertainty of lottery-based admissions, effective strategy focuses on maximizing options while maintaining realistic expectations. Several approaches consistently prove valuable across different district systems.
+      </p>
+
+      <p class="mb-6">
+        <strong>Diversify your applications.</strong> Most districts allow applications to multiple programs—Chicago permits up to 20 Choice programs and 6 Selective Enrollment programs; Miami-Dade allows up to five magnet programs at five different schools. Take advantage of these limits. Your chances of securing at least one desirable placement increase dramatically when you're in the running at multiple schools rather than staking everything on a single high-odds draw. Research each program genuinely; applying to schools you wouldn't actually attend wastes resources and can complicate later decisions.
+      </p>
+
+      <p class="mb-6">
+        <strong>Understand your preference status.</strong> Before the lottery, know which preferences you qualify for at which schools. Sibling status at your first choice dramatically changes your odds compared to the general pool. Geographic preferences may benefit your family at some schools but not others. Employee children preferences exist in some districts. Identify where your preferences apply and weight your choices accordingly—a school where you have preference and moderate interest may be more valuable than a school where you have no preference and high interest.
+      </p>
+
+      <p class="mb-6">
+        <strong>Prepare for waitlist management.</strong> If you receive waitlist offers alongside acceptances, understand the decision timeline. Can you accept one offer while remaining on waitlists for preferred schools? Most districts permit this, but policies vary. Know the deadlines for both accepting initial offers and responding to waitlist offers. Create a decision matrix before results arrive: if offered School A but waitlisted at School B, will you accept A? At what waitlist position for B would you decline A and wait? Having these decisions pre-made prevents rushed choices when deadlines loom.
+      </p>
+
+      <p class="mb-6">
+        <strong>Plan your backup.</strong> Jacksonville's Team Duval advises families to "prepare their children to attend their attendance-area school. This will be the most likely option if a spot does not open up." This isn't pessimism—it's practical wisdom. Many families successfully enter magnet programs from waitlists, but many more do not. Your neighborhood school remains an option, and treating it as a genuine possibility rather than an unthinkable outcome reduces stress and ensures your child begins the year with a viable educational plan.
+      </p>
+
+      <p class="mb-10">
+        <strong>Monitor actively during waitlist season.</strong> Waitlist movement accelerates as summer ends and the school year approaches. Check your parent portal and email regularly during July and August. Some districts, like Chicago, update waitlists nightly; others process offers weekly or as seats become available. Response deadlines are often short—sometimes as little as 24 to 72 hours—making prompt attention essential. If your contact information changes over the summer, update it immediately with the district.
+      </p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Beyond the Numbers</h2>
+
+      <p class="mb-6">
+        Magnet school lotteries exist because demand for specialized educational programs exceeds available seats. This fundamental scarcity means that many qualified, deserving students will not receive offers at their preferred schools through no fault of their own or their families'. The lottery system, for all its statistical coldness, represents an attempt at fairness—an acknowledgment that when everyone can't have what they want, random chance distributes opportunity more equitably than alternative methods based on wealth, connections, or first-come-first-served scrambles.
+      </p>
+
+      <p class="mb-6">
+        Understanding the mechanics won't change your random number, but it will change your experience of the process. Knowing that early application doesn't help eliminates one source of anxiety. Understanding preference categories clarifies your actual odds. Grasping waitlist dynamics helps you make informed decisions about backup plans and acceptance deadlines. And recognizing common misconceptions prevents the frustration of pursuing strategies that never could have helped.
+      </p>
+
+      <p class="mb-10">
+        The lottery represents one moment in your child's educational journey—significant but not determinative. Students thrive in magnet programs, but they also thrive in neighborhood schools, charter schools, private schools, and homeschool environments. The randomness that may exclude your child from one opportunity creates openings for others. What matters ultimately is not which specific school your child attends but how your family engages with whatever educational environment you're in. The lottery decides where your child starts the year; everything after that is up to you.
+      </p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
+      <ul class="text-sm text-gray-600 space-y-2 mb-10">
+        <li>Anne Arundel County Public Schools. "Magnet Lottery Results / FAQ--Understanding the Lottery Results." AACPS Magnet Programs.</li>
+        <li>Arlington Public Schools. "Option Schools and Programs." APS Virginia.</li>
+        <li>Baltimore County Public Schools. "FAQs about Application and Admission Process." Division of Curriculum and Instruction.</li>
+        <li>Cedar Rapids Community School District. "Magnet School Lottery." CRCSD Schools.</li>
+        <li>Chicago School Options. "Waitlists, Rolling Waitlists and What It All Means."</li>
+        <li>Clark County School District. "Selection Process For CCSD Magnet Schools." Magnet Schools.</li>
+        <li>Fairfax County Public Schools. "Elementary Magnet School Lottery." FCPS.</li>
+        <li>General Academic. "How to Apply to Houston ISD Magnet Schools." Houston School Guide.</li>
+        <li>IDEA Public Schools. "Lottery FAQ."</li>
+        <li>Jefferson County Public Schools. "Optional & Magnet Lottery Wait List." JCPS Kentucky.</li>
+        <li>Lafayette Parish School System. "The Lottery Process." LPSS Magnet Academies.</li>
+        <li>Lake Washington School District. "Choice Schools FAQ." LWSD Programs.</li>
+        <li>Los Angeles Unified School District. "General Application Guidelines." Choices Program.</li>
+        <li>Miami-Dade County Public Schools. "Magnet Application Process." Your Choice Miami.</li>
+        <li>My School DC. "How Waitlists Work." Washington D.C. Common Lottery.</li>
+        <li>New York City Department of Education. "Random Numbers in Admissions." Schools NYC.</li>
+        <li>Philadelphia Inquirer. "For Philly magnet school admissions, district will resume using test scores." August 2022.</li>
+        <li>St. Louis Public Schools. "SLPS Magnet Schools Application Procedures and Policies."</li>
+        <li>Team Duval News. "My student is on a Magnet School or STO waitlist. What's next?" Jacksonville, FL. June 2024.</li>
+        <li>The Century Foundation. "Recruiting and Enrolling a Diverse Student Body in Public Choice Schools." May 2019.</li>
+        <li>Tulsa Public Schools. "Policy 2206-R2: Procedures for Admission to Magnet Schools."</li>
+        <li>Wake County Public Schools. "Magnet Schools / FAQs." WCPSS North Carolina.</li>
+      </ul>
+    </div>
+
+    <footer class="mt-16 pt-8 border-t border-gray-200">
+      <p class="text-sm text-gray-500 italic">
+        This article is provided by TruSchools as an educational resource for parents.
+      </p>
+      <div class="mt-6">
+        <a href="/magnet-schools" class="text-brand-blue hover:underline font-medium">
+          Back to Magnet Schools &rarr;
+        </a>
+      </div>
+    </footer>
+  </article>
+</Layout>

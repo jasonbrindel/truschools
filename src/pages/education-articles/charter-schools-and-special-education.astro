@@ -1,0 +1,314 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import heroImage from '@/images/USED-education-teacher-classroom-lesson.jpg';
+
+const title = "Charter Schools and Special Education";
+const description = "What parents of children with IEPs need to know about charter schools, including legal rights, essential questions to ask, warning signs, and recourse when problems arise.";
+const category = 'Charter Schools';
+---
+
+<Layout title={title} description={description}>
+  <ArticleBreadcrumb title={title} defaultParent={{ label: 'Charter Schools', url: '/charter-schools' }} />
+
+  <!-- Header - Centered, Narrow -->
+  <header class="max-w-[680px] mx-auto px-5 pt-4 md:pt-8">
+    <h1 class="text-4xl md:text-5xl font-bold text-gray-900 leading-tight mb-5">
+      {title}
+    </h1>
+    <p class="text-xl md:text-2xl text-gray-600 italic mb-6">
+      What Parents of Kids with IEPs Need to Know
+    </p>
+    <p class="text-base text-gray-500 mb-10">By TruSchools Staff</p>
+  </header>
+
+  <!-- Hero Image - Container Width -->
+  <div class="container">
+    <img
+      src={heroImage.src}
+      alt="Teacher working with students in classroom"
+      class="w-full h-[400px] md:h-[500px] object-cover"
+    />
+  </div>
+
+  <!-- Article Container - Centered, Narrow -->
+  <article class="max-w-[680px] mx-auto px-5 py-10 md:py-16">
+    <!-- Article Body -->
+    <div class="article-body text-lg leading-relaxed text-gray-800">
+      <!-- Opening with drop cap -->
+      <p class="first-letter:text-6xl first-letter:font-bold first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:text-gray-900 mb-6">
+        For parents of children with Individualized Education Programs, the decision to consider a charter school comes loaded with questions that rarely surface for other families. Will your child's IEP transfer? Can the school actually deliver the services your child needs? And what happens if they can't—or won't?
+      </p>
+
+      <p class="mb-6">
+        These questions matter more than ever. According to the National Center for Education Statistics, charter school enrollment more than doubled between 2010 and 2021, growing from 1.8 million to 3.7 million students. That expansion has brought both opportunity and complexity for families navigating special education. The Center for Learner Equity's September 2024 analysis of Civil Rights Data Collection found that traditional public schools educate 14.1 percent students with disabilities, compared to 11.8 percent in charter schools—a persistent gap that suggests access barriers remain.
+      </p>
+
+      <p class="mb-10">
+        This guide will help you understand your child's legal rights, ask the right questions during school tours, recognize warning signs of inadequate support, and know your options when things go wrong.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-10 mb-4">The Legal Framework: What Charter Schools Must Do</h2>
+
+      <p class="mb-6">
+        The foundational principle is unambiguous: charter schools are public schools, and they must comply with the Individuals with Disabilities Education Act just like any traditional district school. The U.S. Department of Education's Office for Civil Rights has repeatedly emphasized that children with disabilities who attend public charter schools retain all rights and protections under Part B of IDEA, including the right to a free appropriate public education. Charter schools cannot refuse to evaluate a child, cannot say they lack resources for special education, and cannot delay services.
+      </p>
+
+      <p class="mb-6">
+        Section 504 of the Rehabilitation Act and the Americans with Disabilities Act provide additional layers of protection. These laws prohibit discrimination against students with disabilities in any program receiving federal funds—which includes every public charter school in the country. A charter school cannot look at an application, see an IEP or 504 plan, and choose not to enroll that child.
+      </p>
+
+      <p class="mb-10">
+        The implementation of these rights, however, varies significantly based on how a charter school fits into its state's educational governance structure.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-10 mb-4">Understanding LEA Status: The Critical Distinction</h2>
+
+      <p class="mb-6">
+        The most important factor determining how your child will receive special education services at a charter school is the school's status as a Local Education Agency. This designation fundamentally shapes who holds responsibility for evaluating your child, developing the IEP, and ensuring services are delivered.
+      </p>
+
+      <h3 class="text-xl font-bold text-gray-900 mt-8 mb-3">Independent LEA Charter Schools</h3>
+
+      <p class="mb-6">
+        When a charter school operates as its own LEA, it bears the exact same legal requirements for providing special education services as any school district. The charter school directly receives federal and state special education funding and must provide the full continuum of services required under IDEA. According to research from the National Center for Special Education in Charter Schools, independent LEA charters actually enroll more students with disabilities—about 11.5 percent—compared to charters that operate within a district structure.
+      </p>
+
+      <p class="mb-6">
+        States like Massachusetts, Michigan, and North Carolina predominantly use this model. When you enroll your child in an independent LEA charter, that school assumes complete responsibility for Child Find obligations, evaluations, IEP development, and service delivery. This can mean more responsive and flexible service arrangements, since the school controls both the programming and the funding.
+      </p>
+
+      <h3 class="text-xl font-bold text-gray-900 mt-8 mb-3">School-of-the-District Charter Schools</h3>
+
+      <p class="mb-6">
+        In many states, charter schools operate as a "school of the district" for special education purposes. Under this arrangement, the authorizing school district remains the LEA and retains primary responsibility for special education. The district's Committee on Special Education handles evaluations and IEP development, while the charter school implements the resulting plan.
+      </p>
+
+      <p class="mb-6">
+        New York State exemplifies this model. As the New York State Education Department explains, the school district of residence is responsible for evaluation, identification, and IEP development for charter school students. The charter school must then fully implement whatever IEP the district's committee develops. If the charter school lacks a particular service—say, a self-contained special education classroom—the district must either provide that service on-site at the charter school or make arrangements for the student to receive it elsewhere.
+      </p>
+
+      <p class="mb-6">
+        This shared responsibility can create complications. Some parents find themselves navigating between two bureaucracies, with the charter school and district pointing fingers at each other when problems arise. Others appreciate having the district's resources and expertise available to supplement what a smaller charter school can offer.
+      </p>
+
+      <h3 class="text-xl font-bold text-gray-900 mt-8 mb-3">California's SELPA System</h3>
+
+      <p class="mb-6">
+        California adds another layer of complexity through its Special Education Local Plan Areas. Charter schools must either operate as a "school of the district," receiving services through their authorizing district's SELPA, or apply to become an independent LEA member of a SELPA. The California Department of Education notes that when a charter operates as a school of the district, the district may retain all state and federal special education funding while assuming full responsibility for services. When a charter becomes its own LEA within a SELPA, it gains more autonomy but also assumes complete liability for serving students with disabilities.
+      </p>
+
+      <p class="mb-10 italic">
+        Before enrolling, you should ask directly: "Is this charter school its own LEA for special education purposes, or is our home district responsible?" The answer shapes every subsequent question about how services will work.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-10 mb-4">Essential Questions for Charter School Tours</h2>
+
+      <p class="mb-6">
+        When you visit a charter school with your child's IEP in hand, the marketing presentation matters far less than the operational details. A school's enthusiasm for inclusion means nothing if they lack the infrastructure to deliver. The following questions can reveal whether a charter school can genuinely serve your child's needs.
+      </p>
+
+      <h3 class="text-xl font-bold text-gray-900 mt-8 mb-3">Staffing and Service Delivery</h3>
+
+      <ol class="list-decimal pl-6 mb-6 space-y-4">
+        <li><strong>Who provides special education services here, and what are their qualifications?</strong> Ask specifically about certifications and experience levels. A school relying entirely on recent graduates or personnel without special education credentials may struggle with complex IEPs.</li>
+        <li><strong>Are your special education teachers and therapists employed by the school or contracted?</strong> Contract providers may rotate frequently, disrupting continuity of care. In-house staff tend to be more integrated into the school community and more available for informal collaboration with classroom teachers.</li>
+        <li><strong>What is the caseload for your special education coordinator or case manager?</strong> A coordinator managing sixty IEPs cannot provide the same attention as one managing twenty-five. High caseloads often correlate with missed deadlines, rushed meetings, and inadequate progress monitoring.</li>
+        <li><strong>What related services do you provide on-site?</strong> Speech therapy, occupational therapy, physical therapy, counseling, and behavioral support are common IEP services. If these providers must be brought in from outside, ask about their schedule and availability.</li>
+        <li><strong>How do you handle services that aren't available at this school?</strong> The honest answer involves coordination with the district or contracted providers. An evasive answer suggests the school hasn't thought through this scenario—which is a significant red flag.</li>
+      </ol>
+
+      <h3 class="text-xl font-bold text-gray-900 mt-8 mb-3">IEP Implementation</h3>
+
+      <ol class="list-decimal pl-6 mb-6 space-y-4" start="6">
+        <li><strong>How are IEP meetings scheduled and conducted here?</strong> Ask who attends, where they're held, and how much notice parents receive. Schools should schedule meetings at times that work for families, not just during the school day.</li>
+        <li><strong>Who from the charter school attends IEP meetings?</strong> IDEA requires participation from the student's regular education teacher, someone qualified to provide or supervise special education, and someone who can commit district resources. At school-of-the-district charters, both charter staff and district personnel should be present.</li>
+        <li><strong>What happens to my child's current IEP when they enroll?</strong> By law, the school must either adopt and implement your child's existing IEP or develop a new one. They cannot simply ignore an incoming IEP or delay services while they "get to know" your child.</li>
+        <li><strong>How do you track and report progress on IEP goals?</strong> Look for systematic data collection, not just teacher impressions. Ask to see a sample progress report format.</li>
+      </ol>
+
+      <h3 class="text-xl font-bold text-gray-900 mt-8 mb-3">Inclusion and Environment</h3>
+
+      <ol class="list-decimal pl-6 mb-6 space-y-4" start="10">
+        <li><strong>What does inclusion look like at this school?</strong> The Center for Learner Equity found that 83.1 percent of special education students in charter schools spend 80 percent or more of their day in general education settings, compared to 67.5 percent in traditional public schools. Ask how the school achieves this—through co-teaching, push-in services, or other models.</li>
+        <li><strong>Do you have any self-contained classrooms or resource rooms?</strong> Not every child thrives in a fully inclusive setting. If your child's IEP calls for a more restrictive environment for certain subjects, the school needs a plan for providing it.</li>
+        <li><strong>How does the school handle behavioral challenges?</strong> Ask specifically about their approach to discipline for students with disabilities. Schools with rigid "no excuses" policies may struggle to implement behavioral IEPs that require flexibility.</li>
+        <li><strong>What training do general education teachers receive on implementing accommodations?</strong> Accommodations only work if every teacher in your child's schedule understands and applies them consistently. Professional development on special education should be ongoing, not a one-time orientation.</li>
+      </ol>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-10 mb-4">"Counseling Out": The Practice That Isn't Supposed to Exist</h2>
+
+      <p class="mb-6">
+        Among special education advocates, "counseling out" is the term for the various ways schools discourage families of children with disabilities from enrolling or staying enrolled—without ever explicitly refusing them. It is illegal. It happens anyway.
+      </p>
+
+      <p class="mb-6">
+        Research from Columbia University and the University of Florida found that charter schools were 5.8 percentage points less likely to respond to application inquiries from parents of students with severe disabilities. "No-excuses" charter schools—those serving predominantly low-income minority students with strict discipline—were 10 percentage points less likely to respond. The researchers concluded that imperfect funding mechanisms create incentives for schools to provide "less application encouragement to students with special needs."
+      </p>
+
+      <p class="mb-6">
+        The practice takes many forms, some subtle and others brazen:
+      </p>
+
+      <ul class="list-disc pl-6 mb-6 space-y-2">
+        <li><strong>Suggesting the school isn't a "good fit"</strong> before any attempt to understand or serve the child</li>
+        <li><strong>Claiming they "don't have the services"</strong> your child needs, without exploring alternatives</li>
+        <li><strong>Repeated disciplinary actions</strong> for behaviors that are manifestations of disability</li>
+        <li><strong>Suggesting that your child "might do better"</strong> at the neighborhood public school</li>
+        <li><strong>Delaying evaluations</strong> or "forgetting" to schedule IEP meetings</li>
+        <li><strong>Asking parents to provide their own paraprofessional</strong> or supplement services out of pocket</li>
+        <li><strong>Creating a hostile environment</strong> where parents feel unwelcome or burdensome</li>
+      </ul>
+
+      <p class="mb-10">
+        As one special education attorney put it: "The law is clear. IDEA applies to charter schools. They can't discriminate. That's outrageous." Yet the persistence of these practices reflects a gap between legal obligation and on-the-ground reality.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-10 mb-4">Red Flags: Warning Signs During Your Search</h2>
+
+      <p class="mb-6">
+        Recognizing problems early can save your family considerable heartache. Watch for these warning signs during the enrollment process and school visits:
+      </p>
+
+      <ol class="list-decimal pl-6 mb-10 space-y-4">
+        <li><strong>The school asks about disabilities on the application form before admission.</strong> Lottery-based admission must be blind to disability status. While schools may need to know about IEPs after admission to prepare services, pre-admission inquiries can signal intent to screen out certain students.</li>
+        <li><strong>Staff express surprise or discomfort when you mention your child has an IEP.</strong> Schools that genuinely serve students with disabilities train all staff to respond knowledgeably and welcomingly.</li>
+        <li><strong>The school claims special education "doesn't really apply here" or "works differently" at charter schools.</strong> IDEA applies equally to all public schools. Any suggestion otherwise is either ignorance or deception.</li>
+        <li><strong>Nobody can clearly explain who is responsible for special education services.</strong> Whether the school is its own LEA or works with the district, someone should be able to articulate the chain of responsibility.</li>
+        <li><strong>The discipline handbook emphasizes zero-tolerance policies without mentioning disability protections.</strong> IDEA discipline procedures—including manifestation determinations—trump any school discipline code for students with disabilities.</li>
+        <li><strong>You cannot meet with the special education coordinator or see the space where services would be delivered.</strong> Transparency about programming is a reasonable expectation.</li>
+        <li><strong>The school's enrollment of students with disabilities is dramatically lower than district averages.</strong> While some variation is normal, a school serving three percent students with disabilities in a district where the average is thirteen percent warrants questions.</li>
+        <li><strong>During the conversation, staff suggest you should "think carefully" about whether this school can meet your child's needs.</strong> This is often counseling-out language dressed up as concern.</li>
+      </ol>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-10 mb-4">Green Flags: Signs of a Welcoming Environment</h2>
+
+      <p class="mb-6">
+        Equally important is recognizing schools that genuinely embrace students with disabilities:
+      </p>
+
+      <ul class="list-disc pl-6 mb-10 space-y-2">
+        <li><strong>The school's mission statement explicitly addresses serving all learners</strong> or mentions inclusion and diverse learning needs</li>
+        <li><strong>Staff ask thoughtful questions</strong> about your child's strengths, interests, and what has worked well in previous settings</li>
+        <li><strong>The special education coordinator is a visible presence</strong> who seems integrated into the school community</li>
+        <li><strong>Teachers can describe specific accommodations</strong> they use and how they differentiate instruction</li>
+        <li><strong>The school can point to data</strong> on special education student outcomes, not just overall achievement</li>
+        <li><strong>Current parents of children with IEPs are available</strong> and willing to share their experiences</li>
+        <li><strong>The school proactively discusses</strong> how they will coordinate with the district for services they don't provide directly</li>
+      </ul>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-10 mb-4">Your Rights and Recourse When Problems Arise</h2>
+
+      <p class="mb-6">
+        When a charter school fails to meet its obligations to your child, you have the same procedural rights available to any public school parent—plus some additional avenues specific to charter school accountability.
+      </p>
+
+      <h3 class="text-xl font-bold text-gray-900 mt-8 mb-3">Documentation Is Everything</h3>
+
+      <p class="mb-6">
+        Before pursuing any formal complaint, build your paper trail. Follow up every conversation with an email confirming what was said: "Dear Ms. Smith, I wanted to confirm our conversation today in which you indicated that speech therapy would begin by October 15..." If they don't correct your summary, it stands as an accurate record. Save every IEP, every progress report, every communication.
+      </p>
+
+      <h3 class="text-xl font-bold text-gray-900 mt-8 mb-3">Escalation Path</h3>
+
+      <ol class="list-decimal pl-6 mb-6 space-y-4">
+        <li><strong>Request an IEP meeting.</strong> Put your concerns in writing and formally request a meeting to address them. Document their response and any delays.</li>
+        <li><strong>Contact the school's leadership and board.</strong> Charter schools are governed by boards of trustees. A formal letter to the board documenting IDEA violations creates a record and may prompt action.</li>
+        <li><strong>Contact the charter authorizer.</strong> Whether the authorizer is a school district, state board of education, or independent body, they have oversight responsibility. Systematic complaints can affect charter renewal.</li>
+        <li><strong>File a state complaint.</strong> Every state has a process for investigating allegations of IDEA violations. The state must investigate and respond within sixty days.</li>
+        <li><strong>Request mediation or a due process hearing.</strong> These IDEA dispute resolution processes apply fully to charter schools. Mediation offers a less adversarial path; due process hearings result in binding decisions.</li>
+        <li><strong>File an Office for Civil Rights complaint.</strong> If you believe your child has been discriminated against on the basis of disability, OCR investigates complaints against any school receiving federal funds. Complaints must generally be filed within 180 days of the incident.</li>
+        <li><strong>Contact your state's Protection and Advocacy agency.</strong> These federally funded organizations provide free advocacy assistance for people with disabilities, including help navigating educational disputes.</li>
+      </ol>
+
+      <h3 class="text-xl font-bold text-gray-900 mt-8 mb-3">Stay-Put Rights</h3>
+
+      <p class="mb-10">
+        One crucial protection: when you dispute a change the school wants to make to your child's educational placement, your child's current placement remains in effect until the dispute is resolved. This "stay-put" right prevents schools from unilaterally removing or changing services while disagreements work through the system.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-10 mb-4">Charter Networks and Special Education: A Mixed Picture</h2>
+
+      <p class="mb-6">
+        Large charter management organizations vary considerably in their approach to special education. A 2017 Stanford CREDO study found significant differences among New York City charter networks, with Success Academy, Uncommon Schools, Achievement First, KIPP, and Democracy Prep all outperforming nearby district schools—but with varying levels of commitment to serving students with disabilities.
+      </p>
+
+      <p class="mb-6">
+        A 2010 Mathematica Policy Research study found that KIPP schools had a "lower concentration of special education and limited English proficiency students than the public schools from which they draw." More recent initiatives suggest evolution: both Achievement First and KIPP have launched pilot programs specifically for students with disabilities, and Democracy Prep created a program called Pathways designed for students who need additional academic and emotional supports.
+      </p>
+
+      <p class="mb-6">
+        Some charter schools have built their entire models around serving students with disabilities. Texas, for example, has Celebrate Dyslexia Schools focusing on reading challenges and Thrive Center for Success serving students with autism. These specialized charters represent a different approach—mission-driven service to specific disability populations rather than inclusive general education.
+      </p>
+
+      <p class="mb-10">
+        The Center for Learner Equity's research suggests that specialized charter schools concentrated in certain states are increasingly focusing on autism—a trend worth watching as options expand. However, their 2024 analysis also found that only about 30.3 percent of students with disabilities in specialized charters spent 80 percent or more of their day in general education settings, compared to 83.1 percent in mainstream charters, raising questions about inclusion in these environments.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-10 mb-4">Making the Decision</h2>
+
+      <p class="mb-6">
+        The right school for your child depends on factors no guide can fully capture—your child's specific needs, the particular schools available in your community, your family's priorities, and practical considerations like transportation and schedule. Charter schools have produced genuine innovation in serving students with disabilities, and some families find exactly what they need in the charter sector. Others discover that the flexibility of charter schools masks inadequate infrastructure for complex special education needs.
+      </p>
+
+      <p class="mb-6">
+        What this guide can offer is a framework for evaluation. Ask the hard questions. Observe how staff respond. Trust your instincts when something feels wrong. Document everything. Know your rights. And remember that your child's entitlement to a free appropriate public education does not diminish because the school has "charter" in its name.
+      </p>
+
+      <p class="mb-10">
+        If a charter school truly serves your child well, that success deserves celebration. If it doesn't, you have the same tools and protections available to any parent advocating for their child in the public school system. The law is clear: charter schools must serve students with disabilities. Ensuring they do sometimes requires parents who are ready to hold them accountable.
+      </p>
+
+      <!-- Sources -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
+
+      <ul class="text-sm text-gray-600 space-y-2 mb-10">
+        <li>California Department of Education, "Students with Disabilities in Charter Schools," 2024</li>
+        <li>Center for Learner Equity, "Analysis of Civil Rights Data Collection," September 2024</li>
+        <li>Center for Learner Equity, "Charter School Equity, Growth, Quality, and Sustainability Study," July 2024</li>
+        <li>Center on Reinventing Public Education, "Seizing the Opportunity: Educating Students with Disabilities in Charter Schools"</li>
+        <li>Columbia University and University of Florida, "School Choice and Information Constraints," 2018</li>
+        <li>Education Commission of the States, "Charter School LEA Status by State"</li>
+        <li>K-12 Dive, "Charter schools have fewer students with disabilities but higher inclusion rates," October 2024</li>
+        <li>Mathematica Policy Research, KIPP Studies, 2010-2023</li>
+        <li>National Alliance for Public Charter Schools, "Do You Know Where the Children Are?" 2024</li>
+        <li>National Center for Education Statistics, "Public Charter School Enrollment," 2023</li>
+        <li>New York State Education Department, "Charter Schools and Special Education" Guidance</li>
+        <li>Pennsylvania Developmental Disabilities Council, "Ten Things Parents Should Know about Charter Schools"</li>
+        <li>Stanford CREDO, "Charter School Study of New York City," 2017</li>
+        <li>U.S. Department of Education, Office for Civil Rights, "Applying Federal Civil Rights Laws to Public Charter Schools"</li>
+        <li>U.S. Department of Education, Office of Special Education Programs, "Frequently Asked Questions About IDEA and Charter Schools"</li>
+      </ul>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-16 pt-8 border-t border-gray-200">
+      <p class="text-sm text-gray-500 italic">
+        This article is provided by TruSchools as an educational resource for families exploring charter school options.
+      </p>
+      <div class="mt-6">
+        <a href="/charter-schools" class="text-brand-blue hover:underline font-medium">
+          Back to Charter Schools &rarr;
+        </a>
+      </div>
+    </footer>
+  </article>
+</Layout>

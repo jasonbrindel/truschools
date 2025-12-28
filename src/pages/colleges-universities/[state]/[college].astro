@@ -597,29 +597,55 @@ const institutionType = getInstitutionType(collegeData);
         <!-- Financial Aid Section -->
         <div class="box-rounded mb-5" id="financial-aid">
           <h2 class="text-brand-blue text-xl mb-4">Tuition & Financial Aid</h2>
+
+          <!-- Cost Overview Cards -->
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+            {(collegeData.tuition_in_state || scorecardData?.tuitionfee_in) && (
+              <div class="text-center p-3 bg-lt-blue rounded">
+                <p class="text-2xl font-bold text-brand-blue">{formatCurrency(collegeData.tuition_in_state || scorecardData?.tuitionfee_in)}</p>
+                <p class="text-gray-600 fs-13">In-State Tuition</p>
+              </div>
+            )}
+            {(collegeData.tuition_out_state || scorecardData?.tuitionfee_out) && (
+              <div class="text-center p-3 bg-lt-blue rounded">
+                <p class="text-2xl font-bold text-brand-blue">{formatCurrency(collegeData.tuition_out_state || scorecardData?.tuitionfee_out)}</p>
+                <p class="text-gray-600 fs-13">Out-of-State Tuition</p>
+              </div>
+            )}
+            {(scorecardData?.costt4_a || scorecardData?.costt4_p) && (
+              <div class="text-center p-3 bg-lt-blue rounded">
+                <p class="text-2xl font-bold text-brand-blue">{formatCurrency(scorecardData.costt4_a || scorecardData.costt4_p)}</p>
+                <p class="text-gray-600 fs-13">Total Cost of Attendance</p>
+              </div>
+            )}
+            {(scorecardData?.npt4_pub || scorecardData?.npt4_priv) && (
+              <div class="text-center p-3 bg-lt-blue rounded">
+                <p class="text-2xl font-bold text-brand-green-text">{formatCurrency(scorecardData.npt4_pub || scorecardData.npt4_priv)}</p>
+                <p class="text-gray-600 fs-13">Avg. Net Price</p>
+              </div>
+            )}
+          </div>
+
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <h3 class="text-brand-green-text font-bold mb-3 fs-14">Tuition & Fees</h3>
+              <h3 class="text-brand-green-text font-bold mb-3 fs-14">Financial Aid Statistics</h3>
               <table class="w-full fs-14">
                 <tbody>
-                  <tr class="border-b border-gray-100">
-                    <td class="py-2 text-gray-600">In-State Tuition</td>
-                    <td class="py-2 font-medium">{formatCurrency(collegeData.tuition_in_state)}</td>
-                  </tr>
-                  <tr class="border-b border-gray-100">
-                    <td class="py-2 text-gray-600">Out-of-State Tuition</td>
-                    <td class="py-2 font-medium">{formatCurrency(collegeData.tuition_out_state)}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div>
-              <h3 class="text-brand-green-text font-bold mb-3 fs-14">Financial Aid</h3>
-              <table class="w-full fs-14">
-                <tbody>
+                  {scorecardData?.pctpell != null && (
+                    <tr class="border-b border-gray-100">
+                      <td class="py-2 text-gray-600">Students Receiving Pell Grants</td>
+                      <td class="py-2 font-medium">{(Number(scorecardData.pctpell) * 100).toFixed(0)}%</td>
+                    </tr>
+                  )}
+                  {scorecardData?.pctfloan != null && (
+                    <tr class="border-b border-gray-100">
+                      <td class="py-2 text-gray-600">Students with Federal Loans</td>
+                      <td class="py-2 font-medium">{(Number(scorecardData.pctfloan) * 100).toFixed(0)}%</td>
+                    </tr>
+                  )}
                   {collegeData.pct_receiving_aid !== null && (
                     <tr class="border-b border-gray-100">
-                      <td class="py-2 text-gray-600">Students Receiving Aid</td>
+                      <td class="py-2 text-gray-600">Students Receiving Any Aid</td>
                       <td class="py-2 font-medium">{formatPercent(collegeData.pct_receiving_aid)}</td>
                     </tr>
                   )}
@@ -641,10 +667,47 @@ const institutionType = getInstitutionType(collegeData);
                       <td class="py-2 font-medium">{formatCurrency(collegeData.avg_federal_grant)}</td>
                     </tr>
                   )}
+                </tbody>
+              </table>
+            </div>
+            <div>
+              <h3 class="text-brand-green-text font-bold mb-3 fs-14">Student Debt & Repayment</h3>
+              <table class="w-full fs-14">
+                <tbody>
+                  {scorecardData?.grad_debt_mdn && (
+                    <tr class="border-b border-gray-100">
+                      <td class="py-2 text-gray-600">Median Debt at Graduation</td>
+                      <td class="py-2 font-medium">{formatCurrency(scorecardData.grad_debt_mdn)}</td>
+                    </tr>
+                  )}
+                  {scorecardData?.debt_mdn && (
+                    <tr class="border-b border-gray-100">
+                      <td class="py-2 text-gray-600">Median Total Debt</td>
+                      <td class="py-2 font-medium">{formatCurrency(scorecardData.debt_mdn)}</td>
+                    </tr>
+                  )}
+                  {scorecardData?.cuml_debt_p90 && (
+                    <tr class="border-b border-gray-100">
+                      <td class="py-2 text-gray-600">90th Percentile Debt</td>
+                      <td class="py-2 font-medium">{formatCurrency(scorecardData.cuml_debt_p90)}</td>
+                    </tr>
+                  )}
                   {collegeData.avg_loan_amount && (
                     <tr class="border-b border-gray-100">
                       <td class="py-2 text-gray-600">Avg. Loan Amount</td>
                       <td class="py-2 font-medium">{formatCurrency(collegeData.avg_loan_amount)}</td>
+                    </tr>
+                  )}
+                  {scorecardData?.rpy_3yr_rt != null && (
+                    <tr class="border-b border-gray-100">
+                      <td class="py-2 text-gray-600">3-Year Repayment Rate</td>
+                      <td class="py-2 font-medium">{(Number(scorecardData.rpy_3yr_rt) * 100).toFixed(0)}%</td>
+                    </tr>
+                  )}
+                  {scorecardData?.cdr3 != null && (
+                    <tr class="border-b border-gray-100">
+                      <td class="py-2 text-gray-600">Cohort Default Rate</td>
+                      <td class="py-2 font-medium">{(Number(scorecardData.cdr3) * 100).toFixed(1)}%</td>
                     </tr>
                   )}
                 </tbody>

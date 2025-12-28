@@ -1,0 +1,157 @@
+---
+interface Props {
+  title?: string;
+  compact?: boolean;
+  variant?: 'default' | 'blue';
+}
+
+const { title = 'Student Loan Calculator', compact = false, variant = 'default' } = Astro.props;
+
+const isBlue = variant === 'blue';
+---
+
+<div class={`loan-calculator ${compact ? 'text-sm' : ''} ${isBlue ? 'bg-gradient-to-r from-brand-blue to-blue-600 text-white p-4 rounded-lg' : ''}`}>
+  <h3 class={`${isBlue ? 'text-white' : 'text-brand-blue'} ${compact ? 'text-lg mb-3' : 'text-xl mb-4'}`}>{title}</h3>
+
+  <div class={`grid ${compact ? 'gap-3' : 'gap-4'}`}>
+    <!-- Loan Amount -->
+    <div>
+      <label for="loan-amount" class={`block font-medium mb-1 fs-14 ${isBlue ? 'text-white/90' : 'text-gray-700'}`}>Loan Amount</label>
+      <div class="relative">
+        <span class={`absolute left-3 top-1/2 -translate-y-1/2 ${isBlue ? 'text-gray-400' : 'text-gray-500'}`}>$</span>
+        <input
+          type="text"
+          id="loan-amount"
+          class="input w-full pl-7"
+          value="30,000"
+          inputmode="numeric"
+        />
+      </div>
+    </div>
+
+    <!-- Interest Rate -->
+    <div>
+      <label for="interest-rate" class={`block font-medium mb-1 fs-14 ${isBlue ? 'text-white/90' : 'text-gray-700'}`}>Interest Rate</label>
+      <div class="relative">
+        <input
+          type="text"
+          id="interest-rate"
+          class="input w-full pr-8"
+          value="6.5"
+          inputmode="decimal"
+        />
+        <span class={`absolute right-3 top-1/2 -translate-y-1/2 ${isBlue ? 'text-gray-400' : 'text-gray-500'}`}>%</span>
+      </div>
+    </div>
+
+    <!-- Loan Term -->
+    <div>
+      <label for="loan-term" class={`block font-medium mb-1 fs-14 ${isBlue ? 'text-white/90' : 'text-gray-700'}`}>Loan Term</label>
+      <select id="loan-term" class="input w-full">
+        <option value="10" selected>10 years</option>
+        <option value="15">15 years</option>
+        <option value="20">20 years</option>
+        <option value="25">25 years</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div class={`rounded ${compact ? 'mt-4 p-3' : 'mt-5 p-4'} ${isBlue ? 'bg-white/15' : 'bg-gray-50'}`}>
+    <div class={`grid ${compact ? 'gap-2' : 'gap-3'}`}>
+      <div class="flex justify-between items-center">
+        <span class={`fs-14 ${isBlue ? 'text-white/80' : 'text-gray-600'}`}>Monthly Payment</span>
+        <span id="monthly-payment" class={`font-bold ${compact ? 'text-lg' : 'text-xl'} ${isBlue ? 'text-white' : 'text-brand-green-text'}`}>$340.02</span>
+      </div>
+      <div class="flex justify-between items-center">
+        <span class={`fs-14 ${isBlue ? 'text-white/80' : 'text-gray-600'}`}>Total Paid</span>
+        <span id="total-paid" class={`font-semibold ${isBlue ? 'text-white' : 'text-gray-900'}`}>$40,802</span>
+      </div>
+      <div class="flex justify-between items-center">
+        <span class={`fs-14 ${isBlue ? 'text-white/80' : 'text-gray-600'}`}>Total Interest</span>
+        <span id="total-interest" class={`font-semibold ${isBlue ? 'text-white' : 'text-gray-900'}`}>$10,802</span>
+      </div>
+    </div>
+  </div>
+
+  <p class={`fs-12 mt-3 mb-0 ${isBlue ? 'text-white/60' : 'text-gray-500'}`}>
+    Calculation assumes fixed interest rate and standard repayment. Actual payments may vary.
+  </p>
+</div>
+
+<script>
+  function initLoanCalculator() {
+    const loanAmountInput = document.getElementById('loan-amount') as HTMLInputElement;
+    const interestRateInput = document.getElementById('interest-rate') as HTMLInputElement;
+    const loanTermSelect = document.getElementById('loan-term') as HTMLSelectElement;
+    const monthlyPaymentEl = document.getElementById('monthly-payment');
+    const totalPaidEl = document.getElementById('total-paid');
+    const totalInterestEl = document.getElementById('total-interest');
+
+    if (!loanAmountInput || !interestRateInput || !loanTermSelect) return;
+
+    function parseAmount(value: string): number {
+      return parseFloat(value.replace(/[^0-9.]/g, '')) || 0;
+    }
+
+    function formatCurrency(value: number): string {
+      return '$' + value.toLocaleString('en-US', { maximumFractionDigits: 0 });
+    }
+
+    function formatCurrencyWithCents(value: number): string {
+      return '$' + value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function formatAmountInput(value: string): string {
+      const num = parseAmount(value);
+      if (isNaN(num) || num === 0) return '';
+      return num.toLocaleString('en-US');
+    }
+
+    function calculate() {
+      const principal = parseAmount(loanAmountInput.value);
+      const annualRate = parseFloat(interestRateInput.value) || 0;
+      const years = parseInt(loanTermSelect.value) || 10;
+
+      if (principal <= 0 || annualRate <= 0) {
+        if (monthlyPaymentEl) monthlyPaymentEl.textContent = '$0.00';
+        if (totalPaidEl) totalPaidEl.textContent = '$0';
+        if (totalInterestEl) totalInterestEl.textContent = '$0';
+        return;
+      }
+
+      const monthlyRate = annualRate / 100 / 12;
+      const numPayments = years * 12;
+
+      // Amortization formula: M = P * [r(1+r)^n] / [(1+r)^n - 1]
+      const monthlyPayment = principal * (monthlyRate * Math.pow(1 + monthlyRate, numPayments)) / (Math.pow(1 + monthlyRate, numPayments) - 1);
+      const totalPaid = monthlyPayment * numPayments;
+      const totalInterest = totalPaid - principal;
+
+      if (monthlyPaymentEl) monthlyPaymentEl.textContent = formatCurrencyWithCents(monthlyPayment);
+      if (totalPaidEl) totalPaidEl.textContent = formatCurrency(totalPaid);
+      if (totalInterestEl) totalInterestEl.textContent = formatCurrency(totalInterest);
+    }
+
+    // Format loan amount on blur
+    loanAmountInput.addEventListener('blur', () => {
+      loanAmountInput.value = formatAmountInput(loanAmountInput.value);
+      calculate();
+    });
+
+    // Calculate on input change
+    loanAmountInput.addEventListener('input', calculate);
+    interestRateInput.addEventListener('input', calculate);
+    loanTermSelect.addEventListener('change', calculate);
+
+    // Initial calculation
+    calculate();
+  }
+
+  // Initialize when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initLoanCalculator);
+  } else {
+    initLoanCalculator();
+  }
+</script>

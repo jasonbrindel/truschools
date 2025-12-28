@@ -1,4 +1,4 @@
--- TrueSchools Database Schema for Cloudflare D1
+-- TruSchools Database Schema for Cloudflare D1
 -- Initial migration: Core tables
 
 -- Schools table (K-12)
@@ -262,4 +262,9 @@ INSERT OR IGNORE INTO states (abbr, name, slug) VALUES
   ('WA', 'Washington', 'washington'),
   ('WV', 'West Virginia', 'west-virginia'),
   ('WI', 'Wisconsin', 'wisconsin'),
-  ('WY', 'Wyoming', 'wyoming');
+  ('WY', 'Wyoming', 'wyoming'),
+  ('PR', 'Puerto Rico', 'puerto-rico'),
+  ('GU', 'Guam', 'guam'),
+  ('VI', 'Virgin Islands', 'virgin-islands'),
+  ('AS', 'American Samoa', 'american-samoa'),
+  ('MP', 'Northern Mariana Islands', 'northern-mariana-islands');

@@ -1,0 +1,347 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import QAPoll from '@/components/QAPoll.astro';
+import NewsletterSignup from '@/components/NewsletterSignup.astro';
+
+// Images for featured article and topic cards
+import featuredImage from '@/images/USED-school-campus-colorful-illustration.jpg';
+import applyArticleImage from '@/images/USED-students-walking-to-school-illustration.jpg';
+import rightForChildImage from '@/images/USED-student-thoughtful-classroom-portrait.jpg';
+import tourQuestionsImage from '@/images/USED-school-entrance-students-abstract.jpg';
+import schoolChoiceImage from '@/images/USED-school-courtyard-students-illustration.jpg';
+import financialStabilityImage from '@/images/USED-modern-school-building-field.jpg';
+import warningSignsImage from '@/images/USED-student-focused-classroom-lecture.jpg';
+import lotteryExplainedImage from '@/images/USED-students-waiting-classroom-colorful.jpg';
+import lotteryRejectionImage from '@/images/USED-student-looking-up-wonder.jpg';
+import specialEducationImage from '@/images/USED-education-teacher-classroom-lesson.jpg';
+
+// All US states
+const states = [
+  { name: 'Alabama', slug: 'alabama', abbr: 'AL' },
+  { name: 'Alaska', slug: 'alaska', abbr: 'AK' },
+  { name: 'Arizona', slug: 'arizona', abbr: 'AZ' },
+  { name: 'Arkansas', slug: 'arkansas', abbr: 'AR' },
+  { name: 'California', slug: 'california', abbr: 'CA' },
+  { name: 'Colorado', slug: 'colorado', abbr: 'CO' },
+  { name: 'Connecticut', slug: 'connecticut', abbr: 'CT' },
+  { name: 'Delaware', slug: 'delaware', abbr: 'DE' },
+  { name: 'District of Columbia', slug: 'district-of-columbia', abbr: 'DC' },
+  { name: 'Florida', slug: 'florida', abbr: 'FL' },
+  { name: 'Georgia', slug: 'georgia', abbr: 'GA' },
+  { name: 'Hawaii', slug: 'hawaii', abbr: 'HI' },
+  { name: 'Idaho', slug: 'idaho', abbr: 'ID' },
+  { name: 'Illinois', slug: 'illinois', abbr: 'IL' },
+  { name: 'Indiana', slug: 'indiana', abbr: 'IN' },
+  { name: 'Iowa', slug: 'iowa', abbr: 'IA' },
+  { name: 'Kansas', slug: 'kansas', abbr: 'KS' },
+  { name: 'Kentucky', slug: 'kentucky', abbr: 'KY' },
+  { name: 'Louisiana', slug: 'louisiana', abbr: 'LA' },
+  { name: 'Maine', slug: 'maine', abbr: 'ME' },
+  { name: 'Maryland', slug: 'maryland', abbr: 'MD' },
+  { name: 'Massachusetts', slug: 'massachusetts', abbr: 'MA' },
+  { name: 'Michigan', slug: 'michigan', abbr: 'MI' },
+  { name: 'Minnesota', slug: 'minnesota', abbr: 'MN' },
+  { name: 'Mississippi', slug: 'mississippi', abbr: 'MS' },
+  { name: 'Missouri', slug: 'missouri', abbr: 'MO' },
+  { name: 'Montana', slug: 'montana', abbr: 'MT' },
+  { name: 'Nebraska', slug: 'nebraska', abbr: 'NE' },
+  { name: 'Nevada', slug: 'nevada', abbr: 'NV' },
+  { name: 'New Hampshire', slug: 'new-hampshire', abbr: 'NH' },
+  { name: 'New Jersey', slug: 'new-jersey', abbr: 'NJ' },
+  { name: 'New Mexico', slug: 'new-mexico', abbr: 'NM' },
+  { name: 'New York', slug: 'new-york', abbr: 'NY' },
+  { name: 'North Carolina', slug: 'north-carolina', abbr: 'NC' },
+  { name: 'North Dakota', slug: 'north-dakota', abbr: 'ND' },
+  { name: 'Ohio', slug: 'ohio', abbr: 'OH' },
+  { name: 'Oklahoma', slug: 'oklahoma', abbr: 'OK' },
+  { name: 'Oregon', slug: 'oregon', abbr: 'OR' },
+  { name: 'Pennsylvania', slug: 'pennsylvania', abbr: 'PA' },
+  { name: 'Puerto Rico', slug: 'puerto-rico', abbr: 'PR' },
+  { name: 'Rhode Island', slug: 'rhode-island', abbr: 'RI' },
+  { name: 'South Carolina', slug: 'south-carolina', abbr: 'SC' },
+  { name: 'South Dakota', slug: 'south-dakota', abbr: 'SD' },
+  { name: 'Tennessee', slug: 'tennessee', abbr: 'TN' },
+  { name: 'Texas', slug: 'texas', abbr: 'TX' },
+  { name: 'Utah', slug: 'utah', abbr: 'UT' },
+  { name: 'Vermont', slug: 'vermont', abbr: 'VT' },
+  { name: 'Virginia', slug: 'virginia', abbr: 'VA' },
+  { name: 'Washington', slug: 'washington', abbr: 'WA' },
+  { name: 'West Virginia', slug: 'west-virginia', abbr: 'WV' },
+  { name: 'Wisconsin', slug: 'wisconsin', abbr: 'WI' },
+  { name: 'Wyoming', slug: 'wyoming', abbr: 'WY' },
+];
+
+// Major cities for the "by city" section
+const majorCities = [
+  { name: 'Albuquerque', state: 'new-mexico' },
+  { name: 'Atlanta', state: 'georgia' },
+  { name: 'Austin', state: 'texas' },
+  { name: 'Baltimore', state: 'maryland' },
+  { name: 'Boston', state: 'massachusetts' },
+  { name: 'Charlotte', state: 'north-carolina' },
+  { name: 'Chicago', state: 'illinois' },
+  { name: 'Cleveland', state: 'ohio' },
+  { name: 'Columbus', state: 'ohio' },
+  { name: 'Dallas', state: 'texas' },
+  { name: 'Denver', state: 'colorado' },
+  { name: 'Detroit', state: 'michigan' },
+  { name: 'El Paso', state: 'texas' },
+  { name: 'Fort Worth', state: 'texas' },
+  { name: 'Fresno', state: 'california' },
+  { name: 'Houston', state: 'texas' },
+  { name: 'Indianapolis', state: 'indiana' },
+  { name: 'Jacksonville', state: 'florida' },
+  { name: 'Kansas City', state: 'missouri' },
+  { name: 'Las Vegas', state: 'nevada' },
+  { name: 'Long Beach', state: 'california' },
+  { name: 'Los Angeles', state: 'california' },
+  { name: 'Louisville', state: 'kentucky' },
+  { name: 'Memphis', state: 'tennessee' },
+  { name: 'Mesa', state: 'arizona' },
+  { name: 'Miami', state: 'florida' },
+  { name: 'Milwaukee', state: 'wisconsin' },
+  { name: 'Minneapolis', state: 'minnesota' },
+  { name: 'Nashville', state: 'tennessee' },
+  { name: 'New Orleans', state: 'louisiana' },
+  { name: 'New York', state: 'new-york' },
+  { name: 'Oakland', state: 'california' },
+  { name: 'Oklahoma City', state: 'oklahoma' },
+  { name: 'Omaha', state: 'nebraska' },
+  { name: 'Philadelphia', state: 'pennsylvania' },
+  { name: 'Phoenix', state: 'arizona' },
+  { name: 'Pittsburgh', state: 'pennsylvania' },
+  { name: 'Portland', state: 'oregon' },
+  { name: 'Raleigh', state: 'north-carolina' },
+  { name: 'Sacramento', state: 'california' },
+  { name: 'San Antonio', state: 'texas' },
+  { name: 'San Diego', state: 'california' },
+  { name: 'San Francisco', state: 'california' },
+  { name: 'San Jose', state: 'california' },
+  { name: 'Seattle', state: 'washington' },
+  { name: 'Tampa', state: 'florida' },
+  { name: 'Tucson', state: 'arizona' },
+  { name: 'Virginia Beach', state: 'virginia' },
+  { name: 'Washington', state: 'district-of-columbia' },
+  { name: 'Wichita', state: 'kansas' },
+];
+
+function slugify(text: string): string {
+  return text.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+}
+
+// Featured articles for the first two cards
+const featuredArticles = [
+  {
+    title: 'How to Apply to Charter Schools: The Complete Parent Guide',
+    url: '/education-articles/how-to-apply-to-charter-schools',
+    image: applyArticleImage,
+    description: 'Navigate the charter school enrollment process with confidence—from applications and lotteries to waitlists and deadlines.',
+  },
+  {
+    title: 'Is a Charter School Right for Your Child?',
+    url: '/education-articles/is-a-charter-school-right-for-your-child',
+    image: rightForChildImage,
+    description: 'A guide to help you decide if a charter school fits your child\'s learning style, temperament, and your family\'s needs.',
+  },
+  {
+    title: 'What to Really Ask When You Walk Through Those Charter School Doors',
+    url: '/education-articles/what-to-ask-on-a-charter-school-tour',
+    image: tourQuestionsImage,
+    description: 'A parent\'s guide to finding the questions that matter—and learning to trust what you observe during school tours.',
+  },
+  {
+    title: 'The Rise of School Choice',
+    url: '/education-articles/the-rise-of-school-choice?from=charter-schools',
+    image: schoolChoiceImage,
+    description: 'A comprehensive guide to charter schools, magnet programs, vouchers, and what the research says about their effectiveness.',
+  },
+  {
+    title: 'The Numbers Behind the Promise',
+    url: '/education-articles/the-numbers-behind-the-promise',
+    image: financialStabilityImage,
+    description: 'How to look past the glossy brochure and assess whether a charter school is built on solid financial ground.',
+  },
+  {
+    title: 'When the Promise Fades: Warning Signs Every Parent Should Recognize',
+    url: '/education-articles/charter-school-warning-signs',
+    image: warningSignsImage,
+    description: 'A research-informed guide to spotting red flags—not to discourage choice, but to make it wiser.',
+  },
+  {
+    title: 'Charter School Lottery Explained: Everything You Need to Know',
+    url: '/education-articles/charter-school-lottery-explained',
+    image: lotteryExplainedImage,
+    description: 'Understanding the mechanics of charter school admission lotteries—and how to navigate them successfully.',
+  },
+  {
+    title: "What to Do If Your Child Doesn't Win the Charter Lottery",
+    url: '/education-articles/charter-lottery-what-to-do-next',
+    image: lotteryRejectionImage,
+    description: 'A practical guide for navigating rejection, exploring alternatives, and finding the right path forward.',
+  },
+  {
+    title: 'Charter Schools and Special Education',
+    url: '/education-articles/charter-schools-and-special-education',
+    image: specialEducationImage,
+    description: 'What parents of kids with IEPs need to know about their rights, essential questions to ask, and recourse when problems arise.',
+  },
+  {
+    title: 'How to Find the Right School for Your Child',
+    url: '/education-articles/how-to-find-the-right-school?from=charter-schools',
+    image: applyArticleImage,
+    description: 'School ratings can tell you a lot—but not everything. Here\'s what actually matters when choosing a school.',
+  },
+];
+
+---
+
+<Layout title="Charter Schools in the United States" description="Find charter schools across the United States. Browse comprehensive listings of public charter schools by state, offering innovative educational programs and school choice options.">
+  <div class="container py-5">
+    <!-- Breadcrumb -->
+    <nav class="text-sm mb-4">
+      <ol class="flex flex-wrap items-center gap-2 text-gray-600">
+        <li><a href="/" class="hover:text-brand-blue">Home</a></li>
+        <li class="text-gray-400">/</li>
+        <li class="text-gray-900 font-medium">Charter Schools</li>
+      </ol>
+    </nav>
+
+    <h1 class="text-brand-green-text mb-2">Charter Schools in the United States</h1>
+    <p class="fs-14 text-gray-500 mb-5">Discover publicly funded, independently operated schools offering innovative educational options.</p>
+
+    <div class="flex flex-col lg:flex-row gap-5">
+      <!-- Main Content -->
+      <div class="lg:w-2/3">
+        <!-- Featured Article -->
+        <div class="box-rounded mb-5">
+          <img
+            src={featuredImage.src}
+            alt="Charter school students"
+            class="w-full aspect-video object-cover rounded mb-4"
+          />
+          <h2 class="text-brand-blue text-xl mb-2">
+            <a href="/education-articles/charter-schools-what-parents-need-to-know" class="hover:underline">Charter Schools: What Parents Need to Know</a>
+          </h2>
+          <p class="text-gray-600 fs-14">
+            Charter schools are publicly funded but independently operated, offering families an alternative to traditional public schools. Learn how they work, what makes them different, and how to find the right one for your child. <a href="/education-articles/charter-schools-what-parents-need-to-know" class="text-brand-blue hover:underline">Read article &rarr;</a>
+          </p>
+        </div>
+
+        <!-- Topic Categories -->
+        <div class="box-rounded mb-5">
+          <h2 class="text-brand-blue text-xl mb-4">Charter School Topics</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <!-- Featured Article Cards -->
+            {featuredArticles.map((article) => (
+              <div class="border border-gray-200 rounded overflow-hidden p-4">
+                <a href={article.url}>
+                  <img
+                    src={article.image.src}
+                    alt={article.title}
+                    class="w-full aspect-square object-cover rounded"
+                  />
+                </a>
+                <div class="pt-4">
+                  <h3 class="text-brand-green-text font-bold mb-1 fs-14">
+                    <a href={article.url} class="hover:underline">{article.title}</a>
+                  </h3>
+                  <p class="text-gray-600 fs-12 mb-2 leading-snug">{article.description}</p>
+                  <a href={article.url} class="text-brand-blue hover:underline fs-13">Read article &rarr;</a>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <!-- Q&A Section -->
+        <div class="box-rounded mb-5 bg-lt-blue">
+          <QAPoll
+            questionId="charter-school-reason"
+            pageSlug="charter-schools"
+            question="What's your main reason for considering a charter school?"
+            answers={["Academic excellence", "Specialized programs", "Smaller class sizes", "School choice"]}
+          />
+        </div>
+
+        <!-- Browse by State -->
+        <div class="box-rounded mb-5">
+          <h2 class="text-brand-blue mb-4">Browse Charter Schools by State</h2>
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-0">
+            {states.map((state, index) => (
+              <div class={`p-3 ${index < states.length - 3 ? 'border-b border-dotted border-[#c1c1c1]' : ''}`}>
+                <a href={`/charter-schools/${state.slug}`} class="flex items-center gap-2">
+                  <span class="text-brand-blue font-bold">{state.abbr}</span>
+                  <span>{state.name}</span>
+                </a>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <!-- Browse by City -->
+        <div class="box-rounded mb-5">
+          <h2 class="text-brand-blue mb-4">Charter Schools by City</h2>
+          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 fs-13">
+            {majorCities.map((city) => (
+              <a href={`/charter-schools/${city.state}/${slugify(city.name)}`} class="text-brand-blue hover:underline">
+                {city.name}
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="lg:w-1/3">
+        <div class="box-rounded bg-lt-blue mb-4">
+          <h3 class="text-brand-blue mb-3">Quick Jump</h3>
+          <select
+            class="input w-full"
+            onchange="if(this.value) window.location.href=this.value"
+          >
+            <option value="">-- Select a State --</option>
+            {states.map((state) => (
+              <option value={`/charter-schools/${state.slug}`}>
+                {state.name} Charter Schools
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <!-- Ad Placeholder -->
+        <div class="box-rounded mb-4">
+          <div class="bg-gray-100 h-[280px] flex items-center justify-center text-gray-400 fs-13">
+            Advertisement
+          </div>
+        </div>
+
+        <div class="box-rounded mb-4">
+          <h3 class="text-brand-blue mb-3">Other School Types</h3>
+          <ul class="list-none m-0 p-0 fs-13">
+            <li class="py-2 border-b border-dotted border-[#c1c1c1]">
+              <a href="/magnet-schools">Magnet Schools</a>
+            </li>
+            <li class="py-2 border-b border-dotted border-[#c1c1c1]">
+              <a href="/preschools">Preschools</a>
+            </li>
+            <li class="py-2 border-b border-dotted border-[#c1c1c1]">
+              <a href="/elementary-schools">Elementary Schools</a>
+            </li>
+            <li class="py-2 border-b border-dotted border-[#c1c1c1]">
+              <a href="/middle-schools">Middle Schools</a>
+            </li>
+            <li class="py-2 border-b border-dotted border-[#c1c1c1]">
+              <a href="/high-schools">High Schools</a>
+            </li>
+            <li class="py-2">
+              <a href="/colleges-universities">Colleges & Universities</a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Newsletter Signup -->
+        <NewsletterSignup />
+      </div>
+    </div>
+  </div>
+</Layout>

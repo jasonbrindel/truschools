@@ -1,5 +1,6 @@
 ---
 import Layout from '@/layouts/Layout.astro';
+import NewsletterSignup from '@/components/NewsletterSignup.astro';
 
 const { state, city, school } = Astro.params;
 
@@ -868,10 +869,13 @@ const pageDescription = `${schoolData.school_name} is a ${getSchoolType(schoolDa
               <a href={`/high-schools/${state}`}>High Schools in {schoolData.state_name}</a>
             </li>
             <li class="py-2">
-              <a href={`/colleges/${state}`}>Colleges in {schoolData.state_name}</a>
+              <a href={`/colleges-universities/${state}`}>Colleges in {schoolData.state_name}</a>
             </li>
           </ul>
         </div>
+
+        <!-- Newsletter Signup -->
+        <NewsletterSignup preselected={['kindergarten']} />
       </div>
     </div>
   </div>

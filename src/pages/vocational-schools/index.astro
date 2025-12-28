@@ -1,13 +1,15 @@
 ---
 import Layout from '@/layouts/Layout.astro';
+import QAPoll from '@/components/QAPoll.astro';
+import NewsletterSignup from '@/components/NewsletterSignup.astro';
 
 const db = Astro.locals.runtime.env.DB;
 
-// Get counts by vocational type
+// Get counts by vocational type (includes all institution types with vocational programs)
 const countsResult = await db.prepare(`
   SELECT vocational_type, COUNT(*) as count
   FROM colleges
-  WHERE institution_category = 'vocational' AND active = 1
+  WHERE vocational_type IS NOT NULL AND active = 1
   GROUP BY vocational_type
   ORDER BY count DESC
 `).all();
@@ -17,20 +19,20 @@ const typeCounts = countsResult.results.reduce((acc: Record<string, number>, row
   return acc;
 }, {});
 
-// Get counts by state
+// Get counts by state (schools with any vocational program)
 const stateCountsResult = await db.prepare(`
   SELECT state_abbr, COUNT(*) as count
   FROM colleges
-  WHERE institution_category = 'vocational' AND active = 1
+  WHERE vocational_type IS NOT NULL AND active = 1
   GROUP BY state_abbr
   ORDER BY count DESC
 `).all();
 
 const stateCounts = stateCountsResult.results;
 
-// Get total vocational schools
+// Get total vocational schools (all schools with vocational programs)
 const totalResult = await db.prepare(`
-  SELECT COUNT(*) as total FROM colleges WHERE institution_category = 'vocational' AND active = 1
+  SELECT COUNT(*) as total FROM colleges WHERE vocational_type IS NOT NULL AND active = 1
 `).first() as { total: number };
 const totalSchools = totalResult?.total || 0;
 
@@ -41,35 +43,30 @@ const categories = [
     name: 'Beauty Schools',
     description: 'Cosmetology, esthetics, nail technology, barbering, and salon management programs.',
     count: typeCounts['beauty'] || 0,
-    icon: '💇'
   },
   {
     slug: 'trade-schools',
     name: 'Trade Schools',
     description: 'HVAC, welding, electrical, plumbing, automotive, and construction programs.',
     count: typeCounts['trade'] || 0,
-    icon: '🔧'
   },
   {
     slug: 'healthcare-schools',
     name: 'Healthcare Schools',
     description: 'Medical assisting, dental assisting, phlebotomy, CNA, and nursing programs.',
     count: typeCounts['healthcare'] || 0,
-    icon: '🏥'
   },
   {
     slug: 'technology-schools',
     name: 'Technology Schools',
     description: 'IT, computer networking, cybersecurity, and software development programs.',
     count: typeCounts['technology'] || 0,
-    icon: '💻'
   },
   {
     slug: 'culinary-schools',
     name: 'Culinary Schools',
     description: 'Culinary arts, pastry, baking, and hospitality management programs.',
     count: typeCounts['culinary'] || 0,
-    icon: '👨‍🍳'
   }
 ];
 
@@ -134,7 +131,34 @@ function getStateSlug(abbr: string): string {
           {categories.map((cat) => (
             <a href={`/${cat.slug}`} class="box-rounded hover:border-brand-blue transition-colors no-underline">
               <div class="flex items-start gap-3">
-                <span class="text-3xl">{cat.icon}</span>
+                <div class="w-10 h-10 flex-shrink-0 text-brand-blue">
+                  {cat.slug === 'beauty-schools' && (
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z" />
+                    </svg>
+                  )}
+                  {cat.slug === 'trade-schools' && (
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17 17.25 21A2.652 2.652 0 0 0 21 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 1 1-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 0 0 4.486-6.336l-3.276 3.277a3.004 3.004 0 0 1-2.25-2.25l3.276-3.276a4.5 4.5 0 0 0-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437 1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008Z" />
+                    </svg>
+                  )}
+                  {cat.slug === 'healthcare-schools' && (
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+                    </svg>
+                  )}
+                  {cat.slug === 'technology-schools' && (
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m6-12V15a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 15V5.25m18 0A2.25 2.25 0 0 0 18.75 3H5.25A2.25 2.25 0 0 0 3 5.25m18 0V12a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 12V5.25" />
+                    </svg>
+                  )}
+                  {cat.slug === 'culinary-schools' && (
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M15.362 5.214A8.252 8.252 0 0 1 12 21 8.25 8.25 0 0 1 6.038 7.047 8.287 8.287 0 0 0 9 9.601a8.983 8.983 0 0 1 3.361-6.867 8.21 8.21 0 0 0 3 2.48Z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 18a3.75 3.75 0 0 0 .495-7.468 5.99 5.99 0 0 0-1.925 3.547 5.975 5.975 0 0 1-2.133-1.001A3.75 3.75 0 0 0 12 18Z" />
+                    </svg>
+                  )}
+                </div>
                 <div>
                   <h3 class="text-brand-blue mb-1 text-lg">{cat.name}</h3>
                   <p class="text-gray-600 fs-13 mb-2">{cat.description}</p>
@@ -216,13 +240,18 @@ function getStateSlug(abbr: string): string {
           </ul>
         </div>
 
-        <!-- Newsletter -->
-        <div class="box-rounded">
-          <h3 class="text-brand-blue mb-3">Get Career Tips</h3>
-          <p class="fs-13 text-gray-600 mb-3">Subscribe for vocational training news and career advice.</p>
-          <input type="email" placeholder="Your email address" class="input w-full mb-2" />
-          <button class="btn btn-primary w-full">Subscribe</button>
+        <!-- Quick Poll -->
+        <div class="box-rounded mb-4">
+          <QAPoll
+            questionId="vocational-why-choose"
+            pageSlug="vocational-schools"
+            question="What's most important to you when choosing a vocational school?"
+            answers={["Program length", "Cost/tuition", "Job placement rate", "Location"]}
+          />
         </div>
+
+        <!-- Newsletter -->
+        <NewsletterSignup />
       </div>
     </div>
   </div>

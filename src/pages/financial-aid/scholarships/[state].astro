@@ -1,0 +1,273 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import NewsletterSignup from '@/components/NewsletterSignup.astro';
+
+const { state: stateSlug } = Astro.params;
+
+// States list with slugs and official financial aid agency info
+const states: Record<string, { name: string; abbr: string; agency: string; website: string; description: string }> = {
+  'alabama': { name: 'Alabama', abbr: 'AL', agency: 'Alabama Commission on Higher Education', website: 'https://ache.edu/students-parents/', description: 'Offers need-based grants and merit scholarships for Alabama residents.' },
+  'alaska': { name: 'Alaska', abbr: 'AK', agency: 'Alaska Commission on Postsecondary Education', website: 'https://acpe.alaska.gov/', description: 'Provides education grants and the Alaska Performance Scholarship.' },
+  'arizona': { name: 'Arizona', abbr: 'AZ', agency: 'Arizona Commission for Postsecondary Education', website: 'https://highered.az.gov/students-families', description: 'Administers state grants and private scholarship programs.' },
+  'arkansas': { name: 'Arkansas', abbr: 'AR', agency: 'Arkansas Division of Higher Education', website: 'https://scholarships.adhe.edu/', description: 'Offers the Arkansas Academic Challenge Scholarship and other programs.' },
+  'california': { name: 'California', abbr: 'CA', agency: 'California Student Aid Commission', website: 'https://www.csac.ca.gov/', description: 'Administers Cal Grants and Middle Class Scholarship programs.' },
+  'colorado': { name: 'Colorado', abbr: 'CO', agency: 'Colorado Department of Higher Education', website: 'https://highered.colorado.gov/students/preparing-for-college/paying-for-college', description: 'Offers Colorado Student Grant and merit-based scholarships.' },
+  'connecticut': { name: 'Connecticut', abbr: 'CT', agency: 'Connecticut Office of Higher Education', website: 'https://www.ctohe.org/studentresources/', description: 'Provides need-based grants for Connecticut residents.' },
+  'delaware': { name: 'Delaware', abbr: 'DE', agency: 'Delaware Higher Education Office', website: 'https://www.doe.k12.de.us/domain/226', description: 'Offers SEED Scholarship and other state aid programs.' },
+  'florida': { name: 'Florida', abbr: 'FL', agency: 'Florida Department of Education - Office of Student Financial Assistance', website: 'https://www.floridastudentfinancialaidsg.org/', description: 'Administers Bright Futures Scholarship and Florida Student Assistance Grant.' },
+  'georgia': { name: 'Georgia', abbr: 'GA', agency: 'Georgia Student Finance Commission', website: 'https://www.gafutures.org/', description: 'Administers HOPE Scholarship, Zell Miller Scholarship, and other programs.' },
+  'hawaii': { name: 'Hawaii', abbr: 'HI', agency: 'University of Hawaii System', website: 'https://www.hawaii.edu/tuition/financial-aid/', description: 'Offers B Plus Scholarship and Hawaii state grants.' },
+  'idaho': { name: 'Idaho', abbr: 'ID', agency: 'Idaho State Board of Education', website: 'https://boardofed.idaho.gov/scholarships/', description: 'Provides Idaho Opportunity Scholarship and other state aid.' },
+  'illinois': { name: 'Illinois', abbr: 'IL', agency: 'Illinois Student Assistance Commission', website: 'https://www.isac.org/', description: 'Administers MAP Grant and AIM HIGH scholarship programs.' },
+  'indiana': { name: 'Indiana', abbr: 'IN', agency: 'Indiana Commission for Higher Education', website: 'https://www.in.gov/che/state-financial-aid/', description: 'Offers 21st Century Scholars and Frank O\'Bannon Grant.' },
+  'iowa': { name: 'Iowa', abbr: 'IA', agency: 'Iowa College Student Aid', website: 'https://iowacollegeaid.gov/', description: 'Provides Iowa Tuition Grant and scholarship programs.' },
+  'kansas': { name: 'Kansas', abbr: 'KS', agency: 'Kansas Board of Regents', website: 'https://www.kansasregents.org/students/student_financial_aid', description: 'Administers Kansas Comprehensive Grant and other aid.' },
+  'kentucky': { name: 'Kentucky', abbr: 'KY', agency: 'Kentucky Higher Education Assistance Authority', website: 'https://www.kheaa.com/', description: 'Offers KEES Scholarship, CAP Grant, and other programs.' },
+  'louisiana': { name: 'Louisiana', abbr: 'LA', agency: 'Louisiana Office of Student Financial Assistance', website: 'https://mylosfa.la.gov/', description: 'Administers TOPS Scholarship and GO Grants.' },
+  'maine': { name: 'Maine', abbr: 'ME', agency: 'Finance Authority of Maine', website: 'https://www.famemaine.com/', description: 'Provides Maine State Grant and scholarship programs.' },
+  'maryland': { name: 'Maryland', abbr: 'MD', agency: 'Maryland Higher Education Commission', website: 'https://mhec.maryland.gov/preparing/Pages/FinancialAid/index.aspx', description: 'Offers Howard P. Rawlings Program of Educational Excellence.' },
+  'massachusetts': { name: 'Massachusetts', abbr: 'MA', agency: 'Massachusetts Office of Student Financial Assistance', website: 'https://www.mass.edu/osfa/', description: 'Administers MASSGrant and other need-based aid.' },
+  'michigan': { name: 'Michigan', abbr: 'MI', agency: 'Michigan Student Aid', website: 'https://www.michigan.gov/mistudentaid', description: 'Offers Michigan Competitive Scholarship and Tuition Grant.' },
+  'minnesota': { name: 'Minnesota', abbr: 'MN', agency: 'Minnesota Office of Higher Education', website: 'https://www.ohe.state.mn.us/mPg.cfm?pageID=138', description: 'Provides Minnesota State Grant and scholarship programs.' },
+  'mississippi': { name: 'Mississippi', abbr: 'MS', agency: 'Mississippi Institutions of Higher Learning', website: 'https://www.mississippi.edu/financialaid/', description: 'Administers MTAG/MESG and other state scholarships.' },
+  'missouri': { name: 'Missouri', abbr: 'MO', agency: 'Missouri Department of Higher Education', website: 'https://dhe.mo.gov/ppc/grants/', description: 'Offers Access Missouri and Bright Flight scholarships.' },
+  'montana': { name: 'Montana', abbr: 'MT', agency: 'Montana University System', website: 'https://mus.edu/Prepare/Pay/Scholarships.html', description: 'Provides Montana University System Honor Scholarship.' },
+  'nebraska': { name: 'Nebraska', abbr: 'NE', agency: 'Nebraska Coordinating Commission for Postsecondary Education', website: 'https://ccpe.nebraska.gov/Nebraska-Opportunity-Grant', description: 'Administers Nebraska Opportunity Grant.' },
+  'nevada': { name: 'Nevada', abbr: 'NV', agency: 'Nevada System of Higher Education', website: 'https://nshe.nevada.edu/students/', description: 'Offers Nevada Promise Scholarship and Silver State Opportunity Grant.' },
+  'new-hampshire': { name: 'New Hampshire', abbr: 'NH', agency: 'New Hampshire Higher Education Assistance Foundation', website: 'https://www.nhheaf.org/', description: 'Provides Granite State Scholars and other programs.' },
+  'new-jersey': { name: 'New Jersey', abbr: 'NJ', agency: 'New Jersey Higher Education Student Assistance Authority', website: 'https://www.hesaa.org/', description: 'Administers TAG Grant and NJ STARS programs.' },
+  'new-mexico': { name: 'New Mexico', abbr: 'NM', agency: 'New Mexico Higher Education Department', website: 'https://hed.nm.gov/students-parents/financial-aid', description: 'Offers New Mexico Opportunity Scholarship and Lottery Success.' },
+  'new-york': { name: 'New York', abbr: 'NY', agency: 'New York State Higher Education Services Corporation', website: 'https://www.hesc.ny.gov/', description: 'Administers TAP, Excelsior Scholarship, and other programs.' },
+  'north-carolina': { name: 'North Carolina', abbr: 'NC', agency: 'College Foundation of North Carolina', website: 'https://www.cfnc.org/', description: 'Provides NC Need-Based Scholarship and other aid.' },
+  'north-dakota': { name: 'North Dakota', abbr: 'ND', agency: 'North Dakota University System', website: 'https://ndus.edu/paying-for-college/', description: 'Offers ND Scholars and Career Builders programs.' },
+  'ohio': { name: 'Ohio', abbr: 'OH', agency: 'Ohio Department of Higher Education', website: 'https://highered.ohio.gov/students/pay-for-college', description: 'Administers Ohio College Opportunity Grant.' },
+  'oklahoma': { name: 'Oklahoma', abbr: 'OK', agency: 'Oklahoma State Regents for Higher Education', website: 'https://www.okhighered.org/student-center/', description: 'Offers Oklahoma\'s Promise and Tuition Aid Grant.' },
+  'oregon': { name: 'Oregon', abbr: 'OR', agency: 'Oregon Student Aid', website: 'https://oregonstudentaid.gov/', description: 'Provides Oregon Opportunity Grant and Promise Grant.' },
+  'pennsylvania': { name: 'Pennsylvania', abbr: 'PA', agency: 'Pennsylvania Higher Education Assistance Agency', website: 'https://www.pheaa.org/', description: 'Administers PA State Grant and other programs.' },
+  'rhode-island': { name: 'Rhode Island', abbr: 'RI', agency: 'Rhode Island Office of Postsecondary Commissioner', website: 'https://www.riopc.edu/', description: 'Offers RI Promise Scholarship and need-based grants.' },
+  'south-carolina': { name: 'South Carolina', abbr: 'SC', agency: 'South Carolina Commission on Higher Education', website: 'https://www.che.sc.gov/Students,FamiliesMilitary/PayingForCollege.aspx', description: 'Administers LIFE Scholarship, Palmetto Fellows, and HOPE.' },
+  'south-dakota': { name: 'South Dakota', abbr: 'SD', agency: 'South Dakota Board of Regents', website: 'https://www.sdbor.edu/student-information/Pages/Financial-Aid.aspx', description: 'Provides SD Opportunity Scholarship.' },
+  'tennessee': { name: 'Tennessee', abbr: 'TN', agency: 'Tennessee Student Assistance Corporation', website: 'https://www.tn.gov/collegepays', description: 'Administers Tennessee Promise, HOPE Scholarship, and Tennessee Reconnect.' },
+  'texas': { name: 'Texas', abbr: 'TX', agency: 'Texas Higher Education Coordinating Board', website: 'https://www.highered.texas.gov/our-work/empowering-our-students/financial-aid/', description: 'Offers TEXAS Grant and Top 10% Scholarship.' },
+  'utah': { name: 'Utah', abbr: 'UT', agency: 'Utah System of Higher Education', website: 'https://ushe.edu/initiatives/access/', description: 'Provides Regents\' Scholarship and Utah Promise.' },
+  'vermont': { name: 'Vermont', abbr: 'VT', agency: 'Vermont Student Assistance Corporation', website: 'https://www.vsac.org/', description: 'Administers Vermont Incentive Grants and scholarships.' },
+  'virginia': { name: 'Virginia', abbr: 'VA', agency: 'State Council of Higher Education for Virginia', website: 'https://www.schev.edu/students/paying-for-college', description: 'Offers Virginia Guaranteed Assistance Program and Tuition Assistance Grant.' },
+  'washington': { name: 'Washington', abbr: 'WA', agency: 'Washington Student Achievement Council', website: 'https://wsac.wa.gov/financial-aid', description: 'Administers Washington College Grant and College Bound Scholarship.' },
+  'west-virginia': { name: 'West Virginia', abbr: 'WV', agency: 'West Virginia Higher Education Policy Commission', website: 'https://www.wvhepc.edu/resources/students/', description: 'Offers PROMISE Scholarship and WV Higher Education Grant.' },
+  'wisconsin': { name: 'Wisconsin', abbr: 'WI', agency: 'Wisconsin Higher Educational Aids Board', website: 'https://heab.wi.gov/', description: 'Provides Wisconsin Grant and Academic Excellence Scholarship.' },
+  'wyoming': { name: 'Wyoming', abbr: 'WY', agency: 'Wyoming Community College Commission', website: 'https://communitycolleges.wy.edu/', description: 'Offers Hathaway Scholarship Program.' },
+};
+
+// Find the state
+if (!stateSlug || !states[stateSlug]) {
+  return Astro.redirect('/financial-aid/scholarships');
+}
+const stateInfo = states[stateSlug];
+
+// Get scholarship programs for this state
+const runtime = Astro.locals.runtime;
+let programs: any[] = [];
+let latestYear = 0;
+
+if (runtime?.env?.DB) {
+  try {
+    // Get most recent year
+    const yearResult = await runtime.env.DB.prepare(`
+      SELECT MAX(year) as max_year FROM state_scholarships WHERE state = ?
+    `).bind(stateInfo.name).first();
+    latestYear = (yearResult as any)?.max_year || 0;
+
+    // Get unique programs for this state (from latest year)
+    if (latestYear) {
+      const result = await runtime.env.DB.prepare(`
+        SELECT DISTINCT program_name, lottery_funding
+        FROM state_scholarships
+        WHERE state = ? AND year = ?
+        ORDER BY program_name
+      `).bind(stateInfo.name, latestYear).all();
+      programs = result.results || [];
+    }
+  } catch (e) {
+    console.error('Error fetching programs:', e);
+  }
+}
+
+// Get neighboring states for navigation
+const stateKeys = Object.keys(states);
+const stateIndex = stateKeys.indexOf(stateSlug);
+const prevStateKey = stateIndex > 0 ? stateKeys[stateIndex - 1] : null;
+const nextStateKey = stateIndex < stateKeys.length - 1 ? stateKeys[stateIndex + 1] : null;
+const prevState = prevStateKey ? { slug: prevStateKey, ...states[prevStateKey] } : null;
+const nextState = nextStateKey ? { slug: nextStateKey, ...states[nextStateKey] } : null;
+---
+
+<Layout title={`${stateInfo.name} Scholarships & Financial Aid Programs`} description={`Find state scholarships and grants for ${stateInfo.name} residents. ${stateInfo.description}`}>
+  <div class="container py-5">
+    <!-- Breadcrumb -->
+    <nav class="text-sm mb-4">
+      <ol class="flex flex-wrap items-center gap-2 text-gray-600">
+        <li><a href="/" class="hover:text-brand-blue">Home</a></li>
+        <li class="text-gray-400">/</li>
+        <li><a href="/financial-aid" class="hover:text-brand-blue">Financial Aid</a></li>
+        <li class="text-gray-400">/</li>
+        <li><a href="/financial-aid/scholarships" class="hover:text-brand-blue">State Scholarships</a></li>
+        <li class="text-gray-400">/</li>
+        <li class="text-gray-900 font-medium">{stateInfo.name}</li>
+      </ol>
+    </nav>
+
+    <h1 class="text-brand-green-text mb-2">{stateInfo.name} Scholarships & Financial Aid</h1>
+    <p class="fs-14 text-gray-600 mb-5">
+      {stateInfo.description}
+    </p>
+
+    <div class="flex flex-col lg:flex-row gap-5">
+      <!-- Main Content -->
+      <div class="lg:w-2/3">
+        <!-- Official State Agency -->
+        <div class="box-rounded mb-5 bg-green-50">
+          <h2 class="text-brand-blue text-xl mb-3">Official State Financial Aid</h2>
+          <p class="text-gray-700 mb-4">
+            The <strong>{stateInfo.agency}</strong> administers {stateInfo.name}'s state-funded financial aid programs.
+            Visit their official website for current program details, eligibility requirements, and application instructions.
+          </p>
+          <a
+            href={stateInfo.website}
+            target="_blank"
+            rel="noopener"
+            class="inline-flex items-center gap-2 bg-brand-blue text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors fs-14 font-medium"
+          >
+            Visit {stateInfo.agency}
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            </svg>
+          </a>
+        </div>
+
+        <!-- Known Programs -->
+        {programs.length > 0 && (
+          <div class="box-rounded mb-5">
+            <h2 class="text-brand-blue text-xl mb-4">{stateInfo.name} Scholarship Programs</h2>
+            <p class="text-gray-600 fs-13 mb-4">
+              The following programs have been tracked in {stateInfo.name}. Visit the official state website above for current details and eligibility.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {programs.map((prog) => (
+                <div class="p-3 bg-gray-50 rounded border border-gray-200">
+                  <span class="text-gray-800 font-medium fs-14">{prog.program_name}</span>
+                  {prog.lottery_funding > 0 && (
+                    <span class="ml-2 bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded fs-11">Lottery Funded</span>
+                  )}
+                </div>
+              ))}
+            </div>
+            <p class="text-gray-500 fs-12 mt-4 italic">
+              Note: Program availability and details change. Always verify with the official state agency.
+            </p>
+          </div>
+        )}
+
+        <!-- How to Apply -->
+        <div class="box-rounded mb-5 bg-lt-blue">
+          <h2 class="text-brand-blue text-xl mb-3">How to Apply for {stateInfo.name} Aid</h2>
+          <div class="space-y-4 text-gray-700 fs-14">
+            <div>
+              <h3 class="font-bold text-gray-900 mb-1">Step 1: Complete the FAFSA</h3>
+              <p>Most state aid programs require the Free Application for Federal Student Aid (FAFSA). Complete it at <a href="https://studentaid.gov/h/apply-for-aid/fafsa" target="_blank" rel="noopener" class="text-brand-blue hover:underline">studentaid.gov</a>.</p>
+            </div>
+            <div>
+              <h3 class="font-bold text-gray-900 mb-1">Step 2: Check State Deadlines</h3>
+              <p>State aid often has earlier deadlines than federal aid. Visit the <a href={stateInfo.website} target="_blank" rel="noopener" class="text-brand-blue hover:underline">{stateInfo.agency}</a> for specific dates.</p>
+            </div>
+            <div>
+              <h3 class="font-bold text-gray-900 mb-1">Step 3: Apply for State-Specific Programs</h3>
+              <p>Some scholarships require separate applications. Check the official state website for any additional requirements.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Combine with Federal Aid -->
+        <div class="box-rounded mb-5">
+          <h2 class="text-brand-blue text-xl mb-3">Maximize Your Aid</h2>
+          <p class="text-gray-700 mb-4">
+            {stateInfo.name} scholarships can be combined with federal grants to cover more of your college costs.
+            You may be eligible for both Pell Grants and state aid.
+          </p>
+          <div class="flex flex-wrap gap-3">
+            <a href="/financial-aid/grants/84-063" class="inline-flex items-center gap-1 text-brand-blue hover:underline font-medium fs-14">
+              Learn About Pell Grants &rarr;
+            </a>
+            <a href="/financial-aid/grants" class="inline-flex items-center gap-1 text-gray-600 hover:text-brand-blue fs-13">
+              All Federal Grants
+            </a>
+          </div>
+        </div>
+
+        <!-- State Navigation -->
+        <div class="flex justify-between items-center mb-5">
+          {prevState ? (
+            <a href={`/financial-aid/scholarships/${prevState.slug}`} class="text-brand-blue hover:underline fs-14">
+              &larr; {prevState.name}
+            </a>
+          ) : <span></span>}
+
+          <a href="/financial-aid/scholarships" class="text-gray-600 hover:text-brand-blue fs-14">
+            All States
+          </a>
+
+          {nextState ? (
+            <a href={`/financial-aid/scholarships/${nextState.slug}`} class="text-brand-blue hover:underline fs-14">
+              {nextState.name} &rarr;
+            </a>
+          ) : <span></span>}
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="lg:w-1/3">
+        <!-- Find Colleges in State -->
+        <div class="box-rounded mb-4">
+          <h3 class="text-brand-blue mb-3">Find {stateInfo.name} Colleges</h3>
+          <p class="text-gray-600 fs-13 mb-3">
+            Most state aid requires attending an in-state college.
+          </p>
+          <a
+            href={`/colleges-universities/${stateSlug}`}
+            class="inline-flex items-center gap-1 text-brand-blue hover:underline font-medium fs-14"
+          >
+            {stateInfo.name} Colleges &rarr;
+          </a>
+        </div>
+
+        <!-- Related Links -->
+        <div class="box-rounded mb-4">
+          <h3 class="text-brand-blue mb-3">Related Resources</h3>
+          <ul class="space-y-2 fs-14">
+            <li>
+              <a href="/financial-aid/scholarships" class="text-brand-blue hover:underline">All State Programs</a>
+            </li>
+            <li>
+              <a href="/financial-aid/grants" class="text-brand-blue hover:underline">Federal Grants</a>
+            </li>
+            <li>
+              <a href="/financial-aid/fafsa/fafsa-school-codes" class="text-brand-blue hover:underline">FAFSA School Codes</a>
+            </li>
+            <li>
+              <a href="/financial-aid" class="text-brand-blue hover:underline">Financial Aid Overview</a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Ad Placeholder -->
+        <div class="box-rounded mb-4">
+          <div class="bg-gray-100 h-[280px] flex items-center justify-center text-gray-400 fs-13">
+            Advertisement
+          </div>
+        </div>
+
+        <!-- Newsletter -->
+        <NewsletterSignup preselected={['financial-aid']} />
+      </div>
+    </div>
+  </div>
+</Layout>

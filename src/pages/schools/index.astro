@@ -1,14 +1,63 @@
 ---
 import Layout from '@/layouts/Layout.astro';
+import QAPoll from '@/components/QAPoll.astro';
+import NewsletterSignup from '@/components/NewsletterSignup.astro';
 
 // Images for featured article and topic cards
-import featuredImage from '@/images/students-walking-to-school-illustration.jpg';
-import academicsImage from '@/images/classroom-teacher-computers-watercolor.jpg';
-import activitiesImage from '@/images/school-playground-sunset-illustration.jpg';
-import healthImage from '@/images/school-basketball-court-illustration.jpg';
-import findingSchoolsImage from '@/images/school-entrance-students-abstract.jpg';
-import parentingImage from '@/images/elementary-students-smiling-classroom.jpg';
-import behaviorImage from '@/images/student-peer-group-school.jpg';
+import featuredImage from '@/images/USED-students-walking-to-school-illustration.jpg';
+import schoolChoiceImage from '@/images/USED-school-courtyard-students-illustration.jpg';
+import publicPrivateImage from '@/images/USED-colorful-school-campus-illustration.jpg';
+import magnetSchoolsImage from '@/images/USED-modern-school-building-field.jpg';
+import charterSchoolImage from '@/images/USED-school-campus-colorful-illustration.jpg';
+import stemSchoolImage from '@/images/USED-students-science-education-hologram.jpg';
+
+// Preschool articles
+import choosingPreschoolImage from '@/images/USED-preschool-teacher-reading.jpg';
+import worthItImage from '@/images/USED-preschool-girl-classroom.jpg';
+import preschoolerHelpImage from '@/images/USED-preschool-girl-bench.jpg';
+import goodPreschoolImage from '@/images/USED-kindergarten-classroom-environment.jpg';
+import whatMattersPreschoolImage from '@/images/USED-preschool-teacher-reading-children.jpg';
+import montessoriImage from '@/images/USED-preschool-classroom-toys.jpg';
+import choosePreschoolImage from '@/images/USED-preschool-1.jpg';
+
+// Kindergarten articles
+import separationAnxietyImage from '@/images/USED-kindergarten-separation-anxiety.jpg';
+import californiaTkImage from '@/images/USED-california-tk-classroom.jpg';
+import whatKindergartenRequiresImage from '@/images/USED-what-kindergarten-really-requires.jpg';
+import cutoffDatesImage from '@/images/USED-kindergarten-age-cutoff-dates.jpg';
+import chooseKindergartenImage from '@/images/USED-how-to-choose-kindergarten.jpg';
+import delayKindergartenImage from '@/images/USED-should-you-delay-kindergarten.jpg';
+import kindergartenReadyImage from '@/images/USED-kindergarten-readiness-joyful-child.jpg';
+
+// Elementary school articles
+import iepsImage from '@/images/USED-classroom-teacher-students-illustration.jpg';
+import bullyingImage from '@/images/USED-school-bullying-awareness-student.jpg';
+import chooseElementaryImage from '@/images/USED-elementary-students-writing-classroom.jpg';
+
+// Middle school articles
+import cyberbullyingImage from '@/images/USED-cyberbullying-middle-school-boy.jpg';
+
+// High school articles
+import apClassesImage from '@/images/USED-ap-classes-explained.jpg';
+import gpaImage from '@/images/USED-weighted-unweighted-gpa.jpg';
+import mentalHealthImage from '@/images/USED-teen-mental-health-warning-signs.jpg';
+import gradRequirementsImage from '@/images/USED-high-school-graduation-requirements.jpg';
+
+// Charter school articles
+import charterRightForChildImage from '@/images/USED-student-thoughtful-classroom-portrait.jpg';
+import charterTourImage from '@/images/USED-school-entrance-students-abstract.jpg';
+import charterWarningImage from '@/images/USED-student-focused-classroom-lecture.jpg';
+import charterLotteryImage from '@/images/USED-students-waiting-classroom-colorful.jpg';
+import charterLotteryRejectImage from '@/images/USED-student-looking-up-wonder.jpg';
+import charterSpecialEdImage from '@/images/USED-education-teacher-classroom-lesson.jpg';
+
+// Magnet school articles
+import magnetLotteryImage from '@/images/USED-students-entering-school-artistic.jpg';
+import magnetAdmissionsImage from '@/images/USED-student-carrying-books-school.jpg';
+import magnetRequirementsImage from '@/images/USED-high-school-students-classroom-vintage.jpg';
+import magnetTransportImage from '@/images/USED-student-backpack-walking-school.jpg';
+import magnetGuideImage from '@/images/USED-school-hallway-students-painting.jpg';
+import magnetVsCharterImage from '@/images/USED-modern-school-architecture-illustration.jpg';
 
 // All US states
 const states = [
@@ -124,59 +173,267 @@ function slugify(text: string): string {
   return text.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
 }
 
-// Topic categories with placeholder articles
-const topics = [
+// Featured articles for the topic cards - mixed across all K-12 topics
+const featuredArticles = [
+  // Row 1: General, Preschool, Kindergarten
   {
-    title: 'Academics',
-    image: academicsImage,
-    articles: [
-      { title: 'What to Teach When AI Does the Work', url: '/education-articles/what-to-teach-when-ai-does-the-work' },
-      { title: '12 Homework Tips for Parents', url: '#' },
-    ]
+    title: 'The Rise of School Choice',
+    url: '/education-articles/the-rise-of-school-choice',
+    image: schoolChoiceImage,
+    description: 'Understanding your options: public, private, charter, magnet, and homeschool—and how to decide.',
   },
   {
-    title: 'Activities & Games',
-    image: activitiesImage,
-    articles: [
-      { title: 'Fun Educational Activities for Kids', url: '#' },
-      { title: 'After-School Programs Guide', url: '#' },
-    ]
+    title: 'Is Preschool Worth It?',
+    url: '/education-articles/is-preschool-worth-it',
+    image: worthItImage,
+    description: 'What six decades of research actually tells us about early childhood education—the benefits, the limits, and what it means for your family.',
   },
   {
-    title: 'Physical Health',
-    image: healthImage,
-    articles: [
-      { title: 'The Stillness Epidemic', url: '/education-articles/the-stillness-epidemic' },
-      { title: 'Sports Programs for Students', url: '#' },
-    ]
+    title: 'Is My Child Ready for Kindergarten?',
+    url: '/education-articles/is-my-child-ready-for-kindergarten',
+    image: kindergartenReadyImage,
+    description: 'A complete readiness checklist covering the seven key domains of kindergarten readiness.',
+  },
+  // Row 2: Elementary, Charter, High School
+  {
+    title: 'How to Choose the Right Elementary School',
+    url: '/education-articles/how-to-choose-the-right-elementary-school',
+    image: chooseElementaryImage,
+    description: 'Finding the right elementary school means looking beyond test scores to understand how a school\'s culture will support your unique child.',
   },
   {
-    title: 'Finding Schools',
-    image: findingSchoolsImage,
-    articles: [
-      { title: 'How to Find the Right School', url: '/education-articles/how-to-find-the-right-school' },
-      { title: 'The Rise of School Choice', url: '/education-articles/the-rise-of-school-choice' },
-      { title: 'Public vs. Private School', url: '/education-articles/public-vs-private-school' },
-      { title: 'Charter Schools: What Parents Need to Know', url: '/education-articles/charter-schools-what-parents-need-to-know' },
-      { title: 'What Is a STEM School?', url: '/education-articles/what-is-a-stem-school' },
-      { title: 'Understanding Magnet Schools', url: '/education-articles/understanding-magnet-schools' },
-    ]
+    title: 'Charter Schools: What Parents Need to Know',
+    url: '/education-articles/charter-schools-what-parents-need-to-know',
+    image: charterSchoolImage,
+    description: 'Understanding how charter schools work, what makes them different, and how to decide if one is right for your child.',
   },
   {
-    title: 'Parenting',
-    image: parentingImage,
-    articles: [
-      { title: 'Parenting Styles: What\'s Your Style?', url: '#' },
-      { title: 'Supporting Your Child\'s Education', url: '#' },
-    ]
+    title: 'High School Graduation Requirements by State',
+    url: '/education-articles/high-school-graduation-requirements-by-state',
+    image: gradRequirementsImage,
+    description: 'From 13 credits in Wyoming to 26 in Texas, understanding your state\'s specific rules is essential for planning.',
+  },
+  // Row 3: Magnet, Preschool, Middle School
+  {
+    title: 'Understanding Magnet Schools',
+    url: '/education-articles/understanding-magnet-schools',
+    image: magnetSchoolsImage,
+    description: 'What magnet schools offer, how to apply, and whether they\'re worth the commute.',
   },
   {
-    title: 'Behavior & Social Health',
-    image: behaviorImage,
-    articles: [
-      { title: 'Helping Your Child Deal with Bullying', url: '#' },
-      { title: 'Building Confidence in Children', url: '#' },
-    ]
+    title: 'The First Classroom: What Really Matters When Choosing a Preschool',
+    url: '/education-articles/how-to-choose-a-preschool',
+    image: choosePreschoolImage,
+    description: 'Research from the Harvard Center on the Developing Child confirms what parents intuit: the early years matter profoundly.',
+  },
+  {
+    title: 'When the Cruelty Follows Them Home: Cyberbullying in Middle School',
+    url: '/education-articles/cyberbullying-middle-school-guide',
+    image: cyberbullyingImage,
+    description: 'What parents need to know about cyberbullying in middle school and how to help when the harassment never seems to stop.',
+  },
+  // Row 4: General, Kindergarten, Charter
+  {
+    title: 'Public vs. Private Schools',
+    url: '/education-articles/public-vs-private-school',
+    image: publicPrivateImage,
+    description: 'What the research actually says about outcomes, costs, and which type might be right for your family.',
+  },
+  {
+    title: 'Should You Delay Kindergarten?',
+    url: '/education-articles/should-you-delay-kindergarten',
+    image: delayKindergartenImage,
+    description: 'What research says about academic redshirting—and what it means for your child.',
+  },
+  {
+    title: 'How to Apply to Charter Schools',
+    url: '/education-articles/how-to-apply-to-charter-schools',
+    image: featuredImage,
+    description: 'Navigate the charter school enrollment process with confidence—from applications and lotteries to waitlists and deadlines.',
+  },
+  // Row 5: High School, Magnet, Preschool
+  {
+    title: 'AP Classes Explained',
+    url: '/education-articles/ap-classes-explained',
+    image: apClassesImage,
+    description: 'How many to take, which ones matter, and what colleges really want from AP coursework.',
+  },
+  {
+    title: 'Magnet vs Charter vs Neighborhood School',
+    url: '/education-articles/magnet-vs-charter-vs-neighborhood-school',
+    image: magnetVsCharterImage,
+    description: 'Understanding the fundamental differences between magnet, charter, and neighborhood schools—and what those distinctions mean for your family.',
+  },
+  {
+    title: 'Montessori vs. Traditional Preschool',
+    url: '/education-articles/montessori-vs-traditional-preschool',
+    image: montessoriImage,
+    description: 'The research is promising but complicated. What actually matters is finding the right fit for your particular child.',
+  },
+  // Row 6: Elementary, Kindergarten, High School
+  {
+    title: 'IEPs vs. 504 Plans: What Every Parent Needs to Understand',
+    url: '/education-articles/ieps-vs-504-plans',
+    image: iepsImage,
+    description: 'A definitive guide to the two federal frameworks that provide support for children with learning differences.',
+  },
+  {
+    title: 'Kindergarten Age Cutoff Dates by State',
+    url: '/education-articles/kindergarten-age-cutoff-dates-by-state',
+    image: cutoffDatesImage,
+    description: 'The complete 2025 guide for parents covering entrance age requirements for all 50 states.',
+  },
+  {
+    title: 'Weighted vs. Unweighted GPA',
+    url: '/education-articles/weighted-vs-unweighted-gpa',
+    image: gpaImage,
+    description: 'Why your 4.3 weighted GPA might mean less than you think—and why a 3.8 with the right courses could mean more.',
+  },
+  // Row 7: Charter, Preschool, Magnet
+  {
+    title: 'Charter School Lottery Explained',
+    url: '/education-articles/charter-school-lottery-explained',
+    image: charterLotteryImage,
+    description: 'Understanding the mechanics of charter school admission lotteries—and how to navigate them successfully.',
+  },
+  {
+    title: 'What Actually Matters in Preschool',
+    url: '/education-articles/what-actually-matters-in-preschool',
+    image: whatMattersPreschoolImage,
+    description: 'Research shows that the quality of teacher-child relationships matters more than educational philosophy.',
+  },
+  {
+    title: 'How Magnet School Lotteries Work',
+    url: '/education-articles/how-magnet-school-lotteries-work',
+    image: magnetLotteryImage,
+    description: 'Understanding waitlists, weighted preferences, second lotteries, and practical strategies for navigating magnet school admissions.',
+  },
+  // Row 8: General, Kindergarten, Elementary
+  {
+    title: 'What Is a STEM School?',
+    url: '/education-articles/what-is-a-stem-school',
+    image: stemSchoolImage,
+    description: 'Beyond the buzzword: what STEM-focused schools actually teach and who they\'re best for.',
+  },
+  {
+    title: 'The Long Goodbye: Kindergarten Separation Anxiety',
+    url: '/education-articles/kindergarten-separation-anxiety',
+    image: separationAnxietyImage,
+    description: 'What parents need to know about kindergarten separation anxiety—in children and in themselves.',
+  },
+  {
+    title: 'Signs Your Child Is Being Bullied',
+    url: '/education-articles/signs-your-child-is-being-bullied',
+    image: bullyingImage,
+    description: 'What the research says, what parents tend to miss, and how to respond in ways that protect your child.',
+  },
+  // Row 9: High School, Charter, Preschool
+  {
+    title: 'When Worry Becomes Something More',
+    url: '/education-articles/when-worry-becomes-something-more',
+    image: mentalHealthImage,
+    description: 'Understanding the warning signs of teen mental health struggles—and what parents can actually do about them.',
+  },
+  {
+    title: 'Is a Charter School Right for Your Child?',
+    url: '/education-articles/is-a-charter-school-right-for-your-child',
+    image: charterRightForChildImage,
+    description: 'A guide to help you decide if a charter school fits your child\'s learning style, temperament, and your family\'s needs.',
+  },
+  {
+    title: 'Choosing a Preschool When Everything Feels Like It Matters',
+    url: '/education-articles/choosing-a-preschool',
+    image: choosingPreschoolImage,
+    description: 'The research on what actually matters in early childhood education—and how to find it during a 30-minute tour.',
+  },
+  // Row 10: Magnet, Kindergarten, Charter
+  {
+    title: 'The Complete Parent\'s Guide to Magnet School Admissions',
+    url: '/education-articles/magnet-school-admissions-guide',
+    image: magnetAdmissionsImage,
+    description: 'Everything you need to know about application windows, required documentation, lottery processes, and audition-based programs.',
+  },
+  {
+    title: 'How to Choose the Right Kindergarten',
+    url: '/education-articles/how-to-choose-the-right-kindergarten',
+    image: chooseKindergartenImage,
+    description: '25 essential questions to ask during school visits—a research-informed guide for parents.',
+  },
+  {
+    title: 'Charter School Warning Signs',
+    url: '/education-articles/charter-school-warning-signs',
+    image: charterWarningImage,
+    description: 'A research-informed guide to spotting red flags—not to discourage choice, but to make it wiser.',
+  },
+  // Row 11: Preschool, Magnet, Charter
+  {
+    title: 'When Your Preschooler Needs More Help',
+    url: '/education-articles/when-your-preschooler-needs-more-help',
+    image: preschoolerHelpImage,
+    description: 'Navigating the path from early concerns to an IEP—and learning to advocate for your child along the way.',
+  },
+  {
+    title: 'Magnet School Requirements Explained',
+    url: '/education-articles/magnet-school-requirements-explained',
+    image: magnetRequirementsImage,
+    description: 'Understanding the spectrum of magnet school admissions—from open-access lottery systems to criteria-based programs.',
+  },
+  {
+    title: 'What to Really Ask When You Walk Through Those Charter School Doors',
+    url: '/education-articles/what-to-ask-on-a-charter-school-tour',
+    image: charterTourImage,
+    description: 'A parent\'s guide to finding the questions that matter—and learning to trust what you observe during school tours.',
+  },
+  // Row 12: Kindergarten, Preschool, Magnet
+  {
+    title: 'What Kindergarten Really Requires',
+    url: '/education-articles/what-kindergarten-really-requires',
+    image: whatKindergartenRequiresImage,
+    description: 'Your child probably doesn\'t need to read yet. But they do need something else.',
+  },
+  {
+    title: 'What Does a Good Preschool Actually Look Like?',
+    url: '/education-articles/what-does-a-good-preschool-look-like',
+    image: goodPreschoolImage,
+    description: 'The search for the right early learning environment is more nuanced than checklists suggest—and more forgiving than anxious parents might fear.',
+  },
+  {
+    title: 'Do Magnet Schools Provide Transportation?',
+    url: '/education-articles/magnet-school-transportation',
+    image: magnetTransportImage,
+    description: 'Understanding transportation policies, challenges, and what families need to know about getting students to specialized programs.',
+  },
+  // Row 13: Charter, Kindergarten, Magnet
+  {
+    title: 'The Numbers Behind the Promise',
+    url: '/education-articles/the-numbers-behind-the-promise',
+    image: magnetSchoolsImage,
+    description: 'How to look past the glossy brochure and assess whether a charter school is built on solid financial ground.',
+  },
+  {
+    title: 'California\'s Universal TK: Everything Parents Need to Know',
+    url: '/education-articles/california-universal-transitional-kindergarten',
+    image: californiaTkImage,
+    description: 'A comprehensive guide to California\'s Universal Transitional Kindergarten program reaching full implementation in 2025-26.',
+  },
+  {
+    title: 'Magnet Schools: What They Are, How They Work, and How to Apply',
+    url: '/education-articles/magnet-schools-guide',
+    image: magnetGuideImage,
+    description: 'A comprehensive guide covering magnet school history, program types, how they differ from charter and private schools.',
+  },
+  // Final row: Charter special topics
+  {
+    title: 'What to Do If Your Child Doesn\'t Win the Charter Lottery',
+    url: '/education-articles/charter-lottery-what-to-do-next',
+    image: charterLotteryRejectImage,
+    description: 'A practical guide for navigating rejection, exploring alternatives, and finding the right path forward.',
+  },
+  {
+    title: 'Charter Schools and Special Education',
+    url: '/education-articles/charter-schools-and-special-education',
+    image: charterSpecialEdImage,
+    description: 'What parents of kids with IEPs need to know about their rights, essential questions to ask, and recourse when problems arise.',
   },
 ];
 
@@ -209,46 +466,41 @@ const schoolTypes = [
       <div class="lg:w-2/3">
         <!-- Featured Article -->
         <div class="box-rounded mb-5">
-          <div class="flex flex-col md:flex-row gap-4">
-            <div class="md:w-1/3">
-              <img
-                src={featuredImage.src}
-                alt="Students walking to school"
-                class="w-full aspect-video object-cover rounded"
-              />
-            </div>
-            <div class="md:w-2/3">
-              <h2 class="text-brand-blue text-xl mb-2">
-                <a href="/education-articles/how-to-find-the-right-school" class="hover:underline">Finding & Evaluating Schools for Your Child</a>
-              </h2>
-              <p class="text-gray-600 fs-14">
-                Choosing the right school is one of the most important decisions you'll make for your child.
-                Learn how to evaluate schools and find the perfect fit for your family.
-              </p>
-            </div>
-          </div>
+          <a href="/education-articles/how-to-find-the-right-school">
+            <img
+              src={featuredImage.src}
+              alt="Students walking to school"
+              class="w-full aspect-video object-cover rounded mb-4"
+            />
+          </a>
+          <h2 class="text-brand-blue text-xl mb-2">
+            <a href="/education-articles/how-to-find-the-right-school" class="hover:underline">How to Find the Right School for Your Child</a>
+          </h2>
+          <p class="text-gray-600 fs-14">
+            School ratings can tell you a lot—but not everything. Here's what actually matters when choosing where your child will spend the next several years of their life. <a href="/education-articles/how-to-find-the-right-school" class="text-brand-blue hover:underline">Read article &rarr;</a>
+          </p>
         </div>
 
         <!-- Topic Categories -->
         <div class="box-rounded mb-5">
           <h2 class="text-brand-blue text-xl mb-4">K-12 Education Topics</h2>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {topics.map((topic) => (
-              <div class="border border-gray-200 rounded overflow-hidden">
-                <img
-                  src={topic.image.src}
-                  alt={topic.title}
-                  class="w-full aspect-square object-cover"
-                />
-                <div class="p-4">
-                  <h3 class="text-brand-green-text font-bold mb-2 fs-14">{topic.title}</h3>
-                  <ul class="space-y-1 fs-13">
-                    {topic.articles.map((article) => (
-                      <li>
-                        <a href={article.url} class="text-brand-blue hover:underline">{article.title}</a>
-                      </li>
-                    ))}
-                  </ul>
+            {/* Featured Article Cards */}
+            {featuredArticles.map((article) => (
+              <div class="border border-gray-200 rounded overflow-hidden p-4">
+                <a href={article.url}>
+                  <img
+                    src={article.image.src}
+                    alt={article.title}
+                    class="w-full aspect-square object-cover rounded"
+                  />
+                </a>
+                <div class="pt-4">
+                  <h3 class="text-brand-green-text font-bold mb-1 fs-14">
+                    <a href={article.url} class="hover:underline">{article.title}</a>
+                  </h3>
+                  <p class="text-gray-600 fs-12 mb-2 leading-snug">{article.description}</p>
+                  <a href={article.url} class="text-brand-blue hover:underline fs-13">Read article &rarr;</a>
                 </div>
               </div>
             ))}
@@ -257,16 +509,12 @@ const schoolTypes = [
 
         <!-- Q&A Section -->
         <div class="box-rounded mb-5 bg-lt-blue">
-          <h2 class="text-brand-blue text-lg mb-3">Education Q&A</h2>
-          <p class="text-gray-700 fs-14 mb-3">
-            <strong>Question:</strong> What's most important when choosing a school?
-          </p>
-          <div class="flex gap-2 flex-wrap">
-            <button class="px-3 py-1 bg-white border border-gray-300 rounded text-sm hover:bg-gray-50">Academic quality</button>
-            <button class="px-3 py-1 bg-white border border-gray-300 rounded text-sm hover:bg-gray-50">Location</button>
-            <button class="px-3 py-1 bg-white border border-gray-300 rounded text-sm hover:bg-gray-50">Class size</button>
-            <button class="px-3 py-1 bg-white border border-gray-300 rounded text-sm hover:bg-gray-50">Extracurriculars</button>
-          </div>
+          <QAPoll
+            questionId="schools-important-factor"
+            pageSlug="schools"
+            question="What's most important when choosing a school?"
+            answers={["Academic quality", "Location", "Class size", "Extracurriculars"]}
+          />
         </div>
 
         <!-- Browse by School Type -->
@@ -352,18 +600,13 @@ const schoolTypes = [
               <a href="/high-schools">High Schools</a>
             </li>
             <li class="py-2">
-              <a href="/colleges">Colleges & Universities</a>
+              <a href="/colleges-universities">Colleges & Universities</a>
             </li>
           </ul>
         </div>
 
         <!-- Newsletter Signup -->
-        <div class="box-rounded">
-          <h3 class="text-brand-blue mb-3">Newsletter Signup</h3>
-          <p class="fs-13 text-gray-600 mb-3">Get the latest education news and tips delivered to your inbox.</p>
-          <input type="email" placeholder="Your email address" class="input w-full mb-2" />
-          <button class="btn btn-primary w-full">Subscribe</button>
-        </div>
+        <NewsletterSignup />
       </div>
     </div>
   </div>

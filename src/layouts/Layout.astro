@@ -25,9 +25,22 @@ const currentYear = new Date().getFullYear();
 
 // Navigation items matching original site structure
 const mainNav = [
-  { label: 'K-12 Schools', href: '/schools' },
+  { label: 'K-12 Schools', href: '/schools', hasDropdown: true },
   { label: 'Colleges & Universities', href: '/colleges-universities' },
   { label: 'Vocational Schools', href: '/vocational-schools' },
+];
+
+// K-12 schools dropdown items
+const k12Dropdown = [
+  { label: 'All K-12 Schools', href: '/schools' },
+  { label: 'Preschools', href: '/preschools' },
+  { label: 'Kindergartens', href: '/kindergartens' },
+  { label: 'Elementary Schools', href: '/elementary-schools' },
+  { label: 'Middle Schools', href: '/middle-schools' },
+  { label: 'High Schools', href: '/high-schools' },
+  { label: 'Charter Schools', href: '/charter-schools' },
+  { label: 'Magnet Schools', href: '/magnet-schools' },
+  { label: 'Private Schools', href: '/private-schools' },
 ];
 
 // Vocational schools dropdown items
@@ -40,11 +53,10 @@ const vocationalDropdown = [
   { label: 'Culinary Schools', href: '/culinary-schools' },
 ];
 
-// Resources dropdown items
-const resourcesDropdown = [
+// Right nav items (no dropdown)
+const rightNav = [
   { label: 'Free Classes', href: '/classes' },
   { label: 'Financial Aid', href: '/financial-aid' },
-  { label: 'Degrees', href: '/degrees' },
 ];
 ---
 
@@ -75,6 +87,55 @@ const resourcesDropdown = [
   <meta name="twitter:title" content={`${title} | TruSchools`} />
   <meta name="twitter:description" content={description} />
   <meta name="twitter:image" content={fullOgImage} />
+
+  <!-- Preconnect to improve asset loading -->
+  <link rel="preconnect" href="/" crossorigin>
+
+  <!-- Critical inline CSS to prevent FOUC (Flash of Unstyled Content) -->
+  <style>
+    /* Critical reset and layout styles - prevents unstyled content flash */
+    *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-font-smoothing: antialiased; }
+    body { margin: 0; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 15px; line-height: 1.2; min-height: 100vh; display: flex; flex-direction: column; }
+    .container { max-width: 1200px; margin-left: auto; margin-right: auto; padding-left: 1.25rem; padding-right: 1.25rem; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0; }
+    .hidden { display: none; }
+    /* Header critical styles */
+    header { background: white; }
+    nav { background: #0d83dd; border-radius: 5px; }
+    .bg-brand-blue { background-color: #0d83dd; }
+    .text-white { color: white; }
+    .flex { display: flex; }
+    .flex-col { flex-direction: column; }
+    .items-center { align-items: center; }
+    .justify-between { justify-content: space-between; }
+    .gap-2 { gap: 0.5rem; }
+    .gap-4 { gap: 1rem; }
+    .py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+    .py-4 { padding-top: 1rem; padding-bottom: 1rem; }
+    .px-5 { padding-left: 1.25rem; padding-right: 1.25rem; }
+    .font-semibold { font-weight: 600; }
+    .no-underline { text-decoration: none; }
+    a { color: #0d83dd; text-decoration: none; }
+    /* Hide hover logos by default */
+    [class*="group-hover:block"] { display: none; }
+    [class*="group-hover:hidden"] { display: block; }
+    /* List reset */
+    ul { list-style: none; margin: 0; padding: 0; }
+    /* Logo sizing */
+    img[class*="h-[55px]"] { height: 55px; }
+    /* Input styling */
+    input { font-family: inherit; font-size: inherit; padding: 0.25rem; border: 1px solid #d1d5db; border-radius: 0.25rem; }
+    button { font-family: inherit; cursor: pointer; }
+    .btn-green { background: #70b52c; color: white; border: 1px solid #5a9023; padding: 0.625rem 1rem; border-radius: 0.25rem; }
+    /* Footer */
+    footer { background: #0d83dd; color: white; margin-top: auto; }
+    footer li { display: block; margin-bottom: 0.375rem; }
+    footer li a { color: rgba(255,255,255,0.8); }
+    /* Responsive - hide on mobile */
+    @media (max-width: 1023px) { [class*="lg:flex"] { display: none !important; } [class*="lg:hidden"] { display: flex !important; } }
+    @media (min-width: 1024px) { [class*="lg:flex"] { display: flex !important; } [class*="lg:hidden"] { display: none !important; } [class*="lg:flex-row"] { flex-direction: row; } [class*="lg:items-end"] { align-items: flex-end; } [class*="lg:justify-between"] { justify-content: space-between; } }
+  </style>
 
   <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="/favicon.ico?v=2" />
@@ -134,7 +195,7 @@ const resourcesDropdown = [
           <!-- Main Navigation (Left) -->
           <ul class="hidden lg:flex items-center m-0 p-0 list-none">
             {mainNav.map((item, index) => (
-              <li class={`${index > 0 ? 'border-l border-[#3fa9f5]' : ''} ${item.label === 'Vocational Schools' ? 'relative group' : ''}`}>
+              <li class={`${index > 0 ? 'border-l border-[#3fa9f5]' : ''} ${item.label === 'Vocational Schools' || item.label === 'K-12 Schools' ? 'relative group' : ''}`}>
                 {item.label === 'Vocational Schools' ? (
                   <>
                     <a href={item.href} class="flex items-center gap-1 px-5 py-3 text-white font-semibold no-underline hover:bg-[#0a6fc2] hover:no-underline transition-colors">
@@ -145,6 +206,22 @@ const resourcesDropdown = [
                     </a>
                     <div class="absolute left-0 top-full hidden group-hover:block bg-white shadow-lg rounded-b min-w-[200px] z-50">
                       {vocationalDropdown.map((subItem) => (
+                        <a href={subItem.href} class="block px-4 py-2 text-gray-700 hover:bg-gray-100 no-underline">
+                          {subItem.label}
+                        </a>
+                      ))}
+                    </div>
+                  </>
+                ) : item.label === 'K-12 Schools' ? (
+                  <>
+                    <a href={item.href} class="flex items-center gap-1 px-5 py-3 text-white font-semibold no-underline hover:bg-[#0a6fc2] hover:no-underline transition-colors rounded-tl-box rounded-bl-box">
+                      {item.label}
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </a>
+                    <div class="absolute left-0 top-full hidden group-hover:block bg-white shadow-lg rounded-b min-w-[200px] z-50">
+                      {k12Dropdown.map((subItem) => (
                         <a href={subItem.href} class="block px-4 py-2 text-gray-700 hover:bg-gray-100 no-underline">
                           {subItem.label}
                         </a>
@@ -169,41 +246,11 @@ const resourcesDropdown = [
 
           <!-- Right Navigation -->
           <div class="hidden lg:flex items-center">
-            <!-- Resources Dropdown -->
-            <div class="relative group">
-              <button class="flex items-center gap-1 px-4 py-3 text-white hover:bg-[#0a6fc2] transition-colors">
-                Resources
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-              <div class="absolute right-0 top-full hidden group-hover:block bg-white shadow-lg rounded-b min-w-[180px] z-50">
-                {resourcesDropdown.map((item) => (
-                  <a href={item.href} class="block px-4 py-2 text-gray-700 hover:bg-gray-100 no-underline">
-                    {item.label}
-                  </a>
-                ))}
-              </div>
-            </div>
-            <!-- Schools Dropdown -->
-            <div class="relative group">
-              <button class="flex items-center gap-1 px-4 py-3 text-white hover:bg-[#0a6fc2] transition-colors">
-                Schools
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-              <div class="absolute right-0 top-full hidden group-hover:block bg-white shadow-lg rounded-b min-w-[180px] z-50">
-                <a href="/preschools" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 no-underline">Preschools</a>
-                <a href="/kindergartens" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 no-underline">Kindergartens</a>
-                <a href="/elementary-schools" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 no-underline">Elementary Schools</a>
-                <a href="/middle-schools" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 no-underline">Middle Schools</a>
-                <a href="/high-schools" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 no-underline">High Schools</a>
-                <a href="/charter-schools" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 no-underline">Charter Schools</a>
-                <a href="/magnet-schools" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 no-underline">Magnet Schools</a>
-                <a href="/private-schools" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 no-underline">Private Schools</a>
-              </div>
-            </div>
+            {rightNav.map((item) => (
+              <a href={item.href} class="px-4 py-3 text-white font-semibold no-underline hover:bg-[#0a6fc2] hover:no-underline transition-colors">
+                {item.label}
+              </a>
+            ))}
             <!-- Login Button -->
             <a href="/login" class="ml-2 mr-3 px-4 py-1.5 bg-white text-brand-green-text text-sm font-medium no-underline hover:bg-brand-green hover:text-white hover:no-underline rounded transition-colors">
               Login
@@ -219,9 +266,8 @@ const resourcesDropdown = [
                 {item.label}
               </a>
             ))}
-            <span class="py-2 text-white/70 text-sm border-b border-[#3fa9f5]">Resources</span>
-            {resourcesDropdown.map((item) => (
-              <a href={item.href} class="py-2 pl-4 text-white no-underline hover:no-underline border-b border-[#3fa9f5]">
+            {rightNav.map((item) => (
+              <a href={item.href} class="py-2 text-white no-underline hover:no-underline border-b border-[#3fa9f5]">
                 {item.label}
               </a>
             ))}
@@ -306,6 +352,7 @@ const resourcesDropdown = [
         <div>
           <h4 class="text-white mb-4 text-sm font-bold">Resources</h4>
           <ul class="list-none m-0 p-0 space-y-1.5 text-sm">
+            <li><a href="/education-articles" class="text-white/80 hover:text-white hover:underline">Education Articles</a></li>
             <li><a href="/classes" class="text-white/80 hover:text-white hover:underline">Free Classes</a></li>
             <li><a href="/financial-aid" class="text-white/80 hover:text-white hover:underline">Financial Aid</a></li>
             <li><a href="/financial-aid/fafsa/application-guide" class="text-white/80 hover:text-white hover:underline">FAFSA Guide</a></li>

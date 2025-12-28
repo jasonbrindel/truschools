@@ -1,5 +1,6 @@
 ---
 import Layout from '@/layouts/Layout.astro';
+import NewsletterSignup from '@/components/NewsletterSignup.astro';
 
 const { state, school: schoolSlug } = Astro.params;
 const db = Astro.locals.runtime.env.DB;
@@ -281,6 +282,9 @@ const websiteUrl = formatWebsite(schoolData.website);
             <li><a href={`/beauty-schools/${state}`} class="text-brand-blue hover:underline">Beauty Schools in {stateName}</a></li>
           </ul>
         </div>
+
+        <!-- Newsletter Signup -->
+        <NewsletterSignup />
       </div>
     </div>
   </div>

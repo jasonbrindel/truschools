@@ -1,0 +1,207 @@
+---
+import Layout from '@/layouts/Layout.astro';
+
+const title = "Education Articles";
+const description = "Expert guides and insights on K-12 education, college admissions, financial aid, and finding the right school for your child.";
+
+// Load all article files as raw text at build time
+const articleModules = import.meta.glob('./*.astro', { query: '?raw', import: 'default', eager: true });
+
+// Load all images
+const allImages = import.meta.glob<{ default: ImageMetadata }>('/src/images/*.jpg', { eager: true });
+
+interface Article {
+  slug: string;
+  title: string;
+  description: string;
+  category: string;
+  image: ImageMetadata | null;
+}
+
+// Parse article metadata from raw file content
+const articles: Article[] = Object.entries(articleModules)
+  .filter(([path]) => !path.includes('index.astro'))
+  .map(([path, content]) => {
+    const slug = path.replace('./', '').replace('.astro', '');
+    const rawContent = content as string;
+
+    // Extract metadata from file content using regex
+    const titleMatch = rawContent.match(/const title\s*=\s*["']([^"']+)["']/);
+    const descriptionMatch = rawContent.match(/const description\s*=\s*["']([^"']+)["']/);
+    const categoryMatch = rawContent.match(/const category\s*=\s*["']([^"']+)["']/);
+    const imageMatch = rawContent.match(/import heroImage from ['"]@\/images\/([^'"]+)['"]/);
+
+    // Get the image from the glob
+    let image: ImageMetadata | null = null;
+    if (imageMatch) {
+      const imagePath = `/src/images/${imageMatch[1]}`;
+      image = allImages[imagePath]?.default || null;
+    }
+
+    return {
+      slug,
+      title: titleMatch?.[1] || slug,
+      description: descriptionMatch?.[1] || '',
+      category: categoryMatch?.[1] || 'Uncategorized',
+      image,
+    };
+  })
+  // Sort alphabetically by title for now (file mtime not available via glob)
+  .sort((a, b) => a.title.localeCompare(b.title));
+
+// Get unique categories for filtering (sorted alphabetically)
+const categories = [...new Set(articles.map(a => a.category))].sort();
+
+// Category colors for badges
+const categoryColors: Record<string, string> = {
+  'Financial Aid': 'bg-green-100 text-green-800',
+  'Graduate School': 'bg-purple-100 text-purple-800',
+  'College Admissions': 'bg-blue-100 text-blue-800',
+  'Kindergarten': 'bg-yellow-100 text-yellow-800',
+  'Preschool': 'bg-pink-100 text-pink-800',
+  'Elementary School': 'bg-orange-100 text-orange-800',
+  'Middle School': 'bg-teal-100 text-teal-800',
+  'High School': 'bg-indigo-100 text-indigo-800',
+  'Charter Schools': 'bg-red-100 text-red-800',
+  'Magnet Schools': 'bg-cyan-100 text-cyan-800',
+  'School Types': 'bg-slate-100 text-slate-800',
+  'School Choice': 'bg-amber-100 text-amber-800',
+  'Special Education': 'bg-violet-100 text-violet-800',
+  'Mental Health': 'bg-rose-100 text-rose-800',
+  'Vocational Education': 'bg-lime-100 text-lime-800',
+  'Future of Education': 'bg-sky-100 text-sky-800',
+  "Children's Health": 'bg-emerald-100 text-emerald-800',
+};
+---
+
+<Layout title={title} description={description}>
+  <div class="container py-8">
+    <!-- Page Header -->
+    <div class="max-w-3xl mb-10">
+      <nav class="text-sm text-gray-500 mb-4">
+        <a href="/" class="hover:text-brand-blue">Home</a>
+        <span class="mx-2">/</span>
+        <span class="text-gray-700">Education Articles</span>
+      </nav>
+      <h1 class="text-4xl font-bold text-gray-900 mb-4">Education Articles</h1>
+      <p class="text-xl text-gray-600">
+        Expert guides and insights to help you navigate school choices, college admissions, financial aid, and your child's education journey.
+      </p>
+    </div>
+
+    <!-- Category Filter -->
+    <div class="mb-8">
+      <div class="flex flex-wrap gap-2">
+        <button
+          class="category-filter px-3 py-1.5 rounded-full text-sm font-medium bg-brand-blue text-white transition-colors"
+          data-category="all"
+        >
+          All Articles ({articles.length})
+        </button>
+        {categories.map(category => {
+          const count = articles.filter(a => a.category === category).length;
+          return (
+            <button
+              class="category-filter px-3 py-1.5 rounded-full text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors"
+              data-category={category}
+            >
+              {category} ({count})
+            </button>
+          );
+        })}
+      </div>
+    </div>
+
+    <!-- Articles Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="articles-grid">
+      {articles.map((article, index) => (
+        <article
+          class="article-card bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow group"
+          data-category={article.category}
+        >
+          <a href={`/education-articles/${article.slug}`} class="block">
+            <div class="aspect-[16/9] overflow-hidden bg-gray-100">
+              {article.image ? (
+                <img
+                  src={article.image.src}
+                  alt={article.title}
+                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+              ) : (
+                <div class="w-full h-full flex items-center justify-center bg-gray-200">
+                  <span class="text-gray-400 text-sm">No image</span>
+                </div>
+              )}
+            </div>
+            <div class="p-4">
+              <div class="flex items-center gap-2 mb-2">
+                <span class={`px-2 py-0.5 rounded text-xs font-medium ${categoryColors[article.category] || 'bg-gray-100 text-gray-800'}`}>
+                  {article.category}
+                </span>
+              </div>
+              <h2 class="text-lg font-bold text-gray-900 mb-2 leading-tight group-hover:text-brand-blue transition-colors line-clamp-2">
+                {article.title}
+              </h2>
+              <p class="text-sm text-gray-600 line-clamp-2">
+                {article.description}
+              </p>
+            </div>
+          </a>
+        </article>
+      ))}
+    </div>
+
+    <!-- No Results Message -->
+    <div id="no-results" class="hidden text-center py-12">
+      <p class="text-gray-500 text-lg">No articles found in this category.</p>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const filterButtons = document.querySelectorAll('.category-filter');
+      const articleCards = document.querySelectorAll('.article-card');
+      const noResults = document.getElementById('no-results');
+
+      filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          const category = button.getAttribute('data-category');
+
+          // Update active button styles
+          filterButtons.forEach(btn => {
+            btn.classList.remove('bg-brand-blue', 'text-white');
+            btn.classList.add('bg-gray-100', 'text-gray-700');
+          });
+          button.classList.remove('bg-gray-100', 'text-gray-700');
+          button.classList.add('bg-brand-blue', 'text-white');
+
+          // Filter articles
+          let visibleCount = 0;
+          articleCards.forEach(card => {
+            const cardCategory = card.getAttribute('data-category');
+            if (category === 'all' || cardCategory === category) {
+              (card as HTMLElement).style.display = 'block';
+              visibleCount++;
+            } else {
+              (card as HTMLElement).style.display = 'none';
+            }
+          });
+
+          // Show/hide no results message
+          if (noResults) {
+            noResults.classList.toggle('hidden', visibleCount > 0);
+          }
+        });
+      });
+    });
+  </script>
+</Layout>
+
+<style>
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>

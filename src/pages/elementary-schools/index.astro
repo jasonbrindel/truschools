@@ -1,14 +1,18 @@
 ---
 import Layout from '@/layouts/Layout.astro';
+import QAPoll from '@/components/QAPoll.astro';
+import NewsletterSignup from '@/components/NewsletterSignup.astro';
 
 // Images for featured article and topic cards
-import featuredImage from '@/images/elementary-school-students-classroom-learning.jpg';
-import academicsImage from '@/images/classroom-teacher-computers-watercolor.jpg';
-import activitiesImage from '@/images/school-playground-sunset-illustration.jpg';
-import healthImage from '@/images/school-basketball-court-illustration.jpg';
-import findingSchoolsImage from '@/images/school-entrance-students-abstract.jpg';
-import parentingImage from '@/images/elementary-students-smiling-classroom.jpg';
-import behaviorImage from '@/images/student-peer-group-school.jpg';
+import featuredImage from '@/images/USED-elementary-students-writing-classroom.jpg';
+import article1Image from '@/images/USED-classroom-teacher-students-illustration.jpg';
+import article2Image from '@/images/USED-school-bullying-awareness-student.jpg';
+import article3Image from '@/images/USED-students-walking-to-school-illustration.jpg';
+import schoolChoiceImage from '@/images/USED-school-courtyard-students-illustration.jpg';
+import publicPrivateImage from '@/images/USED-colorful-school-campus-illustration.jpg';
+import magnetSchoolsImage from '@/images/USED-modern-school-building-field.jpg';
+import stemSchoolImage from '@/images/USED-students-science-education-hologram.jpg';
+import charterSchoolImage from '@/images/USED-school-campus-colorful-illustration.jpg';
 
 // All US states
 const states = [
@@ -124,58 +128,55 @@ function slugify(text: string): string {
   return text.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
 }
 
-// Topic categories with placeholder articles
-const topics = [
+// Featured articles for the topic cards
+const featuredArticles = [
   {
-    title: 'Elementary Academics',
-    image: academicsImage,
-    articles: [
-      { title: 'What to Teach When AI Does the Work', url: '/education-articles/what-to-teach-when-ai-does-the-work?from=elementary-schools' },
-      { title: '12 Homework Tips for Parents', url: '#' },
-    ]
+    title: 'IEPs vs. 504 Plans: What Every Parent Needs to Understand',
+    url: '/education-articles/ieps-vs-504-plans',
+    image: article1Image,
+    description: 'A definitive guide to the two federal frameworks that provide support for children with learning differences.',
   },
   {
-    title: 'Activities & Games',
-    image: activitiesImage,
-    articles: [
-      { title: 'Fun Activities for Kids', url: '#' },
-      { title: 'Educational Games for Elementary Students', url: '#' },
-    ]
+    title: 'Signs Your Child Is Being Bullied',
+    url: '/education-articles/signs-your-child-is-being-bullied',
+    image: article2Image,
+    description: 'What the research says, what parents tend to miss, and how to respond in ways that protect your child.',
   },
   {
-    title: 'Physical Health',
-    image: healthImage,
-    articles: [
-      { title: 'The Stillness Epidemic', url: '/education-articles/the-stillness-epidemic?from=elementary-schools' },
-      { title: 'Sports and Physical Activities', url: '#' },
-    ]
+    title: 'How to Find the Right School for Your Child',
+    url: '/education-articles/how-to-find-the-right-school?from=elementary-schools',
+    image: article3Image,
+    description: 'School ratings can tell you a lot—but not everything. Here\'s what actually matters when choosing a school.',
   },
   {
-    title: 'Finding Schools',
-    image: findingSchoolsImage,
-    articles: [
-      { title: 'How to Find the Right School', url: '/education-articles/how-to-find-the-right-school?from=elementary-schools' },
-      { title: 'The Rise of School Choice', url: '/education-articles/the-rise-of-school-choice?from=elementary-schools' },
-      { title: 'Public vs. Private School', url: '/education-articles/public-vs-private-school?from=elementary-schools' },
-      { title: 'What Is a STEM School?', url: '/education-articles/what-is-a-stem-school?from=elementary-schools' },
-      { title: 'Understanding Magnet Schools', url: '/education-articles/understanding-magnet-schools?from=elementary-schools' },
-    ]
+    title: 'The Rise of School Choice',
+    url: '/education-articles/the-rise-of-school-choice?from=elementary-schools',
+    image: schoolChoiceImage,
+    description: 'Understanding your options: public, private, charter, magnet, and homeschool—and how to decide.',
   },
   {
-    title: 'Parenting',
-    image: parentingImage,
-    articles: [
-      { title: 'Parenting Styles: What\'s Your Style?', url: '#' },
-      { title: 'Supporting Your Child\'s Education', url: '#' },
-    ]
+    title: 'Public vs. Private School',
+    url: '/education-articles/public-vs-private-school?from=elementary-schools',
+    image: publicPrivateImage,
+    description: 'What the research really says about costs, performance, class size, and making the right choice for your family.',
   },
   {
-    title: 'Behavior & Social Health',
-    image: behaviorImage,
-    articles: [
-      { title: 'Helping Your Child Deal with Bullying', url: '#' },
-      { title: 'Building Confidence in Children', url: '#' },
-    ]
+    title: 'Understanding Magnet Schools',
+    url: '/education-articles/understanding-magnet-schools?from=elementary-schools',
+    image: magnetSchoolsImage,
+    description: 'What magnet schools offer, how to apply, and whether they\'re worth the commute.',
+  },
+  {
+    title: 'What Is a STEM School?',
+    url: '/education-articles/what-is-a-stem-school?from=elementary-schools',
+    image: stemSchoolImage,
+    description: 'Beyond the buzzword: what STEM-focused schools actually teach and who they\'re best for.',
+  },
+  {
+    title: 'Charter Schools: What Parents Need to Know',
+    url: '/education-articles/charter-schools-what-parents-need-to-know?from=elementary-schools',
+    image: charterSchoolImage,
+    description: 'Understanding how charter schools work, what makes them different, and how to decide if one is right for your child.',
   },
 ];
 ---
@@ -199,46 +200,41 @@ const topics = [
       <div class="lg:w-2/3">
         <!-- Featured Article -->
         <div class="box-rounded mb-5">
-          <div class="flex flex-col md:flex-row gap-4">
-            <div class="md:w-1/3">
-              <img
-                src={featuredImage.src}
-                alt="Elementary school students"
-                class="w-full aspect-video object-cover rounded"
-              />
-            </div>
-            <div class="md:w-2/3">
-              <h2 class="text-brand-blue text-xl mb-2">
-                <a href="#" class="hover:underline">12 Homework Tips for Parents</a>
-              </h2>
-              <p class="text-gray-600 fs-14">
-                Help your child succeed in school with these proven homework strategies. Learn how to create
-                a productive study environment and support your child's learning.
-              </p>
-            </div>
-          </div>
+          <a href="/education-articles/how-to-choose-the-right-elementary-school">
+            <img
+              src={featuredImage.src}
+              alt="Elementary students engaged in classroom learning"
+              class="w-full aspect-video object-cover rounded mb-4"
+            />
+          </a>
+          <h2 class="text-brand-blue text-xl mb-2">
+            <a href="/education-articles/how-to-choose-the-right-elementary-school" class="hover:underline">How to Choose the Right Elementary School</a>
+          </h2>
+          <p class="text-gray-600 fs-14">
+            Finding the right elementary school means looking beyond test scores to understand how a school's culture, teaching approach, and community will support your unique child. <a href="/education-articles/how-to-choose-the-right-elementary-school" class="text-brand-blue hover:underline">Read article &rarr;</a>
+          </p>
         </div>
 
         <!-- Topic Categories -->
         <div class="box-rounded mb-5">
           <h2 class="text-brand-blue text-xl mb-4">Elementary School Topics</h2>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {topics.map((topic) => (
-              <div class="border border-gray-200 rounded overflow-hidden">
-                <img
-                  src={topic.image.src}
-                  alt={topic.title}
-                  class="w-full aspect-square object-cover"
-                />
-                <div class="p-4">
-                  <h3 class="text-brand-green-text font-bold mb-2 fs-14">{topic.title}</h3>
-                  <ul class="space-y-1 fs-13">
-                    {topic.articles.map((article) => (
-                      <li>
-                        <a href={article.url} class="text-brand-blue hover:underline">{article.title}</a>
-                      </li>
-                    ))}
-                  </ul>
+            {/* Featured Article Cards */}
+            {featuredArticles.map((article) => (
+              <div class="border border-gray-200 rounded overflow-hidden p-4">
+                <a href={article.url}>
+                  <img
+                    src={article.image.src}
+                    alt={article.title}
+                    class="w-full aspect-square object-cover rounded"
+                  />
+                </a>
+                <div class="pt-4">
+                  <h3 class="text-brand-green-text font-bold mb-1 fs-14">
+                    <a href={article.url} class="hover:underline">{article.title}</a>
+                  </h3>
+                  <p class="text-gray-600 fs-12 mb-2 leading-snug">{article.description}</p>
+                  <a href={article.url} class="text-brand-blue hover:underline fs-13">Read article &rarr;</a>
                 </div>
               </div>
             ))}
@@ -247,16 +243,12 @@ const topics = [
 
         <!-- Q&A Section -->
         <div class="box-rounded mb-5 bg-lt-blue">
-          <h2 class="text-brand-blue text-lg mb-3">Elementary School Q&A</h2>
-          <p class="text-gray-700 fs-14 mb-3">
-            <strong>Question:</strong> What do you tell your child about bullying?
-          </p>
-          <div class="flex gap-2 flex-wrap">
-            <button class="px-3 py-1 bg-white border border-gray-300 rounded text-sm hover:bg-gray-50">Tell a teacher</button>
-            <button class="px-3 py-1 bg-white border border-gray-300 rounded text-sm hover:bg-gray-50">Stand up for yourself</button>
-            <button class="px-3 py-1 bg-white border border-gray-300 rounded text-sm hover:bg-gray-50">Ignore them</button>
-            <button class="px-3 py-1 bg-white border border-gray-300 rounded text-sm hover:bg-gray-50">Tell me about it</button>
-          </div>
+          <QAPoll
+            questionId="elementary-bullying-advice"
+            pageSlug="elementary-schools"
+            question="What do you tell your child about bullying?"
+            answers={["Tell a teacher", "Stand up for yourself", "Ignore them", "Tell me about it"]}
+          />
         </div>
 
         <!-- Browse by State -->
@@ -327,18 +319,13 @@ const topics = [
               <a href="/high-schools">High Schools</a>
             </li>
             <li class="py-2">
-              <a href="/colleges">Colleges & Universities</a>
+              <a href="/colleges-universities">Colleges & Universities</a>
             </li>
           </ul>
         </div>
 
         <!-- Newsletter Signup -->
-        <div class="box-rounded">
-          <h3 class="text-brand-blue mb-3">Newsletter Signup</h3>
-          <p class="fs-13 text-gray-600 mb-3">Get the latest elementary school news and tips delivered to your inbox.</p>
-          <input type="email" placeholder="Your email address" class="input w-full mb-2" />
-          <button class="btn btn-primary w-full">Subscribe</button>
-        </div>
+        <NewsletterSignup preselected={['elementary']} />
       </div>
     </div>
   </div>

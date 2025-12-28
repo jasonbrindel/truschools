@@ -1,0 +1,175 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import heroImage from '@/images/USED-modern-school-building-field.jpg';
+
+const title = "The Numbers Behind the Promise";
+const description = "Before you enroll your child in a charter school, here's how to look past the glossy brochure and assess whether the institution is built on solid financial ground.";
+const category = 'Charter Schools';
+---
+
+<Layout title={title} description={description}>
+  <ArticleBreadcrumb title={title} defaultParent={{ label: 'Charter Schools', url: '/charter-schools' }} />
+
+  <!-- Header - Centered, Narrow -->
+  <header class="max-w-[680px] mx-auto px-5 pt-4 md:pt-8">
+    <h1 class="text-4xl md:text-5xl font-bold text-gray-900 leading-tight mb-5">
+      {title}
+    </h1>
+    <p class="text-xl md:text-2xl text-gray-600 italic mb-6">
+      Before you enroll your child in a charter school, here's how to look past the glossy brochure and assess whether the institution is built on solid financial ground.
+    </p>
+    <p class="text-base text-gray-500 mb-10">By TruSchools Staff</p>
+  </header>
+
+  <!-- Hero Image - Container Width -->
+  <div class="container">
+    <img
+      src={heroImage.src}
+      alt="Modern school building"
+      class="w-full h-[400px] md:h-[500px] object-cover"
+    />
+  </div>
+
+  <!-- Article Container - Centered, Narrow -->
+  <article class="max-w-[680px] mx-auto px-5 py-10 md:py-16">
+    <!-- Article Body -->
+    <div class="article-body text-lg leading-relaxed text-gray-800">
+      <!-- Opening with drop cap -->
+      <p class="first-letter:text-6xl first-letter:font-bold first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:text-gray-900 mb-6">
+        When Maria Esperanza enrolled her two daughters at a small charter school in San José, California, she believed she'd found exactly what she was looking for: an intimate campus where teachers knew every student's name, a curriculum that emphasized college preparation, and a promise that her girls—first-generation college hopefuls—would be seen and supported. The school had been serving Latino families in the Alum Rock community for nearly twenty-five years. It felt permanent. It felt safe.
+      </p>
+
+      <p class="mb-6">
+        Then came January 2025, when Downtown College Prep announced it would close all three of its remaining campuses. The network cited a $4.5 million budget deficit, declining enrollment, and financial strain that dated back years. For Maria and nearly a thousand other families, there had been no warning. Just weeks earlier, the school had been operating normally. Staff had been planning the spring semester. Now parents were scrambling to find new schools mid-year, many discovering that their children's transcripts were incomplete or that credits might not transfer seamlessly.
+      </p>
+
+      <p class="mb-6">
+        This scenario is more common than most parents realize. According to a 2024 longitudinal study by the National Center for Charter School Accountability, more than one in four charter schools close within their first five years of operation. By year twenty, that failure rate climbs to 55 percent. The study, which analyzed over two million Department of Education records, found that four in ten of these closures occurred abruptly—mid-year or just before a new school year began—leaving families with little time to regroup. The most frequently cited reason was insufficient enrollment, which accounted for nearly half of all closures. Financial mismanagement and fraud trailed behind at around 13 percent, though that figure rose to over 21 percent in the most recent years examined.
+      </p>
+
+      <p class="mb-10">
+        The promise of charter schools has always been accountability: if a school fails to perform, it closes. But for families caught in that closure, the theory offers cold comfort. The question isn't whether some charter schools will fail—it's whether you can spot the warning signs before committing your child to one that might.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <p class="mb-6">
+        The good news is that charter school finances, unlike those of many private institutions, are largely a matter of public record. Most charter schools operate as nonprofit organizations, which means they must file an IRS Form 990 annually—a document that reveals executive compensation, total revenue, expenses, and any relationships with related organizations. These filings are freely available through ProPublica's Nonprofit Explorer database, where you can search by school name, view historical data going back years, and even set up alerts to be notified when new documents are posted.
+      </p>
+
+      <p class="mb-6">
+        But the 990 is just the starting point. Charter schools are also required to undergo independent financial audits, typically conducted by certified public accounting firms and submitted to the school's authorizer and state education department. Many states now post these audits online. In California, the Department of Education maintains annual financial data for every charter school, accessible through the Ed-Data website. Arizona's State Board for Charter Schools publishes financial dashboards showing key performance indicators for each school. Colorado, North Carolina, and Washington State have similar transparency portals. If you're considering a charter school, your first step should be asking where the school's audited financial statements are published—and then actually reading them.
+      </p>
+
+      <p class="mb-10">
+        This sounds more daunting than it is. You don't need an accounting degree to understand the basics. Financial health in a charter school comes down to a handful of indicators that experts use to assess whether a school is thriving, struggling, or somewhere in between.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <p class="mb-6">
+        The metric that charter school finance experts mention most often is 'days cash on hand'—a measure of how many days a school could continue operating if all revenue stopped tomorrow. According to financial performance frameworks used by authorizers across multiple states, thirty days of cash on hand is considered the bare minimum. Schools with fewer than thirty days are at high risk of not being able to meet payroll or pay their bills if funding is delayed, which happens more often than you might expect in the uneven world of public education finance. Ninety days is considered healthy. If a school you're considering has fewer than thirty days of cash on hand, that should give you pause.
+      </p>
+
+      <p class="mb-6">
+        The current ratio is another useful indicator. This measures whether a school has enough short-term assets to cover its short-term liabilities—essentially, whether it can pay its bills over the next twelve months. A ratio above 1.0 means the school has more current assets than current liabilities. A ratio below 1.0 is a red flag; the school may struggle to meet its immediate financial obligations.
+      </p>
+
+      <p class="mb-6">
+        Enrollment trends matter enormously because charter school funding is tied directly to student headcount. Look for schools that are meeting or exceeding their enrollment projections. A pattern of declining enrollment over two or three years often precedes financial trouble, since fewer students means less funding while many costs—rent, administrative staff, utilities—remain fixed. The Acero charter network in Chicago, which announced plans in late 2024 to close seven of its fifteen schools, had been experiencing enrollment declines for years. The schools slated for closure weren't just underperforming academically; they were bleeding students, and the network's leadership eventually concluded that keeping them open would push the entire organization into a $15 million deficit.
+      </p>
+
+      <p class="mb-10">
+        Net assets—sometimes called fund balance—indicate whether a school is building reserves or depleting them. A school that shows negative net assets, or a pattern of net losses year after year, is living beyond its means. This doesn't necessarily mean closure is imminent, but it does suggest the school lacks a financial cushion to absorb unexpected costs or revenue shortfalls. The Grand Canyon Institute's research on Arizona charter schools identified multiple years of net losses as one of the clearest red flags preceding school closures, noting that these patterns often showed up in audits and 990 filings long before schools actually shut down.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <p class="mb-6">
+        Beyond the numbers themselves, the structure of a charter school's operations can reveal potential vulnerabilities. Many charter schools contract with management organizations—either nonprofit charter management organizations (CMOs) or for-profit education management organizations (EMOs)—to handle everything from curriculum and hiring to facilities and accounting. These arrangements aren't inherently problematic; some of the most successful charter networks in the country operate this way. But they introduce complexities that parents should understand.
+      </p>
+
+      <p class="mb-6">
+        Management fees vary widely. Research on New York charter schools found that schools working with for-profit EMOs paid an average of 17 percent of their per-pupil funding in management fees, compared to 7 percent for those using nonprofit CMOs. A school that's paying a substantial portion of its revenue to a management company has less flexibility in its budget and may be more vulnerable to financial stress if enrollment dips or costs rise. The fee structure should be disclosed in the school's audit and, in many states, in the management contract itself.
+      </p>
+
+      <p class="mb-10">
+        Conflicts of interest have been a recurring theme in charter school scandals. In Arizona, the founder of one charter network made over $37 million by constructing school buildings through his own development company, then selling them to his charter organization at inflated prices—all funded by taxpayer dollars. Similar arrangements have surfaced in Michigan, where a 2017 investigation by the Detroit Free Press documented widespread instances of charter board members awarding contracts to friends, relatives, and their own businesses. Look for whether the school's board is truly independent from its management company. Ask whether any board members have financial relationships with vendors serving the school. A well-governed charter school will have clear conflict-of-interest policies and will disclose related-party transactions in its audit.
+      </p>
+
+      <p class="mb-10">
+        The relationship between a charter school and its authorizer—the entity that approved the school's charter and is responsible for oversight—also matters. Authorizers can be school districts, state education agencies, universities, or independent boards, depending on state law. Strong authorizers set clear academic and financial performance standards, conduct regular site visits and financial reviews, and aren't afraid to close schools that fail to meet expectations. Weak authorizers may approve schools without adequate vetting or allow struggling schools to limp along for years. You can often find information about a school's standing with its authorizer on the authorizer's website, including whether the school has received any notices of concern, been placed on a watch list, or faced renewal challenges.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <p class="mb-6">
+        What do you do if you discover that a charter school you're considering—or one your child already attends—shows worrying signs? The honest answer is that there's no foolproof protection against school closure. Even schools with strong finances can encounter unexpected challenges: a building crisis, leadership turnover, shifts in enrollment demographics. But awareness puts you in a better position to make informed choices and, if necessary, to plan ahead.
+      </p>
+
+      <p class="mb-6">
+        Parents who were caught off-guard by the Coastal Waters charter school closure in New Hampshire in early 2024 later told reporters they had noticed warning signs but hadn't known what to make of them. Some had observed high staff turnover and unclear curriculum. Others had flagged safety concerns in classrooms. A few had even raised questions about attendance tracking. But the school's board wasn't communicating about financial problems, and the state's oversight had been minimal. By the time the school abruptly announced it was closing—less than two years after opening—families had only weeks to find alternatives.
+      </p>
+
+      <p class="mb-6">
+        If you're enrolling a child in a charter school, especially a newer one, consider maintaining a relationship with your local district school as a backup. Know the enrollment deadlines and lottery timelines for other schools in your area. Keep copies of your child's transcripts, report cards, and any documentation of special services or accommodations. If you notice signs of instability—frequent leadership changes, teacher departures mid-year, communications that seem evasive about financial matters—trust your instincts and start exploring alternatives before you're forced to.
+      </p>
+
+      <p class="mb-10">
+        Some charter school closures are handled responsibly, with authorizers and school leaders working together to give families several months' notice, coordinate record transfers, and even host enrollment fairs where parents can learn about other schools. Others are chaotic, leaving families to sort through incomplete records and uncertain credit transfers on their own. The National Association of Charter School Authorizers has developed closure protocols that emphasize family communication, orderly wind-down of operations, and protection of student records. But not all authorizers follow these best practices, and not all states require them to.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <p class="mb-6">
+        None of this should discourage you from considering a charter school if that's what your family wants. Many charter schools offer exactly what they promise: innovative approaches, strong community, academic outcomes that exceed district averages. Some charter networks have decades of demonstrated success and financial stability. The point isn't to avoid charter schools but to approach the decision with the same due diligence you'd apply to any major choice affecting your child's education.
+      </p>
+
+      <p class="mb-6">
+        The paradox of charter schools is that the very mechanism meant to ensure accountability—the possibility of closure—is also what makes them riskier for families than traditional public schools, which rarely close abruptly and always have a district obligated to educate your child somewhere. When you choose a charter school, you're accepting some of that risk in exchange for whatever benefits you believe the school offers. Understanding the financial health of the school you're choosing doesn't eliminate that risk, but it does help you make the choice with open eyes.
+      </p>
+
+      <p class="mb-6">
+        Start with the Form 990. Look up the audit. Ask the school's administrator what the days cash on hand were at the end of the last fiscal year, and whether enrollment met projections. Find out who the authorizer is and what that entity's renewal timeline looks like. These questions aren't hostile; they're the same questions a responsible board member would ask. A school that welcomes them is probably one that has good answers.
+      </p>
+
+      <p class="mb-10">
+        Maria Esperanza eventually found spots for her daughters at a district high school, though the transition was rocky. She wishes she had known to ask about Downtown College Prep's finances before she enrolled them. She wishes someone had told her what to look for. Now, when other parents in her community ask about charter schools, she tells them: look at the numbers. The promise is only as strong as the institution behind it.
+      </p>
+
+      <!-- Sources -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
+
+      <ul class="text-sm text-gray-600 space-y-2 mb-10">
+        <li>National Center for Charter School Accountability and Network for Public Education, "Charter School Closures: 1998 to 2022," October 2024.</li>
+        <li>KQED News, "Santa Clara County's First Charter School to Close All Campuses, Laying Off 100 Staff," May 2025.</li>
+        <li>WBEZ Chicago and Chicago Sun-Times, "What's Behind Chicago's Acero Charter Schools' Closure Decision," November 2024.</li>
+        <li>North Carolina Department of Public Instruction, "Charter School Financial Performance Framework Guide."</li>
+        <li>Washington State Charter School Commission, "Financial Performance Framework."</li>
+        <li>National Association of Charter School Authorizers, "Accountability in Action: A Comprehensive Guide to Charter School Closure."</li>
+        <li>Grand Canyon Institute, "Red Flags: Net Losses—Warning Signs in the Financial Data of Arizona's Public Charter Schools," March 2018.</li>
+        <li>EdSource, "Dozens of fixes proposed to deter more mega-cases of charter school fraud," May 2024.</li>
+        <li>Center for American Progress, "Understanding the Opportunities and Challenges of Charter Management Contracts for Public Schools," January 2022.</li>
+        <li>ProPublica Nonprofit Explorer database (projects.propublica.org/nonprofits/).</li>
+        <li>California Department of Education, Ed-Data financial reports (www.ed-data.org).</li>
+        <li>Arizona State Board for Charter Schools, Financial Performance Dashboard (asbcs.az.gov).</li>
+        <li>New Hampshire Public Radio, "Exeter Charter School Closing Amid Investigation into Alleged Fraud and Embezzlement," January 2024.</li>
+        <li>Detroit Free Press, "Michigan Spends $1B on Charter Schools but Fails to Hold Them Accountable," January 2017.</li>
+        <li>New York Charter School Center, "The Profit Myth: Understanding the Structure of New York Charter Schools."</li>
+      </ul>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-16 pt-8 border-t border-gray-200">
+      <p class="text-sm text-gray-500 italic">
+        This article is provided by TruSchools as an educational resource for families exploring charter school options.
+      </p>
+      <div class="mt-6">
+        <a href="/charter-schools" class="text-brand-blue hover:underline font-medium">
+          Back to Charter Schools &rarr;
+        </a>
+      </div>
+    </footer>
+  </article>
+</Layout>

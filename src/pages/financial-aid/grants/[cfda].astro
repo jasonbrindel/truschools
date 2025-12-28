@@ -1,0 +1,345 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import NewsletterSignup from '@/components/NewsletterSignup.astro';
+
+const { cfda } = Astro.params;
+
+// Convert URL param back to CFDA format (84-063 -> 84.063)
+const cfdaNumber = cfda?.replace('-', '.') || '';
+
+// Get grant from database
+const runtime = Astro.locals.runtime;
+let grant: any = null;
+let relatedGrants: any[] = [];
+
+if (runtime?.env?.DB && cfdaNumber) {
+  try {
+    // Get the specific grant
+    grant = await runtime.env.DB.prepare(`
+      SELECT * FROM federal_grants
+      WHERE cfda_number = ?
+    `).bind(cfdaNumber).first();
+
+    if (grant) {
+      // Get related grants (same category)
+      const relatedResult = await runtime.env.DB.prepare(`
+        SELECT cfda_number, title, popular_name FROM federal_grants
+        WHERE cfda_number != ?
+        AND (
+          (is_student_aid = 1 AND ? = 1) OR
+          (is_higher_ed = 1 AND ? = 1) OR
+          (is_k12 = 1 AND ? = 1) OR
+          (is_career_tech = 1 AND ? = 1) OR
+          (is_special_ed = 1 AND ? = 1)
+        )
+        ORDER BY cfda_number
+        LIMIT 5
+      `).bind(
+        cfdaNumber,
+        grant.is_student_aid,
+        grant.is_higher_ed,
+        grant.is_k12,
+        grant.is_career_tech,
+        grant.is_special_ed
+      ).all();
+      relatedGrants = relatedResult.results || [];
+    }
+  } catch (e) {
+    console.error('Error fetching grant:', e);
+  }
+}
+
+// 404 if grant not found
+if (!grant) {
+  return Astro.redirect('/financial-aid/grants');
+}
+
+function formatCfdaSlug(cfda: string): string {
+  return cfda.replace('.', '-');
+}
+
+// Strip parentheses from popular_name (SAM.gov data includes them)
+function cleanPopularName(name: string | null): string | null {
+  if (!name) return null;
+  return name.replace(/^\((.+)\)$/, '$1').trim();
+}
+
+// Parse deadlines JSON if present
+let deadlinesInfo: any = null;
+try {
+  if (grant.deadlines) {
+    deadlinesInfo = JSON.parse(grant.deadlines);
+  }
+} catch (e) {
+  // Deadlines might be plain text
+}
+
+// Parse accomplishments JSON if present
+let accomplishmentsInfo: any = null;
+try {
+  if (grant.accomplishments) {
+    const parsed = JSON.parse(grant.accomplishments);
+    if (parsed.isApplicable && parsed.list && parsed.list.length > 0) {
+      // Get the most recent accomplishment by fiscal year
+      accomplishmentsInfo = parsed.list.sort((a: any, b: any) => b.fiscalYear - a.fiscalYear)[0];
+    }
+  }
+} catch (e) {
+  // Accomplishments might be plain text
+  if (grant.accomplishments) {
+    accomplishmentsInfo = { description: grant.accomplishments };
+  }
+}
+
+// Get category labels
+const categories: string[] = [];
+if (grant.is_student_aid) categories.push('Student Financial Aid');
+if (grant.is_higher_ed) categories.push('Higher Education');
+if (grant.is_k12) categories.push('K-12 Education');
+if (grant.is_career_tech) categories.push('Career & Technical Education');
+if (grant.is_special_ed) categories.push('Special Education');
+
+const title = cleanPopularName(grant.popular_name) || grant.title;
+const subtitle = grant.popular_name ? grant.title : null;
+---
+
+<Layout title={`${title} (${grant.cfda_number}) - Federal Grant Program`} description={grant.objectives?.substring(0, 160)}>
+  <div class="container py-5">
+    <!-- Breadcrumb -->
+    <nav class="text-sm mb-4">
+      <ol class="flex flex-wrap items-center gap-2 text-gray-600">
+        <li><a href="/" class="hover:text-brand-blue">Home</a></li>
+        <li class="text-gray-400">/</li>
+        <li><a href="/financial-aid" class="hover:text-brand-blue">Financial Aid</a></li>
+        <li class="text-gray-400">/</li>
+        <li><a href="/financial-aid/grants" class="hover:text-brand-blue">Grants</a></li>
+        <li class="text-gray-400">/</li>
+        <li class="text-gray-900 font-medium">{cleanPopularName(grant.popular_name) || grant.title} (CFDA {grant.cfda_number})</li>
+      </ol>
+    </nav>
+
+    <div class="flex flex-col lg:flex-row gap-5">
+      <!-- Main Content -->
+      <div class="lg:w-2/3">
+        <!-- Header -->
+        <div class="box-rounded mb-5">
+          <div class="flex items-start gap-4 mb-4">
+            <div class="flex-1">
+              <h1 class="text-brand-green-text text-2xl md:text-3xl mb-2">{title}</h1>
+              {subtitle && (
+                <p class="text-gray-600 fs-14 mb-2">{subtitle}</p>
+              )}
+              <div class="flex flex-wrap items-center gap-2 mb-3">
+                <span class="bg-brand-blue text-white px-3 py-1 rounded fs-13 font-medium">CFDA {grant.cfda_number}</span>
+                <span class="bg-green-100 text-green-800 px-3 py-1 rounded fs-13">{grant.assistance_type}</span>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                {categories.map((cat) => (
+                  <span class="bg-gray-100 text-gray-600 px-2 py-0.5 rounded fs-12">{cat}</span>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {grant.website && (
+            <a
+              href={grant.website}
+              target="_blank"
+              rel="noopener"
+              class="inline-flex items-center gap-2 bg-brand-blue text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors fs-14 font-medium"
+            >
+              Official Program Website
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+            </a>
+          )}
+        </div>
+
+        <!-- Program Objectives -->
+        <div class="box-rounded mb-5">
+          <h2 class="text-brand-blue text-xl mb-3">Program Objectives</h2>
+          <p class="text-gray-700 leading-relaxed">{grant.objectives}</p>
+        </div>
+
+        <!-- Eligibility -->
+        {grant.beneficiary_eligibility && (
+          <div class="box-rounded mb-5">
+            <h2 class="text-brand-blue text-xl mb-3">Who Can Benefit</h2>
+            <p class="text-gray-700 leading-relaxed">{grant.beneficiary_eligibility}</p>
+          </div>
+        )}
+
+        <!-- Financial Information -->
+        {(grant.award_range || grant.obligations) && (
+          <div class="box-rounded mb-5 bg-green-50">
+            <h2 class="text-brand-blue text-xl mb-3">Financial Information</h2>
+
+            {grant.award_range && (
+              <div class="mb-4">
+                <h3 class="text-gray-800 font-bold fs-14 mb-2">Award Amounts</h3>
+                <p class="text-gray-700">{grant.award_range}</p>
+              </div>
+            )}
+
+            {grant.obligations && (
+              <div class="mb-4">
+                <h3 class="text-gray-800 font-bold fs-14 mb-2">Program Funding</h3>
+                <p class="text-gray-600 fs-13">{grant.obligations}</p>
+              </div>
+            )}
+
+            {accomplishmentsInfo && (
+              <div>
+                <h3 class="text-gray-800 font-bold fs-14 mb-2">Program Recipients{accomplishmentsInfo.fiscalYear ? ` (FY${accomplishmentsInfo.fiscalYear})` : ''}</h3>
+                <p class="text-gray-600 fs-13">{accomplishmentsInfo.description}</p>
+              </div>
+            )}
+          </div>
+        )}
+
+        <!-- Deadlines -->
+        {deadlinesInfo && deadlinesInfo.description && (
+          <div class="box-rounded mb-5">
+            <h2 class="text-brand-blue text-xl mb-3">Deadlines</h2>
+            <p class="text-gray-700">{deadlinesInfo.description}</p>
+          </div>
+        )}
+
+        <!-- How to Apply -->
+        <div class="box-rounded mb-5 bg-lt-blue">
+          <h2 class="text-brand-blue text-xl mb-3">How to Apply</h2>
+          {grant.is_student_aid ? (
+            <div>
+              <p class="text-gray-700 mb-4">
+                To apply for this grant, you must complete the Free Application for Federal Student Aid (FAFSA).
+                Your school's financial aid office will determine your eligibility based on your FAFSA information.
+              </p>
+              <div class="flex flex-wrap gap-3">
+                <a
+                  href="https://studentaid.gov/h/apply-for-aid/fafsa"
+                  target="_blank"
+                  rel="noopener"
+                  class="inline-flex items-center gap-2 bg-brand-blue text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors fs-14 font-medium"
+                >
+                  Apply for FAFSA
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                </a>
+                <a
+                  href="/financial-aid/fafsa/fafsa-school-codes"
+                  class="inline-flex items-center gap-2 bg-white border border-brand-blue text-brand-blue px-4 py-2 rounded hover:bg-gray-50 transition-colors fs-14 font-medium"
+                >
+                  Find FAFSA School Codes
+                </a>
+              </div>
+            </div>
+          ) : (
+            <div>
+              <p class="text-gray-700 mb-4">
+                This program is typically administered through institutions or organizations.
+                Contact your school's financial aid office or visit the official program website for application information.
+              </p>
+              {grant.website && (
+                <a
+                  href={grant.website}
+                  target="_blank"
+                  rel="noopener"
+                  class="inline-flex items-center gap-2 bg-brand-blue text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors fs-14 font-medium"
+                >
+                  Visit Program Website
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                </a>
+              )}
+            </div>
+          )}
+        </div>
+
+        <!-- Administering Agency -->
+        {grant.agency && (
+          <div class="box-rounded mb-5">
+            <h2 class="text-brand-blue text-xl mb-3">Administering Agency</h2>
+            <p class="text-gray-700">{grant.agency}</p>
+          </div>
+        )}
+
+        <!-- Back to Grants -->
+        <div class="mb-5">
+          <a href="/financial-aid/grants" class="text-brand-blue hover:underline font-medium fs-14 flex items-center gap-1">
+            <span>&larr;</span> Back to All Grants
+          </a>
+        </div>
+
+        <!-- Data Source -->
+        <div class="box-rounded mb-5 bg-gray-50">
+          <h3 class="text-gray-700 mb-2 fs-14">Data Source</h3>
+          <p class="text-gray-500 fs-12">
+            Information from <a href="https://sam.gov/content/assistance-listings" target="_blank" rel="noopener" class="text-brand-blue hover:underline">SAM.gov Assistance Listings</a>.
+            Last updated: December 2024.
+          </p>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="lg:w-1/3">
+        <!-- Program Details -->
+        <div class="box-rounded bg-lt-blue mb-4">
+          <h3 class="text-brand-blue mb-3">Program Details</h3>
+          <dl class="space-y-3 fs-14">
+            <div>
+              <dt class="text-gray-500 fs-12">CFDA Number</dt>
+              <dd class="text-gray-900 font-medium">{grant.cfda_number}</dd>
+            </div>
+            <div>
+              <dt class="text-gray-500 fs-12">Assistance Type</dt>
+              <dd class="text-gray-900">{grant.assistance_type}</dd>
+            </div>
+            {grant.website && (
+              <div>
+                <dt class="text-gray-500 fs-12">Official Website</dt>
+                <dd>
+                  <a href={grant.website} target="_blank" rel="noopener" class="text-brand-blue hover:underline break-all">
+                    {grant.website.replace(/^https?:\/\//, '').substring(0, 40)}...
+                  </a>
+                </dd>
+              </div>
+            )}
+          </dl>
+        </div>
+
+        <!-- Related Grants -->
+        {relatedGrants.length > 0 && (
+          <div class="box-rounded mb-4">
+            <h3 class="text-brand-blue mb-3">Related Programs</h3>
+            <ul class="space-y-2 fs-14">
+              {relatedGrants.map((related) => (
+                <li>
+                  <a
+                    href={`/financial-aid/grants/${formatCfdaSlug(related.cfda_number)}`}
+                    class="text-brand-blue hover:underline"
+                  >
+                    {cleanPopularName(related.popular_name) || related.title}
+                  </a>
+                  <span class="text-gray-400 fs-12 ml-1">(CFDA {related.cfda_number})</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        <!-- Ad Placeholder -->
+        <div class="box-rounded mb-4">
+          <div class="bg-gray-100 h-[280px] flex items-center justify-center text-gray-400 fs-13">
+            Advertisement
+          </div>
+        </div>
+
+        <!-- Newsletter -->
+        <NewsletterSignup preselected={['financial-aid']} />
+      </div>
+    </div>
+  </div>
+</Layout>

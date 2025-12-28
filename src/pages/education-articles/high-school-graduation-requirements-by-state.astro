@@ -1,0 +1,318 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import heroImage from '@/images/USED-high-school-graduation-requirements.jpg';
+
+const title = "High School Graduation Requirements by State: What Your Teen Actually Needs to Graduate";
+const description = "From 13 credits in Wyoming to 26 in Texas, the requirements for a high school diploma vary dramatically across the country. Understanding your state's specific rules—and how local districts may add their own—is essential for planning your student's path to graduation and beyond.";
+const category = 'High School';
+---
+
+<Layout title={title} description={description}>
+  <ArticleBreadcrumb title={title} defaultParent={{ label: 'High Schools', url: '/high-schools' }} />
+
+  <!-- Header - Centered, Narrow -->
+  <header class="max-w-[680px] mx-auto px-5 pt-4 md:pt-8">
+    <h1 class="text-4xl md:text-5xl font-bold text-gray-900 leading-tight mb-5">
+      {title}
+    </h1>
+    <p class="text-xl md:text-2xl text-gray-600 italic mb-6">
+      From 13 credits in Wyoming to 26 in Texas, the requirements for a high school diploma vary dramatically across the country. Understanding your state's specific rules—and how local districts may add their own—is essential for planning your student's path to graduation and beyond.
+    </p>
+    <p class="text-base text-gray-500 mb-10">By TruSchools Staff</p>
+  </header>
+
+  <!-- Hero Image - Container Width -->
+  <div class="container">
+    <img
+      src={heroImage.src}
+      alt="High school students in graduation caps"
+      class="w-full h-[400px] md:h-[500px] object-cover"
+    />
+  </div>
+
+  <!-- Article Container - Centered, Narrow -->
+  <article class="max-w-[680px] mx-auto px-5 py-10 md:py-16">
+    <!-- Article Body -->
+    <div class="article-body text-lg leading-relaxed text-gray-800">
+      <!-- Opening with drop cap -->
+      <p class="first-letter:text-6xl first-letter:font-bold first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:text-gray-900 mb-6">
+        The American high school diploma, long considered the baseline credential for adult life, is undergoing a quiet but significant transformation. Across the country, states are revising what students must learn, demonstrate, and complete before they can walk across the graduation stage. Some are adding financial literacy courses. Others are requiring FAFSA completion. Still others are eliminating standardized exit exams that have been fixtures for decades. For parents trying to plan their teenager's academic path, the landscape has never been more complex—or more consequential.
+      </p>
+
+      <p class="mb-6">
+        At least 46 states and the District of Columbia now establish minimum credit requirements for a standard diploma, according to the Education Commission of the States. But the actual requirements vary enormously. Wyoming requires just 13 credits to graduate at the state level, while Texas mandates 22 credits minimum—rising to 26 for students pursuing endorsements that can affect college admissions. And these state minimums often represent only a floor; local school districts frequently impose additional requirements that students must meet.
+      </p>
+
+      <p class="mb-10">
+        This matters because meeting graduation requirements isn't the same as being prepared for what comes next. Research consistently shows a mismatch between what states require for a diploma and what colleges expect for admission. Parents who assume their student is college-ready simply because they're on track to graduate may discover gaps too late to address them.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Understanding the Credit System</h2>
+
+      <p class="mb-6">
+        High school graduation requirements are typically measured in credits, also known as Carnegie units. One credit generally represents about 120 hours of instruction in a single course—typically a class that meets for one period daily throughout a school year. A semester-long course yields half a credit. When states say students need four credits of English, they mean four year-long English courses, one for each year of high school.
+      </p>
+
+      <p class="mb-6">
+        Most states require between 20 and 24 total credits for graduation. The typical distribution includes four credits of English language arts, three to four credits of mathematics, three credits of science, three to four credits of social studies, and the remainder in electives, physical education, health, arts, and career-technical courses. But within this general framework, the specific requirements vary considerably.
+      </p>
+
+      <p class="mb-10">
+        Some states with notably different approaches include Maine, which requires only 11 credits at the state level (though most districts require more); California, which sets minimum requirements but leaves local districts substantial authority to add courses; and Pennsylvania, Massachusetts, and Colorado, where graduation requirements are largely determined by individual school districts rather than state mandate.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">The Shrinking World of Exit Exams</h2>
+
+      <p class="mb-6">
+        For decades, many states required students to pass standardized tests to graduate—so-called exit exams designed to verify that diploma recipients had mastered basic skills. At their peak in the mid-2000s, 27 states mandated these tests. Today, that number has dwindled to just six states for the class of 2026: Florida, Louisiana, Ohio, New Jersey, Texas, and Virginia.
+      </p>
+
+      <p class="mb-6">
+        New York, long famous for its Regents Examinations, announced in November 2024 that it would phase out the exams as a graduation requirement beginning with the 2027-28 school year. Students will still take Regents exams, but passing them will no longer be mandatory for a diploma. Instead, the state is developing a new "Portrait of a Graduate" framework that will allow students to demonstrate proficiency through various means including projects, internships, and alternative assessments.
+      </p>
+
+      <p class="mb-10">
+        Massachusetts voters accelerated this trend in November 2024 by approving a ballot measure eliminating the MCAS exam as a graduation requirement, beginning with the class of 2025. Teachers unions had argued the test forced superficial teaching at the expense of deeper learning, while business groups warned that without standardized testing, employers would have no guarantee that diploma holders possess basic skills.
+      </p>
+
+      <p class="mb-6">
+        In states that still require exit exams, the specifics vary. Texas requires passing five End-of-Course (EOC) exams: English I, English II, Algebra I, Biology, and U.S. History. Florida mandates achieving a Level 3 on both the Grade 10 FAST ELA assessment and the Algebra 1 EOC. Ohio requires passing end-of-course exams in English, Algebra I, and either Geometry or Integrated Math II, plus demonstrating readiness through competency-based pathways. New Jersey, Louisiana, and Virginia each have their own configurations of required assessments.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">The Financial Literacy Revolution</h2>
+
+      <p class="mb-6">
+        Perhaps no graduation requirement has gained momentum faster than financial literacy education. In 2019, just six states required high school students to complete a standalone personal finance course before graduation. As of late 2025, that number has risen to approximately 30 states, with more legislation pending.
+      </p>
+
+      <p class="mb-6">
+        The National Endowment for Financial Education tracks these requirements closely, and the trajectory is striking: from Utah's pioneering mandate in 2008 through a slow buildup, then explosive growth following the COVID-19 pandemic, which exposed widespread financial fragility among American households.
+      </p>
+
+      <blockquote class="border-l-4 border-brand-blue pl-6 my-8 italic text-gray-700">
+        "In five short years, more than four out of ten U.S. high school students will be enrolled in schools where a stand-alone, full-semester course in personal finance is required before graduating. That's a 229 percent increase from 2017."
+        <cite class="block mt-2 text-sm not-italic text-gray-500">— John Pelletier, director of the Center for Financial Literacy at Champlain College</cite>
+      </blockquote>
+
+      <p class="mb-10">
+        States that have recently added or announced financial literacy requirements include California (class of 2030-31), Colorado (2028), Kentucky (2027), Delaware (pending), and Texas (2029). The courses typically cover budgeting, saving, investing, credit, loans, insurance, and tax basics. Most states require at least a half-credit (one semester) standalone course that cannot be fulfilled by embedding content into other subjects.
+      </p>
+
+      <p class="mb-6">
+        Minnesota represents the trend well. Students beginning ninth grade in 2024-25 and later must successfully complete a course for credit in personal finance before graduating. The requirement reflects growing recognition that financial capability—understanding compound interest, managing credit, planning for major purchases—should be treated as essential knowledge rather than an elective topic.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">FAFSA Completion as a Graduation Requirement</h2>
+
+      <p class="mb-6">
+        An increasingly common—and somewhat controversial—trend involves requiring high school seniors to complete the Free Application for Federal Student Aid (FAFSA) before they can graduate. Louisiana pioneered this approach in 2018, and as of 2025, approximately 13 states have enacted similar requirements: Alabama, California, Colorado, Connecticut, Illinois, Indiana, Nebraska, New Hampshire, New Jersey, New York, Oklahoma, Texas, and Kansas (effective 2027-28).
+      </p>
+
+      <p class="mb-6">
+        The rationale is straightforward: data shows that 92% of high school seniors who complete the FAFSA enroll in postsecondary education directly after graduation, compared to much lower rates among non-completers. By requiring the application—or at least requiring students to engage with it—states hope to increase college enrollment, particularly among low-income students who might not otherwise realize they qualify for significant financial aid.
+      </p>
+
+      <p class="mb-6">
+        Importantly, these requirements aren't as rigid as they might initially sound. All states with FAFSA mandates include waiver provisions. Students who don't plan to attend college—whether they're entering the workforce, military, or vocational training—can obtain an exemption. The waiver process varies by state; in Connecticut, for example, a parent, school counselor, or the student (if 18 or older) can sign a waiver to fulfill the requirement.
+      </p>
+
+      <p class="mb-10">
+        The policy has seen some backlash. Louisiana actually dropped its FAFSA mandate for the class of 2025, with state officials arguing the requirement was burdensome and pushed students toward college when other paths might be better suited. New Hampshire similarly repealed its requirement, and Kansas is reconsidering its upcoming mandate. These reversals highlight ongoing tension between encouraging college access and respecting diverse post-graduation pathways.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Civics Education and Testing</h2>
+
+      <p class="mb-6">
+        Civics education requirements have also evolved significantly. Since 2015, many states have adopted requirements for students to pass a civics test—often modeled on or identical to the U.S. Citizenship and Immigration Services naturalization exam—before graduating. Currently, about 16-20 states require some form of civics testing, though the specific requirements vary.
+      </p>
+
+      <p class="mb-6">
+        States requiring passage of a civics test to graduate include Alabama, Arizona, Arkansas, Florida, Kentucky, Michigan, Mississippi, Missouri, Nevada, New Hampshire, North Dakota, Ohio, Oklahoma, Tennessee, Texas, and Utah. The typical requirement is to correctly answer 60-70% of questions drawn from the 100-question USCIS civics test covering American history, government structure, and democratic principles.
+      </p>
+
+      <p class="mb-10">
+        Other states take different approaches. Indiana, South Carolina, and Washington require students to take a civics assessment but don't mandate passing scores. Pennsylvania and Wisconsin require taking a civics exam but don't specify passage. Idaho requires both a full-year government course and passage of the USCIS test. The patchwork reflects ongoing debates about how best to ensure graduates understand their civic rights and responsibilities.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Emerging Requirements: Ethnic Studies and Beyond</h2>
+
+      <p class="mb-6">
+        California became the first state to require ethnic studies as a graduation requirement when Assembly Bill 101 was signed into law in 2021. Beginning with the class of 2030, all California high school students must complete a semester-long ethnic studies course covering the history, contributions, and experiences of the state's major ethnic and racial groups: African Americans, Asian Americans, Latinos, and Native Americans.
+      </p>
+
+      <p class="mb-6">
+        Implementation has proven challenging. High schools were required to offer ethnic studies courses by the 2025-26 school year, but funding constraints and teacher preparation gaps have created uneven access. Governor Newsom excluded funding for the mandate from the 2025 state budget, effectively delaying full implementation for some districts. The experience illustrates a broader reality: passing graduation requirements is only the first step; implementing them effectively requires resources, training, and sustained commitment.
+      </p>
+
+      <p class="mb-10">
+        Other emerging requirements around the country include fentanyl and opioid awareness education in health classes (California, effective 2026-27), computer science coursework (various states with different requirements), and career exploration activities. Some states now require students to develop "High School and Beyond" plans that outline post-graduation goals and the coursework needed to achieve them.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">State-by-State Snapshot: Selected Major States</h2>
+
+      <h3 class="text-xl font-bold text-gray-900 mt-8 mb-4">Texas</h3>
+
+      <p class="mb-6">
+        Texas operates under the Foundation High School Program, which requires a minimum of 22 credits for graduation. However, the state strongly encourages—and in practice, expects—students to earn endorsements that raise the total to 26 credits. Five endorsement pathways are available: STEM, Business and Industry, Public Services, Arts and Humanities, and Multidisciplinary Studies. The STEM endorsement uniquely requires Algebra II, Chemistry, and Physics. Students pursuing the Distinguished Level of Achievement—required for automatic admission to Texas public universities under the Top 10% rule—must complete 26 credits including Algebra II and four credits each in math and science. Texas also requires passing five End-of-Course exams and, beginning with the class of 2025, FAFSA completion (with waiver options).
+      </p>
+
+      <h3 class="text-xl font-bold text-gray-900 mt-8 mb-4">California</h3>
+
+      <p class="mb-6">
+        California sets relatively low state minimums—13 courses including three years of English, two of math, two of science, three of social studies, and one each of arts/foreign language/CTE, PE, and beginning in 2030-31, personal finance. However, local school districts typically require 22-26 courses. For students aiming at University of California or California State University campuses, the A-G requirements specify 15 year-long courses in a particular distribution, exceeding state minimums significantly. New requirements phasing in include ethnic studies (class of 2030) and personal finance (class of 2030-31). California does not require exit exams.
+      </p>
+
+      <h3 class="text-xl font-bold text-gray-900 mt-8 mb-4">Florida</h3>
+
+      <p class="mb-6">
+        Florida requires 24 credits for graduation, including four each in English and math, three each in science and social studies, and one credit of financial literacy (for students entering ninth grade in 2023-24 and later). Students must maintain a 2.0 GPA and pass the Grade 10 FAST ELA assessment and Algebra 1 EOC at Level 3 or higher. Multiple diploma pathways include the standard 24-credit program, an accelerated 18-credit ACCEL option, and IB/AICE curricula. Florida offers Scholar and Merit designations for students completing additional rigorous coursework and industry certifications.
+      </p>
+
+      <h3 class="text-xl font-bold text-gray-900 mt-8 mb-4">New York</h3>
+
+      <p class="mb-6">
+        New York currently requires 44 credits (units of study) for all diploma types. For a Regents diploma, students must pass five Regents exams—one each in English, math, science, and social studies, plus one "pathway" option. An Advanced Designation requires nine Regents exams. However, beginning with the 2027-28 school year, passing Regents exams will no longer be mandatory for graduation. The state's new "Portrait of a Graduate" framework will instead assess proficiency across seven areas including critical thinking, effective communication, and cultural competence, with multiple pathways for demonstrating mastery.
+      </p>
+
+      <h3 class="text-xl font-bold text-gray-900 mt-8 mb-4">North Carolina</h3>
+
+      <p class="mb-10">
+        North Carolina's Future-Ready Course of Study requires 22 credits: four in English, four in math (including NC Math 1, 2, and 3), three in science, four in social studies, one in health/PE, and six electives with specific requirements for world language, arts, and career-technical education. Local districts may add requirements. The state does not require exit exams but does administer end-of-course assessments that factor into course grades.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">When Local Districts Add Requirements</h2>
+
+      <p class="mb-6">
+        State graduation requirements establish a floor, not a ceiling. In most states, local school districts have authority to impose additional requirements beyond state minimums. This creates situations where students in the same state may face meaningfully different graduation paths depending on their district.
+      </p>
+
+      <p class="mb-6">
+        Common district additions include community service hours (frequently 40-100 hours), senior capstone projects or portfolios, additional coursework in specific subjects, minimum GPA requirements beyond state mandates, and requirements to take (though not necessarily pass) the ACT or SAT. Some districts require specific courses—like a health class addressing substance abuse—that the state doesn't mandate.
+      </p>
+
+      <p class="mb-10">
+        For parents, this means that checking state requirements isn't sufficient. Your student's actual graduation path depends on your specific school district's policies, which may change as board priorities shift. School counselors are the essential resource for understanding both state and local requirements and for ensuring your student stays on track.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">How Graduation Requirements Affect College Admissions</h2>
+
+      <p class="mb-6">
+        A critical—and often misunderstood—distinction: meeting high school graduation requirements is not the same as meeting college admissions requirements. Research from the Center for American Progress found "significant misalignment" between states' high school diploma standards and the coursework required for admission to their own public university systems.
+      </p>
+
+      <p class="mb-6">
+        Most selective colleges expect four years of English, four years of mathematics (through at least Algebra II and preferably pre-calculus or higher), three to four years of laboratory science, three to four years of social studies/history, and two to four years of the same foreign language. Many state graduation requirements fall short of these expectations—particularly in foreign language, higher-level math, and laboratory science.
+      </p>
+
+      <p class="mb-6">
+        The National Association for College Admission Counseling advises students to take the most rigorous courses available, even beyond graduation requirements. Admissions officers look for students who challenge themselves academically, and a senior year with light coursework after meeting graduation requirements can signal lack of ambition—regardless of whether the student technically qualified for a diploma.
+      </p>
+
+      <p class="mb-10">
+        Parents should note that this mismatch disproportionately affects students without access to strong counseling. Schools with one counselor for every 491 students (the national average) or higher ratios struggle to help each student navigate the gap between graduation requirements and college expectations. Proactive planning and early conversations with counselors can help bridge this gap.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">What Parents Should Verify with School Counselors</h2>
+
+      <p class="mb-6">
+        Given the complexity of graduation requirements, parents should schedule regular check-ins with their student's school counselor—ideally at least once per year starting in ninth grade. Key questions to address include:
+      </p>
+
+      <ul class="list-disc pl-6 mb-6 space-y-2">
+        <li>What specific credits (and courses) does my student need to graduate from this district?</li>
+        <li>Is my student on track, and are there any courses required in specific years that can't be made up later?</li>
+        <li>What assessments or exams must my student pass, and what happens if they don't pass on the first attempt?</li>
+        <li>What local requirements (community service, senior project, etc.) apply beyond state mandates?</li>
+        <li>If my student is college-bound, how do graduation requirements compare to admissions requirements for target schools?</li>
+        <li>Are there endorsement, pathway, or honors diploma options my student should consider?</li>
+        <li>What new requirements are phasing in that might affect my student's class year?</li>
+      </ul>
+
+      <p class="mb-10">
+        Parents of students with disabilities should additionally verify how graduation requirements apply to students on Individualized Education Programs (IEPs) and whether alternative diploma options or modified requirements exist.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Looking Ahead: The Evolving Diploma</h2>
+
+      <p class="mb-6">
+        The high school diploma is not a static credential. It evolves as society's expectations for young adults change and as states respond to evidence about what prepares students for success. Several trends suggest where graduation requirements are headed.
+      </p>
+
+      <p class="mb-6">
+        First, expect continued expansion of financial literacy requirements. With 30 states now requiring personal finance courses, remaining states are likely to follow as public demand and research evidence mount. The question is less whether than when.
+      </p>
+
+      <p class="mb-6">
+        Second, exit exams will likely continue their decline. The pattern of states moving away from high-stakes standardized tests as graduation gatekeepers seems durable. New York's shift to a "Portrait of a Graduate" model may inspire other states seeking alternatives that measure broader competencies.
+      </p>
+
+      <p class="mb-6">
+        Third, career and technical education pathways are gaining prominence. States increasingly recognize that not all students are college-bound and that high-quality CTE programs can lead to well-paying careers. Expect more endorsement and pathway systems that allow students to specialize while still earning a rigorous diploma.
+      </p>
+
+      <p class="mb-6">
+        Fourth, requirements related to civic literacy, digital citizenship, and social-emotional competencies may expand. California's ethnic studies mandate, while contentious, represents an effort to ensure students graduate with cultural competence—a goal other states may pursue through different means.
+      </p>
+
+      <p class="mb-10">
+        For parents navigating this landscape, the key is staying informed and engaged. Graduation requirements that seemed settled when your student entered high school may change before they exit. Regular communication with counselors, attention to policy developments in your state, and awareness of how graduation requirements connect to your student's post-graduation goals will help ensure they're truly prepared—not just for a diploma, but for what comes next.
+      </p>
+
+      <!-- Sources -->
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
+
+      <ul class="text-sm text-gray-600 space-y-2 mb-10">
+        <li>Education Commission of the States. (2025). <em>50-State Comparison: High School Graduation Requirements.</em></li>
+        <li>National Center for Fair and Open Testing (FairTest). (2025). <em>Summary of State Graduation Requirements.</em></li>
+        <li>Next Gen Personal Finance. (2025). <em>Financial Education State Requirements Tracker.</em></li>
+        <li>National Endowment for Financial Education. (2025). <em>2025 Legislative Review of K-12 Financial Education Requirements.</em></li>
+        <li>National College Attainment Network. (2025). <em>Universal FAFSA Completion with Supports.</em></li>
+        <li>Hoover Institution. (2024). <em>State Civics Requirements in 2024.</em></li>
+        <li>Texas Education Agency. (2025). <em>State Graduation Requirements and 2025 Graduation Toolkit.</em></li>
+        <li>California Department of Education. (2025). <em>State Minimum High School Graduation Requirements.</em></li>
+        <li>New York State Education Department. (2025). <em>Graduation Requirements and NY Inspires Implementation Plan.</em></li>
+        <li>Florida Department of Education. (2025). <em>Graduation Requirements.</em></li>
+        <li>Center for American Progress. (2018). <em>Are High School Diplomas Really a Ticket to College and Work?</em></li>
+        <li>National Association for College Admission Counseling. (2023). <em>High School Classes Required for College Admission.</em></li>
+        <li>Stateline/Pew Charitable Trusts. (2024). <em>High School Exit Exams Dwindle to About Half a Dozen States.</em></li>
+        <li>Education Week. (2024). <em>A Few Years Ago, 8 States Required Personal Finance Education. Now It's Up to Half.</em></li>
+        <li>UCLA Chicano Studies Research Center/Stanford University. (2025). <em>Advancing Ethnic Studies in California High Schools: A Survey of Teacher Preparation Programs.</em></li>
+      </ul>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-16 pt-8 border-t border-gray-200">
+      <p class="text-sm text-gray-500 italic">
+        This article is provided by TruSchools as an educational resource for families navigating high school graduation requirements.
+      </p>
+      <div class="mt-6">
+        <a href="/high-schools" class="text-brand-blue hover:underline font-medium">
+          Browse High Schools by State &rarr;
+        </a>
+      </div>
+    </footer>
+  </article>
+</Layout>

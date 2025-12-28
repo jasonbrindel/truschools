@@ -1,0 +1,231 @@
+---
+interface Props {
+  /** Pre-select specific categories based on page context */
+  preselected?: string[];
+}
+
+const { preselected = [] } = Astro.props;
+
+const categories = [
+  // K-12
+  { id: 'preschool', label: 'Preschool' },
+  { id: 'elementary', label: 'K-5 Elementary' },
+  { id: 'middle', label: 'Middle School' },
+  { id: 'high', label: 'High School' },
+  // School Choice
+  { id: 'charter', label: 'Charter Schools' },
+  { id: 'magnet', label: 'Magnet Schools' },
+  { id: 'private', label: 'Private Schools' },
+  // Higher Ed
+  { id: 'college', label: 'College' },
+  { id: 'grad-school', label: 'Grad School' },
+  { id: 'financial-aid', label: 'Financial Aid' },
+  // Vocational
+  { id: 'trade', label: 'Trade Schools' },
+  { id: 'healthcare', label: 'Healthcare' },
+  { id: 'technology', label: 'Tech Schools' },
+  { id: 'culinary', label: 'Culinary' },
+  { id: 'beauty', label: 'Beauty Schools' },
+];
+---
+
+<div class="newsletter-signup bg-[#EAFBEA] rounded-box p-4 mb-5">
+  <!-- Form State -->
+  <div class="newsletter-form">
+    <h3 class="text-gray-800 text-xl mb-2 font-normal">Newsletter Signup</h3>
+    <p class="text-gray-600 fs-14 mb-4">
+      Signup to receive periodic tips, ideas, articles and news related to education.
+    </p>
+
+    <!-- Category Checkboxes - 2 column layout -->
+    <div class="grid grid-cols-2 gap-x-2 gap-y-1 mb-3">
+      {categories.map((cat) => (
+        <label class="flex items-center gap-2 cursor-pointer text-gray-700 fs-14 hover:text-gray-900">
+          <input
+            type="checkbox"
+            name="categories"
+            value={cat.id}
+            checked={preselected.includes(cat.id)}
+            class="w-4 h-4 rounded border-gray-300 text-brand-blue focus:ring-brand-blue cursor-pointer"
+          />
+          <span>{cat.label}</span>
+        </label>
+      ))}
+    </div>
+
+    <!-- Select All -->
+    <label class="flex items-center gap-2 cursor-pointer text-gray-700 fs-14 hover:text-gray-900 mb-4 pb-3 border-b border-gray-300">
+      <input
+        type="checkbox"
+        id="newsletter-select-all"
+        class="w-4 h-4 rounded border-gray-300 text-brand-blue focus:ring-brand-blue cursor-pointer"
+      />
+      <span class="font-medium">All Newsletters</span>
+    </label>
+
+    <!-- Email Input -->
+    <div class="flex gap-2 mb-3">
+      <input
+        type="email"
+        id="newsletter-email"
+        placeholder="Your email address"
+        class="input flex-1 px-3 py-2"
+        required
+      />
+      <button
+        type="button"
+        class="newsletter-submit-btn btn-blue px-4 py-2 whitespace-nowrap"
+      >
+        Submit
+      </button>
+    </div>
+
+    <!-- Error message -->
+    <p class="newsletter-error hidden text-red fs-13 mb-0"></p>
+
+  </div>
+
+  <!-- Thank You State -->
+  <div class="newsletter-thanks hidden">
+    <div class="text-center py-4">
+      <div class="text-brand-green text-4xl mb-3">✓</div>
+      <h3 class="text-gray-800 text-xl mb-2 font-normal">Thank You!</h3>
+      <p class="text-gray-600 fs-14 mb-0">
+        You've been subscribed to our newsletter. Watch your inbox for education tips and updates!
+      </p>
+    </div>
+  </div>
+</div>
+
+<script>
+  function initNewsletterSignup() {
+    const containers = document.querySelectorAll('.newsletter-signup');
+
+    containers.forEach(container => {
+      const form = container.querySelector('.newsletter-form') as HTMLElement;
+      const thanks = container.querySelector('.newsletter-thanks') as HTMLElement;
+      const emailInput = container.querySelector('#newsletter-email') as HTMLInputElement;
+      const submitBtn = container.querySelector('.newsletter-submit-btn') as HTMLButtonElement;
+      const errorMsg = container.querySelector('.newsletter-error') as HTMLElement;
+      const selectAllCheckbox = container.querySelector('#newsletter-select-all') as HTMLInputElement;
+      const categoryCheckboxes = container.querySelectorAll('input[name="categories"]') as NodeListOf<HTMLInputElement>;
+
+      // Email validation regex
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      // Select All functionality
+      selectAllCheckbox?.addEventListener('change', () => {
+        categoryCheckboxes.forEach(cb => {
+          cb.checked = selectAllCheckbox.checked;
+        });
+      });
+
+      // Update Select All when individual checkboxes change
+      categoryCheckboxes.forEach(cb => {
+        cb.addEventListener('change', () => {
+          const allChecked = Array.from(categoryCheckboxes).every(c => c.checked);
+          const someChecked = Array.from(categoryCheckboxes).some(c => c.checked);
+
+          if (selectAllCheckbox) {
+            selectAllCheckbox.checked = allChecked;
+            selectAllCheckbox.indeterminate = someChecked && !allChecked;
+          }
+        });
+      });
+
+      // Handle submit
+      submitBtn?.addEventListener('click', async () => {
+        // Clear previous errors
+        errorMsg.classList.add('hidden');
+        errorMsg.textContent = '';
+
+        // Get email
+        const email = emailInput.value.trim();
+
+        // Validate email
+        if (!email) {
+          errorMsg.textContent = 'Please enter your email address.';
+          errorMsg.classList.remove('hidden');
+          emailInput.focus();
+          return;
+        }
+
+        if (!emailRegex.test(email)) {
+          errorMsg.textContent = 'Please enter a valid email address.';
+          errorMsg.classList.remove('hidden');
+          emailInput.focus();
+          return;
+        }
+
+        // Get selected categories
+        const selectedCategories = Array.from(categoryCheckboxes)
+          .filter(cb => cb.checked)
+          .map(cb => cb.value);
+
+        if (selectedCategories.length === 0) {
+          errorMsg.textContent = 'Please select at least one newsletter category.';
+          errorMsg.classList.remove('hidden');
+          return;
+        }
+
+        // Disable button and show loading
+        submitBtn.disabled = true;
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = 'Submitting...';
+
+        try {
+          const response = await fetch('/api/newsletter/subscribe', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              email,
+              categories: selectedCategories
+            })
+          });
+
+          const data = await response.json();
+
+          if (data.success) {
+            // Show thank you state
+            form.classList.add('hidden');
+            thanks.classList.remove('hidden');
+
+            // Store in localStorage to remember signup
+            localStorage.setItem('truschools_newsletter_subscribed', 'true');
+          } else {
+            errorMsg.textContent = data.error || 'Something went wrong. Please try again.';
+            errorMsg.classList.remove('hidden');
+          }
+        } catch (error) {
+          console.error('Newsletter signup error:', error);
+          errorMsg.textContent = 'Something went wrong. Please try again.';
+          errorMsg.classList.remove('hidden');
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalText;
+        }
+      });
+
+      // Allow Enter key to submit
+      emailInput?.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          submitBtn?.click();
+        }
+      });
+
+      // Check if already subscribed
+      if (localStorage.getItem('truschools_newsletter_subscribed') === 'true') {
+        form.classList.add('hidden');
+        thanks.classList.remove('hidden');
+      }
+    });
+  }
+
+  // Initialize on DOM ready
+  document.addEventListener('DOMContentLoaded', initNewsletterSignup);
+
+  // Also run immediately if DOM already loaded
+  if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    initNewsletterSignup();
+  }
+</script>
