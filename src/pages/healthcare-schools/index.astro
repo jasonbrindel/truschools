@@ -1,6 +1,7 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import QAPoll from '@/components/QAPoll.astro';
+import NewsletterSignup from '@/components/NewsletterSignup.astro';
 
 const db = Astro.locals.runtime.env.DB;
 
@@ -169,7 +170,7 @@ function getStateSlug(abbr: string): string {
           />
         </div>
 
-        <div class="box-rounded">
+        <div class="box-rounded mb-4">
           <h3 class="text-brand-blue mb-3">Related Programs</h3>
           <ul class="list-none m-0 p-0 space-y-2 fs-14">
             <li><a href="/beauty-schools" class="text-brand-blue hover:underline">Beauty Schools</a></li>
@@ -177,6 +178,9 @@ function getStateSlug(abbr: string): string {
             <li><a href="/vocational-schools" class="text-brand-blue hover:underline">All Vocational Schools</a></li>
           </ul>
         </div>
+
+        <!-- Newsletter -->
+        <NewsletterSignup preselected={['healthcare']} />
       </div>
     </div>
   </div>

@@ -2,6 +2,7 @@
 import Layout from '@/layouts/Layout.astro';
 import QAPoll from '@/components/QAPoll.astro';
 import NewsletterSignup from '@/components/NewsletterSignup.astro';
+import QuickJumpStates from '@/components/QuickJumpStates.astro';
 
 // Images for featured article and topic cards
 import featuredImage from '@/images/USED-high-school-graduation-requirements.jpg';
@@ -289,20 +290,7 @@ const featuredArticles = [
 
       <!-- Sidebar -->
       <div class="lg:w-1/3">
-        <div class="box-rounded bg-lt-blue mb-4">
-          <h3 class="text-brand-blue mb-3">Quick Jump</h3>
-          <select
-            class="input w-full"
-            onchange="if(this.value) window.location.href=this.value"
-          >
-            <option value="">-- Select a State --</option>
-            {states.map((state) => (
-              <option value={`/high-schools/${state.slug}`}>
-                {state.name} High Schools
-              </option>
-            ))}
-          </select>
-        </div>
+        <QuickJumpStates baseUrl="/high-schools" schoolType="high schools" />
 
         <!-- Ad Placeholder -->
         <div class="box-rounded mb-4">

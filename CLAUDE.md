@@ -46,13 +46,20 @@ When importing data or building pages:
 
 ## CRITICAL: Deployment
 
-**The brand name is "TruSchools" and the domain is "truschools.com" (without an 'e').**
+**READ THIS CAREFULLY:**
 
-There are TWO Cloudflare Pages projects:
-- **truschools-preview** - For staging/testing (truschools-preview.pages.dev)
-- **truschools** - For production (truschools.com)
+- **Current LIVE site:** https://trueschools.com (with an 'e') - This is the OLD domain, still in use
+- **Future LIVE site:** https://truschools.com (without an 'e') - NOT YET ACTIVE
+- **Preview/staging site:** https://truschools-preview.pages.dev - ALWAYS DEPLOY HERE FIRST
 
-**By default, ALWAYS deploy to preview.** Only deploy to production when the user explicitly says "deploy to production", "go live", or similar.
+**ALWAYS deploy to truschools-preview first. NEVER deploy directly to production unless explicitly asked.**
+
+```bash
+# ALWAYS USE THIS (preview):
+npm run build && CLOUDFLARE_ACCOUNT_ID=db05e74e773d91c84692ba064111c43c npx wrangler pages deploy dist --project-name=truschools-preview
+```
+
+Only deploy to production (truschools) when user explicitly says "deploy to production", "go live", or approves after reviewing preview.
 
 ## Articles
 
@@ -139,6 +146,8 @@ const articles = [
 ```bash
 npm run build && CLOUDFLARE_ACCOUNT_ID=db05e74e773d91c84692ba064111c43c npx wrangler pages deploy dist --project-name=truschools-preview
 ```
+
+**Preview URL:** https://truschools-preview.pages.dev
 
 ### Article Page Structure Reference
 

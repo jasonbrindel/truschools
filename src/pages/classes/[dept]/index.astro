@@ -38,11 +38,15 @@ const featuredResult = await db.prepare(`
 
 const featuredVideos = featuredResult.results;
 
-// Helper to extract YouTube video ID from old embed URL format
+// Helper to extract YouTube video ID from embed URL (supports both old and new formats)
 function getYoutubeId(embedUrl: string): string {
   if (!embedUrl) return '';
-  const match = embedUrl.match(/youtube\.com\/v\/([^?]+)/);
-  return match ? match[1] : '';
+  // New format: youtube.com/embed/VIDEO_ID
+  const embedMatch = embedUrl.match(/youtube\.com\/embed\/([^?]+)/);
+  if (embedMatch) return embedMatch[1];
+  // Old format: youtube.com/v/VIDEO_ID
+  const oldMatch = embedUrl.match(/youtube\.com\/v\/([^?]+)/);
+  return oldMatch ? oldMatch[1] : '';
 }
 ---
 
@@ -159,7 +163,7 @@ function getYoutubeId(embedUrl: string): string {
           </ul>
         </div>
 
-        <NewsletterSignup />
+        <NewsletterSignup preselected={['college']} />
       </div>
     </div>
   </div>

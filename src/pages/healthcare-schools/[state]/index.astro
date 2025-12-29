@@ -1,5 +1,6 @@
 ---
 import Layout from '@/layouts/Layout.astro';
+import NewsletterSignup from '@/components/NewsletterSignup.astro';
 
 const { state } = Astro.params;
 const db = Astro.locals.runtime.env.DB;
@@ -138,7 +139,7 @@ const cities = Object.keys(schoolsByCity).sort();
           <div class="bg-gray-100 h-[280px] flex items-center justify-center text-gray-400 fs-13">Advertisement</div>
         </div>
 
-        <div class="box-rounded">
+        <div class="box-rounded mb-4">
           <h3 class="text-brand-blue mb-3">Related Links</h3>
           <ul class="list-none m-0 p-0 space-y-2 fs-14">
             <li><a href="/healthcare-schools" class="text-brand-blue hover:underline">All Healthcare Schools</a></li>
@@ -147,6 +148,9 @@ const cities = Object.keys(schoolsByCity).sort();
             <li><a href="/vocational-schools" class="text-brand-blue hover:underline">All Vocational Schools</a></li>
           </ul>
         </div>
+
+        <!-- Newsletter -->
+        <NewsletterSignup preselected={['healthcare']} />
       </div>
     </div>
   </div>

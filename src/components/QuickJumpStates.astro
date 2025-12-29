@@ -1,0 +1,290 @@
+---
+interface Props {
+  baseUrl: string;
+  schoolType: string;
+}
+
+const { baseUrl, schoolType } = Astro.props;
+
+const states = [
+  { name: 'Alabama', slug: 'alabama', abbr: 'AL' },
+  { name: 'Alaska', slug: 'alaska', abbr: 'AK' },
+  { name: 'Arizona', slug: 'arizona', abbr: 'AZ' },
+  { name: 'Arkansas', slug: 'arkansas', abbr: 'AR' },
+  { name: 'California', slug: 'california', abbr: 'CA' },
+  { name: 'Colorado', slug: 'colorado', abbr: 'CO' },
+  { name: 'Connecticut', slug: 'connecticut', abbr: 'CT' },
+  { name: 'Delaware', slug: 'delaware', abbr: 'DE' },
+  { name: 'District of Columbia', slug: 'district-of-columbia', abbr: 'DC' },
+  { name: 'Florida', slug: 'florida', abbr: 'FL' },
+  { name: 'Georgia', slug: 'georgia', abbr: 'GA' },
+  { name: 'Hawaii', slug: 'hawaii', abbr: 'HI' },
+  { name: 'Idaho', slug: 'idaho', abbr: 'ID' },
+  { name: 'Illinois', slug: 'illinois', abbr: 'IL' },
+  { name: 'Indiana', slug: 'indiana', abbr: 'IN' },
+  { name: 'Iowa', slug: 'iowa', abbr: 'IA' },
+  { name: 'Kansas', slug: 'kansas', abbr: 'KS' },
+  { name: 'Kentucky', slug: 'kentucky', abbr: 'KY' },
+  { name: 'Louisiana', slug: 'louisiana', abbr: 'LA' },
+  { name: 'Maine', slug: 'maine', abbr: 'ME' },
+  { name: 'Maryland', slug: 'maryland', abbr: 'MD' },
+  { name: 'Massachusetts', slug: 'massachusetts', abbr: 'MA' },
+  { name: 'Michigan', slug: 'michigan', abbr: 'MI' },
+  { name: 'Minnesota', slug: 'minnesota', abbr: 'MN' },
+  { name: 'Mississippi', slug: 'mississippi', abbr: 'MS' },
+  { name: 'Missouri', slug: 'missouri', abbr: 'MO' },
+  { name: 'Montana', slug: 'montana', abbr: 'MT' },
+  { name: 'Nebraska', slug: 'nebraska', abbr: 'NE' },
+  { name: 'Nevada', slug: 'nevada', abbr: 'NV' },
+  { name: 'New Hampshire', slug: 'new-hampshire', abbr: 'NH' },
+  { name: 'New Jersey', slug: 'new-jersey', abbr: 'NJ' },
+  { name: 'New Mexico', slug: 'new-mexico', abbr: 'NM' },
+  { name: 'New York', slug: 'new-york', abbr: 'NY' },
+  { name: 'North Carolina', slug: 'north-carolina', abbr: 'NC' },
+  { name: 'North Dakota', slug: 'north-dakota', abbr: 'ND' },
+  { name: 'Ohio', slug: 'ohio', abbr: 'OH' },
+  { name: 'Oklahoma', slug: 'oklahoma', abbr: 'OK' },
+  { name: 'Oregon', slug: 'oregon', abbr: 'OR' },
+  { name: 'Pennsylvania', slug: 'pennsylvania', abbr: 'PA' },
+  { name: 'Puerto Rico', slug: 'puerto-rico', abbr: 'PR' },
+  { name: 'Rhode Island', slug: 'rhode-island', abbr: 'RI' },
+  { name: 'South Carolina', slug: 'south-carolina', abbr: 'SC' },
+  { name: 'South Dakota', slug: 'south-dakota', abbr: 'SD' },
+  { name: 'Tennessee', slug: 'tennessee', abbr: 'TN' },
+  { name: 'Texas', slug: 'texas', abbr: 'TX' },
+  { name: 'Utah', slug: 'utah', abbr: 'UT' },
+  { name: 'Vermont', slug: 'vermont', abbr: 'VT' },
+  { name: 'Virginia', slug: 'virginia', abbr: 'VA' },
+  { name: 'Washington', slug: 'washington', abbr: 'WA' },
+  { name: 'West Virginia', slug: 'west-virginia', abbr: 'WV' },
+  { name: 'Wisconsin', slug: 'wisconsin', abbr: 'WI' },
+  { name: 'Wyoming', slug: 'wyoming', abbr: 'WY' },
+];
+
+const uniqueId = `quick-jump-${Math.random().toString(36).substr(2, 9)}`;
+---
+
+<div class="quick-jump-container mb-4">
+  <h3 class="text-brand-blue mb-3 flex items-center gap-2">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+    </svg>
+    Quick Jump to State
+  </h3>
+
+  <div class="quick-jump-dropdown" id={uniqueId}>
+    <!-- Trigger Button -->
+    <button type="button" class="quick-jump-trigger" aria-haspopup="listbox" aria-expanded="false">
+      <span class="trigger-text">Select a state...</span>
+      <svg class="trigger-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+      </svg>
+    </button>
+
+    <!-- Dropdown Panel -->
+    <div class="quick-jump-panel hidden">
+      <!-- Search Input -->
+      <div class="panel-search">
+        <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        <input type="text" class="search-input" placeholder="Search states..." autocomplete="off" />
+      </div>
+
+      <!-- States List -->
+      <ul class="states-list" role="listbox">
+        {states.map((state) => (
+          <li>
+            <a
+              href={`${baseUrl}/${state.slug}`}
+              class="state-item"
+              role="option"
+              data-state-name={state.name.toLowerCase()}
+              data-state-abbr={state.abbr.toLowerCase()}
+            >
+              <span class="state-abbr">{state.abbr}</span>
+              <span class="state-name">{state.name}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+
+  <p class="text-xs text-gray-500 mt-3">
+    Browse {schoolType} in any of the 50 states
+  </p>
+</div>
+
+<style>
+  .quick-jump-container {
+    @apply p-5 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg border border-blue-100;
+  }
+
+  .quick-jump-dropdown {
+    @apply relative;
+  }
+
+  .quick-jump-trigger {
+    @apply w-full py-3 px-4 pr-10 text-base text-left bg-white border-2 border-gray-200 rounded-lg cursor-pointer transition-all duration-200;
+    @apply hover:border-brand-blue focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 focus:outline-none;
+    @apply flex items-center justify-between;
+  }
+
+  .trigger-text {
+    @apply text-gray-500;
+  }
+
+  .trigger-arrow {
+    @apply w-5 h-5 text-gray-400 transition-transform duration-200;
+  }
+
+  .quick-jump-dropdown.open .trigger-arrow {
+    @apply transform rotate-180;
+  }
+
+  .quick-jump-panel {
+    @apply absolute z-50 w-full mt-2 bg-white rounded-lg border border-gray-200 shadow-lg overflow-hidden;
+  }
+
+  .panel-search {
+    @apply relative border-b border-gray-100;
+  }
+
+  .search-icon {
+    @apply absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400;
+  }
+
+  .search-input {
+    @apply w-full py-3 pl-10 pr-4 text-sm border-0 focus:outline-none focus:ring-0;
+  }
+
+  .states-list {
+    @apply max-h-64 overflow-y-auto m-0 p-0 list-none;
+  }
+
+  .state-item {
+    @apply flex items-center gap-3 px-4 py-2.5 text-sm transition-colors duration-150 no-underline;
+    @apply hover:bg-blue-50 focus:bg-blue-50 focus:outline-none;
+  }
+
+  .state-abbr {
+    @apply inline-flex items-center justify-center w-8 h-8 text-xs font-bold text-brand-blue bg-blue-100 rounded-full;
+  }
+
+  .state-name {
+    @apply text-gray-700;
+  }
+
+  .state-item:hover .state-abbr {
+    @apply bg-brand-blue text-white;
+  }
+
+  .state-item.hidden {
+    @apply !hidden;
+  }
+
+  .no-results {
+    @apply px-4 py-6 text-center text-sm text-gray-500;
+  }
+</style>
+
+<script define:vars={{ uniqueId }}>
+  document.addEventListener('DOMContentLoaded', () => {
+    const dropdown = document.getElementById(uniqueId);
+    if (!dropdown) return;
+
+    const trigger = dropdown.querySelector('.quick-jump-trigger');
+    const panel = dropdown.querySelector('.quick-jump-panel');
+    const searchInput = dropdown.querySelector('.search-input');
+    const statesList = dropdown.querySelector('.states-list');
+    const stateItems = dropdown.querySelectorAll('.state-item');
+
+    let isOpen = false;
+
+    function openDropdown() {
+      isOpen = true;
+      dropdown.classList.add('open');
+      panel.classList.remove('hidden');
+      trigger.setAttribute('aria-expanded', 'true');
+      setTimeout(() => searchInput.focus(), 10);
+    }
+
+    function closeDropdown() {
+      isOpen = false;
+      dropdown.classList.remove('open');
+      panel.classList.add('hidden');
+      trigger.setAttribute('aria-expanded', 'false');
+      searchInput.value = '';
+      filterStates('');
+    }
+
+    function toggleDropdown() {
+      if (isOpen) {
+        closeDropdown();
+      } else {
+        openDropdown();
+      }
+    }
+
+    function filterStates(query) {
+      const normalizedQuery = query.toLowerCase().trim();
+      let hasResults = false;
+
+      stateItems.forEach((item) => {
+        const stateName = item.dataset.stateName;
+        const stateAbbr = item.dataset.stateAbbr;
+        const matches = stateName.includes(normalizedQuery) || stateAbbr.includes(normalizedQuery);
+
+        item.parentElement.classList.toggle('hidden', !matches);
+        if (matches) hasResults = true;
+      });
+
+      // Show/hide no results message
+      let noResults = dropdown.querySelector('.no-results');
+      if (!hasResults) {
+        if (!noResults) {
+          noResults = document.createElement('div');
+          noResults.className = 'no-results';
+          noResults.textContent = 'No states found';
+          statesList.appendChild(noResults);
+        }
+        noResults.classList.remove('hidden');
+      } else if (noResults) {
+        noResults.classList.add('hidden');
+      }
+    }
+
+    // Event listeners
+    trigger.addEventListener('click', toggleDropdown);
+
+    searchInput.addEventListener('input', (e) => {
+      filterStates(e.target.value);
+    });
+
+    // Close on click outside
+    document.addEventListener('click', (e) => {
+      if (!dropdown.contains(e.target) && isOpen) {
+        closeDropdown();
+      }
+    });
+
+    // Close on escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && isOpen) {
+        closeDropdown();
+        trigger.focus();
+      }
+    });
+
+    // Keyboard navigation
+    searchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        const firstVisible = dropdown.querySelector('.state-item:not(.hidden)');
+        if (firstVisible) firstVisible.focus();
+      }
+    });
+  });
+</script>

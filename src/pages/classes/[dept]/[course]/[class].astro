@@ -31,11 +31,15 @@ const currentIndex = allVideos.findIndex(v => v.class_page === classSlug);
 const prevVideo = currentIndex > 0 ? allVideos[currentIndex - 1] : null;
 const nextVideo = currentIndex < allVideos.length - 1 ? allVideos[currentIndex + 1] : null;
 
-// Helper to extract YouTube video ID from old embed URL format
+// Helper to extract YouTube video ID from embed URL (supports both old and new formats)
 function getYoutubeId(embedUrl: string): string {
   if (!embedUrl) return '';
-  const match = embedUrl.match(/youtube\.com\/v\/([^?]+)/);
-  return match ? match[1] : '';
+  // New format: youtube.com/embed/VIDEO_ID
+  const embedMatch = embedUrl.match(/youtube\.com\/embed\/([^?]+)/);
+  if (embedMatch) return embedMatch[1];
+  // Old format: youtube.com/v/VIDEO_ID
+  const oldMatch = embedUrl.match(/youtube\.com\/v\/([^?]+)/);
+  return oldMatch ? oldMatch[1] : '';
 }
 
 const youtubeId = getYoutubeId(video.embed_url);
@@ -149,18 +153,57 @@ const youtubeId = getYoutubeId(video.embed_url);
 
       <!-- Sidebar -->
       <div class="lg:w-1/3">
-        <div class="box-rounded bg-lt-blue mb-4">
-          <h3 class="text-brand-blue mb-3">Jump to Lesson</h3>
-          <select
-            class="input w-full"
-            onchange="if(this.value) window.location.href=this.value"
-          >
-            {allVideos.map((v, index) => (
-              <option value={`/classes/${dept}/${course}/${v.class_page}`} selected={v.class_page === classSlug}>
-                {index + 1}. {v.class}
-              </option>
-            ))}
-          </select>
+        <!-- Jump to Lesson -->
+        <div class="jump-to-lesson-container mb-4">
+          <h3 class="text-brand-blue mb-3 flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Jump to Lesson
+          </h3>
+
+          <div class="jump-dropdown" id="lesson-jump">
+            <!-- Trigger Button -->
+            <button type="button" class="jump-trigger" aria-haspopup="listbox" aria-expanded="false">
+              <span class="trigger-text">Lesson {currentIndex + 1}: {video.class}</span>
+              <svg class="trigger-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+
+            <!-- Dropdown Panel -->
+            <div class="jump-panel hidden">
+              <!-- Search Input -->
+              <div class="panel-search">
+                <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <input type="text" class="search-input" placeholder="Search lessons..." autocomplete="off" />
+              </div>
+
+              <!-- Lessons List -->
+              <ul class="lessons-list" role="listbox">
+                {allVideos.map((v, index) => (
+                  <li>
+                    <a
+                      href={`/classes/${dept}/${course}/${v.class_page}`}
+                      class={`lesson-item ${v.class_page === classSlug ? 'current' : ''}`}
+                      role="option"
+                      data-lesson-name={v.class.toLowerCase()}
+                    >
+                      <span class="lesson-num">{index + 1}</span>
+                      <span class="lesson-name">{v.class}</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          <p class="text-xs text-gray-500 mt-3">
+            {allVideos.length} lessons in this course
+          </p>
         </div>
 
         <!-- Ad Placeholder -->
@@ -202,8 +245,191 @@ const youtubeId = getYoutubeId(video.embed_url);
           </ul>
         </div>
 
-        <NewsletterSignup />
+        <NewsletterSignup preselected={['college']} />
       </div>
     </div>
   </div>
 </Layout>
+
+<style>
+  .jump-to-lesson-container {
+    @apply p-5 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg border border-blue-100;
+  }
+
+  .jump-dropdown {
+    @apply relative;
+  }
+
+  .jump-trigger {
+    @apply w-full py-3 px-4 pr-10 text-sm text-left bg-white border-2 border-gray-200 rounded-lg cursor-pointer transition-all duration-200;
+    @apply hover:border-brand-blue focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 focus:outline-none;
+    @apply flex items-center justify-between;
+  }
+
+  .trigger-text {
+    @apply text-gray-700 truncate;
+  }
+
+  .trigger-arrow {
+    @apply w-5 h-5 text-gray-400 transition-transform duration-200 flex-shrink-0;
+  }
+
+  .jump-dropdown.open .trigger-arrow {
+    @apply transform rotate-180;
+  }
+
+  .jump-panel {
+    @apply absolute z-50 w-full mt-2 bg-white rounded-lg border border-gray-200 shadow-lg overflow-hidden;
+  }
+
+  .panel-search {
+    @apply relative border-b border-gray-100;
+  }
+
+  .search-icon {
+    @apply absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400;
+  }
+
+  .search-input {
+    @apply w-full py-3 pl-10 pr-4 text-sm border-0 focus:outline-none focus:ring-0;
+  }
+
+  .lessons-list {
+    @apply max-h-64 overflow-y-auto m-0 p-0 list-none;
+  }
+
+  .lesson-item {
+    @apply flex items-center gap-3 px-4 py-2.5 text-sm transition-colors duration-150 no-underline;
+    @apply hover:bg-blue-50 focus:bg-blue-50 focus:outline-none;
+  }
+
+  .lesson-item.current {
+    @apply bg-brand-blue text-white;
+  }
+
+  .lesson-num {
+    @apply inline-flex items-center justify-center w-7 h-7 text-xs font-bold text-brand-blue bg-blue-100 rounded-full flex-shrink-0;
+  }
+
+  .lesson-item.current .lesson-num {
+    @apply bg-white text-brand-blue;
+  }
+
+  .lesson-name {
+    @apply text-gray-700;
+  }
+
+  .lesson-item.current .lesson-name {
+    @apply text-white;
+  }
+
+  .lesson-item:hover:not(.current) .lesson-num {
+    @apply bg-brand-blue text-white;
+  }
+
+  .lesson-item.filtered-out {
+    @apply !hidden;
+  }
+
+  .no-results {
+    @apply px-4 py-6 text-center text-sm text-gray-500;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const dropdown = document.getElementById('lesson-jump');
+    if (!dropdown) return;
+
+    const trigger = dropdown.querySelector('.jump-trigger');
+    const panel = dropdown.querySelector('.jump-panel');
+    const searchInput = dropdown.querySelector('.search-input');
+    const lessonsList = dropdown.querySelector('.lessons-list');
+    const lessonItems = dropdown.querySelectorAll('.lesson-item');
+
+    let isOpen = false;
+
+    function openDropdown() {
+      isOpen = true;
+      dropdown.classList.add('open');
+      panel.classList.remove('hidden');
+      trigger.setAttribute('aria-expanded', 'true');
+      setTimeout(() => searchInput.focus(), 10);
+    }
+
+    function closeDropdown() {
+      isOpen = false;
+      dropdown.classList.remove('open');
+      panel.classList.add('hidden');
+      trigger.setAttribute('aria-expanded', 'false');
+      searchInput.value = '';
+      filterLessons('');
+    }
+
+    function toggleDropdown() {
+      if (isOpen) {
+        closeDropdown();
+      } else {
+        openDropdown();
+      }
+    }
+
+    function filterLessons(query) {
+      const normalizedQuery = query.toLowerCase().trim();
+      let hasResults = false;
+
+      lessonItems.forEach((item) => {
+        const lessonName = item.dataset.lessonName;
+        const matches = lessonName.includes(normalizedQuery);
+
+        item.parentElement.classList.toggle('hidden', !matches);
+        if (matches) hasResults = true;
+      });
+
+      // Show/hide no results message
+      let noResults = dropdown.querySelector('.no-results');
+      if (!hasResults) {
+        if (!noResults) {
+          noResults = document.createElement('div');
+          noResults.className = 'no-results';
+          noResults.textContent = 'No lessons found';
+          lessonsList.appendChild(noResults);
+        }
+        noResults.classList.remove('hidden');
+      } else if (noResults) {
+        noResults.classList.add('hidden');
+      }
+    }
+
+    // Event listeners
+    trigger.addEventListener('click', toggleDropdown);
+
+    searchInput.addEventListener('input', (e) => {
+      filterLessons(e.target.value);
+    });
+
+    // Close on click outside
+    document.addEventListener('click', (e) => {
+      if (!dropdown.contains(e.target) && isOpen) {
+        closeDropdown();
+      }
+    });
+
+    // Close on escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && isOpen) {
+        closeDropdown();
+        trigger.focus();
+      }
+    });
+
+    // Keyboard navigation
+    searchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        const firstVisible = dropdown.querySelector('.lesson-item:not(.filtered-out)');
+        if (firstVisible) firstVisible.focus();
+      }
+    });
+  });
+</script>

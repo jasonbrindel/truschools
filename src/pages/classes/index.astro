@@ -1,6 +1,7 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import NewsletterSignup from '@/components/NewsletterSignup.astro';
+import khanLogo from '@/images/khan-academy-logo.png';
 
 interface Department {
   dept: string;
@@ -59,6 +60,19 @@ for (const course of coursesResult.results) {
   coursesByDept[course.dept_page].push(course);
 }
 
+// Get one representative video per department for thumbnails
+const deptVideosResult = await db.prepare(`
+  SELECT dept_page, embed_url
+  FROM class_videos
+  WHERE class_order = 1
+  GROUP BY dept_page
+`).all<{ dept_page: string; embed_url: string }>();
+
+const deptThumbnails: Record<string, string> = {};
+for (const video of deptVideosResult.results) {
+  deptThumbnails[video.dept_page] = video.embed_url;
+}
+
 // Get featured videos (first video from different departments)
 const featuredResult = await db.prepare(`
   SELECT class_id, dept, dept_page, course, course_page, class, class_page, class_tagline, embed_url, author, author_tagline
@@ -70,11 +84,15 @@ const featuredResult = await db.prepare(`
 
 const featuredVideos = featuredResult.results;
 
-// Helper to extract YouTube video ID from old embed URL format
+// Helper to extract YouTube video ID from embed URL (supports both old and new formats)
 function getYoutubeId(embedUrl: string): string {
   if (!embedUrl) return '';
-  const match = embedUrl.match(/youtube\.com\/v\/([^?]+)/);
-  return match ? match[1] : '';
+  // New format: youtube.com/embed/VIDEO_ID
+  const embedMatch = embedUrl.match(/youtube\.com\/embed\/([^?]+)/);
+  if (embedMatch) return embedMatch[1];
+  // Old format: youtube.com/v/VIDEO_ID
+  const oldMatch = embedUrl.match(/youtube\.com\/v\/([^?]+)/);
+  return oldMatch ? oldMatch[1] : '';
 }
 
 // Department descriptions
@@ -101,6 +119,24 @@ const deptDescriptions: Record<string, string> = {
 
     <h1 class="text-brand-green-text mb-2">Free Online Classes & Video Tutorials</h1>
     <p class="fs-14 text-gray-500 mb-5">A growing number of videos, exercises and lesson plans for self-paced learning.</p>
+
+    <!-- Khan Academy Acknowledgment -->
+    <div class="box-rounded bg-[#f7f8fa] border-l-4 border-[#14bf96] mb-5">
+      <div class="flex flex-col md:flex-row items-center gap-4">
+        <a href="https://www.khanacademy.org" target="_blank" rel="noopener" class="flex-shrink-0">
+          <img src={khanLogo.src} alt="Khan Academy" class="h-16 w-auto" />
+        </a>
+        <div class="text-center md:text-left">
+          <p class="text-gray-700 mb-2">
+            The majority of video content on this page is provided by <a href="https://www.khanacademy.org" target="_blank" rel="noopener" class="text-[#14bf96] font-bold hover:underline">Khan Academy</a>, a nonprofit organization with a mission to provide a free, world-class education for anyone, anywhere.
+          </p>
+          <p class="text-gray-500 fs-13 mb-0">
+            We are deeply grateful to Khan Academy for making these educational resources freely available to learners worldwide.
+            <a href="https://www.khanacademy.org" target="_blank" rel="noopener" class="text-[#14bf96] hover:underline ml-1">Visit Khan Academy &rarr;</a>
+          </p>
+        </div>
+      </div>
+    </div>
 
     <div class="flex flex-col lg:flex-row gap-5">
       <!-- Main Content -->
@@ -142,9 +178,13 @@ const deptDescriptions: Record<string, string> = {
           <div class="box-rounded mb-5">
             <div class="flex flex-col md:flex-row gap-4 mb-4">
               <div class="md:w-1/4">
-                <div class="bg-gray-200 aspect-video rounded flex items-center justify-center text-gray-400">
-                  {dept.dept}
-                </div>
+                <a href={`/classes/${dept.dept_page}`} class="block">
+                  <img
+                    src={`https://img.youtube.com/vi/${getYoutubeId(deptThumbnails[dept.dept_page] || '')}/mqdefault.jpg`}
+                    alt={dept.dept}
+                    class="w-full aspect-video object-cover rounded"
+                  />
+                </a>
               </div>
               <div class="md:w-3/4">
                 <h2 class="text-brand-blue text-xl mb-2">
@@ -231,7 +271,7 @@ const deptDescriptions: Record<string, string> = {
         </div>
 
         <!-- Newsletter Signup -->
-        <NewsletterSignup />
+        <NewsletterSignup preselected={['college']} />
       </div>
     </div>
   </div>

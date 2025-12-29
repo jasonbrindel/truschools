@@ -38,3 +38,8 @@
 /colleges/:state/ /colleges-universities/:state 301
 /colleges/:state/:college /colleges-universities/:state/:college 301
 /colleges/:state/:college/ /colleges-universities/:state/:college 301
+
+# Old SAT Prep Math course redirects (videos replaced with new Khan Academy content)
+/classes/sat-prep/math /classes/sat-prep 301
+/classes/sat-prep/math/ /classes/sat-prep 301
+/classes/sat-prep/math/* /classes/sat-prep 301
