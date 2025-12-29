@@ -1,0 +1,685 @@
+---
+import AdminNav from '@/components/AdminNav.astro';
+
+const title = "Article Likes - TruSchools";
+
+// Format UTC date to Eastern time
+function formatEastern(utcDate: string, includeTime = false): string {
+  const date = new Date(utcDate + 'Z');
+  return date.toLocaleString('en-US', {
+    timeZone: 'America/New_York',
+    month: 'numeric',
+    day: 'numeric',
+    year: 'numeric',
+    ...(includeTime && { hour: 'numeric', minute: '2-digit', hour12: true })
+  });
+}
+
+// Get database connection
+const db = (Astro.locals as any).runtime?.env?.DB;
+
+// Check authentication
+const cookies = Astro.request.headers.get('cookie') || '';
+const sessionMatch = cookies.match(/session=([^;]+)/);
+const sessionToken = sessionMatch ? sessionMatch[1] : null;
+
+let isAuthenticated = false;
+if (sessionToken && db) {
+  const session = await db.prepare(`
+    SELECT s.*, u.id as user_id
+    FROM sessions s
+    JOIN users u ON s.user_id = u.id
+    WHERE s.token = ? AND s.expires_at > datetime('now')
+  `).bind(sessionToken).first();
+  isAuthenticated = !!session;
+}
+
+// Redirect if not authenticated
+if (!isAuthenticated) {
+  return Astro.redirect('/login?redirect=/admin/article-likes');
+}
+
+// Get query params
+const url = new URL(Astro.request.url);
+const page = parseInt(url.searchParams.get('page') || '1');
+const sortBy = url.searchParams.get('sort') || 'likes';
+const limit = 50;
+const offset = (page - 1) * limit;
+
+// Fetch article ratings
+let articles: any[] = [];
+let total = 0;
+let stats = {
+  totalArticles: 0,
+  totalLikes: 0,
+  avgLikes: 0,
+  articlesWithLikes: 0,
+  likesToday: 0,
+  likesThisWeek: 0,
+};
+let recentVotes: any[] = [];
+
+if (db) {
+  // Check if tables exist first
+  let tablesExist = false;
+  try {
+    await db.prepare('SELECT 1 FROM article_ratings LIMIT 1').first();
+    tablesExist = true;
+  } catch (e) {
+    // Tables don't exist yet
+  }
+
+  if (tablesExist) {
+    // Get total count
+    const countResult = await db.prepare(`
+      SELECT COUNT(*) as count FROM article_ratings
+    `).first();
+    total = (countResult as any)?.count || 0;
+
+    // Get articles with sort
+    const orderClause = sortBy === 'recent'
+      ? 'ORDER BY updated_at DESC'
+      : sortBy === 'alphabetical'
+        ? 'ORDER BY slug ASC'
+        : 'ORDER BY helpful_count DESC';
+
+    const articlesResult = await db.prepare(`
+      SELECT * FROM article_ratings
+      ${orderClause}
+      LIMIT ? OFFSET ?
+    `).bind(limit, offset).all();
+    articles = (articlesResult as any)?.results || [];
+
+    // Get stats
+    const [totalArticlesCount, totalLikesSum, articlesWithLikesCount] = await Promise.all([
+      db.prepare('SELECT COUNT(*) as count FROM article_ratings').first(),
+      db.prepare('SELECT SUM(helpful_count) as total FROM article_ratings').first(),
+      db.prepare('SELECT COUNT(*) as count FROM article_ratings WHERE helpful_count > 0').first(),
+    ]);
+
+    stats.totalArticles = (totalArticlesCount as any)?.count || 0;
+    stats.totalLikes = (totalLikesSum as any)?.total || 0;
+    stats.articlesWithLikes = (articlesWithLikesCount as any)?.count || 0;
+    stats.avgLikes = stats.totalArticles > 0
+      ? Math.round((stats.totalLikes / stats.totalArticles) * 10) / 10
+      : 0;
+
+    // Get likes today and this week from vote records
+    try {
+      const [todayVotes, weekVotes] = await Promise.all([
+        db.prepare("SELECT COUNT(*) as count FROM article_rating_votes WHERE created_at >= date('now')").first(),
+        db.prepare("SELECT COUNT(*) as count FROM article_rating_votes WHERE created_at >= date('now', '-7 days')").first(),
+      ]);
+      stats.likesToday = (todayVotes as any)?.count || 0;
+      stats.likesThisWeek = (weekVotes as any)?.count || 0;
+    } catch (e) {
+      // Votes table might not exist
+    }
+
+    // Get recent votes
+    try {
+      const recentResult = await db.prepare(`
+        SELECT slug, created_at FROM article_rating_votes
+        ORDER BY created_at DESC
+        LIMIT 10
+      `).all();
+      recentVotes = (recentResult as any)?.results || [];
+    } catch (e) {
+      // Votes table might not exist
+    }
+  }
+}
+
+const totalPages = Math.ceil(total / limit);
+
+// Format slug to readable title
+function formatSlug(slug: string): string {
+  return slug
+    .split('-')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>{title}</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f8f9fa;
+      color: #1a1a1a;
+      line-height: 1.6;
+    }
+
+    .content-wrapper {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    h1 {
+      font-size: 1.75rem;
+      font-weight: 600;
+      margin: 0 0 8px 0;
+    }
+
+    .subtitle {
+      color: #666;
+      margin-bottom: 32px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .stat-card {
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 16px;
+    }
+
+    .stat-card.highlight {
+      background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+      border-color: #a7f3d0;
+    }
+
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #059669;
+    }
+
+    .stat-label {
+      font-size: 0.875rem;
+      color: #666;
+    }
+
+    .two-col-layout {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+
+    @media (max-width: 900px) {
+      .two-col-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .recent-section {
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 20px;
+      height: fit-content;
+    }
+
+    .recent-section h2 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin: 0 0 16px 0;
+    }
+
+    .recent-vote {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 10px 0;
+      border-bottom: 1px solid #f0f0f0;
+      gap: 12px;
+    }
+
+    .recent-vote:last-child {
+      border-bottom: none;
+    }
+
+    .recent-vote-article {
+      font-size: 0.875rem;
+      color: #374151;
+      word-break: break-word;
+    }
+
+    .recent-vote-time {
+      font-size: 0.75rem;
+      color: #9ca3af;
+      white-space: nowrap;
+    }
+
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .toolbar-info {
+      font-size: 0.875rem;
+      color: #666;
+    }
+
+    .toolbar-filters {
+      display: flex;
+      gap: 8px;
+    }
+
+    .filter-btn {
+      padding: 6px 12px;
+      font-size: 0.875rem;
+      border: 1px solid #d1d5db;
+      border-radius: 4px;
+      background: white;
+      color: #374151;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .filter-btn:hover {
+      background: #f9fafb;
+    }
+
+    .filter-btn.active {
+      background: #059669;
+      border-color: #059669;
+      color: white;
+    }
+
+    .table-container {
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th {
+      background: #f9fafb;
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    td {
+      padding: 12px 16px;
+      border-bottom: 1px solid #f0f0f0;
+      font-size: 0.875rem;
+    }
+
+    tr:hover {
+      background: #f9fafb;
+    }
+
+    .article-cell {
+      max-width: 400px;
+    }
+
+    .article-title {
+      font-weight: 500;
+      color: #1a1a1a;
+      margin-bottom: 4px;
+    }
+
+    .article-slug {
+      font-size: 0.75rem;
+      color: #9ca3af;
+      font-family: monospace;
+    }
+
+    .article-link {
+      color: #059669;
+      text-decoration: none;
+    }
+
+    .article-link:hover {
+      text-decoration: underline;
+    }
+
+    .likes-cell {
+      text-align: center;
+    }
+
+    .likes-count {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      background: #ecfdf5;
+      color: #059669;
+      border-radius: 16px;
+      font-weight: 600;
+      font-size: 0.875rem;
+    }
+
+    .likes-count.zero {
+      background: #f3f4f6;
+      color: #9ca3af;
+    }
+
+    .likes-icon {
+      width: 14px;
+      height: 14px;
+    }
+
+    .time-cell {
+      white-space: nowrap;
+      color: #6b7280;
+      font-size: 0.8125rem;
+    }
+
+    .empty-state {
+      background: #f9fafb;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 48px;
+      text-align: center;
+    }
+
+    .empty-state-title {
+      font-size: 1.125rem;
+      font-weight: 500;
+      color: #374151;
+      margin-bottom: 4px;
+    }
+
+    .empty-state-text {
+      color: #6b7280;
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      margin-top: 24px;
+    }
+
+    .pagination a, .pagination span {
+      padding: 8px 16px;
+      font-size: 0.875rem;
+    }
+
+    .pagination a {
+      background: white;
+      border: 1px solid #d1d5db;
+      border-radius: 4px;
+      color: #374151;
+      text-decoration: none;
+    }
+
+    .pagination a:hover {
+      background: #f9fafb;
+    }
+
+    .pagination span {
+      color: #6b7280;
+    }
+
+    .no-data-yet {
+      text-align: center;
+      padding: 24px;
+      color: #9ca3af;
+      font-size: 0.875rem;
+    }
+
+    .top-articles {
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 32px;
+    }
+
+    .top-articles h2 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin: 0 0 16px 0;
+    }
+
+    .top-article-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .top-article-item:last-child {
+      border-bottom: none;
+    }
+
+    .top-article-rank {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f3f4f6;
+      border-radius: 50%;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #6b7280;
+    }
+
+    .top-article-rank.gold {
+      background: #fef3c7;
+      color: #d97706;
+    }
+
+    .top-article-rank.silver {
+      background: #e5e7eb;
+      color: #4b5563;
+    }
+
+    .top-article-rank.bronze {
+      background: #fed7aa;
+      color: #c2410c;
+    }
+
+    .top-article-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .top-article-title {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #374151;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .top-article-likes {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #059669;
+    }
+  </style>
+</head>
+<body>
+  <AdminNav currentPage="article-likes" />
+
+  <div class="content-wrapper">
+    <h1>Article Likes</h1>
+    <p class="subtitle">Track which articles readers find most helpful.</p>
+
+    <div class="stats-grid">
+      <div class="stat-card highlight">
+        <div class="stat-value">{stats.totalLikes.toLocaleString()}</div>
+        <div class="stat-label">Total Likes</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">{stats.totalArticles}</div>
+        <div class="stat-label">Articles Rated</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">{stats.avgLikes}</div>
+        <div class="stat-label">Avg Likes/Article</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">{stats.likesToday}</div>
+        <div class="stat-label">Today</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">{stats.likesThisWeek}</div>
+        <div class="stat-label">This Week</div>
+      </div>
+    </div>
+
+    {articles.length > 0 && (
+      <div class="top-articles">
+        <h2>Top Performing Articles</h2>
+        {articles
+          .slice()
+          .sort((a, b) => b.helpful_count - a.helpful_count)
+          .slice(0, 5)
+          .map((article, index) => (
+            <div class="top-article-item">
+              <div class:list={[
+                "top-article-rank",
+                index === 0 && "gold",
+                index === 1 && "silver",
+                index === 2 && "bronze"
+              ]}>
+                {index + 1}
+              </div>
+              <div class="top-article-info">
+                <a href={`/education-articles/${article.slug}`} class="top-article-title article-link" target="_blank">
+                  {formatSlug(article.slug)}
+                </a>
+              </div>
+              <div class="top-article-likes">{article.helpful_count.toLocaleString()} likes</div>
+            </div>
+          ))}
+      </div>
+    )}
+
+    <div class="two-col-layout">
+      <div>
+        <div class="toolbar">
+          <div class="toolbar-info">
+            Showing {articles.length} of {total.toLocaleString()} articles
+            {totalPages > 1 && ` (Page ${page} of ${totalPages})`}
+          </div>
+          <div class="toolbar-filters">
+            <a
+              href="/admin/article-likes?sort=likes"
+              class:list={["filter-btn", { active: sortBy === 'likes' }]}
+            >
+              Most Likes
+            </a>
+            <a
+              href="/admin/article-likes?sort=recent"
+              class:list={["filter-btn", { active: sortBy === 'recent' }]}
+            >
+              Recently Updated
+            </a>
+            <a
+              href="/admin/article-likes?sort=alphabetical"
+              class:list={["filter-btn", { active: sortBy === 'alphabetical' }]}
+            >
+              A-Z
+            </a>
+          </div>
+        </div>
+
+        {articles.length === 0 ? (
+          <div class="empty-state">
+            <div class="empty-state-title">No article ratings yet</div>
+            <div class="empty-state-text">Article ratings will appear here once readers start voting.</div>
+          </div>
+        ) : (
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Article</th>
+                  <th style="text-align: center;">Likes</th>
+                  <th>Last Updated</th>
+                </tr>
+              </thead>
+              <tbody>
+                {articles.map((article: any) => (
+                  <tr>
+                    <td class="article-cell">
+                      <div class="article-title">
+                        <a href={`/education-articles/${article.slug}`} class="article-link" target="_blank">
+                          {formatSlug(article.slug)}
+                        </a>
+                      </div>
+                      <div class="article-slug">{article.slug}</div>
+                    </td>
+                    <td class="likes-cell">
+                      <span class:list={["likes-count", article.helpful_count === 0 && "zero"]}>
+                        <svg class="likes-icon" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path>
+                        </svg>
+                        {article.helpful_count.toLocaleString()}
+                      </span>
+                    </td>
+                    <td class="time-cell">
+                      {article.updated_at ? formatEastern(article.updated_at) : '-'}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        {totalPages > 1 && (
+          <div class="pagination">
+            {page > 1 && (
+              <a href={`/admin/article-likes?page=${page - 1}${sortBy !== 'likes' ? `&sort=${sortBy}` : ''}`}>Previous</a>
+            )}
+            <span>Page {page} of {totalPages}</span>
+            {page < totalPages && (
+              <a href={`/admin/article-likes?page=${page + 1}${sortBy !== 'likes' ? `&sort=${sortBy}` : ''}`}>Next</a>
+            )}
+          </div>
+        )}
+      </div>
+
+      <div class="recent-section">
+        <h2>Recent Votes</h2>
+        {recentVotes.length === 0 ? (
+          <div class="no-data-yet">No recent votes</div>
+        ) : (
+          recentVotes.map((vote: any) => (
+            <div class="recent-vote">
+              <div class="recent-vote-article">{formatSlug(vote.slug)}</div>
+              <div class="recent-vote-time">{formatEastern(vote.created_at, true)}</div>
+            </div>
+          ))
+        )}
+      </div>
+    </div>
+  </div>
+</body>
+</html>

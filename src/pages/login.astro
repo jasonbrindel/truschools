@@ -162,7 +162,7 @@ import Layout from '@/layouts/Layout.astro';
                   var data = await response.json();
 
                   if (data.success) {
-                    document.location = '/tools/article-prompt-builder';
+                    document.location = '/admin/content/prompt-builder';
                     return;
                   } else {
                     errorDiv.textContent = data.error || 'Invalid credentials. Please try again.';

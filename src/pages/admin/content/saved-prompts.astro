@@ -23,9 +23,9 @@ if (sessionToken && db) {
     if (session) {
       isAuthenticated = true;
 
-      // Load all saved prompts
+      // Load non-archived saved prompts
       const promptsResult = await db.prepare(
-        'SELECT * FROM saved_prompts ORDER BY created_at DESC'
+        'SELECT * FROM saved_prompts WHERE archived = 0 OR archived IS NULL ORDER BY created_at DESC'
       ).all();
       savedPrompts = promptsResult.results || [];
     }
@@ -40,10 +40,11 @@ function truncateTopic(topic: string, maxLength: number = 80): string {
   return topic.substring(0, maxLength).trim() + '...';
 }
 
-// Helper to format date
+// Helper to format date in Eastern time
 function formatDate(dateStr: string): string {
   const date = new Date(dateStr + 'Z');
   return date.toLocaleDateString('en-US', {
+    timeZone: 'America/New_York',
     month: 'short',
     day: 'numeric',
     year: 'numeric',
@@ -166,6 +167,7 @@ function formatDate(dateStr: string): string {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
             padding: 16px;
             border-bottom: 1px solid #e0e0e0;
             background: white;
@@ -194,6 +196,15 @@ function formatDate(dateStr: string): string {
             text-overflow: ellipsis;
         }
 
+        @media (max-width: 600px) {
+            .prompt-topic {
+                white-space: normal;
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+            }
+        }
+
         .prompt-meta {
             font-size: 0.8125rem;
             color: #666;
@@ -214,6 +225,37 @@ function formatDate(dateStr: string): string {
             gap: 8px;
             margin-left: 16px;
             flex-shrink: 0;
+        }
+
+        @media (max-width: 600px) {
+            .section {
+                padding: 0;
+                background: transparent;
+                box-shadow: none;
+            }
+
+            .prompt-list {
+                border: none;
+                border-radius: 0;
+            }
+
+            .prompt-item {
+                flex-direction: column;
+                align-items: flex-start;
+                border-radius: 0;
+                border-left: none;
+                border-right: none;
+            }
+
+            .prompt-info {
+                width: 100%;
+                margin-bottom: 12px;
+            }
+
+            .prompt-actions {
+                width: 100%;
+                margin-left: 0;
+            }
         }
 
         .empty-state {
@@ -253,6 +295,15 @@ function formatDate(dateStr: string): string {
 
         .btn-secondary:hover {
             background: #5a6268;
+        }
+
+        .btn-warning {
+            background: #ffc107;
+            color: #212529;
+        }
+
+        .btn-warning:hover {
+            background: #e0a800;
         }
 
         .btn-danger {
@@ -391,6 +442,22 @@ function formatDate(dateStr: string): string {
         .btn-close-modal:hover {
             background: #5a6268;
         }
+
+        .archive-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .archive-link a {
+            color: #6c757d;
+            text-decoration: none;
+            font-size: 0.875rem;
+        }
+
+        .archive-link a:hover {
+            color: #0066cc;
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -410,9 +477,9 @@ function formatDate(dateStr: string): string {
                 </div>
 
                 <div class="page-tabs">
-                    <a href="/tools/article-prompt-builder" class="page-tab">Prompt Builder</a>
-                    <a href="/tools/saved-prompts" class="page-tab active">Saved Prompts</a>
-                    <a href="/tools/prompts" class="page-tab">Manage Prompts</a>
+                    <a href="/admin/content/prompt-builder" class="page-tab">Prompt Builder</a>
+                    <a href="/admin/content/saved-prompts" class="page-tab active">Saved Prompts</a>
+                    <a href="/admin/content/prompts" class="page-tab">Manage Prompts</a>
                 </div>
 
                 <div id="message-container"></div>
@@ -421,7 +488,7 @@ function formatDate(dateStr: string): string {
                     {savedPrompts.length === 0 ? (
                         <div class="empty-state">
                             <p>No saved prompts yet.</p>
-                            <p>Generate prompts in the <a href="/tools/article-prompt-builder">Prompt Builder</a> and click "Save Prompt" to save them here.</p>
+                            <p>Generate prompts in the <a href="/admin/content/prompt-builder">Prompt Builder</a> and click "Save Prompt" to save them here.</p>
                         </div>
                     ) : (
                         <div class="prompt-list">
@@ -435,12 +502,17 @@ function formatDate(dateStr: string): string {
                                         </div>
                                     </div>
                                     <div class="prompt-actions">
+                                        <button class="btn-warning archive-btn" data-id={prompt.id} onclick="event.stopPropagation()">Archive</button>
                                         <button class="btn-danger delete-btn" data-id={prompt.id} onclick="event.stopPropagation()">Delete</button>
                                     </div>
                                 </div>
                             ))}
                         </div>
                     )}
+                </div>
+
+                <div class="archive-link">
+                    <a href="/admin/content/saved-prompts/archived">View Archived Prompts</a>
                 </div>
 
                 <!-- Modal for viewing prompt -->
@@ -496,6 +568,31 @@ function formatDate(dateStr: string): string {
                         });
                     });
 
+                    // Archive buttons
+                    document.querySelectorAll('.archive-btn').forEach(function(btn) {
+                        btn.addEventListener('click', async function(e) {
+                            e.stopPropagation();
+                            var id = this.getAttribute('data-id');
+                            try {
+                                var response = await fetch('/admin/api/saved-prompts/' + id, {
+                                    method: 'PATCH',
+                                    credentials: 'same-origin',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ archived: true })
+                                });
+                                var data = await response.json();
+                                if (data.success) {
+                                    showMessage('Prompt archived');
+                                    setTimeout(function() { window.location.reload(); }, 1000);
+                                } else {
+                                    showMessage(data.error || 'Failed to archive prompt', true);
+                                }
+                            } catch (err) {
+                                showMessage('An error occurred', true);
+                            }
+                        });
+                    });
+
                     // Delete buttons
                     document.querySelectorAll('.delete-btn').forEach(function(btn) {
                         btn.addEventListener('click', async function(e) {
@@ -503,7 +600,7 @@ function formatDate(dateStr: string): string {
                             var id = this.getAttribute('data-id');
                             if (confirm('Are you sure you want to delete this saved prompt?')) {
                                 try {
-                                    var response = await fetch('/api/saved-prompts/' + id, {
+                                    var response = await fetch('/admin/api/saved-prompts/' + id, {
                                         method: 'DELETE',
                                         credentials: 'same-origin'
                                     });

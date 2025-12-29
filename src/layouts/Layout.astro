@@ -409,5 +409,71 @@ const rightNav = [
       mobileMenu?.classList.toggle('hidden');
     });
   </script>
+
+  <!-- Analytics tracker -->
+  <script>
+    (function(){
+      if(navigator.webdriver)return;
+      if(!navigator.cookieEnabled)return;
+      if(!navigator.languages||!navigator.languages.length)return;
+      if(typeof screen.width==='number'&&screen.width===0)return;
+      if(window.callPhantom||window._phantom||window.__nightmare||window.Cypress)return;
+      if(localStorage.getItem('_notrack'))return;
+
+      var site='trueschools';
+      var endpoint='/api/analytics/collect';
+
+      // Session ID persists across pages in same tab session
+      var sid=sessionStorage.getItem('_as');
+      if(!sid){
+        sid=Math.random().toString(36).slice(2)+Date.now().toString(36);
+        sessionStorage.setItem('_as',sid);
+        sessionStorage.setItem('_ast',Date.now()); // session start time
+        sessionStorage.setItem('_apc','0'); // page count
+      }
+
+      // Increment page count for this session
+      var pageCount=parseInt(sessionStorage.getItem('_apc')||'0')+1;
+      sessionStorage.setItem('_apc',pageCount);
+
+      var sessionStart=parseInt(sessionStorage.getItem('_ast')||Date.now());
+      var pageStart=Date.now();
+      var engaged=false;
+      var sent=false;
+      var ref=document.referrer;
+
+      try{if(ref&&new URL(ref).hostname===location.hostname)ref=null;}catch(e){ref=null;}
+
+      function send(){
+        if(sent)return;
+        sent=true;
+        var now=Date.now();
+        navigator.sendBeacon(endpoint,JSON.stringify({
+          s:site,
+          i:sid,
+          p:location.pathname,
+          r:ref||null,
+          d:Math.round((now-pageStart)/1000),
+          sd:Math.round((now-sessionStart)/1000),
+          pc:pageCount
+        }));
+      }
+
+      function onEngage(){
+        if(engaged)return;
+        engaged=true;
+        document.addEventListener('visibilitychange',function(){
+          if(document.visibilityState==='hidden')send();
+        });
+        window.addEventListener('pagehide',send);
+      }
+
+      document.addEventListener('scroll',onEngage,{once:true,passive:true});
+      document.addEventListener('click',onEngage,{once:true});
+      document.addEventListener('keydown',onEngage,{once:true});
+      document.addEventListener('mousemove',onEngage,{once:true,passive:true});
+      document.addEventListener('touchstart',onEngage,{once:true,passive:true});
+    })();
+  </script>
 </body>
 </html>

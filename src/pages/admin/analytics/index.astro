@@ -1,0 +1,487 @@
+---
+import AdminNav from '@/components/AdminNav.astro';
+
+const title = "Site Analytics - TruSchools";
+
+// Get database connection
+const db = (Astro.locals as any).runtime?.env?.DB;
+
+// Check authentication
+const cookies = Astro.request.headers.get('cookie') || '';
+const sessionMatch = cookies.match(/session=([^;]+)/);
+const sessionToken = sessionMatch ? sessionMatch[1] : null;
+
+let isAuthenticated = false;
+if (sessionToken && db) {
+  const session = await db.prepare(`
+    SELECT s.*, u.id as user_id
+    FROM sessions s
+    JOIN users u ON s.user_id = u.id
+    WHERE s.token = ? AND s.expires_at > datetime('now')
+  `).bind(sessionToken).first();
+  isAuthenticated = !!session;
+}
+
+// Redirect if not authenticated
+if (!isAuthenticated) {
+  return Astro.redirect('/login?redirect=/admin/analytics');
+}
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>{title}</title>
+  <style is:global>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f8f9fa;
+      color: #333;
+      line-height: 1.5;
+    }
+
+    .analytics-wrapper {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 24px;
+    }
+
+    .analytics-header {
+      margin-bottom: 32px;
+    }
+
+    .analytics-header h1 {
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: #111;
+      margin-bottom: 4px;
+    }
+
+    .analytics-header p {
+      color: #6b7280;
+      font-size: 0.95rem;
+    }
+
+    .analytics-controls {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .analytics-controls select {
+      padding: 10px 14px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      background: #fff;
+      cursor: pointer;
+      min-width: 140px;
+    }
+
+    .analytics-controls select:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .analytics-controls button {
+      padding: 10px 20px;
+      background: #1f2937;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .analytics-controls button:hover {
+      background: #374151;
+    }
+
+    .analytics-notrack-btn {
+      background: #dc2626 !important;
+    }
+
+    .analytics-notrack-btn:hover {
+      background: #b91c1c !important;
+    }
+
+    .analytics-notrack-btn.tracking {
+      background: #16a34a !important;
+    }
+
+    .analytics-notrack-btn.tracking:hover {
+      background: #15803d !important;
+    }
+
+    .analytics-stats {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    @media (max-width: 1100px) {
+      .analytics-stats { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    @media (max-width: 700px) {
+      .analytics-stats { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 450px) {
+      .analytics-stats { grid-template-columns: 1fr; }
+    }
+
+    .analytics-stat {
+      background: #fff;
+      padding: 24px;
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+      transition: box-shadow 0.15s;
+    }
+
+    .analytics-stat:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .analytics-stat-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #111;
+      line-height: 1.2;
+    }
+
+    .analytics-stat-label {
+      color: #6b7280;
+      font-size: 0.85rem;
+      margin-top: 4px;
+      font-weight: 500;
+    }
+
+    .analytics-chart {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+      padding: 24px;
+      margin-bottom: 28px;
+    }
+
+    .analytics-chart h3 {
+      font-weight: 600;
+      font-size: 1rem;
+      color: #111;
+      margin-bottom: 20px;
+    }
+
+    .analytics-chart-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 6px;
+      height: 140px;
+      padding-bottom: 28px;
+    }
+
+    .analytics-bar {
+      flex: 1;
+      background: linear-gradient(180deg, #3b82f6 0%, #2563eb 100%);
+      border-radius: 4px 4px 0 0;
+      min-height: 4px;
+      position: relative;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+
+    .analytics-bar:hover {
+      opacity: 0.85;
+    }
+
+    .analytics-bar::after {
+      content: attr(data-label);
+      position: absolute;
+      bottom: -24px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 11px;
+      color: #9ca3af;
+      white-space: nowrap;
+    }
+
+    .analytics-tables {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 1000px) {
+      .analytics-tables { grid-template-columns: 1fr; }
+    }
+
+    .analytics-table-card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+      overflow: hidden;
+    }
+
+    .analytics-table-card h3 {
+      padding: 16px 20px;
+      border-bottom: 1px solid #f3f4f6;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: #111;
+      background: #fafafa;
+    }
+
+    .analytics-table-card table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .analytics-table-card td {
+      padding: 12px 20px;
+      border-bottom: 1px solid #f3f4f6;
+      font-size: 0.875rem;
+    }
+
+    .analytics-table-card tr:last-child td {
+      border-bottom: none;
+    }
+
+    .analytics-table-card tr:hover {
+      background: #fafafa;
+    }
+
+    .analytics-table-card td:first-child {
+      color: #374151;
+      max-width: 220px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .analytics-table-card td:last-child {
+      text-align: right;
+      color: #6b7280;
+      font-weight: 500;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .analytics-empty {
+      padding: 32px 20px;
+      text-align: center;
+      color: #9ca3af;
+      font-size: 0.875rem;
+    }
+
+    .analytics-loading {
+      padding: 64px 20px;
+      text-align: center;
+      color: #6b7280;
+    }
+
+    .analytics-loading-spinner {
+      width: 32px;
+      height: 32px;
+      border: 3px solid #e5e7eb;
+      border-top-color: #3b82f6;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 16px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .analytics-error {
+      padding: 48px 20px;
+      text-align: center;
+      color: #ef4444;
+      background: #fef2f2;
+      border-radius: 12px;
+      border: 1px solid #fecaca;
+    }
+  </style>
+</head>
+<body>
+  <AdminNav currentPage="analytics" />
+
+  <div class="analytics-wrapper">
+    <div class="analytics-header">
+      <h1>Site Analytics</h1>
+      <p>Track pageviews, visitors, and engagement across the site.</p>
+    </div>
+
+    <div class="analytics-controls">
+      <select id="days">
+        <option value="1">Today</option>
+        <option value="7" selected>Last 7 days</option>
+        <option value="30">Last 30 days</option>
+        <option value="90">Last 90 days</option>
+      </select>
+      <button type="button" id="refresh-btn">Refresh</button>
+      <button type="button" id="notrack-btn" class="analytics-notrack-btn"></button>
+    </div>
+
+    <div id="content">
+      <div class="analytics-loading">
+        <div class="analytics-loading-spinner"></div>
+        Loading analytics...
+      </div>
+    </div>
+  </div>
+
+  <script is:inline>
+    async function loadAnalytics() {
+      const days = document.getElementById('days').value;
+      const content = document.getElementById('content');
+
+      content.innerHTML = '<div class="analytics-loading"><div class="analytics-loading-spinner"></div>Loading analytics...</div>';
+
+      try {
+        const res = await fetch('/api/analytics/stats?site=trueschools&days=' + days);
+        const data = await res.json();
+
+        if (data.error) {
+          throw new Error(data.error);
+        }
+
+        renderAnalytics(data);
+      } catch (err) {
+        content.innerHTML = '<div class="analytics-error">Error loading analytics: ' + err.message + '</div>';
+      }
+    }
+
+    function formatDuration(seconds) {
+      if (!seconds || seconds === 0) return '0s';
+      if (seconds < 60) return seconds + 's';
+      const mins = Math.floor(seconds / 60);
+      const secs = seconds % 60;
+      return mins + 'm' + (secs ? ' ' + secs + 's' : '');
+    }
+
+    function getCountryFlag(code) {
+      if (!code || code.length !== 2) return '';
+      const codePoints = code.toUpperCase().split('').map(c => 127397 + c.charCodeAt(0));
+      return String.fromCodePoint(...codePoints) + ' ';
+    }
+
+    function renderAnalytics(data) {
+      let html = '';
+
+      // Stats cards
+      html += '<div class="analytics-stats">';
+      html += '<div class="analytics-stat"><div class="analytics-stat-value">' + data.pageviews.toLocaleString() + '</div><div class="analytics-stat-label">Pageviews</div></div>';
+      html += '<div class="analytics-stat"><div class="analytics-stat-value">' + data.sessions.toLocaleString() + '</div><div class="analytics-stat-label">Unique Visitors</div></div>';
+      html += '<div class="analytics-stat"><div class="analytics-stat-value">' + formatDuration(data.avgDuration) + '</div><div class="analytics-stat-label">Avg. Time on Page</div></div>';
+      html += '<div class="analytics-stat"><div class="analytics-stat-value">' + formatDuration(data.avgSessionDuration) + '</div><div class="analytics-stat-label">Avg. Session Duration</div></div>';
+      html += '<div class="analytics-stat"><div class="analytics-stat-value">' + data.pagesPerSession + '</div><div class="analytics-stat-label">Pages per Visit</div></div>';
+      html += '</div>';
+
+      // Chart
+      if (data.byDay && data.byDay.length > 0) {
+        const maxViews = Math.max(...data.byDay.map(d => d.views));
+        html += '<div class="analytics-chart">';
+        html += '<h3>Pageviews Over Time</h3>';
+        html += '<div class="analytics-chart-bars">';
+        data.byDay.forEach(day => {
+          const height = maxViews > 0 ? Math.max((day.views / maxViews * 100), 4) : 4;
+          const label = day.date.slice(5); // MM-DD
+          html += '<div class="analytics-bar" style="height: ' + height + '%" data-label="' + label + '" title="' + day.date + ': ' + day.views + ' views"></div>';
+        });
+        html += '</div>';
+        html += '</div>';
+      }
+
+      // Tables
+      html += '<div class="analytics-tables">';
+
+      // Top Pages
+      html += '<div class="analytics-table-card"><h3>Top Pages</h3>';
+      if (data.topPages && data.topPages.length > 0) {
+        html += '<table>';
+        data.topPages.slice(0, 10).forEach(page => {
+          const displayPath = page.path.length > 35 ? page.path.slice(0, 35) + '...' : page.path;
+          html += '<tr><td title="' + page.path + '">' + displayPath + '</td><td>' + page.views.toLocaleString() + '</td></tr>';
+        });
+        html += '</table>';
+      } else {
+        html += '<div class="analytics-empty">No page data yet</div>';
+      }
+      html += '</div>';
+
+      // Referrers
+      html += '<div class="analytics-table-card"><h3>Top Referrers</h3>';
+      if (data.topReferrers && data.topReferrers.length > 0) {
+        html += '<table>';
+        data.topReferrers.slice(0, 10).forEach(ref => {
+          let display = ref.referrer || '(direct)';
+          try {
+            if (display.startsWith('http')) {
+              display = new URL(display).hostname;
+            }
+          } catch (e) {}
+          html += '<tr><td title="' + (ref.referrer || 'Direct traffic') + '">' + display + '</td><td>' + ref.count.toLocaleString() + '</td></tr>';
+        });
+        html += '</table>';
+      } else {
+        html += '<div class="analytics-empty">No referrer data yet</div>';
+      }
+      html += '</div>';
+
+      // Countries
+      html += '<div class="analytics-table-card"><h3>Top Countries</h3>';
+      if (data.countries && data.countries.length > 0) {
+        html += '<table>';
+        data.countries.slice(0, 10).forEach(country => {
+          const flag = getCountryFlag(country.country);
+          const name = country.country || 'Unknown';
+          html += '<tr><td>' + flag + name + '</td><td>' + country.count.toLocaleString() + '</td></tr>';
+        });
+        html += '</table>';
+      } else {
+        html += '<div class="analytics-empty">No country data yet</div>';
+      }
+      html += '</div>';
+
+      html += '</div>';
+
+      document.getElementById('content').innerHTML = html;
+    }
+
+    // Load on page load
+    loadAnalytics();
+
+    // Event listeners
+    document.getElementById('days').addEventListener('change', loadAnalytics);
+    document.getElementById('refresh-btn').addEventListener('click', loadAnalytics);
+
+    // No-track toggle
+    const notrackBtn = document.getElementById('notrack-btn');
+    function updateNotrackBtn() {
+      const isTracking = !localStorage.getItem('_notrack');
+      notrackBtn.textContent = isTracking ? 'Tracking: ON' : 'Tracking: OFF';
+      notrackBtn.classList.toggle('tracking', isTracking);
+    }
+    updateNotrackBtn();
+    notrackBtn.addEventListener('click', function() {
+      if (localStorage.getItem('_notrack')) {
+        localStorage.removeItem('_notrack');
+      } else {
+        localStorage.setItem('_notrack', '1');
+      }
+      updateNotrackBtn();
+    });
+  </script>
+</body>
+</html>

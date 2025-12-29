@@ -11,15 +11,17 @@ const navCategories = [
   {
     label: 'Content',
     items: [
-      { href: '/tools/article-prompt-builder', label: 'Prompt Builder', id: 'prompt-builder' },
-      { href: '/tools/saved-prompts', label: 'Saved Prompts', id: 'saved-prompts' },
+      { href: '/admin/content/prompt-builder', label: 'Prompt Builder', id: 'prompt-builder' },
+      { href: '/admin/content/notes', label: 'Notes', id: 'notes' },
     ]
   },
   {
     label: 'Analytics',
     items: [
+      { href: '/admin/analytics', label: 'Site Analytics', id: 'analytics' },
       { href: '/admin/subscribers', label: 'Subscribers', id: 'subscribers' },
       { href: '/admin/polls', label: 'Polls', id: 'polls' },
+      { href: '/admin/article-likes', label: 'Article Likes', id: 'article-likes' },
     ]
   },
   {
@@ -208,5 +210,15 @@ const currentLabel = currentItem?.label || 'Admin Tools';
     background: #eff6ff;
     color: #2563eb;
     font-weight: 500;
+  }
+
+  @media (max-width: 768px) {
+    .dropdown-item {
+      padding: 12px 20px;
+    }
+
+    .dropdown-section-label {
+      padding: 6px 20px 10px;
+    }
   }
 </style>

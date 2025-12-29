@@ -63,7 +63,7 @@ export const GET: APIRoute = async ({ params, request, locals }) => {
   } catch (error) {
     console.error('Error fetching prompt:', error);
     await captureException(db, error, {
-      tags: { endpoint: '/api/prompts/[id]', method: 'GET' },
+      tags: { endpoint: '/admin/api/prompts/[id]', method: 'GET' },
       extra: { id: params.id },
       request
     });
@@ -148,7 +148,7 @@ export const PUT: APIRoute = async ({ params, request, locals }) => {
       });
     }
     await captureException(db, error, {
-      tags: { endpoint: '/api/prompts/[id]', method: 'PUT' },
+      tags: { endpoint: '/admin/api/prompts/[id]', method: 'PUT' },
       extra: { id: params.id },
       request
     });
@@ -207,7 +207,7 @@ export const DELETE: APIRoute = async ({ params, request, locals }) => {
   } catch (error) {
     console.error('Error deleting prompt:', error);
     await captureException(db, error, {
-      tags: { endpoint: '/api/prompts/[id]', method: 'DELETE' },
+      tags: { endpoint: '/admin/api/prompts/[id]', method: 'DELETE' },
       extra: { id: params.id },
       request
     });

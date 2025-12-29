@@ -378,9 +378,9 @@ import AdminNav from '@/components/AdminNav.astro';
                 </div>
 
                 <div class="page-tabs">
-                    <a href="/tools/article-prompt-builder" class="page-tab">Prompt Builder</a>
-                    <a href="/tools/saved-prompts" class="page-tab">Saved Prompts</a>
-                    <a href="/tools/prompts" class="page-tab active">Manage Prompts</a>
+                    <a href="/admin/content/prompt-builder" class="page-tab">Prompt Builder</a>
+                    <a href="/admin/content/saved-prompts" class="page-tab">Saved Prompts</a>
+                    <a href="/admin/content/prompts" class="page-tab active">Manage Prompts</a>
                 </div>
 
                 <div id="message-container"></div>
@@ -535,7 +535,7 @@ import AdminNav from '@/components/AdminNav.astro';
                         var name = this.getAttribute('data-name');
                         if (confirm('Are you sure you want to delete "' + name + '"?')) {
                             try {
-                                var response = await fetch('/api/prompts/' + id, {
+                                var response = await fetch('/admin/api/prompts/' + id, {
                                     method: 'DELETE',
                                     credentials: 'same-origin'
                                 });
@@ -568,7 +568,7 @@ import AdminNav from '@/components/AdminNav.astro';
                     };
 
                     try {
-                        var url = id ? '/api/prompts/' + id : '/api/prompts';
+                        var url = id ? '/admin/api/prompts/' + id : '/admin/api/prompts';
                         var method = id ? 'PUT' : 'POST';
 
                         var response = await fetch(url, {

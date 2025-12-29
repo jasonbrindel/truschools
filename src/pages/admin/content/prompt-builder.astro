@@ -665,9 +665,9 @@ import AdminNav from '@/components/AdminNav.astro';
             </div>
 
             <div class="page-tabs">
-                <a href="/tools/article-prompt-builder" class="page-tab active">Prompt Builder</a>
-                <a href="/tools/saved-prompts" class="page-tab">Saved Prompts</a>
-                <a href="/tools/prompts" class="page-tab">Manage Prompts</a>
+                <a href="/admin/content/prompt-builder" class="page-tab active">Prompt Builder</a>
+                <a href="/admin/content/saved-prompts" class="page-tab">Saved Prompts</a>
+                <a href="/admin/content/prompts" class="page-tab">Manage Prompts</a>
             </div>
 
             <div class="section">
@@ -833,7 +833,7 @@ import AdminNav from '@/components/AdminNav.astro';
                     saveBtn.textContent = 'Saving...';
 
                     try {
-                        var response = await fetch('/api/saved-prompts', {
+                        var response = await fetch('/admin/api/saved-prompts', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({

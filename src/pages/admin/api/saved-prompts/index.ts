@@ -23,7 +23,7 @@ async function isAuthenticated(request: Request, db: any): Promise<boolean> {
   }
 }
 
-// GET - List all prompts
+// GET - List all saved prompts
 export const GET: APIRoute = async ({ request, locals }) => {
   const db = (locals as any).runtime?.env?.DB;
 
@@ -35,16 +35,17 @@ export const GET: APIRoute = async ({ request, locals }) => {
       });
     }
 
-    const url = new URL(request.url);
-    const activeOnly = url.searchParams.get('active') === 'true';
-
-    let query = 'SELECT * FROM prompts';
-    if (activeOnly) {
-      query += ' WHERE is_active = 1';
+    // Check authentication
+    if (!await isAuthenticated(request, db)) {
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+        status: 401,
+        headers: { 'Content-Type': 'application/json' }
+      });
     }
-    query += ' ORDER BY sort_order ASC, name ASC';
 
-    const results = await db.prepare(query).all();
+    const results = await db.prepare(
+      'SELECT * FROM saved_prompts ORDER BY created_at DESC'
+    ).all();
 
     return new Response(JSON.stringify({
       success: true,
@@ -55,19 +56,19 @@ export const GET: APIRoute = async ({ request, locals }) => {
     });
 
   } catch (error) {
-    console.error('Error fetching prompts:', error);
+    console.error('Error fetching saved prompts:', error);
     await captureException(db, error, {
-      tags: { endpoint: '/api/prompts', method: 'GET' },
+      tags: { endpoint: '/admin/api/saved-prompts', method: 'GET' },
       request
     });
-    return new Response(JSON.stringify({ error: 'Failed to fetch prompts' }), {
+    return new Response(JSON.stringify({ error: 'Failed to fetch saved prompts' }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' }
     });
   }
 };
 
-// POST - Create new prompt
+// POST - Save a new prompt
 export const POST: APIRoute = async ({ request, locals }) => {
   const db = (locals as any).runtime?.env?.DB;
   let body: any;
@@ -89,49 +90,36 @@ export const POST: APIRoute = async ({ request, locals }) => {
     }
 
     body = await request.json();
-    const { slug, name, description, prompt_template, sort_order, is_active } = body;
+    const { topic, style_name, full_prompt } = body;
 
-    if (!slug || !name || !prompt_template) {
-      return new Response(JSON.stringify({ error: 'Missing required fields: slug, name, prompt_template' }), {
+    if (!topic || !style_name || !full_prompt) {
+      return new Response(JSON.stringify({ error: 'Missing required fields: topic, style_name, full_prompt' }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' }
       });
     }
 
     await db.prepare(`
-      INSERT INTO prompts (slug, name, description, prompt_template, sort_order, is_active)
-      VALUES (?, ?, ?, ?, ?, ?)
-    `).bind(
-      slug,
-      name,
-      description || '',
-      prompt_template,
-      sort_order || 0,
-      is_active !== undefined ? (is_active ? 1 : 0) : 1
-    ).run();
+      INSERT INTO saved_prompts (topic, style_name, full_prompt)
+      VALUES (?, ?, ?)
+    `).bind(topic, style_name, full_prompt).run();
 
     return new Response(JSON.stringify({
       success: true,
-      message: 'Prompt created successfully'
+      message: 'Prompt saved successfully'
     }), {
       status: 201,
       headers: { 'Content-Type': 'application/json' }
     });
 
-  } catch (error: any) {
-    console.error('Error creating prompt:', error);
-    if (error.message?.includes('UNIQUE constraint failed')) {
-      return new Response(JSON.stringify({ error: 'A prompt with this slug already exists' }), {
-        status: 400,
-        headers: { 'Content-Type': 'application/json' }
-      });
-    }
+  } catch (error) {
+    console.error('Error saving prompt:', error);
     await captureException(db, error, {
-      tags: { endpoint: '/api/prompts', method: 'POST' },
-      extra: { slug: body?.slug },
+      tags: { endpoint: '/admin/api/saved-prompts', method: 'POST' },
+      extra: { topic: body?.topic },
       request
     });
-    return new Response(JSON.stringify({ error: 'Failed to create prompt' }), {
+    return new Response(JSON.stringify({ error: 'Failed to save prompt' }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' }
     });

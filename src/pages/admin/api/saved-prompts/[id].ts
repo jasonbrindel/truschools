@@ -23,9 +23,10 @@ async function isAuthenticated(request: Request, db: any): Promise<boolean> {
   }
 }
 
-// GET - List all saved prompts
-export const GET: APIRoute = async ({ request, locals }) => {
+// PATCH - Archive/unarchive a saved prompt
+export const PATCH: APIRoute = async ({ params, request, locals }) => {
   const db = (locals as any).runtime?.env?.DB;
+  const { id } = params;
 
   try {
     if (!db) {
@@ -43,35 +44,55 @@ export const GET: APIRoute = async ({ request, locals }) => {
       });
     }
 
-    const results = await db.prepare(
-      'SELECT * FROM saved_prompts ORDER BY created_at DESC'
-    ).all();
+    const body = await request.json();
+    const { archived } = body;
+
+    if (typeof archived !== 'number' && typeof archived !== 'boolean') {
+      return new Response(JSON.stringify({ error: 'Missing required field: archived' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
+    const archivedValue = archived ? 1 : 0;
+
+    const result = await db.prepare(
+      'UPDATE saved_prompts SET archived = ? WHERE id = ?'
+    ).bind(archivedValue, id).run();
+
+    if (result.meta.changes === 0) {
+      return new Response(JSON.stringify({ error: 'Saved prompt not found' }), {
+        status: 404,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
 
     return new Response(JSON.stringify({
       success: true,
-      prompts: results.results || []
+      message: archived ? 'Prompt archived successfully' : 'Prompt unarchived successfully'
     }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' }
     });
 
   } catch (error) {
-    console.error('Error fetching saved prompts:', error);
+    console.error('Error updating saved prompt:', error);
     await captureException(db, error, {
-      tags: { endpoint: '/api/saved-prompts', method: 'GET' },
+      tags: { endpoint: '/admin/api/saved-prompts/[id]', method: 'PATCH' },
+      extra: { id },
       request
     });
-    return new Response(JSON.stringify({ error: 'Failed to fetch saved prompts' }), {
+    return new Response(JSON.stringify({ error: 'Failed to update saved prompt' }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' }
     });
   }
 };
 
-// POST - Save a new prompt
-export const POST: APIRoute = async ({ request, locals }) => {
+// DELETE - Delete a saved prompt
+export const DELETE: APIRoute = async ({ params, request, locals }) => {
   const db = (locals as any).runtime?.env?.DB;
-  let body: any;
+  const { id } = params;
 
   try {
     if (!db) {
@@ -89,37 +110,33 @@ export const POST: APIRoute = async ({ request, locals }) => {
       });
     }
 
-    body = await request.json();
-    const { topic, style_name, full_prompt } = body;
+    const result = await db.prepare(
+      'DELETE FROM saved_prompts WHERE id = ?'
+    ).bind(id).run();
 
-    if (!topic || !style_name || !full_prompt) {
-      return new Response(JSON.stringify({ error: 'Missing required fields: topic, style_name, full_prompt' }), {
-        status: 400,
+    if (result.meta.changes === 0) {
+      return new Response(JSON.stringify({ error: 'Saved prompt not found' }), {
+        status: 404,
         headers: { 'Content-Type': 'application/json' }
       });
     }
 
-    await db.prepare(`
-      INSERT INTO saved_prompts (topic, style_name, full_prompt)
-      VALUES (?, ?, ?)
-    `).bind(topic, style_name, full_prompt).run();
-
     return new Response(JSON.stringify({
       success: true,
-      message: 'Prompt saved successfully'
+      message: 'Saved prompt deleted successfully'
     }), {
-      status: 201,
+      status: 200,
       headers: { 'Content-Type': 'application/json' }
     });
 
   } catch (error) {
-    console.error('Error saving prompt:', error);
+    console.error('Error deleting saved prompt:', error);
     await captureException(db, error, {
-      tags: { endpoint: '/api/saved-prompts', method: 'POST' },
-      extra: { topic: body?.topic },
+      tags: { endpoint: '/admin/api/saved-prompts/[id]', method: 'DELETE' },
+      extra: { id },
       request
     });
-    return new Response(JSON.stringify({ error: 'Failed to save prompt' }), {
+    return new Response(JSON.stringify({ error: 'Failed to delete saved prompt' }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' }
     });
