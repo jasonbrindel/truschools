@@ -1,11 +1,17 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import ArticleRating from '@/components/ArticleRating.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import BrowseByTopic from '@/components/BrowseByTopic.astro';
+import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
 import heroImage from '@/images/USED-education-teacher-classroom-lesson.jpg';
 
 const title = "Charter Schools and Special Education";
 const description = "What parents of children with IEPs need to know about charter schools, including legal rights, essential questions to ask, warning signs, and recourse when problems arise.";
-const category = 'Charter Schools';
+const publishDate = "2024-08-19";
+const tags = ['Charter Schools', 'Special Education'];
 ---
 
 <Layout title={title} description={description}>
@@ -281,23 +287,43 @@ const category = 'Charter Schools';
       <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
 
       <ul class="text-sm text-gray-600 space-y-2 mb-10">
-        <li>California Department of Education, "Students with Disabilities in Charter Schools," 2024</li>
-        <li>Center for Learner Equity, "Analysis of Civil Rights Data Collection," September 2024</li>
-        <li>Center for Learner Equity, "Charter School Equity, Growth, Quality, and Sustainability Study," July 2024</li>
-        <li>Center on Reinventing Public Education, "Seizing the Opportunity: Educating Students with Disabilities in Charter Schools"</li>
-        <li>Columbia University and University of Florida, "School Choice and Information Constraints," 2018</li>
-        <li>Education Commission of the States, "Charter School LEA Status by State"</li>
-        <li>K-12 Dive, "Charter schools have fewer students with disabilities but higher inclusion rates," October 2024</li>
-        <li>Mathematica Policy Research, KIPP Studies, 2010-2023</li>
-        <li>National Alliance for Public Charter Schools, "Do You Know Where the Children Are?" 2024</li>
-        <li>National Center for Education Statistics, "Public Charter School Enrollment," 2023</li>
-        <li>New York State Education Department, "Charter Schools and Special Education" Guidance</li>
-        <li>Pennsylvania Developmental Disabilities Council, "Ten Things Parents Should Know about Charter Schools"</li>
-        <li>Stanford CREDO, "Charter School Study of New York City," 2017</li>
-        <li>U.S. Department of Education, Office for Civil Rights, "Applying Federal Civil Rights Laws to Public Charter Schools"</li>
-        <li>U.S. Department of Education, Office of Special Education Programs, "Frequently Asked Questions About IDEA and Charter Schools"</li>
+        <li><a href="https://www.cde.ca.gov/sp/ch/cefcharterstudwd.asp" class="text-brand-blue hover:underline" target="_blank" rel="noopener">California Department of Education</a>. <em>"Students with Disabilities in Charter Schools."</em> 2024.</li>
+        <li><a href="https://www.centerforlearnerequity.org/news/center-for-learner-equity-releases-new-analysis-of-civil-rights-data-collection/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Center for Learner Equity</a>. <em>"Analysis of Civil Rights Data Collection."</em> September 2024.</li>
+        <li><a href="https://www.centerforlearnerequity.org/research/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Center for Learner Equity</a>. <em>"Charter School Equity, Growth, Quality, and Sustainability Study."</em> July 2024.</li>
+        <li><a href="https://crpe.org/seizing-the-opportunity-educating-students-with-disabilities-in-charter-schools/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Center on Reinventing Public Education</a>. <em>"Seizing the Opportunity: Educating Students with Disabilities in Charter Schools."</em></li>
+        <li><a href="https://www.sciencedirect.com/science/article/abs/pii/S0272775718303807" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Columbia University and University of Florida</a>. <em>"School Choice and Information Constraints."</em> 2018.</li>
+        <li><a href="https://www.ecs.org/charter-schools-is-the-charter-school-its-own-lea-or-party-of-the-authorizing-lea/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Education Commission of the States</a>. <em>"Charter School LEA Status by State."</em></li>
+        <li><a href="https://www.k12dive.com/news/charter-schools-fewer-students-with-disabilities-higher-inclusion-rates/730026/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">K-12 Dive</a>. <em>"Charter schools have fewer students with disabilities but higher inclusion rates."</em> October 2024.</li>
+        <li><a href="https://www.mathematica.org/projects/kipp" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Mathematica Policy Research</a>. <em>KIPP Studies.</em> 2010-2023.</li>
+        <li><a href="https://publiccharters.org/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Alliance for Public Charter Schools</a>. <em>"Do You Know Where the Children Are?"</em> 2024.</li>
+        <li><a href="https://nces.ed.gov/programs/coe/indicator/cgb/charter-school-enrollment" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Center for Education Statistics</a>. <em>"Public Charter School Enrollment."</em> 2023.</li>
+        <li><a href="https://www.nysed.gov/charter-schools/special-education-charter-schools" class="text-brand-blue hover:underline" target="_blank" rel="noopener">New York State Education Department</a>. <em>"Charter Schools and Special Education" Guidance.</em></li>
+        <li><a href="https://paddc.org/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Pennsylvania Developmental Disabilities Council</a>. <em>"Ten Things Parents Should Know about Charter Schools."</em></li>
+        <li><a href="https://credo.stanford.edu/reports/item/charter-school-performance-in-new-york-city/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Stanford CREDO</a>. <em>"Charter School Study of New York City."</em> 2017.</li>
+        <li><a href="https://www2.ed.gov/about/offices/list/ocr/docs/dcl-factsheet-201612-504-charter-school.pdf" class="text-brand-blue hover:underline" target="_blank" rel="noopener">U.S. Department of Education, Office for Civil Rights</a>. <em>"Applying Federal Civil Rights Laws to Public Charter Schools."</em></li>
+        <li><a href="https://sites.ed.gov/idea/files/policy_speced_guid_idea_faq-idea-charter.pdf" class="text-brand-blue hover:underline" target="_blank" rel="noopener">U.S. Department of Education, Office of Special Education Programs</a>. <em>"Frequently Asked Questions About IDEA and Charter Schools."</em></li>
       </ul>
     </div>
+
+    <!-- Article Rating -->
+
+
+    
+    <ArticleRating slug="charter-schools-and-special-education" />
+
+    <!-- Related Articles -->
+    <RelatedArticles currentSlug="charter-schools-and-special-education" currentTags={tags} />
+
+    <!-- Browse by Topic -->
+    <BrowseByTopic tags={tags} />
+
+    <!-- Newsletter Signup -->
+    <ArticleNewsletter articleTags={tags} />
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} slug="charter-schools-and-special-education" />
+
+
 
     <!-- Footer -->
     <footer class="mt-16 pt-8 border-t border-gray-200">

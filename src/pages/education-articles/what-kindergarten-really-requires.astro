@@ -1,11 +1,17 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import ArticleRating from '@/components/ArticleRating.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import BrowseByTopic from '@/components/BrowseByTopic.astro';
+import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
 import heroImage from '@/images/USED-what-kindergarten-really-requires.jpg';
 
 const title = "What Kindergarten Really Requires";
 const description = "Your child probably doesn't need to read yet. But they do need something else. Research reveals the skills that truly predict kindergarten success.";
-const category = 'Kindergarten';
+const publishDate = "2025-01-07";
+const tags = ['Kindergarten', 'Preschool'];
 ---
 
 <Layout title={title} description={description}>
@@ -142,18 +148,38 @@ const category = 'Kindergarten';
       <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
 
       <ul class="text-sm text-gray-600 space-y-2 mb-10">
-        <li>American Academy of Pediatrics. "School Readiness." <em>Pediatrics</em>, vol. 144, no. 2, 2019.</li>
-        <li>Blair, Clancy and C. Cybele Raver. "School Readiness and Self-Regulation: A Developmental Psychobiological Approach." <em>Annual Review of Psychology</em>, vol. 66, 2015, pp. 711-731.</li>
-        <li>Pagani, Linda S. et al. "Kindergarten Readiness, Later Health, and Social Costs." <em>Pediatrics</em>, vol. 146, no. 6, 2020.</li>
-        <li>National Early Literacy Panel. "Developing Early Literacy: Report of the National Early Literacy Panel." National Institute for Literacy, 2008.</li>
-        <li>Thompson, Ross. "Developing Self-regulation in Young Children: Lessons from Research." Head Start Early Childhood Learning & Knowledge Center, 2024.</li>
-        <li>Heaviside, Sheila and Elizabeth Farris. "Public School Kindergarten Teachers' Views on Children's Readiness for School." National Center for Education Statistics, 1993.</li>
-        <li>University of Virginia. "Is Kindergarten the New First Grade?" <em>AERA Open</em>, Bassok et al., 2016.</li>
-        <li>HealthyChildren.org. "Is Your Preschooler Ready for Kindergarten?" American Academy of Pediatrics.</li>
-        <li>Reading Rockets. "Learning to Read and Write: What Research Reveals." WETA Public Television.</li>
-        <li>EdSurge. "To Be Ready for Kindergarten, Teachers and Researchers Say Social-Emotional Skills Are Key." September 2024.</li>
+        <li><a href="https://publications.aap.org/pediatrics/article/144/2/e20191766/38466/School-Readiness" class="text-brand-blue hover:underline" target="_blank" rel="noopener">American Academy of Pediatrics</a>. <em>"School Readiness."</em> Pediatrics, vol. 144, no. 2, 2019.</li>
+        <li><a href="https://doi.org/10.1146/annurev-psych-010814-015221" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Blair, Clancy and C. Cybele Raver</a>. <em>"School Readiness and Self-Regulation: A Developmental Psychobiological Approach."</em> Annual Review of Psychology, vol. 66, 2015, pp. 711-731.</li>
+        <li><a href="https://doi.org/10.1542/peds.2020-0978" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Pagani, Linda S. et al.</a> <em>"Kindergarten Readiness, Later Health, and Social Costs."</em> Pediatrics, vol. 146, no. 6, 2020.</li>
+        <li><a href="https://lincs.ed.gov/publications/pdf/NELPReport09.pdf" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Early Literacy Panel</a>. <em>"Developing Early Literacy: Report of the National Early Literacy Panel."</em> National Institute for Literacy, 2008.</li>
+        <li><a href="https://eclkc.ohs.acf.hhs.gov/video/developing-self-regulation-young-children-lessons-research" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Thompson, Ross</a>. <em>"Developing Self-regulation in Young Children: Lessons from Research."</em> Head Start Early Childhood Learning & Knowledge Center, 2024.</li>
+        <li><a href="https://nces.ed.gov/pubsearch/pubsinfo.asp?pubid=93410" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Heaviside, Sheila and Elizabeth Farris</a>. <em>"Public School Kindergarten Teachers' Views on Children's Readiness for School."</em> National Center for Education Statistics, 1993.</li>
+        <li><a href="https://doi.org/10.1177/2332858415616358" class="text-brand-blue hover:underline" target="_blank" rel="noopener">University of Virginia</a>. <em>"Is Kindergarten the New First Grade?"</em> AERA Open, Bassok et al., 2016.</li>
+        <li><a href="https://www.healthychildren.org/English/ages-stages/preschool/Pages/Is-Your-Child-Ready-for-Kindergarten.aspx" class="text-brand-blue hover:underline" target="_blank" rel="noopener">HealthyChildren.org</a>. <em>"Is Your Preschooler Ready for Kindergarten?"</em> American Academy of Pediatrics.</li>
+        <li><a href="https://www.readingrockets.org/topics/early-literacy-development/articles/learning-read-and-write-what-research-reveals" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Reading Rockets</a>. <em>"Learning to Read and Write: What Research Reveals."</em> WETA Public Television.</li>
+        <li><a href="https://www.edsurge.com/news/2024-09-10-to-be-ready-for-kindergarten-teachers-and-researchers-say-social-emotional-skills-are-key" class="text-brand-blue hover:underline" target="_blank" rel="noopener">EdSurge</a>. <em>"To Be Ready for Kindergarten, Teachers and Researchers Say Social-Emotional Skills Are Key."</em> September 2024.</li>
       </ul>
     </div>
+
+    <!-- Article Rating -->
+
+
+    
+    <ArticleRating slug="what-kindergarten-really-requires" />
+
+    <!-- Related Articles -->
+    <RelatedArticles currentSlug="what-kindergarten-really-requires" currentTags={tags} />
+
+    <!-- Browse by Topic -->
+    <BrowseByTopic tags={tags} />
+
+    <!-- Newsletter Signup -->
+    <ArticleNewsletter articleTags={tags} />
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} slug="what-kindergarten-really-requires" />
+
+
 
     <!-- Footer -->
     <footer class="mt-16 pt-8 border-t border-gray-200">

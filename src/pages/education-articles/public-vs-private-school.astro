@@ -1,12 +1,18 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import ArticleRating from '@/components/ArticleRating.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import BrowseByTopic from '@/components/BrowseByTopic.astro';
+import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
 import heroImage from '@/images/USED-colorful-school-campus-illustration.jpg';
 
 const title = "Public vs. Private School";
 const subtitle = "Making the Right Choice for Your Family";
 const description = "A comprehensive guide for parents comparing public and private schools, covering costs, performance, class size, special needs, and how to make the right choice.";
-const category = 'School Types';
+const publishDate = "2024-11-20";
+const tags = ['School Types', 'School Choice'];
 ---
 
 <Layout title={`${title}: ${subtitle}`} description={description}>
@@ -240,6 +246,26 @@ const category = 'School Types';
         But it's the right question. And asking it is the first step toward an answer that actually works.
       </p>
     </div>
+
+    <!-- Article Rating -->
+
+
+    
+    <ArticleRating slug="public-vs-private-school" />
+
+    <!-- Related Articles -->
+    <RelatedArticles currentSlug="public-vs-private-school" currentTags={tags} />
+
+    <!-- Browse by Topic -->
+    <BrowseByTopic tags={tags} />
+
+    <!-- Newsletter Signup -->
+    <ArticleNewsletter articleTags={tags} />
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} slug="public-vs-private-school" />
+
+
 
     <!-- Footer -->
     <footer class="mt-16 pt-8 border-t border-gray-200">

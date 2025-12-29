@@ -1,0 +1,44 @@
+---
+interface Props {
+  tags: string[];
+}
+
+const { tags } = Astro.props;
+
+// Category colors for badges (same as index page)
+const categoryColors: Record<string, string> = {
+  'Financial Aid': 'bg-green-100 text-green-800 hover:bg-green-200',
+  'Graduate School': 'bg-purple-100 text-purple-800 hover:bg-purple-200',
+  'College Admissions': 'bg-blue-100 text-blue-800 hover:bg-blue-200',
+  'Kindergarten': 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200',
+  'Preschool': 'bg-pink-100 text-pink-800 hover:bg-pink-200',
+  'Elementary School': 'bg-orange-100 text-orange-800 hover:bg-orange-200',
+  'Middle School': 'bg-teal-100 text-teal-800 hover:bg-teal-200',
+  'High School': 'bg-indigo-100 text-indigo-800 hover:bg-indigo-200',
+  'Charter Schools': 'bg-red-100 text-red-800 hover:bg-red-200',
+  'Magnet Schools': 'bg-cyan-100 text-cyan-800 hover:bg-cyan-200',
+  'School Types': 'bg-slate-100 text-slate-800 hover:bg-slate-200',
+  'School Choice': 'bg-amber-100 text-amber-800 hover:bg-amber-200',
+  'Special Education': 'bg-violet-100 text-violet-800 hover:bg-violet-200',
+  'Mental Health': 'bg-rose-100 text-rose-800 hover:bg-rose-200',
+  'Vocational Education': 'bg-lime-100 text-lime-800 hover:bg-lime-200',
+  'Future of Education': 'bg-sky-100 text-sky-800 hover:bg-sky-200',
+  "Children's Health": 'bg-emerald-100 text-emerald-800 hover:bg-emerald-200',
+};
+---
+
+{tags.length > 0 && (
+  <div class="browse-by-topic mt-8">
+    <p class="text-sm text-gray-600 mb-3">Browse more articles about:</p>
+    <div class="flex flex-wrap gap-2">
+      {tags.map(tag => (
+        <a
+          href={`/education-articles?tag=${encodeURIComponent(tag)}`}
+          class={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${categoryColors[tag] || 'bg-gray-100 text-gray-800 hover:bg-gray-200'}`}
+        >
+          {tag}
+        </a>
+      ))}
+    </div>
+  </div>
+)}

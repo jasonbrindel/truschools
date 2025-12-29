@@ -1,11 +1,17 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import ArticleRating from '@/components/ArticleRating.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import BrowseByTopic from '@/components/BrowseByTopic.astro';
+import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
 import heroImage from '@/images/USED-preschool-girl-bench.jpg';
 
 const title = "When Your Preschooler Needs More Help";
 const description = "Navigating the path from early concerns to an IEP—and learning to advocate for your child along the way.";
-const category = 'Preschool';
+const publishDate = "2025-01-19";
+const tags = ['Preschool', 'Special Education'];
 ---
 
 <Layout title={title} description={description}>
@@ -175,19 +181,39 @@ const category = 'Preschool';
 
       <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
       <ul class="text-sm text-gray-600 space-y-2 mb-10">
-        <li>U.S. Department of Education, Office of Special Education Programs. "IDEA Section 618 Data Products." Annual Reports to Congress on the Implementation of the Individuals with Disabilities Education Act, 2024.</li>
-        <li>Early Childhood Technical Assistance Center. "Part B, Section 619 of IDEA." ECTA Center, 2024.</li>
-        <li>Congress.gov, Congressional Research Service. "The Individuals with Disabilities Education Act (IDEA), Part B: Key Statutory and Regulatory Provisions." R41833, 2024.</li>
-        <li>American Speech-Language-Hearing Association. "Early Intervention" and "School-Based Service Delivery in Speech-Language Pathology." ASHA Practice Portal, 2024.</li>
-        <li>Center for Parent Information and Resources. "Categories of Disability Under Part B of IDEA" and "Evaluating School-Aged Children for Disability." ParentCenterHub.org, 2024.</li>
-        <li>RAND Corporation. "Proven Benefits of Early Childhood Interventions." Research Brief, 2005.</li>
-        <li>National Institute for Early Education Research. "The State(s) of Early Intervention and Early Childhood Special Education: Looking at Equity." Friedman-Krauss, A. H., & Barnett, W. S., 2023.</li>
-        <li>Frank Porter Graham Child Development Institute. "Early Intervention & Special Education." University of North Carolina at Chapel Hill, 2024.</li>
-        <li>U.S. Departments of Health and Human Services and Education. "Policy Statement on Inclusion of Children with Disabilities in Early Childhood Programs." 2015.</li>
-        <li>Understood.org. "The Difference Between IEPs and 504 Plans" and "Questions to Ask Before and During Your Child's IEP Meeting." 2024-2025.</li>
-        <li>Code of Federal Regulations, Title 34, Part 300. "Assistance to States for the Education of Children With Disabilities." IDEA Regulations.</li>
+        <li><a href="https://sites.ed.gov/idea/idea-files/2024-individuals-with-disabilities-education-act-annual-report-to-congress/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">U.S. Department of Education, Office of Special Education Programs</a>. <em>"IDEA Section 618 Data Products."</em> Annual Reports to Congress on the Implementation of the Individuals with Disabilities Education Act, 2024.</li>
+        <li><a href="https://ectacenter.org/sec619/sec619.asp" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Early Childhood Technical Assistance Center</a>. <em>"Part B, Section 619 of IDEA."</em> ECTA Center, 2024.</li>
+        <li><a href="https://crsreports.congress.gov/product/pdf/R/R41833" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Congressional Research Service</a>. <em>"The Individuals with Disabilities Education Act (IDEA), Part B: Key Statutory and Regulatory Provisions."</em> R41833, 2024.</li>
+        <li><a href="https://www.asha.org/practice-portal/professional-issues/early-intervention/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">American Speech-Language-Hearing Association</a>. <em>"Early Intervention"</em> and <em>"School-Based Service Delivery in Speech-Language Pathology."</em> ASHA Practice Portal, 2024.</li>
+        <li><a href="https://www.parentcenterhub.org/categories/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Center for Parent Information and Resources</a>. <em>"Categories of Disability Under Part B of IDEA"</em> and <em>"Evaluating School-Aged Children for Disability."</em> ParentCenterHub.org, 2024.</li>
+        <li><a href="https://www.rand.org/pubs/research_briefs/RB9145.html" class="text-brand-blue hover:underline" target="_blank" rel="noopener">RAND Corporation</a>. <em>"Proven Benefits of Early Childhood Interventions."</em> Research Brief, 2005.</li>
+        <li><a href="https://nieer.org/research-library/the-states-of-early-intervention-and-early-childhood-special-education-looking-at-equity" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Institute for Early Education Research</a>. <em>"The State(s) of Early Intervention and Early Childhood Special Education: Looking at Equity."</em> Friedman-Krauss, A. H., & Barnett, W. S., 2023.</li>
+        <li><a href="https://fpg.unc.edu/focus-areas/early-intervention-special-education" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Frank Porter Graham Child Development Institute</a>. <em>"Early Intervention & Special Education."</em> University of North Carolina at Chapel Hill, 2024.</li>
+        <li><a href="https://www2.ed.gov/policy/speced/guid/earlylearning/joint-statement-full-text.pdf" class="text-brand-blue hover:underline" target="_blank" rel="noopener">U.S. Departments of Health and Human Services and Education</a>. <em>"Policy Statement on Inclusion of Children with Disabilities in Early Childhood Programs."</em> 2015.</li>
+        <li><a href="https://www.understood.org/en/articles/the-difference-between-ieps-and-504-plans" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Understood.org</a>. <em>"The Difference Between IEPs and 504 Plans"</em> and <em>"Questions to Ask Before and During Your Child's IEP Meeting."</em> 2024-2025.</li>
+        <li><a href="https://www.ecfr.gov/current/title-34/subtitle-B/chapter-III/part-300" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Code of Federal Regulations, Title 34, Part 300</a>. <em>"Assistance to States for the Education of Children With Disabilities."</em> IDEA Regulations.</li>
       </ul>
     </div>
+
+    <!-- Article Rating -->
+
+
+    
+    <ArticleRating slug="when-your-preschooler-needs-more-help" />
+
+    <!-- Related Articles -->
+    <RelatedArticles currentSlug="when-your-preschooler-needs-more-help" currentTags={tags} />
+
+    <!-- Browse by Topic -->
+    <BrowseByTopic tags={tags} />
+
+    <!-- Newsletter Signup -->
+    <ArticleNewsletter articleTags={tags} />
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} slug="when-your-preschooler-needs-more-help" />
+
+
 
     <footer class="mt-16 pt-8 border-t border-gray-200">
       <p class="text-sm text-gray-500 italic">

@@ -1,11 +1,17 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import ArticleRating from '@/components/ArticleRating.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import BrowseByTopic from '@/components/BrowseByTopic.astro';
+import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
 import heroImage from '@/images/USED-school-bullying-awareness-student.jpg';
 
 const title = "Signs Your Elementary Schooler Is Being Bullied (And What to Actually Do About It)";
 const description = "Bullying can start quietly, years before the word ever shows up in a school handbook. Here is what the research says, what parents tend to miss, and how to respond in ways that protect your child.";
-const category = 'Elementary School';
+const publishDate = "2024-11-29";
+const tags = ['Elementary School', 'Mental Health'];
 ---
 
 <Layout title={title} description={description}>
@@ -160,17 +166,37 @@ const category = 'Elementary School';
       <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
 
       <ul class="text-sm text-gray-600 space-y-2 mb-10">
-        <li>National Center for Education Statistics. <em>Student Reports of Bullying: Results From the 2022 School Crime Supplement to the National Crime Victimization Survey</em> (tables and NCES 2024-109). U.S. Department of Education, 2024.</li>
-        <li>StopBullying.gov. <em>Warning Signs for Bullying; Facts About Bullying; Get Help Now; Respond to Bullying.</em> U.S. Department of Health and Human Services, updated 2017-2025.</li>
-        <li>Centers for Disease Control and Prevention. <em>Bullying (Youth Violence Prevention).</em> Updated 2024.</li>
-        <li>PACER's National Bullying Prevention Center. Bullying Statistics (citing NCES).</li>
-        <li>Dennehy, R., et al. <em>The psychosocial impacts of cybervictimisation and barriers to help-seeking.</em> International Journal of Law and Psychiatry, 2020.</li>
-        <li>Family Online Safety Institute. <em>5 Reasons Youth Don't Report Cyberbullying</em> (parent guidance). 2020.</li>
-        <li>American Psychological Association. <em>Students experiencing bullying; How parents, teachers, and kids can take action to prevent bullying.</em> APA, 2011 and later updates.</li>
-        <li>American Academy of Child and Adolescent Psychiatry. <em>Bullying Resource Center; Children's Threats: When Are They Serious?</em> AACAP Facts for Families.</li>
-        <li>U.S. Department of Education. <em>Harassment, Bullying, and Retaliation; How to File a Discrimination Complaint with OCR</em> (including general 180 day timeliness guidance).</li>
+        <li><a href="https://nces.ed.gov/pubsearch/pubsinfo.asp?pubid=2024109" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Center for Education Statistics</a>. <em>Student Reports of Bullying: Results From the 2022 School Crime Supplement to the National Crime Victimization Survey</em> (tables and NCES 2024-109). U.S. Department of Education, 2024.</li>
+        <li><a href="https://www.stopbullying.gov/blog/categories/warning-signs" class="text-brand-blue hover:underline" target="_blank" rel="noopener">StopBullying.gov</a>. <em>Warning Signs for Bullying; Facts About Bullying; Get Help Now; Respond to Bullying.</em> U.S. Department of Health and Human Services, updated 2017-2025.</li>
+        <li><a href="https://www.cdc.gov/youth-violence/about/about-school-violence.html" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Centers for Disease Control and Prevention</a>. <em>Bullying (Youth Violence Prevention).</em> Updated 2024.</li>
+        <li><a href="https://www.pacer.org/bullying/info/facts/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">PACER's National Bullying Prevention Center</a>. Bullying Statistics (citing NCES).</li>
+        <li><a href="https://doi.org/10.1016/j.ijlp.2020.101610" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Dennehy, R., et al.</a> <em>The psychosocial impacts of cybervictimisation and barriers to help-seeking.</em> International Journal of Law and Psychiatry, 2020.</li>
+        <li><a href="https://www.fosi.org/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Family Online Safety Institute</a>. <em>5 Reasons Youth Don't Report Cyberbullying</em> (parent guidance). 2020.</li>
+        <li><a href="https://www.apa.org/topics/bullying" class="text-brand-blue hover:underline" target="_blank" rel="noopener">American Psychological Association</a>. <em>Students experiencing bullying; How parents, teachers, and kids can take action to prevent bullying.</em> APA, 2011 and later updates.</li>
+        <li><a href="https://www.aacap.org/AACAP/Families_and_Youth/Facts_for_Families/FFF-Guide/Bullying.aspx" class="text-brand-blue hover:underline" target="_blank" rel="noopener">American Academy of Child and Adolescent Psychiatry</a>. <em>Bullying Resource Center; Children's Threats: When Are They Serious?</em> AACAP Facts for Families.</li>
+        <li><a href="https://www2.ed.gov/about/offices/list/ocr/docs/howto.html" class="text-brand-blue hover:underline" target="_blank" rel="noopener">U.S. Department of Education</a>. <em>Harassment, Bullying, and Retaliation; How to File a Discrimination Complaint with OCR</em> (including general 180 day timeliness guidance).</li>
       </ul>
     </div>
+
+    <!-- Article Rating -->
+
+
+    
+    <ArticleRating slug="signs-your-child-is-being-bullied" />
+
+    <!-- Related Articles -->
+    <RelatedArticles currentSlug="signs-your-child-is-being-bullied" currentTags={tags} />
+
+    <!-- Browse by Topic -->
+    <BrowseByTopic tags={tags} />
+
+    <!-- Newsletter Signup -->
+    <ArticleNewsletter articleTags={tags} />
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} slug="signs-your-child-is-being-bullied" />
+
+
 
     <!-- Footer -->
     <footer class="mt-16 pt-8 border-t border-gray-200">

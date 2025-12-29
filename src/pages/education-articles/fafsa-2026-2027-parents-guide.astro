@@ -1,11 +1,17 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import ArticleRating from '@/components/ArticleRating.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import BrowseByTopic from '@/components/BrowseByTopic.astro';
+import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
 import heroImage from '@/images/USED-fafsa-financial-aid-guide.jpg';
 
 const title = "FAFSA 2026-2027: Complete Parent's Guide to the New Rules and How to Maximize Financial Aid";
 const description = "Major changes under the One Big Beautiful Bill Act reshape federal aid—here's what families need to know about the 2026-2027 FAFSA.";
-const category = 'Financial Aid';
+const publishDate = "2024-09-09";
+const tags = ['Financial Aid', 'College Admissions'];
 ---
 
 <Layout title={title} description={description}>
@@ -227,18 +233,35 @@ const category = 'Financial Aid';
 
       <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
       <ul class="text-sm text-gray-600 space-y-2 mb-10">
-        <li>U.S. Department of Education, Federal Student Aid. "2026–27 FAFSA Form and Pell Grant Eligibility Updates." Electronic Announcement, August 15, 2025.</li>
-        <li>National Association of Student Financial Aid Administrators (NASFAA). "ED Details 2026-27 FAFSA and Pell Grant Eligibility Changes Due to 'One Big Beautiful Bill Act.'" News Item, August 2025.</li>
-        <li>U.S. Department of Education, Knowledge Center. "2026-27 Student Aid Index (SAI) and Pell Grant Eligibility Guide." Updated August 25, 2025.</li>
-        <li>Congressional Research Service. "One Big Beautiful Bill Act: Higher Education Provisions." Congress.gov, 2025.</li>
-        <li>Brookings Institution. "FAFSA Simplification and the Loss of the Sibling Discount." Policy Analysis, 2024.</li>
-        <li>Saving for College. "The 'Grandparent Loophole': Grandparent-Owned 529 Accounts & the New FAFSA." Updated December 2024.</li>
-        <li>National Association of Independent Colleges and Universities (NAICU). "Frequently Asked Questions About the One Big Beautiful Bill Act." 2025.</li>
-        <li>Federal Student Aid. "2025-2026 Federal Pell Grant Maximum and Minimum Award Amounts." Dear Colleague Letter, January 31, 2025.</li>
-        <li>Jobs for the Future (JFF). "Budget Bill Expands Pell Eligibility: What's Next for Students and Providers?" September 2025.</li>
-        <li>U.S. Department of Education. "Filling Out the FAFSA Form." 2024-2025 Federal Student Aid Handbook.</li>
+        <li><a href="https://fsapartners.ed.gov/knowledge-center/library/electronic-announcements/2025-08-15/2026-27-fafsa-form-and-pell-grant-eligibility-updates" class="text-brand-blue hover:underline" target="_blank" rel="noopener">U.S. Department of Education</a>. <em>"2026–27 FAFSA Form and Pell Grant Eligibility Updates."</em> Electronic Announcement, August 15, 2025.</li>
+        <li><a href="https://www.nasfaa.org/news-item/36567/ED_Details_2026-27_FAFSA_and_Pell_Grant_Eligibility_Changes" class="text-brand-blue hover:underline" target="_blank" rel="noopener">NASFAA</a>. <em>"ED Details 2026-27 FAFSA and Pell Grant Eligibility Changes."</em> August 2025.</li>
+        <li><a href="https://studentaid.gov/help-center/answers/article/2026-27-student-aid-index-and-pell-grant-eligibility-guide" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Federal Student Aid Knowledge Center</a>. <em>"2026-27 Student Aid Index and Pell Grant Eligibility Guide."</em> August 25, 2025.</li>
+        <li><a href="https://www.irs.gov/individuals/get-transcript" class="text-brand-blue hover:underline" target="_blank" rel="noopener">IRS</a>. <em>"How to Access Your Tax Return Transcript."</em></li>
+        <li><a href="https://www.councilforeconed.org/resources-for-teachers/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Council for Economic Education</a>. <em>"FAFSA Completion and Follow-Through Data."</em></li>
+        <li><a href="https://www.ncan.org/page/FAFSACompletionTracker" class="text-brand-blue hover:underline" target="_blank" rel="noopener">NCAN</a>. <em>"FAFSA Completion Tracker."</em></li>
+        <li><a href="https://research.collegeboard.org/trends/college-pricing" class="text-brand-blue hover:underline" target="_blank" rel="noopener">College Board</a>. <em>"Trends in College Pricing and Student Aid."</em></li>
       </ul>
     </div>
+
+    <!-- Article Rating -->
+
+
+    
+    <ArticleRating slug="fafsa-2026-2027-parents-guide" />
+
+    <!-- Related Articles -->
+    <RelatedArticles currentSlug="fafsa-2026-2027-parents-guide" currentTags={tags} />
+
+    <!-- Browse by Topic -->
+    <BrowseByTopic tags={tags} />
+
+    <!-- Newsletter Signup -->
+    <ArticleNewsletter articleTags={tags} />
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} slug="fafsa-2026-2027-parents-guide" />
+
+
 
     <footer class="mt-16 pt-8 border-t border-gray-200">
       <p class="text-sm text-gray-500 italic">

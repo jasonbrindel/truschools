@@ -1,11 +1,17 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import ArticleRating from '@/components/ArticleRating.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import BrowseByTopic from '@/components/BrowseByTopic.astro';
+import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
 import heroImage from '@/images/USED-preschool-teacher-reading.jpg';
 
 const title = "Choosing a Preschool When Everything Feels Like It Matters";
 const description = "The research on what actually matters in early childhood education—and how to find it during a 30-minute tour.";
-const category = 'Preschool';
+const publishDate = "2024-08-28";
+const tags = ['Preschool', 'School Choice'];
 ---
 
 <Layout title={title} description={description}>
@@ -377,18 +383,38 @@ const category = 'Preschool';
 
       <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
       <ul class="text-sm text-gray-600 space-y-2 mb-10">
-        <li>Pianta, R.C., La Paro, K.M., & Hamre, B.K. Classroom Assessment Scoring System (CLASS). Paul H. Brookes Publishing, 2008.</li>
-        <li>National Association for the Education of Young Children. NAEYC Early Learning Program Accreditation Standards and Assessment Items, 2019.</li>
-        <li>California Department of Social Services. Title 22, Division 12, Chapter 1: Child Care Center General Licensing Requirements.</li>
-        <li>Texas Health and Human Services. Minimum Standards for Child-Care Centers, Chapter 746.</li>
-        <li>Florida Department of Children and Families. Child Care Facility Handbook.</li>
-        <li>Arizona Department of Health Services. Child Care Facilities Rules, Article 7.</li>
-        <li>New York State Office of Children and Family Services. Day Care Center Regulations.</li>
-        <li>American Academy of Pediatrics. "Media and Young Minds." Pediatrics, 2016.</li>
-        <li>Burchinal, M. "Measuring Early Care and Education Quality." Child Development Perspectives, 2018.</li>
-        <li>Center on the Developing Child at Harvard University. "The Foundations of Lifelong Health Are Built in Early Childhood." 2010.</li>
+        <li><a href="https://teachstone.com/class/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Pianta, R.C., La Paro, K.M., & Hamre, B.K.</a> <em>Classroom Assessment Scoring System (CLASS).</em> Paul H. Brookes Publishing, 2008.</li>
+        <li><a href="https://www.naeyc.org/accreditation/early-learning/standards" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Association for the Education of Young Children</a>. <em>NAEYC Early Learning Program Accreditation Standards and Assessment Items.</em> 2019.</li>
+        <li><a href="https://www.cdss.ca.gov/inforesources/child-care-licensing" class="text-brand-blue hover:underline" target="_blank" rel="noopener">California Department of Social Services</a>. <em>Title 22, Division 12, Chapter 1: Child Care Center General Licensing Requirements.</em></li>
+        <li><a href="https://www.hhs.texas.gov/providers/protective-services-providers/child-care-regulation/minimum-standards" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Texas Health and Human Services</a>. <em>Minimum Standards for Child-Care Centers, Chapter 746.</em></li>
+        <li><a href="https://www.myflfamilies.com/service-programs/child-care/child-care-providers" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Florida Department of Children and Families</a>. <em>Child Care Facility Handbook.</em></li>
+        <li><a href="https://www.azdhs.gov/licensing/childcare-facilities/index.php" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Arizona Department of Health Services</a>. <em>Child Care Facilities Rules, Article 7.</em></li>
+        <li><a href="https://ocfs.ny.gov/programs/childcare/regulations/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">New York State Office of Children and Family Services</a>. <em>Day Care Center Regulations.</em></li>
+        <li><a href="https://publications.aap.org/pediatrics/article/138/5/e20162591/60503/Media-and-Young-Minds" class="text-brand-blue hover:underline" target="_blank" rel="noopener">American Academy of Pediatrics</a>. <em>"Media and Young Minds."</em> Pediatrics, 2016.</li>
+        <li><a href="https://doi.org/10.1111/cdep.12282" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Burchinal, M.</a> <em>"Measuring Early Care and Education Quality."</em> Child Development Perspectives, 2018.</li>
+        <li><a href="https://developingchild.harvard.edu/resources/the-foundations-of-lifelong-health-are-built-in-early-childhood/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Center on the Developing Child at Harvard University</a>. <em>"The Foundations of Lifelong Health Are Built in Early Childhood."</em> 2010.</li>
       </ul>
     </div>
+
+    <!-- Article Rating -->
+
+
+    
+    <ArticleRating slug="choosing-a-preschool" />
+
+    <!-- Related Articles -->
+    <RelatedArticles currentSlug="choosing-a-preschool" currentTags={tags} />
+
+    <!-- Browse by Topic -->
+    <BrowseByTopic tags={tags} />
+
+    <!-- Newsletter Signup -->
+    <ArticleNewsletter articleTags={tags} />
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} slug="choosing-a-preschool" />
+
+
 
     <footer class="mt-16 pt-8 border-t border-gray-200">
       <p class="text-sm text-gray-500 italic">

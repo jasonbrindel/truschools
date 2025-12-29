@@ -1,11 +1,17 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import ArticleRating from '@/components/ArticleRating.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import BrowseByTopic from '@/components/BrowseByTopic.astro';
+import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
 import heroImage from '@/images/USED-ap-classes-explained.jpg';
 
 const title = "AP Classes Explained";
 const description = "How Many to Take, Which Ones Matter, and What Colleges Really Want. A technical analysis of the Advanced Placement system and its role in college admissions.";
-const category = 'High School';
+const publishDate = "2024-08-01";
+const tags = ['High School', 'College Admissions'];
 ---
 
 <Layout title={title} description={description}>
@@ -333,18 +339,38 @@ const category = 'High School';
       <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
 
       <ul class="text-sm text-gray-600 space-y-2 mb-10">
-        <li>College Board. "AP Program Results: Class of 2024." Reports.collegeboard.org. 2024.</li>
-        <li>College Board. "2024 AP Score Distributions." APStudents.collegeboard.org. 2024.</li>
-        <li>College Board. "AP National and State Data." APCentral.collegeboard.org. 2024.</li>
-        <li>College Board. "Statewide AP Credit Policies." Reports.collegeboard.org. 2024.</li>
-        <li>Education Week. "The 10 Most-Requested AP Exams of 2024." EdWeek.org. February 2025.</li>
-        <li>Education Week. "Here's Why More Students Have Passed AP Exams in Recent Years." August 2024.</li>
-        <li>Getting Smart. "Can We Ditch AP for More Engaging Courses?" GettingSmart.com. March 2022.</li>
-        <li>Massachusetts Institute of Technology. "Advanced Placement." MIT Office of the First Year. 2025.</li>
-        <li>National Center for Education Statistics. "Public Schools Rate Themselves on College Preparation." March 2024.</li>
-        <li>University of California. "AP Credits." UC Admissions. 2024.</li>
+        <li><a href="https://reports.collegeboard.org/ap-program-results/class-of-2024" class="text-brand-blue hover:underline" target="_blank" rel="noopener">College Board</a>. <em>"AP Program Results: Class of 2024."</em> 2024.</li>
+        <li><a href="https://apstudents.collegeboard.org/about-ap-scores/score-distributions" class="text-brand-blue hover:underline" target="_blank" rel="noopener">College Board</a>. <em>"2024 AP Score Distributions."</em> 2024.</li>
+        <li><a href="https://apcentral.collegeboard.org/about-ap/ap-data-research/ap-national-state-data" class="text-brand-blue hover:underline" target="_blank" rel="noopener">College Board</a>. <em>"AP National and State Data."</em> 2024.</li>
+        <li><a href="https://reports.collegeboard.org/ap-program-results/statewide-ap-credit-policies" class="text-brand-blue hover:underline" target="_blank" rel="noopener">College Board</a>. <em>"Statewide AP Credit Policies."</em> 2024.</li>
+        <li><a href="https://www.edweek.org/teaching-learning/the-10-most-requested-ap-exams-of-2024/2025/02" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Education Week</a>. <em>"The 10 Most-Requested AP Exams of 2024."</em> February 2025.</li>
+        <li><a href="https://www.edweek.org/teaching-learning/heres-why-more-students-have-passed-ap-exams-in-recent-years/2024/08" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Education Week</a>. <em>"Here's Why More Students Have Passed AP Exams in Recent Years."</em> August 2024.</li>
+        <li><a href="https://www.gettingsmart.com/2022/03/18/can-we-ditch-ap-for-more-engaging-courses/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Getting Smart</a>. <em>"Can We Ditch AP for More Engaging Courses?"</em> March 2022.</li>
+        <li><a href="https://firstyear.mit.edu/academics-exploration/ap-credits/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">MIT Office of the First Year</a>. <em>"Advanced Placement (AP) Credits."</em> 2025.</li>
+        <li><a href="https://nces.ed.gov/programs/schoolsurvey/response2023/public-schools-rate-themselves.asp" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Center for Education Statistics</a>. <em>"Public Schools Rate Themselves on College Preparation."</em> March 2024.</li>
+        <li><a href="https://admission.universityofcalifornia.edu/admission-requirements/ap-exam-credit.html" class="text-brand-blue hover:underline" target="_blank" rel="noopener">University of California</a>. <em>"AP Exam Credit."</em> 2024.</li>
       </ul>
     </div>
+
+    <!-- Article Rating -->
+
+
+    
+    <ArticleRating slug="ap-classes-explained" />
+
+    <!-- Related Articles -->
+    <RelatedArticles currentSlug="ap-classes-explained" currentTags={tags} />
+
+    <!-- Browse by Topic -->
+    <BrowseByTopic tags={tags} />
+
+    <!-- Newsletter Signup -->
+    <ArticleNewsletter articleTags={tags} />
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} slug="ap-classes-explained" />
+
+
 
     <!-- Footer -->
     <footer class="mt-16 pt-8 border-t border-gray-200">

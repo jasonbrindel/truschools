@@ -1,11 +1,17 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import ArticleRating from '@/components/ArticleRating.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import BrowseByTopic from '@/components/BrowseByTopic.astro';
+import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
 import heroImage from '@/images/USED-elementary-students-writing-classroom.jpg';
 
 const title = "How to Choose the Right Elementary School";
 const description = "Finding the right elementary school means looking beyond test scores to understand how a school's culture, teaching approach, and community will support your unique child.";
-const category = 'Elementary School';
+const publishDate = "2024-09-24";
+const tags = ['Elementary School', 'School Choice'];
 ---
 
 <Layout title={title} description={description}>
@@ -216,14 +222,34 @@ const category = 'Elementary School';
       <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
 
       <ul class="text-sm text-gray-600 space-y-2 mb-10">
-        <li>National Center for Education Statistics. <em>"Digest of Education Statistics."</em> 2023.</li>
-        <li>Chetty, Raj et al. <em>"Measuring the Impacts of Teachers."</em> American Economic Review. 2014.</li>
-        <li>Reardon, Sean F. <em>"The Widening Academic Achievement Gap Between the Rich and the Poor."</em> Stanford University. 2011.</li>
-        <li>Learning Policy Institute. <em>"What Makes a Great School?"</em> 2021.</li>
-        <li>Education Week Research Center. <em>"Parents' Perspectives on School Choice."</em> 2023.</li>
-        <li>Phi Delta Kappan. <em>"The PDK Poll of the Public's Attitudes Toward the Public Schools."</em> 2024.</li>
+        <li><a href="https://nces.ed.gov/programs/digest/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Center for Education Statistics</a>. <em>"Digest of Education Statistics."</em> 2023.</li>
+        <li><a href="https://doi.org/10.1257/aer.104.9.2593" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Chetty, Raj et al.</a> <em>"Measuring the Impacts of Teachers."</em> American Economic Review. 2014.</li>
+        <li><a href="https://cepa.stanford.edu/content/widening-academic-achievement-gap-between-rich-and-poor" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Reardon, Sean F.</a> <em>"The Widening Academic Achievement Gap Between the Rich and the Poor."</em> Stanford University. 2011.</li>
+        <li><a href="https://learningpolicyinstitute.org/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Learning Policy Institute</a>. <em>"What Makes a Great School?"</em> 2021.</li>
+        <li><a href="https://www.edweek.org/research-center" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Education Week Research Center</a>. <em>"Parents' Perspectives on School Choice."</em> 2023.</li>
+        <li><a href="https://pdkpoll.org/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Phi Delta Kappan</a>. <em>"The PDK Poll of the Public's Attitudes Toward the Public Schools."</em> 2024.</li>
       </ul>
     </div>
+
+    <!-- Article Rating -->
+
+
+    
+    <ArticleRating slug="how-to-choose-the-right-elementary-school" />
+
+    <!-- Related Articles -->
+    <RelatedArticles currentSlug="how-to-choose-the-right-elementary-school" currentTags={tags} />
+
+    <!-- Browse by Topic -->
+    <BrowseByTopic tags={tags} />
+
+    <!-- Newsletter Signup -->
+    <ArticleNewsletter articleTags={tags} />
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} slug="how-to-choose-the-right-elementary-school" />
+
+
 
     <!-- Footer -->
     <footer class="mt-16 pt-8 border-t border-gray-200">

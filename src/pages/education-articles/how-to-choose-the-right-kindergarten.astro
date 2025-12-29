@@ -1,11 +1,17 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import ArticleRating from '@/components/ArticleRating.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import BrowseByTopic from '@/components/BrowseByTopic.astro';
+import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
 import heroImage from '@/images/USED-how-to-choose-kindergarten.jpg';
 
 const title = "How to Choose the Right Kindergarten: 25 Essential Questions to Ask During School Visits";
 const description = "A warm, research-informed field guide for school tours. Learn what questions to ask, what to look for, and how to evaluate whether a kindergarten is right for your child.";
-const category = 'Kindergarten';
+const publishDate = "2024-09-27";
+const tags = ['Kindergarten', 'School Choice'];
 ---
 
 <Layout title={title} description={description}>
@@ -178,18 +184,38 @@ const category = 'Kindergarten';
       <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
 
       <ul class="text-sm text-gray-600 space-y-2 mb-10">
-        <li>American Academy of Pediatrics. "Power of Play in Early Childhood." HealthyChildren.org, 2021.</li>
-        <li>National Association for the Education of Young Children (NAEYC). "Developmentally Appropriate Practice: Defining Developmentally Appropriate Practice" (Position Statement). NAEYC, 2020.</li>
-        <li>National Association for the Education of Young Children (NAEYC). "Developmentally Appropriate Practice in Kindergarten: Introduction." NAEYC, 2024.</li>
-        <li>National Association for the Education of Young Children (NAEYC). "Staff-to-Child Ratios and Group Size." NAEYC Accreditation, n.d.</li>
-        <li>Institute of Education Sciences, What Works Clearinghouse. "Foundational Skills to Support Reading for Understanding in Kindergarten Through 3rd Grade." Practice Guide, 2016.</li>
-        <li>U.S. Department of Health and Human Services and U.S. Department of Education. "Policy Statement on Expulsion and Suspension Policies in Early Childhood Settings." 2014.</li>
-        <li>U.S. Department of Education. "Individuals with Disabilities Education Act (IDEA)." Ed.gov, n.d.</li>
-        <li>U.S. Department of Education. "The Civil Rights of Students With Hidden Disabilities and Section 504." Ed.gov, n.d.</li>
-        <li>Centers for Disease Control and Prevention. "Information for Childcare Providers: Before, During, and After an Emergency." CDC, 2024.</li>
-        <li>Pianta, Robert C., et al. "Defining Early Education Quality Using CLASS-Observed Teacher–Child Interactions." <em>Frontiers in Psychology</em>, 2023.</li>
+        <li><a href="https://www.healthychildren.org/English/ages-stages/toddler/fitness/Pages/Caution-Children-at-Play.aspx" class="text-brand-blue hover:underline" target="_blank" rel="noopener">American Academy of Pediatrics</a>. <em>"Power of Play in Early Childhood."</em> HealthyChildren.org, 2021.</li>
+        <li><a href="https://www.naeyc.org/resources/position-statements/dap/definition" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Association for the Education of Young Children (NAEYC)</a>. <em>"Developmentally Appropriate Practice: Defining Developmentally Appropriate Practice"</em> (Position Statement). NAEYC, 2020.</li>
+        <li><a href="https://www.naeyc.org/resources/pubs/books/developmentally-appropriate-practice-kindergarten" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Association for the Education of Young Children (NAEYC)</a>. <em>"Developmentally Appropriate Practice in Kindergarten: Introduction."</em> NAEYC, 2024.</li>
+        <li><a href="https://www.naeyc.org/our-work/families/staff-to-child-ratio-class-size" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Association for the Education of Young Children (NAEYC)</a>. <em>"Staff-to-Child Ratios and Group Size."</em> NAEYC Accreditation, n.d.</li>
+        <li><a href="https://ies.ed.gov/ncee/wwc/PracticeGuide/21" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Institute of Education Sciences, What Works Clearinghouse</a>. <em>"Foundational Skills to Support Reading for Understanding in Kindergarten Through 3rd Grade."</em> Practice Guide, 2016.</li>
+        <li><a href="https://www2.ed.gov/policy/gen/guid/school-discipline/policy-statement-ece-expulsions-suspensions.pdf" class="text-brand-blue hover:underline" target="_blank" rel="noopener">U.S. Department of Health and Human Services and U.S. Department of Education</a>. <em>"Policy Statement on Expulsion and Suspension Policies in Early Childhood Settings."</em> 2014.</li>
+        <li><a href="https://sites.ed.gov/idea/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">U.S. Department of Education</a>. <em>"Individuals with Disabilities Education Act (IDEA)."</em> Ed.gov, n.d.</li>
+        <li><a href="https://www2.ed.gov/about/offices/list/ocr/504faq.html" class="text-brand-blue hover:underline" target="_blank" rel="noopener">U.S. Department of Education</a>. <em>"The Civil Rights of Students With Hidden Disabilities and Section 504."</em> Ed.gov, n.d.</li>
+        <li><a href="https://www.cdc.gov/niosh/topics/emres/chemagent.html" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Centers for Disease Control and Prevention</a>. <em>"Information for Childcare Providers: Before, During, and After an Emergency."</em> CDC, 2024.</li>
+        <li><a href="https://doi.org/10.3389/fpsyg.2023.1266850" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Pianta, Robert C., et al.</a> <em>"Defining Early Education Quality Using CLASS-Observed Teacher–Child Interactions."</em> Frontiers in Psychology, 2023.</li>
       </ul>
     </div>
+
+    <!-- Article Rating -->
+
+
+    
+    <ArticleRating slug="how-to-choose-the-right-kindergarten" />
+
+    <!-- Related Articles -->
+    <RelatedArticles currentSlug="how-to-choose-the-right-kindergarten" currentTags={tags} />
+
+    <!-- Browse by Topic -->
+    <BrowseByTopic tags={tags} />
+
+    <!-- Newsletter Signup -->
+    <ArticleNewsletter articleTags={tags} />
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} slug="how-to-choose-the-right-kindergarten" />
+
+
 
     <!-- Footer -->
     <footer class="mt-16 pt-8 border-t border-gray-200">

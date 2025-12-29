@@ -1,11 +1,17 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import ArticleRating from '@/components/ArticleRating.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import BrowseByTopic from '@/components/BrowseByTopic.astro';
+import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
 import heroImage from '@/images/USED-kindergarten-classroom-environment.jpg';
 
 const title = "What Does a Good Preschool Actually Look Like?";
 const description = "The search for the right early learning environment is more nuanced than checklists suggest—and more forgiving than anxious parents might fear.";
-const category = 'Preschool';
+const publishDate = "2025-01-01";
+const tags = ['Preschool', 'School Choice'];
 ---
 
 <Layout title={title} description={description}>
@@ -177,18 +183,38 @@ const category = 'Preschool';
 
       <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
       <ul class="text-sm text-gray-600 space-y-2 mb-10">
-        <li>Center on the Developing Child at Harvard University. "Serve and Return." Harvard University, 2024.</li>
-        <li>Education Endowment Foundation. "Play-Based Learning: Early Years Toolkit." 2024.</li>
-        <li>Institute of Education Sciences. "Prioritizing Play: The Importance of Play-Based Learning in Early Education." U.S. Department of Education, 2024.</li>
-        <li>Learning Policy Institute. "The Building Blocks of High-Quality Early Childhood Education Programs." 2016.</li>
-        <li>National Association for the Education of Young Children. "The 10 NAEYC Program Standards." NAEYC, 2024.</li>
-        <li>National Association for the Education of Young Children. "Staff-to-Child Ratio and Class Size." NAEYC, 2018.</li>
-        <li>National Institute for Early Education Research. "Better Teachers, Better Preschools: Student Achievement Linked to Teacher Qualifications." NIEER Preschool Policy Matters, 2004.</li>
-        <li>Regional Educational Laboratory West, Institute of Education Sciences. "The Relationship Between Preschool Teacher Qualifications and Student Outcomes." IES, 2019.</li>
-        <li>University of Cambridge. "The Power of Play-Based Learning in Preschool and Elementary School." Edutopia, 2022.</li>
-        <li>Zosh, Jennifer M., et al. "The Power of Playful Learning in the Early Childhood Setting." Young Children, National Association for the Education of Young Children, Summer 2022.</li>
+        <li><a href="https://developingchild.harvard.edu/science/key-concepts/serve-and-return/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Center on the Developing Child at Harvard University</a>. <em>"Serve and Return."</em> Harvard University, 2024.</li>
+        <li><a href="https://educationendowmentfoundation.org.uk/education-evidence/early-years-toolkit/play-based-learning" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Education Endowment Foundation</a>. <em>"Play-Based Learning: Early Years Toolkit."</em> 2024.</li>
+        <li><a href="https://ies.ed.gov/ncee/rel/Products/Region/southwest/Blog/85217" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Institute of Education Sciences</a>. <em>"Prioritizing Play: The Importance of Play-Based Learning in Early Education."</em> U.S. Department of Education, 2024.</li>
+        <li><a href="https://learningpolicyinstitute.org/product/building-blocks-high-quality-early-childhood-education-programs" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Learning Policy Institute</a>. <em>"The Building Blocks of High-Quality Early Childhood Education Programs."</em> 2016.</li>
+        <li><a href="https://www.naeyc.org/accreditation/early-learning/standards" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Association for the Education of Young Children</a>. <em>"The 10 NAEYC Program Standards."</em> NAEYC, 2024.</li>
+        <li><a href="https://www.naeyc.org/our-work/families/staff-to-child-ratio-class-size" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Association for the Education of Young Children</a>. <em>"Staff-to-Child Ratio and Class Size."</em> NAEYC, 2018.</li>
+        <li><a href="https://nieer.org/policy-issue/policy-report-better-teachers-better-preschools-student-achievement-linked-to-teacher-qualifications" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Institute for Early Education Research</a>. <em>"Better Teachers, Better Preschools: Student Achievement Linked to Teacher Qualifications."</em> NIEER Preschool Policy Matters, 2004.</li>
+        <li><a href="https://ies.ed.gov/ncee/rel/regions/west" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Regional Educational Laboratory West, Institute of Education Sciences</a>. <em>"The Relationship Between Preschool Teacher Qualifications and Student Outcomes."</em> IES, 2019.</li>
+        <li><a href="https://www.edutopia.org/article/power-play-based-learning" class="text-brand-blue hover:underline" target="_blank" rel="noopener">University of Cambridge</a>. <em>"The Power of Play-Based Learning in Preschool and Elementary School."</em> Edutopia, 2022.</li>
+        <li><a href="https://www.naeyc.org/resources/pubs/yc/summer2022/power-playful-learning" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Zosh, Jennifer M., et al.</a> <em>"The Power of Playful Learning in the Early Childhood Setting."</em> Young Children, National Association for the Education of Young Children, Summer 2022.</li>
       </ul>
     </div>
+
+    <!-- Article Rating -->
+
+
+    
+    <ArticleRating slug="what-does-a-good-preschool-look-like" />
+
+    <!-- Related Articles -->
+    <RelatedArticles currentSlug="what-does-a-good-preschool-look-like" currentTags={tags} />
+
+    <!-- Browse by Topic -->
+    <BrowseByTopic tags={tags} />
+
+    <!-- Newsletter Signup -->
+    <ArticleNewsletter articleTags={tags} />
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} slug="what-does-a-good-preschool-look-like" />
+
+
 
     <footer class="mt-16 pt-8 border-t border-gray-200">
       <p class="text-sm text-gray-500 italic">

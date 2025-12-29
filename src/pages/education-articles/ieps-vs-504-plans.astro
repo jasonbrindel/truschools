@@ -1,11 +1,17 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import ArticleRating from '@/components/ArticleRating.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import BrowseByTopic from '@/components/BrowseByTopic.astro';
+import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
 import heroImage from '@/images/USED-classroom-teacher-students-illustration.jpg';
 
 const title = "IEPs vs. 504 Plans: What Every Elementary School Parent Needs to Understand";
 const description = "A definitive guide to the two federal frameworks that provide support for children with learning differences—how they work, what they provide, and how parents can navigate each system effectively.";
-const category = 'Special Education';
+const publishDate = "2024-10-06";
+const tags = ['Special Education', 'Elementary School'];
 ---
 
 <Layout title={title} description={description}>
@@ -284,20 +290,39 @@ const category = 'Special Education';
       <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
 
       <ul class="text-sm text-gray-600 space-y-2 mb-10">
-        <li>U.S. Department of Education, Office of Special Education Programs. <em>IDEA regulations, 34 C.F.R. Part 300.</em></li>
-        <li>U.S. Department of Education. <em>"A Guide to the Individualized Education Program."</em> ED Pubs.</li>
-        <li>U.S. Department of Education, Office for Civil Rights. <em>"Protecting Students with Disabilities: Frequently Asked Questions About Section 504 and the Education of Children with Disabilities."</em></li>
-        <li>National Center for Education Statistics. <em>"Students with Disabilities."</em> Condition of Education, 2024.</li>
-        <li>California Department of Education. Special Education Data Reports and Enrollment Statistics.</li>
-        <li>The Advocacy Institute. Analysis of IDEA Part B Child Count Data, 2023-2024.</li>
-        <li>Center for Parent Information and Resources. <em>"Procedural Safeguards"</em> and <em>"The IEP Team."</em> parentcenterhub.org</li>
-        <li>National Center for Learning Disabilities. <em>"IEPs vs. 504 Plans."</em> ncld.org</li>
-        <li>Disability Rights California. <em>"How to Obtain an Independent Educational Evaluation at Public Expense."</em></li>
-        <li>EdSource. <em>"Parents' guide to 504 plans and IEPs: What they are and how they're different."</em> 2022.</li>
-        <li>K-12 Dive. <em>"Special education enrollment climbs to nearly 8M."</em> February 2025.</li>
-        <li>Center for Appropriate Dispute Resolution in Special Education. Due Process Complaint Analysis, 2022-23.</li>
+        <li><a href="https://sites.ed.gov/idea/regs/b/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">IDEA Regulations</a>. <em>"34 C.F.R. Part 300."</em></li>
+        <li><a href="https://www2.ed.gov/parents/needs/speced/iepguide/index.html" class="text-brand-blue hover:underline" target="_blank" rel="noopener">U.S. Department of Education</a>. <em>"A Guide to the Individualized Education Program (IEP)."</em></li>
+        <li><a href="https://www2.ed.gov/about/offices/list/ocr/504faq.html" class="text-brand-blue hover:underline" target="_blank" rel="noopener">OCR</a>. <em>"Protecting Students with Disabilities: FAQs about Section 504."</em></li>
+        <li><a href="https://nces.ed.gov/programs/coe/indicator/cgg" class="text-brand-blue hover:underline" target="_blank" rel="noopener">NCES</a>. <em>"Students with Disabilities, Condition of Education (2024)."</em></li>
+        <li><a href="https://www.cde.ca.gov/sp/se/ds/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">California Department of Education</a>. <em>"Special Education Data Reports."</em></li>
+        <li><a href="https://www.parentcenterhub.org/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Center for Parent Information and Resources</a>. <em>"Procedural Safeguards / IEP Team."</em></li>
+        <li><a href="https://ncld.org/resources/parent-center/ieps-vs-504-plans/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Center for Learning Disabilities</a>. <em>"IEPs vs 504 Plans."</em></li>
+        <li><a href="https://www.disabilityrightsca.org/publications/special-education-rights-and-responsibilities" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Disability Rights California</a>. <em>"Independent Educational Evaluations (IEE)."</em></li>
+        <li><a href="https://edsource.org/2022/parents-guide-to-504-plans-and-ieps-what-they-are-and-how-theyre-different/675420" class="text-brand-blue hover:underline" target="_blank" rel="noopener">EdSource</a>. <em>"Parents' Guide to 504 Plans and IEPs."</em> 2022.</li>
+        <li><a href="https://www.k12dive.com/news/special-education-enrollment-students-with-disabilities/708843/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">K-12 Dive</a>. <em>"Special Education Enrollment Climbs to Nearly 8M."</em> February 2025.</li>
+        <li><a href="https://www.cadreworks.org/resources/data-on-dispute-resolution" class="text-brand-blue hover:underline" target="_blank" rel="noopener">CADRE</a>. <em>"Due Process Complaint Analysis (2022–23)."</em></li>
       </ul>
     </div>
+
+    <!-- Article Rating -->
+
+
+    
+    <ArticleRating slug="ieps-vs-504-plans" />
+
+    <!-- Related Articles -->
+    <RelatedArticles currentSlug="ieps-vs-504-plans" currentTags={tags} />
+
+    <!-- Browse by Topic -->
+    <BrowseByTopic tags={tags} />
+
+    <!-- Newsletter Signup -->
+    <ArticleNewsletter articleTags={tags} />
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} slug="ieps-vs-504-plans" />
+
+
 
     <!-- Footer -->
     <footer class="mt-16 pt-8 border-t border-gray-200">

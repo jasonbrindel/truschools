@@ -1,11 +1,17 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import ArticleRating from '@/components/ArticleRating.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import BrowseByTopic from '@/components/BrowseByTopic.astro';
+import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
 import heroImage from '@/images/USED-law-school-lsat-vs-gre.jpg';
 
 const title = "Law School LSAT vs. GRE: Which Test to Take and How Schools Really Evaluate Them";
 const description = "More law schools than ever accept the GRE, but applicant behavior tells a more complicated story. Here's what you need to know about the post-logic-games LSAT, school policies, and the strategic calculus of test selection.";
-const category = 'Graduate School';
+const publishDate = "2024-10-24";
+const tags = ['Graduate School', 'College Admissions'];
 ---
 
 <Layout title={title} description={description}>
@@ -227,19 +233,39 @@ const category = 'Graduate School';
 
       <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
       <ul class="text-sm text-gray-600 space-y-2 mb-10">
-        <li>Law School Admission Council, 'What to Expect Starting With the August 2024 LSAT,' October 2023</li>
-        <li>American Bar Association, 'ABA website updates data on law school admissions, tuition and other matters,' December 2024</li>
-        <li>American Bar Association, 'Council of the Section of Legal Education and Admissions to the Bar releases annual law school data,' December 2025</li>
-        <li>Educational Testing Service, 'Law Schools that Accept GRE Scores for Their JD Programs,' 2025</li>
-        <li>Yale Law School, 'Application Components,' Admissions Website, 2025</li>
-        <li>Stanford Law School, 'JD Application Process,' Admissions Website, 2025</li>
-        <li>Columbia Law School, 'Frequently Asked Questions,' Admissions Website, 2025</li>
-        <li>Spivey Consulting, 'Law School Data Analysis: 2025 ABA 509 Disclosures,' December 2025</li>
-        <li>U.S. News & World Report, 'Methodology: 2025 Best Law Schools Rankings,' April 2025</li>
-        <li>LSAC, 'LSAT Score Cancellations' and 'Limits on Repeating the Test,' 2025</li>
-        <li>U.S. News & World Report, 'Law School Applicants With Multiple LSAT Scores,' April 2025</li>
+        <li><a href="https://www.lsac.org/lsat/lsat-dates-deadlines-score-release-dates/what-expect-starting-august-2024-lsat" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Law School Admission Council</a>. <em>"What to Expect Starting With the August 2024 LSAT."</em> October 2023.</li>
+        <li><a href="https://www.americanbar.org/groups/legal_education/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">American Bar Association</a>. <em>"ABA website updates data on law school admissions, tuition and other matters."</em> December 2024.</li>
+        <li><a href="https://www.americanbar.org/groups/legal_education/resources/statistics/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">American Bar Association</a>. <em>"Council of the Section of Legal Education and Admissions to the Bar releases annual law school data."</em> December 2025.</li>
+        <li><a href="https://www.ets.org/gre/schools/about/law.html" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Educational Testing Service</a>. <em>"Law Schools that Accept GRE Scores for Their JD Programs."</em> 2025.</li>
+        <li><a href="https://law.yale.edu/admissions/jd-admissions/application-process" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Yale Law School</a>. <em>"Application Components."</em> Admissions Website, 2025.</li>
+        <li><a href="https://law.stanford.edu/apply/how-to-apply/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Stanford Law School</a>. <em>"JD Application Process."</em> Admissions Website, 2025.</li>
+        <li><a href="https://www.law.columbia.edu/admissions/jd/faq" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Columbia Law School</a>. <em>"Frequently Asked Questions."</em> Admissions Website, 2025.</li>
+        <li><a href="https://www.spiveyconsulting.com/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Spivey Consulting</a>. <em>"Law School Data Analysis: 2025 ABA 509 Disclosures."</em> December 2025.</li>
+        <li><a href="https://www.usnews.com/education/best-graduate-schools/articles/law-schools-methodology" class="text-brand-blue hover:underline" target="_blank" rel="noopener">U.S. News & World Report</a>. <em>"Methodology: 2025 Best Law Schools Rankings."</em> April 2025.</li>
+        <li><a href="https://www.lsac.org/lsat/taking-lsat/lsat-scoring/lsat-score-cancellation" class="text-brand-blue hover:underline" target="_blank" rel="noopener">LSAC</a>. <em>"LSAT Score Cancellations"</em> and <em>"Limits on Repeating the Test."</em> 2025.</li>
+        <li><a href="https://www.usnews.com/education/best-graduate-schools/top-law-schools" class="text-brand-blue hover:underline" target="_blank" rel="noopener">U.S. News & World Report</a>. <em>"Law School Applicants With Multiple LSAT Scores."</em> April 2025.</li>
       </ul>
     </div>
+
+    <!-- Article Rating -->
+
+
+    
+    <ArticleRating slug="law-school-lsat-vs-gre" />
+
+    <!-- Related Articles -->
+    <RelatedArticles currentSlug="law-school-lsat-vs-gre" currentTags={tags} />
+
+    <!-- Browse by Topic -->
+    <BrowseByTopic tags={tags} />
+
+    <!-- Newsletter Signup -->
+    <ArticleNewsletter articleTags={tags} />
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} slug="law-school-lsat-vs-gre" />
+
+
 
     <footer class="mt-16 pt-8 border-t border-gray-200">
       <p class="text-sm text-gray-500 italic">

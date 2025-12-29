@@ -1,11 +1,17 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import ArticleRating from '@/components/ArticleRating.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import BrowseByTopic from '@/components/BrowseByTopic.astro';
+import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
 import heroImage from '@/images/USED-high-school-graduation-requirements.jpg';
 
 const title = "High School Graduation Requirements by State: What Your Teen Actually Needs to Graduate";
 const description = "From 13 credits in Wyoming to 26 in Texas, the requirements for a high school diploma vary dramatically across the country. Understanding your state's specific rules—and how local districts may add their own—is essential for planning your student's path to graduation and beyond.";
-const category = 'High School';
+const publishDate = "2024-09-12";
+const tags = ['High School', 'College Admissions'];
 ---
 
 <Layout title={title} description={description}>
@@ -285,23 +291,37 @@ const category = 'High School';
       <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
 
       <ul class="text-sm text-gray-600 space-y-2 mb-10">
-        <li>Education Commission of the States. (2025). <em>50-State Comparison: High School Graduation Requirements.</em></li>
-        <li>National Center for Fair and Open Testing (FairTest). (2025). <em>Summary of State Graduation Requirements.</em></li>
-        <li>Next Gen Personal Finance. (2025). <em>Financial Education State Requirements Tracker.</em></li>
-        <li>National Endowment for Financial Education. (2025). <em>2025 Legislative Review of K-12 Financial Education Requirements.</em></li>
-        <li>National College Attainment Network. (2025). <em>Universal FAFSA Completion with Supports.</em></li>
-        <li>Hoover Institution. (2024). <em>State Civics Requirements in 2024.</em></li>
-        <li>Texas Education Agency. (2025). <em>State Graduation Requirements and 2025 Graduation Toolkit.</em></li>
-        <li>California Department of Education. (2025). <em>State Minimum High School Graduation Requirements.</em></li>
-        <li>New York State Education Department. (2025). <em>Graduation Requirements and NY Inspires Implementation Plan.</em></li>
-        <li>Florida Department of Education. (2025). <em>Graduation Requirements.</em></li>
-        <li>Center for American Progress. (2018). <em>Are High School Diplomas Really a Ticket to College and Work?</em></li>
-        <li>National Association for College Admission Counseling. (2023). <em>High School Classes Required for College Admission.</em></li>
-        <li>Stateline/Pew Charitable Trusts. (2024). <em>High School Exit Exams Dwindle to About Half a Dozen States.</em></li>
-        <li>Education Week. (2024). <em>A Few Years Ago, 8 States Required Personal Finance Education. Now It's Up to Half.</em></li>
-        <li>UCLA Chicano Studies Research Center/Stanford University. (2025). <em>Advancing Ethnic Studies in California High Schools: A Survey of Teacher Preparation Programs.</em></li>
+        <li><a href="https://www.ecs.org/50-state-comparison-high-school-graduation-requirements/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Education Commission of the States</a>. <em>"50-State Comparison: High School Graduation Requirements."</em></li>
+        <li><a href="https://fairtest.org/high-school-graduation-tests/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">FairTest</a>. <em>"State High School Graduation Test Requirements Overview."</em></li>
+        <li><a href="https://www.ngpf.org/mission/financial-education-report/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Next Gen Personal Finance</a>. <em>"Financial Education Graduation Requirements Tracker."</em></li>
+        <li><a href="https://www.nefe.org/initiatives/state-legislation/index.html" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Endowment for Financial Education</a>. <em>"State Financial Education Legislative Review (2024)."</em></li>
+        <li><a href="https://www.ncan.org/page/FAFSAPolicyBrief" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National College Attainment Network</a>. <em>"Universal FAFSA Completion with Supports."</em></li>
+        <li><a href="https://www.hoover.org/research/civics-education-requirements" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Hoover Institution</a>. <em>"Civics Education Requirements Analysis (2024)."</em></li>
+        <li><a href="https://tea.texas.gov/academics/graduation-information" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Texas Education Agency</a>. <em>"Graduation and Diploma Requirements Toolkit."</em></li>
+        <li><a href="https://www.cde.ca.gov/ci/gs/hs/hsgrads.asp" class="text-brand-blue hover:underline" target="_blank" rel="noopener">California Department of Education</a>. <em>"High School Graduation Requirements."</em></li>
+        <li><a href="https://www.nysed.gov/curriculum-instruction/general-education-and-diploma-requirements" class="text-brand-blue hover:underline" target="_blank" rel="noopener">New York State Education Department</a>. <em>"Graduation Requirements Overview."</em></li>
       </ul>
     </div>
+
+    <!-- Article Rating -->
+
+
+    
+    <ArticleRating slug="high-school-graduation-requirements-by-state" />
+
+    <!-- Related Articles -->
+    <RelatedArticles currentSlug="high-school-graduation-requirements-by-state" currentTags={tags} />
+
+    <!-- Browse by Topic -->
+    <BrowseByTopic tags={tags} />
+
+    <!-- Newsletter Signup -->
+    <ArticleNewsletter articleTags={tags} />
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} slug="high-school-graduation-requirements-by-state" />
+
+
 
     <!-- Footer -->
     <footer class="mt-16 pt-8 border-t border-gray-200">

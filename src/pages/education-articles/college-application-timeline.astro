@@ -1,11 +1,17 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import ArticleRating from '@/components/ArticleRating.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import BrowseByTopic from '@/components/BrowseByTopic.astro';
+import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
 import heroImage from '@/images/USED-college-application-timeline.jpg';
 
 const title = "The College Application System: A Technical Guide to the Modern Admissions Timeline";
 const description = "How strategic timing, algorithmic matching, and data-driven decisions have transformed the path from high school junior to college freshman.";
-const category = 'College Admissions';
+const publishDate = "2024-08-31";
+const tags = ['College Admissions', 'High School'];
 ---
 
 <Layout title={title} description={description}>
@@ -320,20 +326,33 @@ const category = 'College Admissions';
 
       <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
       <ul class="text-sm text-gray-600 space-y-2 mb-10">
-        <li>College Board. PSAT/NMSQT Student Guide and National Merit Scholarship Program. collegeboard.org</li>
-        <li>Common Application. 2025-2026 Essay Prompts and Application Guide. commonapp.org</li>
-        <li>Compass Education Group. National Merit Semifinalist Cutoffs and Testing Policies. compassprep.com</li>
-        <li>Federal Student Aid, U.S. Department of Education. FAFSA Simplification Implementation Timeline. studentaid.gov</li>
-        <li>National Association for College Admission Counseling (NACAC). State of College Admission Reports.</li>
-        <li>Shemmassian Academic Consulting. College Application Timeline Research. shemmassianconsulting.com</li>
-        <li>BigFuture, College Board. Financial Aid and Application Deadlines. bigfuture.collegeboard.org</li>
-        <li>CSS Profile, College Board. Participating Institutions List. cssprofile.collegeboard.org</li>
-        <li>FairTest. ACT/SAT Optional College List. fairtest.org</li>
-        <li>Town & Country. Elite Colleges Extending Waitlist Activity Into Summer 2025. August 2025.</li>
-        <li>Higher Ed Dive. FAFSA 2025-26 Timeline Updates. highereddive.com</li>
-        <li>Applerouth. 2025 College Admissions Trends: Waitlists and Late Scholarships. applerouth.com</li>
+        <li><a href="https://satsuite.collegeboard.org/media/pdf/psat-nmsqt-student-guide.pdf" class="text-brand-blue hover:underline" target="_blank" rel="noopener">College Board</a>. <em>"PSAT/NMSQT Student Guide."</em></li>
+        <li><a href="https://www.commonapp.org/blog/announcing-2025-2026-common-app-essay-prompts" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Common Application</a>. <em>"Announcing the 2025–2026 Common App Essay Prompts."</em></li>
+        <li><a href="https://www.compassprep.com/national-merit-semifinalist-cutoffs/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Compass Prep</a>. <em>"National Merit Semifinalist Cutoffs (Class of 2027)."</em></li>
+        <li><a href="https://www.nasfaa.org/uploads/documents/FAFSA_Simplification_Implementation_Timeline.pdf" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Federal Student Aid / NASFAA</a>. <em>"FAFSA Simplification Implementation Timeline."</em></li>
+        <li><a href="https://www.nacacnet.org/state-of-college-admission-report/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">NACAC</a>. <em>"State of College Admission Report."</em></li>
       </ul>
     </div>
+
+    <!-- Article Rating -->
+
+
+    
+    <ArticleRating slug="college-application-timeline" />
+
+    <!-- Related Articles -->
+    <RelatedArticles currentSlug="college-application-timeline" currentTags={tags} />
+
+    <!-- Browse by Topic -->
+    <BrowseByTopic tags={tags} />
+
+    <!-- Newsletter Signup -->
+    <ArticleNewsletter articleTags={tags} />
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} slug="college-application-timeline" />
+
+
 
     <footer class="mt-16 pt-8 border-t border-gray-200">
       <p class="text-sm text-gray-500 italic">

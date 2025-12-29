@@ -5,7 +5,6 @@ const sessionMatch = cookies.match(/session=([^;]+)/);
 const sessionToken = sessionMatch ? sessionMatch[1] : null;
 
 let isAuthenticated = false;
-let user = null;
 let dbPrompts: any[] = [];
 
 const db = (Astro.locals as any).runtime?.env?.DB;
@@ -21,11 +20,6 @@ if (sessionToken && db) {
 
     if (session) {
       isAuthenticated = true;
-      user = {
-        id: session.user_id,
-        email: session.email,
-        name: session.name
-      };
 
       // Load prompts from database
       const promptsResult = await db.prepare(
@@ -281,9 +275,9 @@ Sources section: Include a "Sources" section listing technical papers, reports, 
 // Use database prompts if available, otherwise use defaults
 const prompts = dbPrompts.length > 0 ? dbPrompts : defaultPrompts;
 
-// Convert to JSON for client-side use
+// Convert to JSON for client-side use (includes template and name)
 const promptsJson = JSON.stringify(prompts.reduce((acc: any, p: any) => {
-  acc[p.slug] = p.prompt_template;
+  acc[p.slug] = { template: p.prompt_template, name: p.name };
   return acc;
 }, {}));
 
@@ -294,7 +288,7 @@ import AdminNav from '@/components/AdminNav.astro';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Article Prompt Builder - TruSchools</title>
+    <title>Prompt Builder - TruSchools</title>
     <style>
         * {
             box-sizing: border-box;
@@ -345,35 +339,47 @@ import AdminNav from '@/components/AdminNav.astro';
         }
 
         .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
+            margin-bottom: 24px;
         }
 
         h1 {
             font-size: 1.75rem;
             font-weight: 600;
-            margin: 0;
-        }
-
-        .user-info {
-            font-size: 0.875rem;
-            color: #666;
-        }
-
-        .user-info a {
-            color: #0066cc;
-            text-decoration: none;
-        }
-
-        .user-info a:hover {
-            text-decoration: underline;
+            margin: 0 0 4px 0;
         }
 
         .subtitle {
             color: #666;
-            margin-bottom: 32px;
+            margin: 0 0 16px 0;
+        }
+
+        .page-tabs {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 24px;
+        }
+
+        .page-tab {
+            padding: 8px 16px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.15s ease;
+        }
+
+        .page-tab.active {
+            background: #0066cc;
+            color: white;
+        }
+
+        .page-tab:not(.active) {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+        .page-tab:not(.active):hover {
+            background: #d1d5db;
         }
 
         .section {
@@ -398,7 +404,41 @@ import AdminNav from '@/components/AdminNav.astro';
             font-size: 1rem;
             font-family: inherit;
             resize: vertical;
-            min-height: 80px;
+            min-height: 160px;
+        }
+
+        .topic-input-wrapper {
+            position: relative;
+        }
+
+        .clear-topic {
+            position: absolute;
+            right: 12px;
+            top: 12px;
+            background: #e0e0e0;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            font-size: 14px;
+            line-height: 1;
+            cursor: pointer;
+            color: #666;
+            display: none;
+            padding: 0;
+        }
+
+        .clear-topic:hover {
+            background: #ccc;
+            color: #333;
+        }
+
+        .clear-topic.visible {
+            display: block;
+        }
+
+        .topic-actions {
+            margin-top: 12px;
         }
 
         textarea:focus {
@@ -586,13 +626,33 @@ import AdminNav from '@/components/AdminNav.astro';
         .btn-close-modal:hover {
             background: #5a6268;
         }
+
+        .btn-save {
+            background: #6f42c1;
+            color: white;
+            padding: 10px 20px;
+            font-size: 0.9375rem;
+        }
+
+        .btn-save:hover {
+            background: #5a32a3;
+        }
+
+        .btn-save.saved {
+            background: #666;
+        }
+
+        .btn-save:disabled {
+            background: #999;
+            cursor: not-allowed;
+        }
     </style>
 </head>
 <body>
     {!isAuthenticated ? (
         <div class="auth-required">
             <h1>Login Required</h1>
-            <p>You need to be logged in to access the Article Prompt Builder.</p>
+            <p>You need to be logged in to access the Prompt Builder.</p>
             <a href="/login">Sign In</a>
         </div>
     ) : (
@@ -600,16 +660,25 @@ import AdminNav from '@/components/AdminNav.astro';
             <AdminNav currentPage="prompt-builder" />
             <div class="content-wrapper">
             <div class="header">
-                <h1>Article Prompt Builder</h1>
-                <div class="user-info">
-                    {user?.name || user?.email} | <a href="/tools/prompts">Manage Prompts</a>
-                </div>
+                <h1>Prompt Builder</h1>
+                <p class="subtitle">Enter a topic, choose a writing style, and generate your prompt.</p>
             </div>
-            <p class="subtitle">Enter a topic, choose a writing style, and generate your prompt.</p>
+
+            <div class="page-tabs">
+                <a href="/tools/article-prompt-builder" class="page-tab active">Prompt Builder</a>
+                <a href="/tools/saved-prompts" class="page-tab">Saved Prompts</a>
+                <a href="/tools/prompts" class="page-tab">Manage Prompts</a>
+            </div>
 
             <div class="section">
-                <label for="topic">Article Topic</label>
-                <textarea id="topic" placeholder="e.g., The rise of microschools in American education"></textarea>
+                <label for="topic">Topic</label>
+                <div class="topic-input-wrapper">
+                    <textarea id="topic" placeholder="e.g., The rise of microschools in American education"></textarea>
+                    <button type="button" class="clear-topic" id="clear-topic" title="Clear topic">&times;</button>
+                </div>
+                <div class="topic-actions">
+                    <button class="btn-primary" id="generate-top">Generate Prompt</button>
+                </div>
             </div>
 
             <div class="section">
@@ -643,6 +712,7 @@ import AdminNav from '@/components/AdminNav.astro';
                     </div>
                     <div class="modal-footer">
                         <button class="btn-copy" id="copy-btn">Copy to Clipboard</button>
+                        <button class="btn-save" id="save-btn">Save Prompt</button>
                         <button class="btn-close-modal" id="close-btn">Close</button>
                     </div>
                 </div>
@@ -650,14 +720,47 @@ import AdminNav from '@/components/AdminNav.astro';
 
             <script is:inline define:vars={{ promptsJson }}>
                 var prompts = JSON.parse(promptsJson);
+                var STYLE_STORAGE_KEY = 'truschools_prompt_style';
+                var currentTopic = '';
+                var currentStyleName = '';
 
                 var topicInput = document.getElementById('topic');
                 var generateBtn = document.getElementById('generate');
+                var generateTopBtn = document.getElementById('generate-top');
+                var clearTopicBtn = document.getElementById('clear-topic');
                 var modalOverlay = document.getElementById('modal-overlay');
                 var resultContent = document.getElementById('result');
                 var copyBtn = document.getElementById('copy-btn');
+                var saveBtn = document.getElementById('save-btn');
                 var modalClose = document.getElementById('modal-close');
                 var closeBtn = document.getElementById('close-btn');
+
+                // Restore saved style preference
+                var savedStyle = localStorage.getItem(STYLE_STORAGE_KEY);
+                if (savedStyle) {
+                    var savedRadio = document.querySelector('input[name="style"][value="' + savedStyle + '"]');
+                    if (savedRadio) {
+                        savedRadio.checked = true;
+                    }
+                }
+
+                // Update clear button visibility
+                function updateClearButton() {
+                    if (topicInput.value.trim()) {
+                        clearTopicBtn.classList.add('visible');
+                    } else {
+                        clearTopicBtn.classList.remove('visible');
+                    }
+                }
+
+                topicInput.addEventListener('input', updateClearButton);
+                updateClearButton();
+
+                clearTopicBtn.addEventListener('click', function() {
+                    topicInput.value = '';
+                    updateClearButton();
+                    topicInput.focus();
+                });
 
                 function openModal() {
                     modalOverlay.classList.add('visible');
@@ -669,7 +772,7 @@ import AdminNav from '@/components/AdminNav.astro';
                     document.body.style.overflow = '';
                 }
 
-                generateBtn.addEventListener('click', function() {
+                function generatePrompt() {
                     var topic = topicInput.value.trim();
                     var style = document.querySelector('input[name="style"]:checked').value;
 
@@ -678,18 +781,34 @@ import AdminNav from '@/components/AdminNav.astro';
                         return;
                     }
 
-                    var prompt = prompts[style].replace('{TOPIC}', topic);
+                    // Save style preference
+                    localStorage.setItem(STYLE_STORAGE_KEY, style);
+
+                    // Store current topic and style name for saving
+                    currentTopic = topic;
+                    currentStyleName = prompts[style].name;
+
+                    var prompt = prompts[style].template.replace('{TOPIC}', topic);
                     resultContent.textContent = prompt;
                     copyBtn.textContent = 'Copy to Clipboard';
                     copyBtn.classList.remove('copied');
+                    saveBtn.textContent = 'Save Prompt';
+                    saveBtn.classList.remove('saved');
+                    saveBtn.disabled = false;
                     openModal();
-                });
+                }
+
+                generateBtn.addEventListener('click', generatePrompt);
+                generateTopBtn.addEventListener('click', generatePrompt);
 
                 copyBtn.addEventListener('click', async function() {
                     try {
                         await navigator.clipboard.writeText(resultContent.textContent);
                         copyBtn.textContent = 'Copied!';
                         copyBtn.classList.add('copied');
+                        // Clear the topic input after copying
+                        topicInput.value = '';
+                        updateClearButton();
                         setTimeout(function() {
                             copyBtn.textContent = 'Copy to Clipboard';
                             copyBtn.classList.remove('copied');
@@ -703,6 +822,46 @@ import AdminNav from '@/components/AdminNav.astro';
                         document.body.removeChild(textarea);
                         copyBtn.textContent = 'Copied!';
                         copyBtn.classList.add('copied');
+                        // Clear the topic input after copying
+                        topicInput.value = '';
+                        updateClearButton();
+                    }
+                });
+
+                saveBtn.addEventListener('click', async function() {
+                    saveBtn.disabled = true;
+                    saveBtn.textContent = 'Saving...';
+
+                    try {
+                        var response = await fetch('/api/saved-prompts', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                topic: currentTopic,
+                                style_name: currentStyleName,
+                                full_prompt: resultContent.textContent
+                            }),
+                            credentials: 'same-origin'
+                        });
+
+                        var data = await response.json();
+
+                        if (data.success) {
+                            saveBtn.textContent = 'Saved!';
+                            saveBtn.classList.add('saved');
+                        } else {
+                            saveBtn.textContent = 'Error';
+                            setTimeout(function() {
+                                saveBtn.textContent = 'Save Prompt';
+                                saveBtn.disabled = false;
+                            }, 2000);
+                        }
+                    } catch (err) {
+                        saveBtn.textContent = 'Error';
+                        setTimeout(function() {
+                            saveBtn.textContent = 'Save Prompt';
+                            saveBtn.disabled = false;
+                        }, 2000);
                     }
                 });
 
@@ -724,7 +883,7 @@ import AdminNav from '@/components/AdminNav.astro';
                 topicInput.addEventListener('keydown', function(e) {
                     if (e.key === 'Enter' && !e.shiftKey) {
                         e.preventDefault();
-                        generateBtn.click();
+                        generatePrompt();
                     }
                 });
             </script>

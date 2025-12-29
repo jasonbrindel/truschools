@@ -1,11 +1,17 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import ArticleRating from '@/components/ArticleRating.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import BrowseByTopic from '@/components/BrowseByTopic.astro';
+import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
 import heroImage from '@/images/USED-preschool-teacher-reading-children.jpg';
 
 const title = "What Actually Matters in Preschool";
 const description = "Research shows that the quality of teacher-child relationships matters more than educational philosophy. Here's what to look for when choosing a preschool.";
-const category = 'Preschool';
+const publishDate = "2024-12-29";
+const tags = ['Preschool', 'School Choice'];
 ---
 
 <Layout title={title} description={description}>
@@ -191,20 +197,40 @@ const category = 'Preschool';
 
       <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
       <ul class="text-sm text-gray-600 space-y-2 mb-10">
-        <li>Pianta, R. C., La Paro, K. M., & Hamre, B. K. (2008). Classroom Assessment Scoring System (CLASS). Paul H. Brookes Publishing.</li>
-        <li>Hamre, B. K., & Pianta, R. C. (2005). Can Instructional and Emotional Support in the First-Grade Classroom Make a Difference for Children at Risk of School Failure? Child Development, 76(5), 949-967.</li>
-        <li>Lillard, A. S., & Else-Quest, N. (2006). Evaluating Montessori Education. Science, 313(5795), 1893-1894.</li>
-        <li>Lillard, A. S., et al. (2017). Montessori Preschool Elevates and Equalizes Child Outcomes: A Longitudinal Study. Frontiers in Psychology, 8, 1783.</li>
-        <li>Lillard, A. S. (2012). Preschool children's development in classic Montessori, supplemented Montessori, and conventional programs. Journal of School Psychology, 50(3), 379-401.</li>
-        <li>Lillard, A. S., et al. (2025). A national randomized controlled trial of the impact of public Montessori preschool at the end of kindergarten. Proceedings of the National Academy of Sciences.</li>
-        <li>Verrier, D., et al. (2023). A meta-analysis of the effects of Montessori education on five fields of development and learning. Contemporary Educational Psychology, 73, 102174.</li>
-        <li>Lillard, A. S., et al. (2021). An Association Between Montessori Education in Childhood and Adult Wellbeing. Frontiers in Psychology, 12, 721943.</li>
-        <li>Heckman, J. J., et al. (2018). Evaluation of the Reggio Approach to Early Education. Research in Economics, 72(1), 1-32.</li>
-        <li>Harvard Center on the Developing Child. (2011). Play in Early Childhood: The Role of Play in Any Setting.</li>
-        <li>Project Zero, Harvard Graduate School of Education. (2023). A Pedagogy of Play: Supporting Playful Learning in Classrooms and Schools.</li>
-        <li>Vitiello, V. E., et al. (2012). Goodness of fit between children and classrooms: Effects of child temperament and preschool classroom quality on achievement trajectories. Early Education & Development, 23(3), 302-322.</li>
+        <li><a href="https://teachstone.com/class/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Pianta, R. C., La Paro, K. M., & Hamre, B. K.</a> (2008). <em>Classroom Assessment Scoring System (CLASS).</em> Paul H. Brookes Publishing.</li>
+        <li><a href="https://doi.org/10.1111/j.1467-8624.2005.00889.x" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Hamre, B. K., & Pianta, R. C.</a> (2005). <em>Can Instructional and Emotional Support in the First-Grade Classroom Make a Difference for Children at Risk of School Failure?</em> Child Development, 76(5), 949-967.</li>
+        <li><a href="https://doi.org/10.1126/science.1132362" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Lillard, A. S., & Else-Quest, N.</a> (2006). <em>Evaluating Montessori Education.</em> Science, 313(5795), 1893-1894.</li>
+        <li><a href="https://doi.org/10.3389/fpsyg.2017.01783" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Lillard, A. S., et al.</a> (2017). <em>Montessori Preschool Elevates and Equalizes Child Outcomes: A Longitudinal Study.</em> Frontiers in Psychology, 8, 1783.</li>
+        <li><a href="https://doi.org/10.1016/j.jsp.2012.01.001" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Lillard, A. S.</a> (2012). <em>Preschool children's development in classic Montessori, supplemented Montessori, and conventional programs.</em> Journal of School Psychology, 50(3), 379-401.</li>
+        <li><a href="https://doi.org/10.1073/pnas.2405293121" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Lillard, A. S., et al.</a> (2025). <em>A national randomized controlled trial of the impact of public Montessori preschool at the end of kindergarten.</em> Proceedings of the National Academy of Sciences.</li>
+        <li><a href="https://doi.org/10.1016/j.cedpsych.2023.102174" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Verrier, D., et al.</a> (2023). <em>A meta-analysis of the effects of Montessori education on five fields of development and learning.</em> Contemporary Educational Psychology, 73, 102174.</li>
+        <li><a href="https://doi.org/10.3389/fpsyg.2021.721943" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Lillard, A. S., et al.</a> (2021). <em>An Association Between Montessori Education in Childhood and Adult Wellbeing.</em> Frontiers in Psychology, 12, 721943.</li>
+        <li><a href="https://doi.org/10.1016/j.rie.2017.09.001" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Heckman, J. J., et al.</a> (2018). <em>Evaluation of the Reggio Approach to Early Education.</em> Research in Economics, 72(1), 1-32.</li>
+        <li><a href="https://developingchild.harvard.edu/resources/play-in-early-childhood-the-role-of-play-in-any-setting/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Harvard Center on the Developing Child</a>. (2011). <em>Play in Early Childhood: The Role of Play in Any Setting.</em></li>
+        <li><a href="https://pz.harvard.edu/projects/pedagogy-of-play" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Project Zero, Harvard Graduate School of Education</a>. (2023). <em>A Pedagogy of Play: Supporting Playful Learning in Classrooms and Schools.</em></li>
+        <li><a href="https://doi.org/10.1080/10409289.2011.569316" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Vitiello, V. E., et al.</a> (2012). <em>Goodness of fit between children and classrooms: Effects of child temperament and preschool classroom quality on achievement trajectories.</em> Early Education & Development, 23(3), 302-322.</li>
       </ul>
     </div>
+
+    <!-- Article Rating -->
+
+
+    
+    <ArticleRating slug="what-actually-matters-in-preschool" />
+
+    <!-- Related Articles -->
+    <RelatedArticles currentSlug="what-actually-matters-in-preschool" currentTags={tags} />
+
+    <!-- Browse by Topic -->
+    <BrowseByTopic tags={tags} />
+
+    <!-- Newsletter Signup -->
+    <ArticleNewsletter articleTags={tags} />
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} slug="what-actually-matters-in-preschool" />
+
+
 
     <footer class="mt-16 pt-8 border-t border-gray-200">
       <p class="text-sm text-gray-500 italic">

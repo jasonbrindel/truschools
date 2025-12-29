@@ -1,11 +1,17 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import ArticleRating from '@/components/ArticleRating.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import BrowseByTopic from '@/components/BrowseByTopic.astro';
+import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
 import heroImage from '@/images/USED-student-focused-classroom-lecture.jpg';
 
 const title = "When the Promise Fades: Warning Signs Every Parent Should Recognize Before Choosing a Charter School";
 const description = "A research-informed guide to spotting red flags—not to discourage choice, but to make it wiser.";
-const category = 'Charter Schools';
+const publishDate = "2024-08-16";
+const tags = ['Charter Schools', 'School Choice'];
 ---
 
 <Layout title={title} description={description}>
@@ -170,23 +176,38 @@ const category = 'Charter Schools';
       <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
 
       <ul class="text-sm text-gray-600 space-y-2 mb-10">
-        <li>Pfleger, Ryan. "Doomed to Fail: An Analysis of Charter School Closures from 1998 to 2022." National Center for Charter School Accountability and Network for Public Education, 2024.</li>
-        <li>Center for Research on Education Outcomes (CREDO). "National Charter School Study." Stanford University, 2023.</li>
-        <li>Education Resource Strategies. "Examining School-Level Teacher Turnover Trends (2021-24)." 2024.</li>
-        <li>RAND Corporation. "Educator Turnover Continues Decline Toward Prepandemic Levels: Findings from the American School District Panel." 2024.</li>
-        <li>Losen, Daniel J., et al. "Charter Schools, Civil Rights and School Discipline: A Comprehensive Review." UCLA Civil Rights Project, 2016.</li>
-        <li>Bacher-Hicks, Andrew, Stephen Billings, and David Deming. "The School to Prison Pipeline: Long-Run Impacts of School Suspensions on Adult Crime." National Bureau of Economic Research Working Paper, 2019.</li>
-        <li>Learning Policy Institute. "Pushed Out: Trends and Disparities in Out-of-School Suspension." 2024.</li>
-        <li>Golann, Joanne W. "Scripting the Moves: Culture and Control in a 'No-Excuses' Charter School." Princeton University Press, 2021.</li>
-        <li>Bingham, A.J., and McCann, K. "'Learning Can't Occur in Chaos:' A Critical Policy Discourse Analysis of No Excuses Charter School Websites." Urban Review, 2024.</li>
-        <li>Philadelphia Talent Coalition. "Teacher Attrition Report." Elevate 215, 2024.</li>
-        <li>Illinois State Board of Education. "Investigation of Instituto Health Sciences Career Academy Special Education Violations." Chicago Public Schools, 2024.</li>
-        <li>New York City Independent Budget Office. "Comparing Student Attrition Rates at Charter Schools and Nearby Traditional Public Schools." 2015.</li>
-        <li>U.S. Department of Education. "The Evaluation of Charter School Impacts: Final Report." Institute of Education Sciences, 2010.</li>
-        <li>Michigan Department of Education. "State Board of Education Approves Measure to Increase Charter School Transparency." 2024.</li>
-        <li>Cohodes, Sarah. "Charter Schools and the Achievement Gap." The Future of Children, Princeton University, 2018.</li>
+        <li><a href="https://networkforpubliceducation.org/wp-content/uploads/2024/11/DTM-Final.pdf" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Pfleger, Ryan</a>. <em>"Doomed to Fail: An Analysis of Charter School Closures from 1998 to 2022."</em> Network for Public Education, 2024.</li>
+        <li><a href="https://credo.stanford.edu/reports/item/national-charter-school-study-iii/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Stanford CREDO</a>. <em>"National Charter School Study III."</em> 2023.</li>
+        <li><a href="https://www.erstrategies.org/tap/strategic_school_staffing" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Education Resource Strategies</a>. <em>"Teacher Turnover and Staffing Stability Research (2021–2024)."</em></li>
+        <li><a href="https://www.rand.org/pubs/research_reports/RRA956-29.html" class="text-brand-blue hover:underline" target="_blank" rel="noopener">RAND Corporation</a>. <em>"Educator Turnover Continues Decline Toward Prepandemic Levels."</em> 2025.</li>
+        <li><a href="https://civilrightsproject.ucla.edu/research/k-12-education/school-discipline" class="text-brand-blue hover:underline" target="_blank" rel="noopener">UCLA Civil Rights Project</a>. <em>"Charter Schools, Discipline, and Civil Rights Research."</em> 2016.</li>
+        <li><a href="https://www.nber.org/papers/w26257" class="text-brand-blue hover:underline" target="_blank" rel="noopener">NBER</a>. <em>"The School-to-Prison Pipeline: Long-Run Impacts of School Suspensions on Adult Crime."</em> 2019.</li>
+        <li><a href="https://learningpolicyinstitute.org/product/crdc-school-suspension-report" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Learning Policy Institute</a>. <em>"Pushed Out: Trends and Disparities in Out-of-School Suspension."</em></li>
+        <li><a href="https://press.princeton.edu/books/hardcover/9780691194384/scripting-the-moves" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Golann, J.</a> <em>"Scripting the Moves."</em> Princeton University Press, 2021.</li>
+        <li><a href="https://link.springer.com/article/10.1007/s11256-023-00671-4" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Bingham & McCann, Urban Review</a>. <em>"'Learning Can't Occur in Chaos.'"</em> 2024.</li>
+        <li><a href="https://elevate215.org/research/teacher-attrition" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Philadelphia Talent Coalition / Elevate 215</a>. <em>"Teacher Attrition Report."</em> 2024.</li>
       </ul>
     </div>
+
+    <!-- Article Rating -->
+
+
+    
+    <ArticleRating slug="charter-school-warning-signs" />
+
+    <!-- Related Articles -->
+    <RelatedArticles currentSlug="charter-school-warning-signs" currentTags={tags} />
+
+    <!-- Browse by Topic -->
+    <BrowseByTopic tags={tags} />
+
+    <!-- Newsletter Signup -->
+    <ArticleNewsletter articleTags={tags} />
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} slug="charter-school-warning-signs" />
+
+
 
     <!-- Footer -->
     <footer class="mt-16 pt-8 border-t border-gray-200">

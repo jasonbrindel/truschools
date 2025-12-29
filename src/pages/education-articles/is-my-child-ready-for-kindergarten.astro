@@ -1,11 +1,17 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import ArticleRating from '@/components/ArticleRating.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import BrowseByTopic from '@/components/BrowseByTopic.astro';
+import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
 import heroImage from '@/images/USED-kindergarten-readiness-joyful-child.jpg';
 
 const title = "Is My Child Ready for Kindergarten?";
 const description = "A complete readiness checklist covering the seven key domains of kindergarten readiness, with specific milestones, activities to build skills, and red flags that warrant professional attention.";
-const category = 'Kindergarten';
+const publishDate = "2024-10-12";
+const tags = ['Kindergarten', 'Preschool'];
 ---
 
 <Layout title={title} description={description}>
@@ -393,14 +399,34 @@ const category = 'Kindergarten';
       <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
 
       <ul class="text-sm text-gray-600 space-y-2 mb-10">
-        <li>Child Mind Institute. <em>"Is My Child Ready for Kindergarten?"</em></li>
-        <li>Michigan State University Extension. <em>"Kindergarten Readiness: Social and Emotional Development."</em></li>
-        <li>Early Childhood Research Quarterly. <em>"Fine Motor Skills and Early Academic Achievement."</em></li>
-        <li>Oregon State University. <em>"Gross Motor Skills and Executive Function in Preschoolers."</em></li>
-        <li>U.S. Department of Education. <em>"Early Childhood Longitudinal Studies."</em></li>
-        <li>Arizona Department of Education. <em>"Kindergarten Teacher Survey on Readiness."</em> 2021.</li>
+        <li><a href="https://childmind.org/article/is-my-child-ready-for-kindergarten/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Child Mind Institute</a>. <em>"Is My Child Ready for Kindergarten?"</em></li>
+        <li><a href="https://www.canr.msu.edu/news/kindergarten_readiness_social_and_emotional_development" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Michigan State University Extension</a>. <em>"Kindergarten Readiness: Social and Emotional Development."</em></li>
+        <li><a href="https://www.sciencedirect.com/journal/early-childhood-research-quarterly" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Early Childhood Research Quarterly</a>. <em>"Fine Motor Skills and Early Academic Achievement."</em></li>
+        <li><a href="https://today.oregonstate.edu/news/preschoolers-motor-skills-linked-better-behavior-study-shows" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Oregon State University</a>. <em>"Gross Motor Skills and Executive Function in Preschoolers."</em></li>
+        <li><a href="https://nces.ed.gov/ecls/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">U.S. Department of Education</a>. <em>"Early Childhood Longitudinal Studies."</em></li>
+        <li><a href="https://www.azed.gov/ece" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Arizona Department of Education</a>. <em>"Kindergarten Teacher Survey on Readiness."</em> 2021.</li>
       </ul>
     </div>
+
+    <!-- Article Rating -->
+
+
+    
+    <ArticleRating slug="is-my-child-ready-for-kindergarten" />
+
+    <!-- Related Articles -->
+    <RelatedArticles currentSlug="is-my-child-ready-for-kindergarten" currentTags={tags} />
+
+    <!-- Browse by Topic -->
+    <BrowseByTopic tags={tags} />
+
+    <!-- Newsletter Signup -->
+    <ArticleNewsletter articleTags={tags} />
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} slug="is-my-child-ready-for-kindergarten" />
+
+
 
     <!-- Footer -->
     <footer class="mt-16 pt-8 border-t border-gray-200">

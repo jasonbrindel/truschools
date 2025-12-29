@@ -1,12 +1,18 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import ArticleRating from '@/components/ArticleRating.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import BrowseByTopic from '@/components/BrowseByTopic.astro';
+import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
 import heroImage from '@/images/USED-school-courtyard-students-illustration.jpg';
 
 const title = "The Rise of School Choice";
 const subtitle = "Understanding Charter, Magnet, and Private School Options";
 const description = "A comprehensive guide to school choice in America, explaining charter schools, magnet programs, vouchers, and what the research says about their effectiveness.";
-const category = 'School Choice';
+const publishDate = "2024-12-17";
+const tags = ['School Choice', 'Charter Schools', 'Magnet Schools'];
 ---
 
 <Layout title={`${title}: ${subtitle}`} description={description}>
@@ -205,23 +211,43 @@ const category = 'School Choice';
       <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
 
       <ul class="text-sm text-gray-600 space-y-2 mb-10">
-        <li>National Alliance for Public Charter Schools, "Do You Know Where the Children Are? A Five-Year Analysis of Public School Enrollment," 2024</li>
-        <li>EdChoice, "One Million Students in School Choice Programs," 2024</li>
-        <li>EdChoice, "2025 EdChoice Share: Exploring Where America's Students Are Educated," 2025</li>
-        <li>Stanford University Center for Research on Education Outcomes (CREDO), "As a Matter of Fact: The National Charter School Study III 2023," June 2023</li>
-        <li>Brookings Institution, "More Findings About School Vouchers and Test Scores, and They Are Still Negative," 2018</li>
-        <li>Urban Institute, "The Effects of Ohio's EdChoice Voucher Program on College Enrollment and Graduation," 2025</li>
-        <li>Education Week, "Private School Choice: What the Research Says," 2024</li>
-        <li>The 74 Million, "Charter Schools Continue to See Enrollment Increases Post-Pandemic," October 2024</li>
-        <li>Texas Tribune, "Private School Vouchers Are Now Law in Texas. Here's How They Will Work," May 2025</li>
-        <li>Newsweek, "The Slow Rise of America's Charter Schools," September 2025</li>
-        <li>FutureEd (Georgetown University), school choice legislation tracker, 2024-2025</li>
-        <li>National Education Policy Center, "CREDO Report Makes Overstated Claims of Charter School Gains," September 2023</li>
-        <li>Pew Research Center, "Facts About Public, Private and Charter Schools in the US," June 2024</li>
-        <li>National Center for Education Statistics, Private School Universe Survey, 2021-22</li>
-        <li>Moody's Investors Service, report on school district financial outlook, April 2025</li>
+        <li><a href="https://www.publiccharters.org/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Alliance for Public Charter Schools</a>. <em>"Do You Know Where the Children Are? A Five-Year Analysis of Public School Enrollment."</em> 2024.</li>
+        <li><a href="https://www.edchoice.org/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">EdChoice</a>. <em>"One Million Students in School Choice Programs."</em> 2024.</li>
+        <li><a href="https://www.edchoice.org/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">EdChoice</a>. <em>"2025 EdChoice Share: Exploring Where America's Students Are Educated."</em> 2025.</li>
+        <li><a href="https://credo.stanford.edu/reports/item/national-charter-school-study-iii/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Stanford University Center for Research on Education Outcomes (CREDO)</a>. <em>"As a Matter of Fact: The National Charter School Study III 2023."</em> June 2023.</li>
+        <li><a href="https://www.brookings.edu/articles/more-findings-about-school-vouchers-and-test-scores-and-they-are-still-negative/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Brookings Institution</a>. <em>"More Findings About School Vouchers and Test Scores, and They Are Still Negative."</em> 2018.</li>
+        <li><a href="https://www.urban.org/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Urban Institute</a>. <em>"The Effects of Ohio's EdChoice Voucher Program on College Enrollment and Graduation."</em> 2025.</li>
+        <li><a href="https://www.edweek.org/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Education Week</a>. <em>"Private School Choice: What the Research Says."</em> 2024.</li>
+        <li><a href="https://www.the74million.org/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">The 74 Million</a>. <em>"Charter Schools Continue to See Enrollment Increases Post-Pandemic."</em> October 2024.</li>
+        <li><a href="https://www.texastribune.org/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Texas Tribune</a>. <em>"Private School Vouchers Are Now Law in Texas. Here's How They Will Work."</em> May 2025.</li>
+        <li><a href="https://www.newsweek.com/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Newsweek</a>. <em>"The Slow Rise of America's Charter Schools."</em> September 2025.</li>
+        <li><a href="https://www.future-ed.org/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">FutureEd (Georgetown University)</a>. School choice legislation tracker, 2024-2025.</li>
+        <li><a href="https://nepc.colorado.edu/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Education Policy Center</a>. <em>"CREDO Report Makes Overstated Claims of Charter School Gains."</em> September 2023.</li>
+        <li><a href="https://www.pewresearch.org/short-reads/2024/06/06/facts-about-public-private-and-charter-schools-in-the-us/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Pew Research Center</a>. <em>"Facts About Public, Private and Charter Schools in the US."</em> June 2024.</li>
+        <li><a href="https://nces.ed.gov/surveys/pss/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Center for Education Statistics</a>. <em>Private School Universe Survey, 2021-22.</em></li>
+        <li><a href="https://www.moodys.com/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Moody's Investors Service</a>. Report on school district financial outlook, April 2025.</li>
       </ul>
     </div>
+
+    <!-- Article Rating -->
+
+
+    
+    <ArticleRating slug="the-rise-of-school-choice" />
+
+    <!-- Related Articles -->
+    <RelatedArticles currentSlug="the-rise-of-school-choice" currentTags={tags} />
+
+    <!-- Browse by Topic -->
+    <BrowseByTopic tags={tags} />
+
+    <!-- Newsletter Signup -->
+    <ArticleNewsletter articleTags={tags} />
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} slug="the-rise-of-school-choice" />
+
+
 
     <!-- Footer -->
     <footer class="mt-16 pt-8 border-t border-gray-200">

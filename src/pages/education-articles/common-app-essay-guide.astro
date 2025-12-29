@@ -1,11 +1,17 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import ArticleRating from '@/components/ArticleRating.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import BrowseByTopic from '@/components/BrowseByTopic.astro';
+import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
 import heroImage from '@/images/USED-common-app-essay-guide.jpg';
 
 const title = "The Examined Life at Seventeen: Self-Knowledge, Authenticity, and the Art of the College Essay";
 const description = "A guide to writing authentic college application essays that reveal genuine self-knowledge in an age of AI.";
-const category = 'College Admissions';
+const publishDate = "2024-09-03";
+const tags = ['College Admissions', 'High School'];
 ---
 
 <Layout title={title} description={description}>
@@ -201,28 +207,36 @@ const category = 'College Admissions';
 
       <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
       <ul class="text-sm text-gray-600 space-y-2 mb-10">
-        <li>Britannica. "Michel de Montaigne - Renaissance, Essays, Philosopher." Encyclopedia Britannica, 1998.</li>
-        <li>Britannica. "Essays | Definition, Michel de Montaigne, Contents, & Facts." Encyclopedia Britannica, 2023.</li>
-        <li>College Essay Advisors. "2025-26 Common App Essay Prompts: Expert Guide and Tips." March 2025.</li>
-        <li>College Essay Guy. "The 2025-2026 Common App Prompts (and 7 Example Essays & Analysis)." February 2025.</li>
-        <li>College Transitions. "Common App Essay Prompts 2025-2026." May 2025.</li>
-        <li>Common Application. "Announcing the 2025–2026 Common App Essay Prompts." February 2025.</li>
-        <li>Expert Admissions. "Guide to the Common App 'Challenges and Circumstances' Question." June 2025.</li>
-        <li>Harvard Summer School. "12 Strategies to Writing the Perfect College Essay." August 2022.</li>
-        <li>Internet Encyclopedia of Philosophy. "Montaigne, Michel de."</li>
-        <li>Koppelman Group (TKG). "2025-2026 Additional Information Changes and New Challenges and Circumstances Common App Section." July 2025.</li>
-        <li>Lopate, Phillip. The Art of the Personal Essay: An Anthology from the Classical Era to the Present. Anchor Books, 1994.</li>
-        <li>Originality.AI. "Do College Admissions Check for AI?" December 2025.</li>
-        <li>Spark Admissions. "Do College Admissions Check for AI in Essays and Recs?" October 2025.</li>
-        <li>Stanford Encyclopedia of Philosophy. "Michel de Montaigne." August 2004.</li>
-        <li>Taylor, Charles. The Ethics of Authenticity. Harvard University Press, 1991.</li>
-        <li>The Collector. "Michel de Montaigne and the Art of the Personal Essay." August 2022.</li>
-        <li>The Hudson Review. "Lessons of Montaigne." 2022.</li>
-        <li>The London Magazine. "Assaying Essaying Saying: Montaigne's Poetics of Identity." April 2015.</li>
-        <li>The Nation. "AI Is Taking Over College Admissions." October 2024.</li>
-        <li>Top Tier Admissions. "AI in College Admissions." June 2025.</li>
+        <li><a href="https://www.britannica.com/biography/Michel-de-Montaigne" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Encyclopaedia Britannica</a>. <em>"Michel de Montaigne."</em></li>
+        <li><a href="https://www.commonapp.org/blog/announcing-2025-2026-common-app-essay-prompts" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Common Application</a>. <em>"2025–26 Common App Essay Prompts."</em></li>
+        <li><a href="https://appsupport.commonapp.org/applicantsupport/s/article/What-are-the-2025-26-Common-App-essay-prompts" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Common App Applicant Support</a>. <em>"What Are the 2025–26 Common App Essay Prompts?"</em></li>
+        <li><a href="https://www.collegeessayadvisors.com/portfolio-items/common-application-essay-prompts-guide/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">College Essay Advisors</a>. <em>"2025–26 Common Application Essay Prompts Guide."</em></li>
+        <li><a href="https://www.collegeessayguy.com/common-app-essay" class="text-brand-blue hover:underline" target="_blank" rel="noopener">College Essay Guy</a>. <em>"Common App Essay Guide and Topic Resources."</em></li>
+        <li><a href="https://www.collegetransitions.com/blog/common-app-essay-prompts/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">College Transitions</a>. <em>"Common App Essay Prompts 2025–26."</em></li>
+        <li><a href="https://summer.harvard.edu/blog/12-strategies-for-writing-the-best-college-essay/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Harvard Summer School</a>. <em>"Twelve Strategies for Writing the Best College Essay."</em></li>
+        <li><a href="https://expertadmissions.com/common-app-challenges-and-circumstances-question/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Expert Admissions</a>. <em>"Guide to the Common App 'Challenges and Circumstances' Question."</em></li>
       </ul>
     </div>
+
+    <!-- Article Rating -->
+
+
+    
+    <ArticleRating slug="common-app-essay-guide" />
+
+    <!-- Related Articles -->
+    <RelatedArticles currentSlug="common-app-essay-guide" currentTags={tags} />
+
+    <!-- Browse by Topic -->
+    <BrowseByTopic tags={tags} />
+
+    <!-- Newsletter Signup -->
+    <ArticleNewsletter articleTags={tags} />
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} slug="common-app-essay-guide" />
+
+
 
     <footer class="mt-16 pt-8 border-t border-gray-200">
       <p class="text-sm text-gray-500 italic">

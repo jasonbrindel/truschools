@@ -1,11 +1,17 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import ArticleRating from '@/components/ArticleRating.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import BrowseByTopic from '@/components/BrowseByTopic.astro';
+import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
 import heroImage from '@/images/USED-school-entrance-students-abstract.jpg';
 
 const title = "What to Really Ask When You Walk Through Those Charter School Doors";
 const description = "A parent's guide to finding the questions that matter—and learning to trust what you observe.";
-const category = 'Charter Schools';
+const publishDate = "2025-01-10";
+const tags = ['Charter Schools', 'School Choice'];
 ---
 
 <Layout title={title} description={description}>
@@ -148,21 +154,41 @@ const category = 'Charter Schools';
       <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
 
       <ul class="text-sm text-gray-600 space-y-2 mb-10">
-        <li>Center for Research on Education Outcomes (CREDO), Stanford University. <em>"As a Matter of Fact: The National Charter School Study III."</em> 2023.</li>
-        <li>MIT Blueprint Labs. Charter School Research Collaborative data on charter school enrollment. 2024.</li>
-        <li>EdChoice and Braun Research. <em>"Schooling in America Survey."</em> 2024.</li>
-        <li>National Alliance for Public Charter Schools. <em>"Never Going Back: An Analysis of Parent Sentiment on Education."</em> 2022.</li>
-        <li>Center for Learner Equity. Report on charter schools and special education services. 2024.</li>
-        <li>Learning Policy Institute. <em>"Pushed Out: Trends and Disparities in Out-of-School Suspension."</em> 2024.</li>
-        <li>RAND Corporation. <em>"Educator Turnover Continues Decline Toward Prepandemic Levels."</em> 2024.</li>
-        <li>Oberfield, Zachary W. <em>"Parent Engagement and Satisfaction in Public Charter and District Schools."</em> American Educational Research Journal. 2020.</li>
-        <li>Thomas B. Fordham Institute. Analysis of teacher turnover in charter schools. 2023.</li>
-        <li>American Enterprise Institute. Research on charter school discipline practices. 2022.</li>
-        <li>National Center for Education Statistics. Teacher Attrition and Mobility: Results from the 2021-22 Teacher Follow-up Survey. 2024.</li>
-        <li>GreatSchools.org. <em>"How to Make the Most of a School Visit."</em> 2025.</li>
-        <li>Chalkbeat. <em>"School Choice: Eight Tips to Get the Most Out of School Tours."</em> 2019.</li>
+        <li><a href="https://credo.stanford.edu/reports/item/national-charter-school-study-iii/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Center for Research on Education Outcomes (CREDO), Stanford University</a>. <em>"As a Matter of Fact: The National Charter School Study III."</em> 2023.</li>
+        <li><a href="https://blueprintlabs.mit.edu/research/charter-schools/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">MIT Blueprint Labs</a>. Charter School Research Collaborative data on charter school enrollment. 2024.</li>
+        <li><a href="https://www.edchoice.org/engage/schooling-in-america-survey/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">EdChoice and Braun Research</a>. <em>"Schooling in America Survey."</em> 2024.</li>
+        <li><a href="https://www.publiccharters.org/our-work/publications/never-going-back" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Alliance for Public Charter Schools</a>. <em>"Never Going Back: An Analysis of Parent Sentiment on Education."</em> 2022.</li>
+        <li><a href="https://www.centerforlearnerequity.org/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Center for Learner Equity</a>. Report on charter schools and special education services. 2024.</li>
+        <li><a href="https://learningpolicyinstitute.org/product/crdc-school-suspension-report" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Learning Policy Institute</a>. <em>"Pushed Out: Trends and Disparities in Out-of-School Suspension."</em> 2024.</li>
+        <li><a href="https://www.rand.org/pubs/research_reports/RRA956-29.html" class="text-brand-blue hover:underline" target="_blank" rel="noopener">RAND Corporation</a>. <em>"Educator Turnover Continues Decline Toward Prepandemic Levels."</em> 2024.</li>
+        <li><a href="https://journals.sagepub.com/doi/10.3102/0002831220905999" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Oberfield, Zachary W.</a> <em>"Parent Engagement and Satisfaction in Public Charter and District Schools."</em> American Educational Research Journal. 2020.</li>
+        <li><a href="https://fordhaminstitute.org/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Thomas B. Fordham Institute</a>. Analysis of teacher turnover in charter schools. 2023.</li>
+        <li><a href="https://www.aei.org/research-products/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">American Enterprise Institute</a>. Research on charter school discipline practices. 2022.</li>
+        <li><a href="https://nces.ed.gov/pubs2024/2024017.pdf" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Center for Education Statistics</a>. Teacher Attrition and Mobility: Results from the 2021-22 Teacher Follow-up Survey. 2024.</li>
+        <li><a href="https://www.greatschools.org/gk/articles/how-to-make-the-most-of-a-school-visit/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">GreatSchools.org</a>. <em>"How to Make the Most of a School Visit."</em> 2025.</li>
+        <li><a href="https://www.chalkbeat.org/2019/1/8/21106818/school-choice-eight-tips-to-get-the-most-out-of-school-tours/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Chalkbeat</a>. <em>"School Choice: Eight Tips to Get the Most Out of School Tours."</em> 2019.</li>
       </ul>
     </div>
+
+    <!-- Article Rating -->
+
+
+    
+    <ArticleRating slug="what-to-ask-on-a-charter-school-tour" />
+
+    <!-- Related Articles -->
+    <RelatedArticles currentSlug="what-to-ask-on-a-charter-school-tour" currentTags={tags} />
+
+    <!-- Browse by Topic -->
+    <BrowseByTopic tags={tags} />
+
+    <!-- Newsletter Signup -->
+    <ArticleNewsletter articleTags={tags} />
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} slug="what-to-ask-on-a-charter-school-tour" />
+
+
 
     <!-- Footer -->
     <footer class="mt-16 pt-8 border-t border-gray-200">

@@ -1,11 +1,17 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import ArticleRating from '@/components/ArticleRating.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import BrowseByTopic from '@/components/BrowseByTopic.astro';
+import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
 import heroImage from '@/images/USED-choosing-college-major.jpg';
 
 const title = "Choosing a College Major";
 const description = "What parents need to know about undecided students and career-connected degrees in an AI-shaped job market.";
-const category = 'College Admissions';
+const publishDate = "2024-08-25";
+const tags = ['College Admissions', 'Future of Education'];
 ---
 
 <Layout title={title} description={description}>
@@ -217,23 +223,43 @@ const category = 'College Admissions';
 
       <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
       <ul class="text-sm text-gray-600 space-y-2 mb-10">
-        <li>Bailey, Thomas R., Shanna Smith Jaggars, and Davis Jenkins. "What We Know About Guided Pathways." Community College Research Center, Teachers College, Columbia University, 2015.</li>
-        <li>Duquesne University. "New Discover Program for Undecided Students." Duquesne University News, 2023.</li>
-        <li>Duquesne University Admissions. "Duquesne Discover." Duquesne University, 2025.</li>
-        <li>Federal Reserve Bank of New York. "The Labor Market for Recent College Graduates." 2025.</li>
-        <li>Georgetown University Center on Education and the Workforce. "The Major Payoff: Evaluating Earnings and Employment Outcomes by Field of Study." 2025.</li>
-        <li>Lumina Foundation. "How Late Is Too Late?" 2013.</li>
-        <li>Mary Christie Institute. "Questions and Answers with Dr. Jeffrey Jensen Arnett." 2021.</li>
-        <li>McCombs School of Business, The University of Texas at Austin. "BBA: Admissions and Cost." 2025.</li>
-        <li>National Association of Colleges and Employers (NACE). "What Are Employers Looking for When Reviewing College Students' Resumes." 2024.</li>
-        <li>National Association of Colleges and Employers (NACE). "Engineering, Computer Sciences Top Salary Projections for the Class of 2025 Bachelor's Grads." 2025.</li>
-        <li>National Center for Education Statistics (NCES). "Beginning College Students Who Change Their Majors Within 3 Years of Enrollment." 2017.</li>
-        <li>OECD. "Generative AI and the SME Workforce." 2025.</li>
-        <li>UCLA Undergraduate Admission. "First Year Profile by Major, Fall 2023." 2023.</li>
-        <li>University of Toledo. "Exploratory Studies: QUEST Program." 2025.</li>
-        <li>World Economic Forum. "The Future of Jobs Report 2025." 2025.</li>
+        <li><a href="https://ccrc.tc.columbia.edu/publications/what-we-know-about-guided-pathways.html" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Bailey, Thomas R., Shanna Smith Jaggars, and Davis Jenkins</a>. <em>"What We Know About Guided Pathways."</em> Community College Research Center, Teachers College, Columbia University, 2015.</li>
+        <li><a href="https://www.duq.edu/news/releases/new-discover-program-for-undecided-students" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Duquesne University</a>. <em>"New Discover Program for Undecided Students."</em> Duquesne University News, 2023.</li>
+        <li><a href="https://www.duq.edu/admissions/undergraduate/discover" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Duquesne University Admissions</a>. <em>"Duquesne Discover."</em> Duquesne University, 2025.</li>
+        <li><a href="https://www.newyorkfed.org/research/college-labor-market/index" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Federal Reserve Bank of New York</a>. <em>"The Labor Market for Recent College Graduates."</em> 2025.</li>
+        <li><a href="https://cew.georgetown.edu/cew-reports/collegepayoff2021/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Georgetown University Center on Education and the Workforce</a>. <em>"The Major Payoff: Evaluating Earnings and Employment Outcomes by Field of Study."</em> 2025.</li>
+        <li><a href="https://www.luminafoundation.org/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Lumina Foundation</a>. <em>"How Late Is Too Late?"</em> 2013.</li>
+        <li><a href="https://marychristieinstitute.org/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Mary Christie Institute</a>. <em>"Questions and Answers with Dr. Jeffrey Jensen Arnett."</em> 2021.</li>
+        <li><a href="https://www.mccombs.utexas.edu/bba/admissions/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">McCombs School of Business, The University of Texas at Austin</a>. <em>"BBA: Admissions and Cost."</em> 2025.</li>
+        <li><a href="https://www.naceweb.org/talent-acquisition/candidate-selection/what-are-employers-looking-for-when-reviewing-college-students-resumes/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Association of Colleges and Employers (NACE)</a>. <em>"What Are Employers Looking for When Reviewing College Students' Resumes."</em> 2024.</li>
+        <li><a href="https://www.naceweb.org/job-market/compensation/engineering-computer-sciences-top-salary-projections-for-the-class-of-2025-bachelors-grads/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Association of Colleges and Employers (NACE)</a>. <em>"Engineering, Computer Sciences Top Salary Projections for the Class of 2025 Bachelor's Grads."</em> 2025.</li>
+        <li><a href="https://nces.ed.gov/pubs2018/2018434.pdf" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Center for Education Statistics (NCES)</a>. <em>"Beginning College Students Who Change Their Majors Within 3 Years of Enrollment."</em> 2017.</li>
+        <li><a href="https://www.oecd.org/en/publications/generative-ai-and-the-sme-workforce_6eb3b922-en.html" class="text-brand-blue hover:underline" target="_blank" rel="noopener">OECD</a>. <em>"Generative AI and the SME Workforce."</em> 2025.</li>
+        <li><a href="https://admission.ucla.edu/apply/freshman/freshman-profile" class="text-brand-blue hover:underline" target="_blank" rel="noopener">UCLA Undergraduate Admission</a>. <em>"First Year Profile by Major, Fall 2023."</em> 2023.</li>
+        <li><a href="https://www.utoledo.edu/success/exploratory/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">University of Toledo</a>. <em>"Exploratory Studies: QUEST Program."</em> 2025.</li>
+        <li><a href="https://www.weforum.org/publications/the-future-of-jobs-report-2025/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">World Economic Forum</a>. <em>"The Future of Jobs Report 2025."</em> 2025.</li>
       </ul>
     </div>
+
+    <!-- Article Rating -->
+
+
+    
+    <ArticleRating slug="choosing-a-college-major" />
+
+    <!-- Related Articles -->
+    <RelatedArticles currentSlug="choosing-a-college-major" currentTags={tags} />
+
+    <!-- Browse by Topic -->
+    <BrowseByTopic tags={tags} />
+
+    <!-- Newsletter Signup -->
+    <ArticleNewsletter articleTags={tags} />
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} slug="choosing-a-college-major" />
+
+
 
     <footer class="mt-16 pt-8 border-t border-gray-200">
       <p class="text-sm text-gray-500 italic">

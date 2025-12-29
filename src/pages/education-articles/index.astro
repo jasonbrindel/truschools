@@ -10,12 +10,32 @@ const articleModules = import.meta.glob('./*.astro', { query: '?raw', import: 'd
 // Load all images
 const allImages = import.meta.glob<{ default: ImageMetadata }>('/src/images/*.jpg', { eager: true });
 
+// Get article ratings from database
+const db = (Astro.locals as any).runtime?.env?.DB;
+let ratingsMap: Record<string, number> = {};
+
+if (db) {
+  try {
+    const ratingsResult = await db.prepare('SELECT slug, helpful_count FROM article_ratings').all();
+    if (ratingsResult.results) {
+      ratingsResult.results.forEach((r: any) => {
+        ratingsMap[r.slug] = r.helpful_count || 0;
+      });
+    }
+  } catch (e) {
+    // Table might not exist yet, that's ok
+    console.error('Error fetching ratings:', e);
+  }
+}
+
 interface Article {
   slug: string;
   title: string;
   description: string;
-  category: string;
+  tags: string[];
   image: ImageMetadata | null;
+  publishDate: string | null;
+  helpfulCount: number;
 }
 
 // Parse article metadata from raw file content
@@ -28,8 +48,24 @@ const articles: Article[] = Object.entries(articleModules)
     // Extract metadata from file content using regex
     const titleMatch = rawContent.match(/const title\s*=\s*["']([^"']+)["']/);
     const descriptionMatch = rawContent.match(/const description\s*=\s*["']([^"']+)["']/);
-    const categoryMatch = rawContent.match(/const category\s*=\s*["']([^"']+)["']/);
     const imageMatch = rawContent.match(/import heroImage from ['"]@\/images\/([^'"]+)['"]/);
+    const publishDateMatch = rawContent.match(/const publishDate\s*=\s*["']([^"']+)["']/);
+
+    // Try to extract tags array first, fall back to single category for backwards compatibility
+    const tagsMatch = rawContent.match(/const tags\s*=\s*\[([^\]]+)\]/);
+    const categoryMatch = rawContent.match(/const category\s*=\s*["']([^"']+)["']/);
+
+    let tags: string[] = [];
+    if (tagsMatch) {
+      // Parse the tags array - extract strings from the array literal
+      tags = tagsMatch[1]
+        .split(',')
+        .map(t => t.trim().replace(/^["']|["']$/g, ''))
+        .filter(t => t.length > 0);
+    } else if (categoryMatch) {
+      // Backwards compatibility: single category becomes single-item tags array
+      tags = [categoryMatch[1]];
+    }
 
     // Get the image from the glob
     let image: ImageMetadata | null = null;
@@ -42,15 +78,27 @@ const articles: Article[] = Object.entries(articleModules)
       slug,
       title: titleMatch?.[1] || slug,
       description: descriptionMatch?.[1] || '',
-      category: categoryMatch?.[1] || 'Uncategorized',
+      tags: tags.length > 0 ? tags : ['Uncategorized'],
       image,
+      publishDate: publishDateMatch?.[1] || null,
+      helpfulCount: ratingsMap[slug] || 0,
     };
   })
-  // Sort alphabetically by title for now (file mtime not available via glob)
-  .sort((a, b) => a.title.localeCompare(b.title));
+  // Default sort: newest first (articles with dates), then alphabetical for undated
+  .sort((a, b) => {
+    // If both have dates, sort by date (newest first)
+    if (a.publishDate && b.publishDate) {
+      return b.publishDate.localeCompare(a.publishDate);
+    }
+    // Articles with dates come before those without
+    if (a.publishDate && !b.publishDate) return -1;
+    if (!a.publishDate && b.publishDate) return 1;
+    // Fall back to alphabetical for articles without dates
+    return a.title.localeCompare(b.title);
+  });
 
-// Get unique categories for filtering (sorted alphabetically)
-const categories = [...new Set(articles.map(a => a.category))].sort();
+// Get unique tags for filtering (sorted alphabetically)
+const allTags = [...new Set(articles.flatMap(a => a.tags))].sort();
 
 // Category colors for badges
 const categoryColors: Record<string, string> = {
@@ -89,26 +137,40 @@ const categoryColors: Record<string, string> = {
       </p>
     </div>
 
-    <!-- Category Filter -->
-    <div class="mb-8">
+    <!-- Filter and Sort Controls -->
+    <div class="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <!-- Tag Filter -->
       <div class="flex flex-wrap gap-2">
         <button
-          class="category-filter px-3 py-1.5 rounded-full text-sm font-medium bg-brand-blue text-white transition-colors"
-          data-category="all"
+          class="tag-filter px-3 py-1.5 rounded-full text-sm font-medium bg-brand-blue text-white transition-colors"
+          data-tag="all"
         >
           All Articles ({articles.length})
         </button>
-        {categories.map(category => {
-          const count = articles.filter(a => a.category === category).length;
+        {allTags.map(tag => {
+          const count = articles.filter(a => a.tags.includes(tag)).length;
           return (
             <button
-              class="category-filter px-3 py-1.5 rounded-full text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors"
-              data-category={category}
+              class="tag-filter px-3 py-1.5 rounded-full text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors"
+              data-tag={tag}
             >
-              {category} ({count})
+              {tag} ({count})
             </button>
           );
         })}
+      </div>
+
+      <!-- Sort Dropdown -->
+      <div class="flex items-center gap-2 shrink-0">
+        <label for="sort-select" class="text-sm text-gray-600">Sort by:</label>
+        <select
+          id="sort-select"
+          class="px-3 py-1.5 text-sm border border-gray-300 rounded-lg bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-transparent cursor-pointer"
+        >
+          <option value="newest">Newest</option>
+          <option value="popular">Most Popular</option>
+          <option value="az">A-Z</option>
+        </select>
       </div>
     </div>
 
@@ -117,7 +179,10 @@ const categoryColors: Record<string, string> = {
       {articles.map((article, index) => (
         <article
           class="article-card bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow group"
-          data-category={article.category}
+          data-tags={JSON.stringify(article.tags)}
+          data-title={article.title}
+          data-date={article.publishDate || ''}
+          data-helpful={article.helpfulCount}
         >
           <a href={`/education-articles/${article.slug}`} class="block">
             <div class="aspect-[16/9] overflow-hidden bg-gray-100">
@@ -134,15 +199,17 @@ const categoryColors: Record<string, string> = {
               )}
             </div>
             <div class="p-4">
-              <div class="flex items-center gap-2 mb-2">
-                <span class={`px-2 py-0.5 rounded text-xs font-medium ${categoryColors[article.category] || 'bg-gray-100 text-gray-800'}`}>
-                  {article.category}
-                </span>
+              <div class="flex flex-wrap items-center gap-1.5 mb-2">
+                {article.tags.map(tag => (
+                  <span class={`px-2 py-0.5 rounded text-xs font-medium ${categoryColors[tag] || 'bg-gray-100 text-gray-800'}`}>
+                    {tag}
+                  </span>
+                ))}
               </div>
-              <h2 class="text-lg font-bold text-gray-900 mb-2 leading-tight group-hover:text-brand-blue transition-colors line-clamp-2">
+              <h2 class="text-lg font-bold text-gray-900 mb-2 leading-tight group-hover:text-brand-blue transition-colors">
                 {article.title}
               </h2>
-              <p class="text-sm text-gray-600 line-clamp-2">
+              <p class="text-sm text-gray-600">
                 {article.description}
               </p>
             </div>
@@ -159,13 +226,111 @@ const categoryColors: Record<string, string> = {
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const filterButtons = document.querySelectorAll('.category-filter');
-      const articleCards = document.querySelectorAll('.article-card');
+      const filterButtons = document.querySelectorAll('.tag-filter');
+      const articlesGrid = document.getElementById('articles-grid');
       const noResults = document.getElementById('no-results');
+      const sortSelect = document.getElementById('sort-select') as HTMLSelectElement;
 
+      let currentTag = 'all';
+
+      // Check URL for tag parameter on load
+      const urlParams = new URLSearchParams(window.location.search);
+      const tagFromUrl = urlParams.get('tag');
+      if (tagFromUrl) {
+        currentTag = tagFromUrl;
+        // Find and activate the matching button
+        filterButtons.forEach(btn => {
+          const btnTag = btn.getAttribute('data-tag');
+          if (btnTag === tagFromUrl) {
+            btn.classList.remove('bg-gray-100', 'text-gray-700');
+            btn.classList.add('bg-brand-blue', 'text-white');
+          } else {
+            btn.classList.remove('bg-brand-blue', 'text-white');
+            btn.classList.add('bg-gray-100', 'text-gray-700');
+          }
+        });
+        // Apply initial filter
+        setTimeout(() => filterArticles(), 0);
+      }
+
+      // Get all article cards as an array for sorting
+      function getArticleCards(): HTMLElement[] {
+        return Array.from(document.querySelectorAll('.article-card')) as HTMLElement[];
+      }
+
+      // Filter articles based on selected tag
+      function filterArticles() {
+        const cards = getArticleCards();
+        let visibleCount = 0;
+
+        cards.forEach(card => {
+          const tagsJson = card.getAttribute('data-tags');
+          const cardTags: string[] = tagsJson ? JSON.parse(tagsJson) : [];
+          if (currentTag === 'all' || cardTags.includes(currentTag)) {
+            card.style.display = 'block';
+            visibleCount++;
+          } else {
+            card.style.display = 'none';
+          }
+        });
+
+        // Show/hide no results message
+        if (noResults) {
+          noResults.classList.toggle('hidden', visibleCount > 0);
+        }
+      }
+
+      // Sort articles based on selected option
+      function sortArticles(sortBy: string) {
+        const cards = getArticleCards();
+
+        cards.sort((a, b) => {
+          switch (sortBy) {
+            case 'newest': {
+              const dateA = a.getAttribute('data-date') || '';
+              const dateB = b.getAttribute('data-date') || '';
+              // Articles with dates come first, sorted newest to oldest
+              if (dateA && dateB) return dateB.localeCompare(dateA);
+              if (dateA && !dateB) return -1;
+              if (!dateA && dateB) return 1;
+              // Fall back to title for undated articles
+              const titleA = a.getAttribute('data-title') || '';
+              const titleB = b.getAttribute('data-title') || '';
+              return titleA.localeCompare(titleB);
+            }
+            case 'popular': {
+              const helpfulA = parseInt(a.getAttribute('data-helpful') || '0', 10);
+              const helpfulB = parseInt(b.getAttribute('data-helpful') || '0', 10);
+              // Sort by helpful count descending, then by title
+              if (helpfulB !== helpfulA) return helpfulB - helpfulA;
+              const titleA = a.getAttribute('data-title') || '';
+              const titleB = b.getAttribute('data-title') || '';
+              return titleA.localeCompare(titleB);
+            }
+            case 'az': {
+              const titleA = a.getAttribute('data-title') || '';
+              const titleB = b.getAttribute('data-title') || '';
+              return titleA.localeCompare(titleB);
+            }
+            default:
+              return 0;
+          }
+        });
+
+        // Re-append sorted cards to the grid
+        if (articlesGrid) {
+          cards.forEach(card => articlesGrid.appendChild(card));
+        }
+
+        // Re-apply filter after sorting
+        filterArticles();
+      }
+
+      // Handle tag filter clicks
       filterButtons.forEach(button => {
         button.addEventListener('click', () => {
-          const category = button.getAttribute('data-category');
+          const selectedTag = button.getAttribute('data-tag') || 'all';
+          currentTag = selectedTag;
 
           // Update active button styles
           filterButtons.forEach(btn => {
@@ -175,33 +340,17 @@ const categoryColors: Record<string, string> = {
           button.classList.remove('bg-gray-100', 'text-gray-700');
           button.classList.add('bg-brand-blue', 'text-white');
 
-          // Filter articles
-          let visibleCount = 0;
-          articleCards.forEach(card => {
-            const cardCategory = card.getAttribute('data-category');
-            if (category === 'all' || cardCategory === category) {
-              (card as HTMLElement).style.display = 'block';
-              visibleCount++;
-            } else {
-              (card as HTMLElement).style.display = 'none';
-            }
-          });
-
-          // Show/hide no results message
-          if (noResults) {
-            noResults.classList.toggle('hidden', visibleCount > 0);
-          }
+          filterArticles();
         });
       });
+
+      // Handle sort selection
+      if (sortSelect) {
+        sortSelect.addEventListener('change', () => {
+          sortArticles(sortSelect.value);
+        });
+      }
     });
   </script>
 </Layout>
 
-<style>
-  .line-clamp-2 {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-</style>

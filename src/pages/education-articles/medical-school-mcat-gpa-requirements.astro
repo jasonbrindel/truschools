@@ -1,11 +1,17 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import ArticleRating from '@/components/ArticleRating.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import BrowseByTopic from '@/components/BrowseByTopic.astro';
+import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
 import heroImage from '@/images/USED-medical-school-mcat-gpa.jpg';
 
 const title = "Medical School Admissions: The Truth Behind MCAT and GPA 'Requirements'";
 const description = "Why the numbers matter, why they don't, and how parents can stay sane in the meantime.";
-const category = 'Graduate School';
+const publishDate = "2024-11-11";
+const tags = ['Graduate School', 'College Admissions'];
 ---
 
 <Layout title={title} description={description}>
@@ -189,21 +195,37 @@ const category = 'Graduate School';
 
       <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
       <ul class="text-sm text-gray-600 space-y-2 mb-10">
-        <li>Association of American Medical Colleges (AAMC). "New AAMC Data on Medical School Applicants and Enrollment." Press release. 2025.</li>
-        <li>AAMC. "Understanding Your MCAT Exam Score." (MCAT scoring scale, section scoring, percentiles). Updated periodically.</li>
-        <li>AAMC. Table A-23: "MCAT and GPA Grid for Applicants and Acceptees to U.S. Medical Schools" (aggregated acceptance rates by MCAT and GPA). 2023 (data aggregated across recent cycles).</li>
-        <li>AAMC. Table A-1: "U.S. MD-Granting Medical School Applications and Matriculants by School, State of Legal Residence, and Gender." 2023-2024.</li>
-        <li>AAMC. Table A-5: "Applicants to U.S. MD-Granting Medical Schools by In or Out-of-State Matriculation Status." 2023-2024.</li>
-        <li>AAMC. "Key Findings and Definitions" (FACTS: Applicants and Matriculants). 2024.</li>
-        <li>AAMC. "Where to Apply? Factors to Consider When Making Your Medical School List." Medical School Admission Requirements (MSAR) guidance. Updated periodically.</li>
-        <li>AAMC. "PREview: Participating Institutions" (list of schools using or requiring PREview). Updated periodically.</li>
-        <li>AAMC. "MCAT Exam Retake Policies" (limits on attempts). Updated periodically.</li>
-        <li>AAMC. "Using MCAT Data in 2024 Medical Student Selection." Guidance for admissions officers. 2024.</li>
-        <li>AAMC. Medical School Admission Requirements (MSAR) database. (School-specific MCAT/GPA ranges and policies; subscription).</li>
-        <li>Shemmassian Academic Consulting. "Average GPA and MCAT Score for Every Medical School." Updated periodically (compiled from publicly reported class profiles).</li>
-        <li>Jack Westin. "Average GPA and MCAT Score for Every Medical School: A 2025 Update." 2025 (compiled from public class profile data).</li>
+        <li><a href="https://www.aamc.org/news/press-releases/2024/11/07/new-aamc-data-medical-school-applicants-and-enrollment" class="text-brand-blue hover:underline" target="_blank" rel="noopener">AAMC</a>. <em>"New AAMC Data on Medical School Applicants and Enrollment."</em> Press release, 2025.</li>
+        <li><a href="https://students-residents.aamc.org/mcat-scores/understanding-your-mcat-score" class="text-brand-blue hover:underline" target="_blank" rel="noopener">AAMC</a>. <em>"Understanding Your MCAT Exam Score."</em></li>
+        <li><a href="https://www.aamc.org/data-reports/students-residents/interactive-data/2023-facts-applicants-and-matriculants-data" class="text-brand-blue hover:underline" target="_blank" rel="noopener">AAMC FACTS Table A-23</a>. <em>"MCAT and GPA Grid."</em></li>
+        <li><a href="https://www.aamc.org/data-reports/students-residents/interactive-data/2024-facts-applicants-and-matriculants-data" class="text-brand-blue hover:underline" target="_blank" rel="noopener">AAMC Table A-1</a>. <em>"Applications and Matriculants by School/State/Gender (2023–24)."</em></li>
+        <li><a href="https://students-residents.aamc.org/aamc-preview/aamc-preview-participating-institutions" class="text-brand-blue hover:underline" target="_blank" rel="noopener">AAMC PREview</a>. <em>"Participating Institutions."</em></li>
+        <li><a href="https://students-residents.aamc.org/mcat-register-for-mcat-exam/mcat-exam-retest-policy" class="text-brand-blue hover:underline" target="_blank" rel="noopener">AAMC</a>. <em>"MCAT Retake Policies."</em></li>
+        <li><a href="https://students-residents.aamc.org/applying-medical-school-amcas/medical-school-admission-requirements-msar" class="text-brand-blue hover:underline" target="_blank" rel="noopener">AAMC MSAR</a> (subscription).</li>
+        <li><a href="https://www.shemmassianconsulting.com/blog/average-mcat-score-gpa-medical-school" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Shemmassian Consulting</a>. <em>"Average GPA and MCAT for Every Medical School."</em></li>
+        <li><a href="https://jackwestin.com/resources/blog/average-gpa-and-mcat-score-for-every-medical-school-a-2025-update" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Jack Westin</a>. <em>"Average GPA and MCAT for Every Medical School (2025 Update)."</em></li>
       </ul>
     </div>
+
+    <!-- Article Rating -->
+
+
+    
+    <ArticleRating slug="medical-school-mcat-gpa-requirements" />
+
+    <!-- Related Articles -->
+    <RelatedArticles currentSlug="medical-school-mcat-gpa-requirements" currentTags={tags} />
+
+    <!-- Browse by Topic -->
+    <BrowseByTopic tags={tags} />
+
+    <!-- Newsletter Signup -->
+    <ArticleNewsletter articleTags={tags} />
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} slug="medical-school-mcat-gpa-requirements" />
+
+
 
     <footer class="mt-16 pt-8 border-t border-gray-200">
       <p class="text-sm text-gray-500 italic">

@@ -1,12 +1,18 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import ArticleRating from '@/components/ArticleRating.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import BrowseByTopic from '@/components/BrowseByTopic.astro';
+import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
 import heroImage from '@/images/USED-high-school-courtyard-picnic-tables.jpg';
 
 const title = "The Comeback of Vocational Schools";
 const subtitle = "America is facing a skilled labor crisis—and a generation of young people is discovering that trade careers offer something a college degree often can't: stable work, good pay, and freedom from crushing debt.";
 const description = "How Gen Z is embracing vocational schools and skilled trades as an alternative to college, amid a growing labor shortage and changing attitudes about career paths.";
-const category = 'Vocational Education';
+const publishDate = "2024-12-05";
+const tags = ['Vocational Education', 'High School', 'School Choice'];
 ---
 
 <Layout title={title} description={description}>
@@ -165,26 +171,46 @@ const category = 'Vocational Education';
       <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
 
       <ul class="text-sm text-gray-600 space-y-2 mb-10">
-        <li>Bureau of Labor Statistics, Occupational Outlook Handbook: Electricians, Plumbers, HVAC Technicians (May 2024 data)</li>
-        <li>CBS News, "Data center demand is booming. Can the supply of trade workers keep up?" (August 2025)</li>
-        <li>Deloitte and Manufacturing Institute, "Creating Pathways for Tomorrow's Workforce Today" (2024)</li>
-        <li>National Student Clearinghouse Research Center, Current Term Enrollment Estimates (2023)</li>
-        <li>Resume Builder, "4 in 10 Gen Z College Grads Are Turning to Blue-Collar Work for Job Security" (May 2025)</li>
-        <li>NPR, "Many in Gen Z ditch colleges for trade schools. Meet the 'toolbelt generation'" (April 2024)</li>
-        <li>CNBC, "Gen Z workers increasingly opt out of college and into the trades" (April 2025)</li>
-        <li>The Wall Street Journal, "How Gen Z Is Becoming the Toolbelt Generation" (April 2024)</li>
-        <li>McKinsey & Company, "Tradespeople Wanted: The need for critical trade skills in the U.S." (April 2024)</li>
-        <li>Associated Builders and Contractors, Construction Industry Workforce Report (2024)</li>
-        <li>The Hill/NewsNation, "Why is there a shortage of plumbers and electricians?" (April 2024)</li>
-        <li>White House Council of Economic Advisers, "All Aboard the ApprenticeSHIP" (November 2024)</li>
-        <li>American Institutes for Research, "What We Know About the Impact of Career and Technical Education" (2024)</li>
-        <li>National Center for Education Statistics, Career and Technical Education Statistics (2024)</li>
-        <li>World Resources Institute, "5 Insights on the State of US Clean Energy Jobs" (2025)</li>
-        <li>U.S. Department of Energy, Infrastructure Investment and Jobs Act Implementation Reports</li>
-        <li>Angi Research, "Skilled Trades Report" (2024)</li>
-        <li>Education Data Initiative, Average Cost of College and Student Loan Debt Statistics (2024)</li>
+        <li><a href="https://www.bls.gov/ooh/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Bureau of Labor Statistics</a>. <em>Occupational Outlook Handbook: Electricians, Plumbers, HVAC Technicians</em> (May 2024 data).</li>
+        <li><a href="https://www.cbsnews.com/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">CBS News</a>. <em>"Data center demand is booming. Can the supply of trade workers keep up?"</em> (August 2025).</li>
+        <li><a href="https://www2.deloitte.com/us/en/insights/industry/manufacturing/manufacturing-skills-gap-study.html" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Deloitte and Manufacturing Institute</a>. <em>"Creating Pathways for Tomorrow's Workforce Today"</em> (2024).</li>
+        <li><a href="https://nscresearchcenter.org/current-term-enrollment-estimates/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Student Clearinghouse Research Center</a>. <em>Current Term Enrollment Estimates</em> (2023).</li>
+        <li><a href="https://www.resumebuilder.com/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Resume Builder</a>. <em>"4 in 10 Gen Z College Grads Are Turning to Blue-Collar Work for Job Security"</em> (May 2025).</li>
+        <li><a href="https://www.npr.org/2024/04/25/1244486778/gen-z-trades-skilled-jobs-college-vocational-schools" class="text-brand-blue hover:underline" target="_blank" rel="noopener">NPR</a>. <em>"Many in Gen Z ditch colleges for trade schools. Meet the 'toolbelt generation'"</em> (April 2024).</li>
+        <li><a href="https://www.cnbc.com/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">CNBC</a>. <em>"Gen Z workers increasingly opt out of college and into the trades"</em> (April 2025).</li>
+        <li><a href="https://www.wsj.com/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">The Wall Street Journal</a>. <em>"How Gen Z Is Becoming the Toolbelt Generation"</em> (April 2024).</li>
+        <li><a href="https://www.mckinsey.com/industries/public-sector/our-insights/tradespeople-wanted" class="text-brand-blue hover:underline" target="_blank" rel="noopener">McKinsey & Company</a>. <em>"Tradespeople Wanted: The need for critical trade skills in the U.S."</em> (April 2024).</li>
+        <li><a href="https://www.abc.org/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Associated Builders and Contractors</a>. <em>Construction Industry Workforce Report</em> (2024).</li>
+        <li><a href="https://thehill.com/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">The Hill/NewsNation</a>. <em>"Why is there a shortage of plumbers and electricians?"</em> (April 2024).</li>
+        <li><a href="https://www.whitehouse.gov/cea/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">White House Council of Economic Advisers</a>. <em>"All Aboard the ApprenticeSHIP"</em> (November 2024).</li>
+        <li><a href="https://www.air.org/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">American Institutes for Research</a>. <em>"What We Know About the Impact of Career and Technical Education"</em> (2024).</li>
+        <li><a href="https://nces.ed.gov/surveys/ctes/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Center for Education Statistics</a>. <em>Career and Technical Education Statistics</em> (2024).</li>
+        <li><a href="https://www.wri.org/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">World Resources Institute</a>. <em>"5 Insights on the State of US Clean Energy Jobs"</em> (2025).</li>
+        <li><a href="https://www.energy.gov/infrastructure" class="text-brand-blue hover:underline" target="_blank" rel="noopener">U.S. Department of Energy</a>. <em>Infrastructure Investment and Jobs Act Implementation Reports.</em></li>
+        <li><a href="https://www.angi.com/research/reports/skilled-trades/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Angi Research</a>. <em>"Skilled Trades Report"</em> (2024).</li>
+        <li><a href="https://educationdata.org/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Education Data Initiative</a>. <em>Average Cost of College and Student Loan Debt Statistics</em> (2024).</li>
       </ul>
     </div>
+
+    <!-- Article Rating -->
+
+
+    
+    <ArticleRating slug="the-comeback-of-vocational-schools" />
+
+    <!-- Related Articles -->
+    <RelatedArticles currentSlug="the-comeback-of-vocational-schools" currentTags={tags} />
+
+    <!-- Browse by Topic -->
+    <BrowseByTopic tags={tags} />
+
+    <!-- Newsletter Signup -->
+    <ArticleNewsletter articleTags={tags} />
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} slug="the-comeback-of-vocational-schools" />
+
+
 
     <!-- Footer -->
     <footer class="mt-16 pt-8 border-t border-gray-200">

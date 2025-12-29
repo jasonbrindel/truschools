@@ -1,12 +1,18 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import ArticleRating from '@/components/ArticleRating.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import BrowseByTopic from '@/components/BrowseByTopic.astro';
+import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
 import heroImage from '@/images/USED-school-playground-pink-sunset-illustration.jpg';
 
 const title = "The Stillness Epidemic";
 const subtitle = "How America's children stopped moving—and what it's costing them";
 const description = "An in-depth look at declining physical activity among American children, the health consequences, and what parents and schools can do about it.";
-const category = "Children's Health";
+const publishDate = "2024-12-20";
+const tags = ["Children's Health", 'Elementary School', 'Middle School'];
 ---
 
 <Layout title={`${title}`} description={description}>
@@ -195,26 +201,46 @@ const category = "Children's Health";
       <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
 
       <ul class="text-sm text-gray-600 space-y-2 mb-10">
-        <li>Physical Activity Alliance, "2024 United States Report Card on Physical Activity for Children and Youth," October 2024</li>
-        <li>Centers for Disease Control and Prevention, "Childhood Obesity Facts," April 2024</li>
-        <li>Centers for Disease Control and Prevention, "What Counts for Children and Teens," January 2024</li>
-        <li>U.S. Department of Transportation, "Transportation Characteristics of School Children," Nationwide Personal Transportation Survey, 1972</li>
-        <li>National Center for Safe Routes to School, "How Children Get to School: Patterns from 1969–2009," 2011</li>
-        <li>Safe Routes to School National Partnership, "What Is Safe Routes to School?" fact sheet</li>
-        <li>Center on Education Policy, "Instructional Time in Elementary Schools," 2008</li>
-        <li>Zhang et al., "Global Prevalence of Overweight and Obesity in Children and Adolescents: A Systematic Review and Meta-Analysis," JAMA Pediatrics, 2024</li>
-        <li>Syed et al., "The Impact of Screen Time on Sleep Patterns in School-Aged Children," Cureus, 2024</li>
-        <li>Roman-Viñas et al., "Proportion of children meeting recommendations for 24-hour movement guidelines," The Lancet Child & Adolescent Health, 2016</li>
-        <li>World Health Organization, "To grow up healthy, children need to sit less and play more," April 2019</li>
-        <li>World Health Organization, "Obesity and Overweight," fact sheet, December 2024</li>
-        <li>LiiNK Project, Texas Christian University, research findings on recess interventions</li>
-        <li>London, Rebecca, "Rethinking Recess," Harvard EdCast interview, October 2019</li>
-        <li>Belsha, Kalyn, "Teachers often cancel recess as a punishment," NBC News / The Hechinger Report, May 2022</li>
-        <li>National Association of State Boards of Education, state recess policy data, 2024</li>
-        <li>Dooley, Erin, "The stress of recess: Here's how schools are improving playtime," K-12 Dive, May 2024</li>
-        <li>Farrell, James, "All work and no play: Should kids have longer school recess?" WFAE Charlotte, December 2025</li>
+        <li><a href="https://physicalactivityalliance.org/reportcard/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Physical Activity Alliance</a>. <em>"2024 United States Report Card on Physical Activity for Children and Youth."</em> October 2024.</li>
+        <li><a href="https://www.cdc.gov/obesity/php/data-research/childhood-obesity-facts.html" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Centers for Disease Control and Prevention</a>. <em>"Childhood Obesity Facts."</em> April 2024.</li>
+        <li><a href="https://www.cdc.gov/physical-activity-basics/guidelines/children.html" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Centers for Disease Control and Prevention</a>. <em>"What Counts for Children and Teens."</em> January 2024.</li>
+        <li><a href="https://rosap.ntl.bts.gov/view/dot/61964" class="text-brand-blue hover:underline" target="_blank" rel="noopener">U.S. Department of Transportation</a>. <em>"Transportation Characteristics of School Children."</em> Nationwide Personal Transportation Survey, 1972.</li>
+        <li><a href="https://www.saferoutesinfo.org/facts-and-stats" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Center for Safe Routes to School</a>. <em>"How Children Get to School: Patterns from 1969–2009."</em> 2011.</li>
+        <li><a href="https://www.saferoutespartnership.org/resources/fact-sheet/what-safe-routes-school" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Safe Routes to School National Partnership</a>. <em>"What Is Safe Routes to School?"</em> fact sheet.</li>
+        <li><a href="https://www.cep-dc.org/displayDocument.cfm?DocumentID=309" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Center on Education Policy</a>. <em>"Instructional Time in Elementary Schools."</em> 2008.</li>
+        <li><a href="https://jamanetwork.com/journals/jamapediatrics/fullarticle/2815885" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Zhang et al., JAMA Pediatrics</a>. <em>"Global Prevalence of Overweight and Obesity in Children and Adolescents: A Systematic Review and Meta-Analysis."</em> 2024.</li>
+        <li><a href="https://www.cureus.com/articles/298380-the-impact-of-screen-time-on-sleep-patterns-in-school-aged-children" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Syed et al., Cureus</a>. <em>"The Impact of Screen Time on Sleep Patterns in School-Aged Children."</em> 2024.</li>
+        <li><a href="https://www.thelancet.com/journals/lanchi/article/PIIS2352-4642(16)30266-7/fulltext" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Roman-Viñas et al., The Lancet Child & Adolescent Health</a>. <em>"Proportion of children meeting recommendations for 24-hour movement guidelines."</em> 2016.</li>
+        <li><a href="https://www.who.int/news/item/24-04-2019-to-grow-up-healthy-children-need-to-sit-less-and-play-more" class="text-brand-blue hover:underline" target="_blank" rel="noopener">World Health Organization</a>. <em>"To grow up healthy, children need to sit less and play more."</em> April 2019.</li>
+        <li><a href="https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight" class="text-brand-blue hover:underline" target="_blank" rel="noopener">World Health Organization</a>. <em>"Obesity and Overweight."</em> fact sheet, December 2024.</li>
+        <li><a href="https://liinkproject.tcu.edu/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">LiiNK Project, Texas Christian University</a>. Research findings on recess interventions.</li>
+        <li><a href="https://www.gse.harvard.edu/ideas/edcast/19/10/rethinking-recess" class="text-brand-blue hover:underline" target="_blank" rel="noopener">London, Rebecca, Harvard EdCast</a>. <em>"Rethinking Recess."</em> October 2019.</li>
+        <li><a href="https://hechingerreport.org/teachers-often-cancel-recess-as-a-punishment-is-that-a-good-idea/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Belsha, Kalyn, The Hechinger Report</a>. <em>"Teachers often cancel recess as a punishment."</em> May 2022.</li>
+        <li><a href="https://statepolicies.nasbe.org/health/categories/physical-education-and-physical-activity/recess-policies" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Association of State Boards of Education</a>. State recess policy data. 2024.</li>
+        <li><a href="https://www.k12dive.com/news/schools-stress-recess-improving-playtime/715817/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Dooley, Erin, K-12 Dive</a>. <em>"The stress of recess: Here's how schools are improving playtime."</em> May 2024.</li>
+        <li><a href="https://www.wfae.org/education/2024-12-18/charlotte-schools-recess-petition-research" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Farrell, James, WFAE Charlotte</a>. <em>"All work and no play: Should kids have longer school recess?"</em> December 2024.</li>
       </ul>
     </div>
+
+    <!-- Article Rating -->
+
+
+    
+    <ArticleRating slug="the-stillness-epidemic" />
+
+    <!-- Related Articles -->
+    <RelatedArticles currentSlug="the-stillness-epidemic" currentTags={tags} />
+
+    <!-- Browse by Topic -->
+    <BrowseByTopic tags={tags} />
+
+    <!-- Newsletter Signup -->
+    <ArticleNewsletter articleTags={tags} />
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} slug="the-stillness-epidemic" />
+
+
 
     <!-- Footer -->
     <footer class="mt-16 pt-8 border-t border-gray-200">

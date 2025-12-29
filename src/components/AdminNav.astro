@@ -1,50 +1,212 @@
 ---
+import logo from '@/images/USED-logo-truschools-white-up.png';
+
 interface Props {
   currentPage?: string;
 }
 
 const { currentPage = '' } = Astro.props;
 
-const navItems = [
-  { href: '/tools/article-prompt-builder', label: 'Prompt Builder', id: 'prompt-builder' },
-  { href: '/admin/subscribers', label: 'Subscribers', id: 'subscribers' },
-  { href: '/admin/polls', label: 'Polls', id: 'polls' },
-  { href: '/admin/errors', label: 'Error Log', id: 'errors' },
+const navCategories = [
+  {
+    label: 'Content',
+    items: [
+      { href: '/tools/article-prompt-builder', label: 'Prompt Builder', id: 'prompt-builder' },
+      { href: '/tools/saved-prompts', label: 'Saved Prompts', id: 'saved-prompts' },
+    ]
+  },
+  {
+    label: 'Analytics',
+    items: [
+      { href: '/admin/subscribers', label: 'Subscribers', id: 'subscribers' },
+      { href: '/admin/polls', label: 'Polls', id: 'polls' },
+    ]
+  },
+  {
+    label: 'System',
+    items: [
+      { href: '/admin/errors', label: 'Error Log', id: 'errors' },
+    ]
+  }
 ];
+
+// Find current page label for display
+const allItems = navCategories.flatMap(cat => cat.items);
+const currentItem = allItems.find(item => item.id === currentPage);
+const currentLabel = currentItem?.label || 'Admin Tools';
 ---
 
-<nav class="bg-gray-800 text-white mb-6">
-  <div class="container">
-    <div class="flex items-center justify-between py-3">
-      <div class="flex items-center gap-1">
-        <span class="text-gray-400 text-sm mr-3">Admin Tools:</span>
-        {navItems.map((item) => (
-          <a
-            href={item.href}
-            class:list={[
-              "px-3 py-1.5 rounded text-sm font-medium transition-colors",
-              currentPage === item.id
-                ? "bg-gray-900 text-white"
-                : "text-gray-300 hover:bg-gray-700 hover:text-white"
-            ]}
-          >
-            {item.label}
-          </a>
+<nav class="admin-nav">
+  <div class="admin-nav-container">
+    <a href="/" class="logo-link">
+      <img src={logo.src} alt="TruSchools" class="logo" />
+    </a>
+
+    <div class="dropdown" id="admin-dropdown">
+      <button class="dropdown-trigger" type="button" id="dropdown-trigger">
+        <span class="current-page">{currentLabel}</span>
+        <svg class="chevron" width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+
+      <div class="dropdown-menu" id="dropdown-menu">
+        {navCategories.map((category) => (
+          <div class="dropdown-section">
+            <div class="dropdown-section-label">{category.label}</div>
+            {category.items.map((item) => (
+              <a
+                href={item.href}
+                class:list={[
+                  "dropdown-item",
+                  currentPage === item.id && "active"
+                ]}
+              >
+                {item.label}
+              </a>
+            ))}
+          </div>
         ))}
       </div>
-      <a href="/" class="text-gray-400 hover:text-white text-sm">
-        Back to TruSchools
-      </a>
     </div>
   </div>
 </nav>
 
+<script>
+  const dropdown = document.getElementById('admin-dropdown');
+  const trigger = document.getElementById('dropdown-trigger');
+
+  trigger?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    dropdown?.classList.toggle('open');
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!dropdown?.contains(e.target as Node)) {
+      dropdown?.classList.remove('open');
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      dropdown?.classList.remove('open');
+    }
+  });
+</script>
+
 <style>
-  .container {
+  .admin-nav {
+    background: #1f2937;
+    margin-bottom: 1.5rem;
+  }
+
+  .admin-nav-container {
     max-width: 1200px;
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: 1.25rem;
-    padding-right: 1.25rem;
+    margin: 0 auto;
+    padding: 0 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+  }
+
+  .logo-link {
+    display: flex;
+    align-items: center;
+  }
+
+  .logo {
+    height: 28px;
+    width: auto;
+  }
+
+  .dropdown {
+    position: relative;
+  }
+
+  .dropdown-trigger {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: #374151;
+    border: 1px solid #4b5563;
+    border-radius: 6px;
+    color: white;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .dropdown-trigger:hover {
+    background: #4b5563;
+    border-color: #6b7280;
+  }
+
+  .chevron {
+    transition: transform 0.15s ease;
+  }
+
+  .dropdown.open .chevron {
+    transform: rotate(180deg);
+  }
+
+  .dropdown-menu {
+    position: absolute;
+    top: calc(100% + 4px);
+    right: 0;
+    min-width: 200px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    transition: all 0.15s ease;
+    z-index: 1000;
+    overflow: hidden;
+  }
+
+  .dropdown.open .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .dropdown-section {
+    padding: 8px 0;
+  }
+
+  .dropdown-section:not(:last-child) {
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .dropdown-section-label {
+    padding: 4px 16px 8px;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #9ca3af;
+  }
+
+  .dropdown-item {
+    display: block;
+    padding: 8px 16px;
+    font-size: 0.875rem;
+    color: #374151;
+    text-decoration: none;
+    transition: background 0.1s ease;
+  }
+
+  .dropdown-item:hover {
+    background: #f3f4f6;
+  }
+
+  .dropdown-item.active {
+    background: #eff6ff;
+    color: #2563eb;
+    font-weight: 500;
   }
 </style>

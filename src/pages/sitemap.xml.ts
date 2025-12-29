@@ -32,6 +32,7 @@ export const GET: APIRoute = async () => {
     { loc: `${SITE_URL}/sitemap-schools-3.xml`, lastmod: today },
     { loc: `${SITE_URL}/sitemap-colleges.xml`, lastmod: today },
     { loc: `${SITE_URL}/sitemap-vocational.xml`, lastmod: today },
+    { loc: `${SITE_URL}/sitemap-classes.xml`, lastmod: today },
   ];
 
   const xml = generateSitemapIndex(sitemaps);

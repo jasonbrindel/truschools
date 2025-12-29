@@ -1,12 +1,18 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import ArticleRating from '@/components/ArticleRating.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import BrowseByTopic from '@/components/BrowseByTopic.astro';
+import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
 import heroImage from '@/images/USED-school-campus-colorful-illustration.jpg';
 
 const title = "Charter Schools";
 const subtitle = "What Parents Need to Know";
 const description = "A comprehensive guide for parents considering charter schools, covering how they work, admissions, funding, and tips for evaluation.";
-const category = 'Charter Schools';
+const publishDate = "2024-08-22";
+const tags = ['Charter Schools', 'School Choice'];
 ---
 
 <Layout title={`${title}: ${subtitle}`} description={description}>
@@ -175,6 +181,26 @@ const category = 'Charter Schools';
         That's the thing about charter schools. They're an option, not an answer. They expand the range of choices available to families, which is valuable. But more choices means more research, more decisions, more ways to get it wrong. The best school for your child is the one that fits—their learning style, their needs, their personality. That might be a charter. It might be your neighborhood public school. The label matters less than the match.
       </p>
     </div>
+
+    <!-- Article Rating -->
+
+
+    
+    <ArticleRating slug="charter-schools-what-parents-need-to-know" />
+
+    <!-- Related Articles -->
+    <RelatedArticles currentSlug="charter-schools-what-parents-need-to-know" currentTags={tags} />
+
+    <!-- Browse by Topic -->
+    <BrowseByTopic tags={tags} />
+
+    <!-- Newsletter Signup -->
+    <ArticleNewsletter articleTags={tags} />
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} slug="charter-schools-what-parents-need-to-know" />
+
+
 
     <!-- Footer -->
     <footer class="mt-16 pt-8 border-t border-gray-200">

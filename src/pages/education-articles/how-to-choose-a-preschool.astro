@@ -1,11 +1,17 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import ArticleRating from '@/components/ArticleRating.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import BrowseByTopic from '@/components/BrowseByTopic.astro';
+import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
 import heroImage from '@/images/USED-preschool-1.jpg';
 
 const title = "The First Classroom";
 const description = "What really matters when choosing a preschool—and how to find it. A comprehensive guide for parents on evaluating early childhood programs.";
-const category = 'Preschool';
+const publishDate = "2024-09-21";
+const tags = ['Preschool', 'School Choice'];
 ---
 
 <Layout title={title} description={description}>
@@ -212,18 +218,38 @@ const category = 'Preschool';
 
       <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
       <ul class="text-sm text-gray-600 space-y-2 mb-10">
-        <li>National Association for the Education of Young Children. "The 10 NAEYC Program Standards." NAEYC, 2024.</li>
-        <li>Center on the Developing Child at Harvard University. "From Best Practices to Breakthrough Impacts: A Science-Based Approach to Building a More Promising Future for Young Children and Families." Harvard University, 2016.</li>
-        <li>Pianta, R.C., Hamre, B.K., & Allen, J.P. "Teacher-Student Relationships and Engagement." In Handbook of Research on Student Engagement. Springer, 2012.</li>
-        <li>Sun, J., Rao, N., & Pearson, E. "Language Development in Early Childhood: Quality of Teacher-Child Interaction and Children's Receptive Vocabulary Competency." Frontiers in Psychology, 2021.</li>
-        <li>University of Cambridge. "Play-based learning can improve academic outcomes, study finds." 2022.</li>
-        <li>Weisberg, D.S., Hirsh-Pasek, K., & Golinkoff, R.M. "Guided Play: Where Curricular Goals Meet a Playful Pedagogy." Mind, Brain, and Education, 2013.</li>
-        <li>Johns Hopkins All Children's Hospital. "10 Must-Ask Questions and Tips on Choosing a Preschool." Johns Hopkins Medicine, 2024.</li>
-        <li>California Department of Social Services, Community Care Licensing Division. Title 22 California Administrative Code.</li>
-        <li>Burchinal, M., et al. "ECE quality indicators and child outcomes: Analyses of six large child care studies." Early Childhood Research Quarterly, 2019.</li>
-        <li>NAEYC. "Staff-to-Child Ratio and Class Size." NAEYC Accreditation Standards, 2018.</li>
+        <li><a href="https://www.naeyc.org/accreditation/early-learning/standards" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Association for the Education of Young Children</a>. <em>"The 10 NAEYC Program Standards."</em> NAEYC, 2024.</li>
+        <li><a href="https://developingchild.harvard.edu/resources/from-best-practices-to-breakthrough-impacts/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Center on the Developing Child at Harvard University</a>. <em>"From Best Practices to Breakthrough Impacts: A Science-Based Approach to Building a More Promising Future for Young Children and Families."</em> Harvard University, 2016.</li>
+        <li><a href="https://doi.org/10.1007/978-1-4614-2018-7_12" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Pianta, R.C., Hamre, B.K., & Allen, J.P.</a> <em>"Teacher-Student Relationships and Engagement."</em> In Handbook of Research on Student Engagement. Springer, 2012.</li>
+        <li><a href="https://doi.org/10.3389/fpsyg.2021.649680" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Sun, J., Rao, N., & Pearson, E.</a> <em>"Language Development in Early Childhood: Quality of Teacher-Child Interaction and Children's Receptive Vocabulary Competency."</em> Frontiers in Psychology, 2021.</li>
+        <li><a href="https://www.cam.ac.uk/research/news/play-based-learning-can-set-your-child-up-for-success-at-school-and-beyond" class="text-brand-blue hover:underline" target="_blank" rel="noopener">University of Cambridge</a>. <em>"Play-based learning can improve academic outcomes, study finds."</em> 2022.</li>
+        <li><a href="https://doi.org/10.1111/mbe.12015" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Weisberg, D.S., Hirsh-Pasek, K., & Golinkoff, R.M.</a> <em>"Guided Play: Where Curricular Goals Meet a Playful Pedagogy."</em> Mind, Brain, and Education, 2013.</li>
+        <li><a href="https://www.hopkinsallchildrens.org/patients-families/health-library/healthdocnew/10-must-ask-questions-and-tips-on-choosing-a-pres" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Johns Hopkins All Children's Hospital</a>. <em>"10 Must-Ask Questions and Tips on Choosing a Preschool."</em> Johns Hopkins Medicine, 2024.</li>
+        <li><a href="https://www.cdss.ca.gov/inforesources/child-care-licensing" class="text-brand-blue hover:underline" target="_blank" rel="noopener">California Department of Social Services, Community Care Licensing Division</a>. <em>Title 22 California Administrative Code.</em></li>
+        <li><a href="https://doi.org/10.1016/j.ecresq.2019.03.007" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Burchinal, M., et al.</a> <em>"ECE quality indicators and child outcomes: Analyses of six large child care studies."</em> Early Childhood Research Quarterly, 2019.</li>
+        <li><a href="https://www.naeyc.org/our-work/families/staff-to-child-ratio-class-size" class="text-brand-blue hover:underline" target="_blank" rel="noopener">NAEYC</a>. <em>"Staff-to-Child Ratio and Class Size."</em> NAEYC Accreditation Standards, 2018.</li>
       </ul>
     </div>
+
+    <!-- Article Rating -->
+
+
+    
+    <ArticleRating slug="how-to-choose-a-preschool" />
+
+    <!-- Related Articles -->
+    <RelatedArticles currentSlug="how-to-choose-a-preschool" currentTags={tags} />
+
+    <!-- Browse by Topic -->
+    <BrowseByTopic tags={tags} />
+
+    <!-- Newsletter Signup -->
+    <ArticleNewsletter articleTags={tags} />
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} slug="how-to-choose-a-preschool" />
+
+
 
     <footer class="mt-16 pt-8 border-t border-gray-200">
       <p class="text-sm text-gray-500 italic">

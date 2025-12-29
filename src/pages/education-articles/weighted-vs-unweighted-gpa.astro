@@ -1,11 +1,17 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import ArticleRating from '@/components/ArticleRating.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import BrowseByTopic from '@/components/BrowseByTopic.astro';
+import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
 import heroImage from '@/images/USED-weighted-unweighted-gpa.jpg';
 
 const title = "Weighted vs. Unweighted GPA: What Colleges Actually Care About";
 const description = "Why your 4.3 weighted GPA might mean less than you think—and why a 3.8 with the right courses could mean more. A guide for families navigating GPA calculations and college admissions.";
-const category = 'High School';
+const publishDate = "2024-12-26";
+const tags = ['High School', 'College Admissions'];
 ---
 
 <Layout title={title} description={description}>
@@ -172,18 +178,38 @@ const category = 'High School';
       <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
 
       <ul class="text-sm text-gray-600 space-y-2 mb-10">
-        <li>National Association for College Admission Counseling (NACAC), State of College Admission Report, 2023</li>
-        <li>ACT Research, "Grade Inflation Continues to Grow in the Past Decade," 2022</li>
-        <li>ACT Research, "High School Grade Inflation on Rise, Especially in Math," 2023</li>
-        <li>University of California Office of Admissions, GPA Requirement Guidelines</li>
-        <li>College Board, "Grade Inflation for Top California Students by High School," Research Brief</li>
-        <li>Harvard University Office of Admissions, Admissions Statistics</li>
-        <li>Yale University Office of Undergraduate Admissions, Advice on Selecting High School Courses</li>
-        <li>Stanford University Admissions Office, Application Requirements</li>
-        <li>The Hechinger Report, "New Evidence of High School Grade Inflation," May 2022</li>
-        <li>Inside Higher Ed, "Study Finds Notable Increase in Grades in High Schools Nationally," July 2017</li>
+        <li><a href="https://www.nacacnet.org/state-of-college-admission-report/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">NACAC</a>. <em>"State of College Admission Report (2023)."</em></li>
+        <li><a href="https://www.act.org/content/dam/act/secured/documents/pdfs/Grade-Inflation-Continues-to-Grow-in-the-Past-Decade-Final-Accessible.pdf" class="text-brand-blue hover:underline" target="_blank" rel="noopener">ACT Research</a>. <em>"Grade Inflation Continues to Grow in the Past Decade."</em> 2022.</li>
+        <li><a href="https://leadershipblog.act.org/2023/08/grade-inflation-math.html" class="text-brand-blue hover:underline" target="_blank" rel="noopener">ACT</a>. <em>"High School Grade Inflation on Rise, Especially in Math."</em> August 2023.</li>
+        <li><a href="https://admission.universityofcalifornia.edu/admission-requirements/first-year-requirements/gpa-requirement.html" class="text-brand-blue hover:underline" target="_blank" rel="noopener">UC Admissions</a>. <em>"GPA Requirement Guidelines."</em></li>
+        <li><a href="https://www.ucop.edu/institutional-research-academic-planning/research/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">UCOP</a>. <em>"Grade Inflation for Top California Students by High School Affluence."</em> Research brief, Jan 2020.</li>
+        <li><a href="https://college.harvard.edu/admissions/apply/admissions-statistics" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Harvard College Admissions</a>. <em>"Admissions Statistics."</em></li>
+        <li><a href="https://admissions.yale.edu/faq/should-i-take-most-rigorous-courses-available" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Yale Admissions</a>. <em>"Advice on Selecting High School Courses."</em></li>
+        <li><a href="https://admission.stanford.edu/apply/first-year/index.html" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Stanford Undergraduate Admission</a>. <em>"Application Requirements."</em></li>
+        <li><a href="https://hechingerreport.org/new-evidence-of-high-school-grade-inflation/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Hechinger Report</a>. <em>"New Evidence of High School Grade Inflation."</em> May 2022.</li>
+        <li><a href="https://www.insidehighered.com/admissions/article/2017/07/17/study-finds-notable-increase-grades-high-schools-nationally" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Inside Higher Ed</a>. <em>"Study Finds Notable Increase in Grades in High Schools Nationally."</em> July 2017.</li>
       </ul>
     </div>
+
+    <!-- Article Rating -->
+
+
+    
+    <ArticleRating slug="weighted-vs-unweighted-gpa" />
+
+    <!-- Related Articles -->
+    <RelatedArticles currentSlug="weighted-vs-unweighted-gpa" currentTags={tags} />
+
+    <!-- Browse by Topic -->
+    <BrowseByTopic tags={tags} />
+
+    <!-- Newsletter Signup -->
+    <ArticleNewsletter articleTags={tags} />
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} slug="weighted-vs-unweighted-gpa" />
+
+
 
     <!-- Footer -->
     <footer class="mt-16 pt-8 border-t border-gray-200">

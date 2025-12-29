@@ -1,11 +1,17 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import ArticleRating from '@/components/ArticleRating.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import BrowseByTopic from '@/components/BrowseByTopic.astro';
+import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
 import heroImage from '@/images/USED-student-backpack-walking-school.jpg';
 
 const title = "Do Magnet Schools Provide Transportation?";
 const description = "Understanding magnet school transportation policies, challenges, and what families need to know about getting students to specialized programs.";
-const category = 'Magnet Schools';
+const publishDate = "2024-11-02";
+const tags = ['Magnet Schools', 'School Choice'];
 ---
 
 <Layout title={title} description={description}>
@@ -290,24 +296,44 @@ const category = 'Magnet Schools';
 
       <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
       <ul class="text-sm text-gray-600 space-y-2 mb-10">
-        <li>American School Bus Council, "National School Bus Statistics"</li>
-        <li>Chicago Public Schools, Transportation Services for Magnet Programs</li>
-        <li>Clark County School District, Transportation Eligibility Guidelines</li>
-        <li>Denver Public Schools, Transportation Options for Choice Schools</li>
-        <li>Hartford Public Schools, Regional Magnet Transportation Services</li>
-        <li>Jefferson County Public Schools, Magnet School Transportation</li>
-        <li>Journal of School Choice, "Transportation Access and Magnet School Demographics," 2018</li>
-        <li>Los Angeles Unified School District, Transportation Services</li>
-        <li>Miami-Dade County Public Schools, Magnet Transportation Information</li>
-        <li>Montgomery County Public Schools, Magnet Transportation Guidelines</li>
-        <li>National Center for Education Statistics, Magnet School Enrollment Data</li>
-        <li>Portland Public Schools, Transportation Options</li>
-        <li>RAND Corporation, "School Commute Times and Student Outcomes"</li>
-        <li>School Bus Fleet Magazine, "Driver Shortage Survey," 2023</li>
-        <li>School Superintendents Association, "Transportation Cost Analysis," 2019</li>
-        <li>Wake County Public Schools, Magnet Transportation FAQ</li>
+        <li><a href="https://www.americanschoolbuscouncil.org/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">American School Bus Council</a>. <em>"National School Bus Statistics."</em></li>
+        <li><a href="https://www.cps.edu/services-and-supports/transportation/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Chicago Public Schools</a>. <em>Transportation Services for Magnet Programs.</em></li>
+        <li><a href="https://www.ccsd.net/departments/transportation/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Clark County School District</a>. <em>Transportation Eligibility Guidelines.</em></li>
+        <li><a href="https://transportation.dpsk12.org/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Denver Public Schools</a>. <em>Transportation Options for Choice Schools.</em></li>
+        <li><a href="https://www.hartfordschools.org/transportation/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Hartford Public Schools</a>. <em>Regional Magnet Transportation Services.</em></li>
+        <li><a href="https://www.jefferson.kyschools.us/departments/operations/transportation" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Jefferson County Public Schools</a>. <em>Magnet School Transportation.</em></li>
+        <li><a href="https://www.tandfonline.com/toc/wjsc20/current" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Journal of School Choice</a>. <em>"Transportation Access and Magnet School Demographics."</em> 2018.</li>
+        <li><a href="https://achieve.lausd.net/transportation" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Los Angeles Unified School District</a>. <em>Transportation Services.</em></li>
+        <li><a href="https://www.dadeschools.net/transportation" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Miami-Dade County Public Schools</a>. <em>Magnet Transportation Information.</em></li>
+        <li><a href="https://www.montgomeryschoolsmd.org/departments/transportation/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Montgomery County Public Schools</a>. <em>Magnet Transportation Guidelines.</em></li>
+        <li><a href="https://nces.ed.gov/programs/digest/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Center for Education Statistics</a>. <em>Magnet School Enrollment Data.</em></li>
+        <li><a href="https://www.pps.net/transportation" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Portland Public Schools</a>. <em>Transportation Options.</em></li>
+        <li><a href="https://www.rand.org/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">RAND Corporation</a>. <em>"School Commute Times and Student Outcomes."</em></li>
+        <li><a href="https://www.schoolbusfleet.com/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">School Bus Fleet Magazine</a>. <em>"Driver Shortage Survey."</em> 2023.</li>
+        <li><a href="https://www.aasa.org/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">School Superintendents Association</a>. <em>"Transportation Cost Analysis."</em> 2019.</li>
+        <li><a href="https://www.wcpss.net/transportation" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Wake County Public Schools</a>. <em>Magnet Transportation FAQ.</em></li>
       </ul>
     </div>
+
+    <!-- Article Rating -->
+
+
+    
+    <ArticleRating slug="magnet-school-transportation" />
+
+    <!-- Related Articles -->
+    <RelatedArticles currentSlug="magnet-school-transportation" currentTags={tags} />
+
+    <!-- Browse by Topic -->
+    <BrowseByTopic tags={tags} />
+
+    <!-- Newsletter Signup -->
+    <ArticleNewsletter articleTags={tags} />
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} slug="magnet-school-transportation" />
+
+
 
     <footer class="mt-16 pt-8 border-t border-gray-200">
       <p class="text-sm text-gray-500 italic">

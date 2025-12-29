@@ -1,11 +1,17 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import ArticleRating from '@/components/ArticleRating.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import BrowseByTopic from '@/components/BrowseByTopic.astro';
+import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
 import heroImage from '@/images/USED-should-you-delay-kindergarten.jpg';
 
 const title = "Should You Delay Kindergarten?";
 const description = "What research says about academic redshirting—and what it means for your child. A comprehensive look at the evidence behind holding children back a year before kindergarten.";
-const category = 'Kindergarten';
+const publishDate = "2024-11-26";
+const tags = ['Kindergarten', 'Preschool'];
 ---
 
 <Layout title={title} description={description}>
@@ -148,22 +154,42 @@ const category = 'Kindergarten';
       <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
 
       <ul class="text-sm text-gray-600 space-y-2 mb-10">
-        <li>Bassok, D., & Reardon, S.F. "Academic Redshirting in Kindergarten: Prevalence, Patterns, and Implications." Stanford Center for Education Policy Analysis, 2013.</li>
-        <li>Layton, T.J., et al. "Attention Deficit–Hyperactivity Disorder and Month of School Enrollment." <em>New England Journal of Medicine</em>, November 2018.</li>
-        <li>Cook, P.J. "Redshirting Boys and Academic Achievement." National Bureau of Economic Research Working Paper, 2018.</li>
-        <li>Bassok, D. "The Truth About Redshirting." University of Virginia Magazine, 2013.</li>
-        <li>Fortner, C.K., & Jenkins, J.M. "Kindergarten Redshirting: Motivations and Spillovers Using Census-Level Data." <em>Early Childhood Research Quarterly</em>, 2017.</li>
-        <li>Reeves, R. "Who Redshirts?" Brookings Institution, September 2022.</li>
-        <li>Reeves, R. "How Much Does It Benefit a Child to Delay Kindergarten Entry for a Year?" Brookings Institution, December 2016.</li>
-        <li>Dee, T. "Hold Them Back? Stanford Education Professor Explains the Research on Kindergarten Redshirting." Stanford Graduate School of Education, 2023.</li>
-        <li>Elder, T. "The Importance of Relative Standards in ADHD Diagnoses: Evidence Based on Exact Birth Dates." <em>Journal of Health Economics</em>, 2010.</li>
-        <li>Brown, C. "How Kindergarten Redshirting Is Changing." <em>Education Week</em>, October 2024.</li>
-        <li>Centers for Disease Control and Prevention. "Why Act Early if You're Concerned about Development?" 2024.</li>
-        <li>Range, B., et al. "The Effects of Academic Redshirting and Relative Age on Student Achievement." ERIC, 2011.</li>
-        <li>Jones, S. "Academic Red-shirting: Perceived Life Satisfaction of Adolescent Males." ProQuest Digital Dissertations, 2012.</li>
-        <li>Dougan, K. "Forced to Redshirt: Quasi-Experimental Impacts of Delayed Kindergarten Entry." <em>Journal of Research on Educational Effectiveness</em>, 2024.</li>
+        <li><a href="https://cepa.stanford.edu/content/academic-redshirting-kindergarten-prevalence-patterns-and-implications" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Bassok, D., & Reardon, S.F.</a> <em>"Academic Redshirting in Kindergarten: Prevalence, Patterns, and Implications."</em> Stanford Center for Education Policy Analysis, 2013.</li>
+        <li><a href="https://doi.org/10.1056/NEJMoa1806828" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Layton, T.J., et al.</a> <em>"Attention Deficit–Hyperactivity Disorder and Month of School Enrollment."</em> New England Journal of Medicine, November 2018.</li>
+        <li><a href="https://www.nber.org/papers/w24310" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Cook, P.J.</a> <em>"Redshirting Boys and Academic Achievement."</em> National Bureau of Economic Research Working Paper, 2018.</li>
+        <li><a href="https://news.virginia.edu/content/truth-about-redshirting" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Bassok, D.</a> <em>"The Truth About Redshirting."</em> University of Virginia Magazine, 2013.</li>
+        <li><a href="https://doi.org/10.1016/j.ecresq.2016.10.002" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Fortner, C.K., & Jenkins, J.M.</a> <em>"Kindergarten Redshirting: Motivations and Spillovers Using Census-Level Data."</em> Early Childhood Research Quarterly, 2017.</li>
+        <li><a href="https://www.brookings.edu/articles/who-redshirts/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Reeves, R.</a> <em>"Who Redshirts?"</em> Brookings Institution, September 2022.</li>
+        <li><a href="https://www.brookings.edu/articles/how-much-does-it-benefit-a-child-to-delay-kindergarten-entry-for-a-year/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Reeves, R.</a> <em>"How Much Does It Benefit a Child to Delay Kindergarten Entry for a Year?"</em> Brookings Institution, December 2016.</li>
+        <li><a href="https://ed.stanford.edu/news/hold-them-back-stanford-education-professor-explains-research-kindergarten-redshirting" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Dee, T.</a> <em>"Hold Them Back? Stanford Education Professor Explains the Research on Kindergarten Redshirting."</em> Stanford Graduate School of Education, 2023.</li>
+        <li><a href="https://doi.org/10.1016/j.jhealeco.2010.07.002" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Elder, T.</a> <em>"The Importance of Relative Standards in ADHD Diagnoses: Evidence Based on Exact Birth Dates."</em> Journal of Health Economics, 2010.</li>
+        <li><a href="https://www.edweek.org/leadership/how-kindergarten-redshirting-is-changing/2024/10" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Brown, C.</a> <em>"How Kindergarten Redshirting Is Changing."</em> Education Week, October 2024.</li>
+        <li><a href="https://www.cdc.gov/ncbddd/actearly/whyactearlyifconcerned.html" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Centers for Disease Control and Prevention</a>. <em>"Why Act Early if You're Concerned about Development?"</em> 2024.</li>
+        <li><a href="https://eric.ed.gov/?id=ED520285" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Range, B., et al.</a> <em>"The Effects of Academic Redshirting and Relative Age on Student Achievement."</em> ERIC, 2011.</li>
+        <li><a href="https://www.proquest.com/dissertations-theses" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Jones, S.</a> <em>"Academic Red-shirting: Perceived Life Satisfaction of Adolescent Males."</em> ProQuest Digital Dissertations, 2012.</li>
+        <li><a href="https://doi.org/10.1080/19345747.2023.2252615" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Dougan, K.</a> <em>"Forced to Redshirt: Quasi-Experimental Impacts of Delayed Kindergarten Entry."</em> Journal of Research on Educational Effectiveness, 2024.</li>
       </ul>
     </div>
+
+    <!-- Article Rating -->
+
+
+    
+    <ArticleRating slug="should-you-delay-kindergarten" />
+
+    <!-- Related Articles -->
+    <RelatedArticles currentSlug="should-you-delay-kindergarten" currentTags={tags} />
+
+    <!-- Browse by Topic -->
+    <BrowseByTopic tags={tags} />
+
+    <!-- Newsletter Signup -->
+    <ArticleNewsletter articleTags={tags} />
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} slug="should-you-delay-kindergarten" />
+
+
 
     <!-- Footer -->
     <footer class="mt-16 pt-8 border-t border-gray-200">

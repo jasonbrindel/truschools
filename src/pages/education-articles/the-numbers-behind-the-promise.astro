@@ -1,11 +1,17 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import ArticleRating from '@/components/ArticleRating.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import BrowseByTopic from '@/components/BrowseByTopic.astro';
+import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
 import heroImage from '@/images/USED-modern-school-building-field.jpg';
 
 const title = "The Numbers Behind the Promise";
 const description = "Before you enroll your child in a charter school, here's how to look past the glossy brochure and assess whether the institution is built on solid financial ground.";
-const category = 'Charter Schools';
+const publishDate = "2024-12-11";
+const tags = ['Charter Schools', 'School Choice'];
 ---
 
 <Layout title={title} description={description}>
@@ -142,23 +148,43 @@ const category = 'Charter Schools';
       <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
 
       <ul class="text-sm text-gray-600 space-y-2 mb-10">
-        <li>National Center for Charter School Accountability and Network for Public Education, "Charter School Closures: 1998 to 2022," October 2024.</li>
-        <li>KQED News, "Santa Clara County's First Charter School to Close All Campuses, Laying Off 100 Staff," May 2025.</li>
-        <li>WBEZ Chicago and Chicago Sun-Times, "What's Behind Chicago's Acero Charter Schools' Closure Decision," November 2024.</li>
-        <li>North Carolina Department of Public Instruction, "Charter School Financial Performance Framework Guide."</li>
-        <li>Washington State Charter School Commission, "Financial Performance Framework."</li>
-        <li>National Association of Charter School Authorizers, "Accountability in Action: A Comprehensive Guide to Charter School Closure."</li>
-        <li>Grand Canyon Institute, "Red Flags: Net Losses—Warning Signs in the Financial Data of Arizona's Public Charter Schools," March 2018.</li>
-        <li>EdSource, "Dozens of fixes proposed to deter more mega-cases of charter school fraud," May 2024.</li>
-        <li>Center for American Progress, "Understanding the Opportunities and Challenges of Charter Management Contracts for Public Schools," January 2022.</li>
-        <li>ProPublica Nonprofit Explorer database (projects.propublica.org/nonprofits/).</li>
-        <li>California Department of Education, Ed-Data financial reports (www.ed-data.org).</li>
-        <li>Arizona State Board for Charter Schools, Financial Performance Dashboard (asbcs.az.gov).</li>
-        <li>New Hampshire Public Radio, "Exeter Charter School Closing Amid Investigation into Alleged Fraud and Embezzlement," January 2024.</li>
-        <li>Detroit Free Press, "Michigan Spends $1B on Charter Schools but Fails to Hold Them Accountable," January 2017.</li>
-        <li>New York Charter School Center, "The Profit Myth: Understanding the Structure of New York Charter Schools."</li>
+        <li><a href="https://networkforpubliceducation.org/wp-content/uploads/2024/11/DTM-Final.pdf" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Center for Charter School Accountability and Network for Public Education</a>. <em>"Charter School Closures: 1998 to 2022."</em> October 2024.</li>
+        <li><a href="https://www.kqed.org/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">KQED News</a>. <em>"Santa Clara County's First Charter School to Close All Campuses, Laying Off 100 Staff."</em> May 2025.</li>
+        <li><a href="https://www.wbez.org/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">WBEZ Chicago and Chicago Sun-Times</a>. <em>"What's Behind Chicago's Acero Charter Schools' Closure Decision."</em> November 2024.</li>
+        <li><a href="https://www.dpi.nc.gov/students-families/alternative-choices/charter-schools" class="text-brand-blue hover:underline" target="_blank" rel="noopener">North Carolina Department of Public Instruction</a>. <em>"Charter School Financial Performance Framework Guide."</em></li>
+        <li><a href="https://charterschool.wa.gov/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Washington State Charter School Commission</a>. <em>"Financial Performance Framework."</em></li>
+        <li><a href="https://qualitycharters.org/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Association of Charter School Authorizers</a>. <em>"Accountability in Action: A Comprehensive Guide to Charter School Closure."</em></li>
+        <li><a href="https://grandcanyoninstitute.org/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Grand Canyon Institute</a>. <em>"Red Flags: Net Losses—Warning Signs in the Financial Data of Arizona's Public Charter Schools."</em> March 2018.</li>
+        <li><a href="https://edsource.org/2024/dozens-of-fixes-proposed-to-deter-more-mega-cases-of-charter-school-fraud/710234" class="text-brand-blue hover:underline" target="_blank" rel="noopener">EdSource</a>. <em>"Dozens of fixes proposed to deter more mega-cases of charter school fraud."</em> May 2024.</li>
+        <li><a href="https://www.americanprogress.org/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Center for American Progress</a>. <em>"Understanding the Opportunities and Challenges of Charter Management Contracts for Public Schools."</em> January 2022.</li>
+        <li><a href="https://projects.propublica.org/nonprofits/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">ProPublica Nonprofit Explorer database</a> (projects.propublica.org/nonprofits/).</li>
+        <li><a href="https://www.ed-data.org/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">California Department of Education, Ed-Data</a> financial reports (www.ed-data.org).</li>
+        <li><a href="https://asbcs.az.gov/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Arizona State Board for Charter Schools</a>. Financial Performance Dashboard (asbcs.az.gov).</li>
+        <li><a href="https://www.nhpr.org/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">New Hampshire Public Radio</a>. <em>"Exeter Charter School Closing Amid Investigation into Alleged Fraud and Embezzlement."</em> January 2024.</li>
+        <li><a href="https://www.freep.com/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Detroit Free Press</a>. <em>"Michigan Spends $1B on Charter Schools but Fails to Hold Them Accountable."</em> January 2017.</li>
+        <li><a href="https://www.nyccharterschools.org/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">New York Charter School Center</a>. <em>"The Profit Myth: Understanding the Structure of New York Charter Schools."</em></li>
       </ul>
     </div>
+
+    <!-- Article Rating -->
+
+
+    
+    <ArticleRating slug="the-numbers-behind-the-promise" />
+
+    <!-- Related Articles -->
+    <RelatedArticles currentSlug="the-numbers-behind-the-promise" currentTags={tags} />
+
+    <!-- Browse by Topic -->
+    <BrowseByTopic tags={tags} />
+
+    <!-- Newsletter Signup -->
+    <ArticleNewsletter articleTags={tags} />
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} slug="the-numbers-behind-the-promise" />
+
+
 
     <!-- Footer -->
     <footer class="mt-16 pt-8 border-t border-gray-200">

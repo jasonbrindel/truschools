@@ -1,12 +1,18 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import ArticleRating from '@/components/ArticleRating.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import BrowseByTopic from '@/components/BrowseByTopic.astro';
+import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
 import heroImage from '@/images/USED-students-walking-to-school-illustration.jpg';
 
 const title = "How to Find the Right School for Your Child";
 const subtitle = "School ratings can tell you a lot—but not everything. Here's what actually matters when choosing where your child will spend the next several years of their life.";
 const description = "A practical guide for parents on evaluating schools, understanding ratings, and finding the best educational fit for their child.";
-const category = 'School Choice';
+const publishDate = "2024-09-30";
+const tags = ['School Choice', 'Elementary School', 'Middle School'];
 ---
 
 <Layout title={title} description={description}>
@@ -182,6 +188,26 @@ const category = 'School Choice';
         Remember that school choice isn't a one-time decision. As your child grows and their needs change, you may revisit this process at transition points. Stay engaged with your child's education, maintain open communication with teachers and administrators, and remain willing to advocate for what your child needs. The right school today may not be the right school in five years—and that's okay.
       </p>
     </div>
+
+    <!-- Article Rating -->
+
+
+    
+    <ArticleRating slug="how-to-find-the-right-school" />
+
+    <!-- Related Articles -->
+    <RelatedArticles currentSlug="how-to-find-the-right-school" currentTags={tags} />
+
+    <!-- Browse by Topic -->
+    <BrowseByTopic tags={tags} />
+
+    <!-- Newsletter Signup -->
+    <ArticleNewsletter articleTags={tags} />
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} slug="how-to-find-the-right-school" />
+
+
 
     <!-- Footer -->
     <footer class="mt-16 pt-8 border-t border-gray-200">

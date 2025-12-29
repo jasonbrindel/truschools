@@ -1,11 +1,17 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import ArticleRating from '@/components/ArticleRating.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import BrowseByTopic from '@/components/BrowseByTopic.astro';
+import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
 import heroImage from '@/images/USED-colorful-school-campus-illustration.jpg';
 
 const title = "The Complete Guide to Helping Your Child Transition to Middle School";
 const description = "Understanding the neuroscience, psychology, and practical strategies behind one of childhood's most challenging developmental transitions.";
-const category = 'Middle School';
+const publishDate = "2024-11-14";
+const tags = ['Middle School', 'Elementary School'];
 ---
 
 <Layout title={title} description={description}>
@@ -284,16 +290,36 @@ const category = 'Middle School';
       <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
 
       <ul class="text-sm text-gray-600 space-y-2 mb-10">
-        <li>Eccles, J. S., Midgley, C., Wigfield, A., et al. <em>Development during adolescence: The impact of stage-environment fit on young adolescents' experiences in schools and in families.</em> American Psychologist. 1993.</li>
-        <li>Grills-Taquechel, A. E., Norton, P., & Ollendick, T. H. <em>A longitudinal examination of factors predicting anxiety during the transition to middle school.</em> Anxiety, Stress & Coping. 2010.</li>
-        <li>Evans, D., Borriello, G. A., & Field, A. P. <em>A review of the academic and psychological impact of the transition to secondary education.</em> Frontiers in Psychology. 2018.</li>
-        <li>Waters, S., Lester, L., & Cross, D. <em>How does support from peers compare with support from adults as students transition to secondary school?</em> Journal of Adolescent Health. 2014.</li>
-        <li>Arain, M., Haque, M., Johal, L., et al. <em>Maturation of the adolescent brain.</em> Neuropsychiatric Disease and Treatment. 2013.</li>
-        <li>National Institute of Mental Health. <em>The teen brain: 7 things to know.</em> U.S. Department of Health and Human Services. 2023.</li>
-        <li>Harvard Center on the Developing Child. <em>Building the brain's 'air traffic control' system: How early experiences shape the development of executive function.</em> 2011.</li>
-        <li>Goyer, J. P., et al. <em>Reappraising academic and social adversity improves middle school students' academic achievement, behavior, and well-being.</em> Proceedings of the National Academy of Sciences. 2019.</li>
+        <li><a href="https://doi.org/10.1037/0003-066X.48.2.90" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Eccles, J. S., Midgley, C., Wigfield, A., et al.</a> <em>Development during adolescence: The impact of stage-environment fit on young adolescents' experiences in schools and in families.</em> American Psychologist. 1993.</li>
+        <li><a href="https://doi.org/10.1080/10615800903494127" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Grills-Taquechel, A. E., Norton, P., & Ollendick, T. H.</a> <em>A longitudinal examination of factors predicting anxiety during the transition to middle school.</em> Anxiety, Stress & Coping. 2010.</li>
+        <li><a href="https://doi.org/10.3389/fpsyg.2018.01482" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Evans, D., Borriello, G. A., & Field, A. P.</a> <em>A review of the academic and psychological impact of the transition to secondary education.</em> Frontiers in Psychology. 2018.</li>
+        <li><a href="https://doi.org/10.1016/j.jadohealth.2013.10.015" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Waters, S., Lester, L., & Cross, D.</a> <em>How does support from peers compare with support from adults as students transition to secondary school?</em> Journal of Adolescent Health. 2014.</li>
+        <li><a href="https://doi.org/10.2147/NDT.S39776" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Arain, M., Haque, M., Johal, L., et al.</a> <em>Maturation of the adolescent brain.</em> Neuropsychiatric Disease and Treatment. 2013.</li>
+        <li><a href="https://www.nimh.nih.gov/health/publications/the-teen-brain-7-things-to-know" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Institute of Mental Health</a>. <em>The teen brain: 7 things to know.</em> U.S. Department of Health and Human Services. 2023.</li>
+        <li><a href="https://developingchild.harvard.edu/resources/building-the-brains-air-traffic-control-system-how-early-experiences-shape-the-development-of-executive-function/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Harvard Center on the Developing Child</a>. <em>Building the brain's 'air traffic control' system: How early experiences shape the development of executive function.</em> 2011.</li>
+        <li><a href="https://doi.org/10.1073/pnas.1820317116" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Goyer, J. P., et al.</a> <em>Reappraising academic and social adversity improves middle school students' academic achievement, behavior, and well-being.</em> Proceedings of the National Academy of Sciences. 2019.</li>
       </ul>
     </div>
+
+    <!-- Article Rating -->
+
+
+    
+    <ArticleRating slug="middle-school-transition-guide" />
+
+    <!-- Related Articles -->
+    <RelatedArticles currentSlug="middle-school-transition-guide" currentTags={tags} />
+
+    <!-- Browse by Topic -->
+    <BrowseByTopic tags={tags} />
+
+    <!-- Newsletter Signup -->
+    <ArticleNewsletter articleTags={tags} />
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} slug="middle-school-transition-guide" />
+
+
 
     <!-- Footer -->
     <footer class="mt-16 pt-8 border-t border-gray-200">

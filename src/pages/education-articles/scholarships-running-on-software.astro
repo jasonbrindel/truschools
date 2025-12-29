@@ -1,11 +1,17 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import ArticleRating from '@/components/ArticleRating.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import BrowseByTopic from '@/components/BrowseByTopic.astro';
+import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
 import heroImage from '@/images/USED-scholarships-running-on-software.jpg';
 
 const title = "Scholarships, Now Running on Software";
 const description = "The emerging stack behind college and graduate funding—how discovery, eligibility, verification, and review are being transformed by technology.";
-const category = 'Financial Aid';
+const publishDate = "2024-11-23";
+const tags = ['Financial Aid', 'College Admissions'];
 ---
 
 <Layout title={title} description={description}>
@@ -302,23 +308,43 @@ const category = 'Financial Aid';
 
       <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
       <ul class="text-sm text-gray-600 space-y-2 mb-10">
-        <li>College Board, Trends in College Pricing and Student Aid 2025 (grant aid totals for 2024–25).</li>
-        <li>StudentAid.gov, "What does it mean to provide consent and approval to share federal tax information?"</li>
-        <li>Federal Student Aid (FSA Partner Connect), "FAFSA Simplification Act Changes for Implementation in 2024–25" (Dear Colleague Letter, Aug 4, 2023).</li>
-        <li>Federal Student Aid (FSA Handbook), Application and Verification Guide (2024–25 and 2025–26).</li>
-        <li>Ellucian, Scholarship Universe product page and "Scholarship Universe Vetting Process" (PDF).</li>
-        <li>Treasury Inspector General for Tax Administration, "The IRS Transferred Incorrect Federal Tax Information to the Department of Education for Federal Student Aid" (Report 2025-2S0-029, Jun 30, 2025).</li>
-        <li>W3C, Verifiable Credentials Overview (Sept 24, 2025).</li>
-        <li>W3C, Verifiable Credentials Data Model v2.0 (W3C Recommendation, May 15, 2025).</li>
-        <li>Credential Engine and Digital Credentials Consortium, Issuer Identity Registry Research Report (PDF, Jun 9, 2025).</li>
-        <li>Turnitin, "Crossroads: Navigating the intersection of AI in education" (Apr 14, 2025).</li>
-        <li>NSF, Graduate Research Fellowship Program (GRFP) funding page and Program Solicitation.</li>
-        <li>NIH, Notice NOT-OD-25-105, "Ruth L. Kirschstein NRSA Stipend Levels for FY 2025" (May 16, 2025).</li>
-        <li>Fulbright U.S. Student Program, Award Benefits.</li>
-        <li>FTC (Consumer Advice), "How To Avoid Scholarship and Financial Aid Scams."</li>
-        <li>StudentAid.gov, "Avoiding Student Aid Scams."</li>
+        <li><a href="https://research.collegeboard.org/trends/college-pricing" class="text-brand-blue hover:underline" target="_blank" rel="noopener">College Board</a>. <em>Trends in College Pricing and Student Aid 2025</em> (grant aid totals for 2024–25).</li>
+        <li><a href="https://studentaid.gov/help-center/answers/article/consent-and-approval-to-share-federal-tax-information" class="text-brand-blue hover:underline" target="_blank" rel="noopener">StudentAid.gov</a>. <em>"What does it mean to provide consent and approval to share federal tax information?"</em></li>
+        <li><a href="https://fsapartners.ed.gov/knowledge-center/library/dear-colleague-letters/2023-08-04/fafsa-simplification-act-changes-implementation-2024-25" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Federal Student Aid (FSA Partner Connect)</a>. <em>"FAFSA Simplification Act Changes for Implementation in 2024–25"</em> (Dear Colleague Letter, Aug 4, 2023).</li>
+        <li><a href="https://fsapartners.ed.gov/knowledge-center/fsa-handbook" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Federal Student Aid (FSA Handbook)</a>. <em>Application and Verification Guide</em> (2024–25 and 2025–26).</li>
+        <li><a href="https://www.ellucian.com/solutions/ellucian-scholarship-universe" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Ellucian</a>. <em>Scholarship Universe product page</em> and <em>"Scholarship Universe Vetting Process"</em> (PDF).</li>
+        <li><a href="https://www.treasury.gov/tigta/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Treasury Inspector General for Tax Administration</a>. <em>"The IRS Transferred Incorrect Federal Tax Information to the Department of Education for Federal Student Aid"</em> (Report 2025-2S0-029, Jun 30, 2025).</li>
+        <li><a href="https://www.w3.org/TR/vc-overview/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">W3C</a>. <em>Verifiable Credentials Overview</em> (Sept 24, 2025).</li>
+        <li><a href="https://www.w3.org/TR/vc-data-model-2.0/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">W3C</a>. <em>Verifiable Credentials Data Model v2.0</em> (W3C Recommendation, May 15, 2025).</li>
+        <li><a href="https://credentialengine.org/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Credential Engine and Digital Credentials Consortium</a>. <em>Issuer Identity Registry Research Report</em> (PDF, Jun 9, 2025).</li>
+        <li><a href="https://www.turnitin.com/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Turnitin</a>. <em>"Crossroads: Navigating the intersection of AI in education"</em> (Apr 14, 2025).</li>
+        <li><a href="https://www.nsf.gov/funding/pgm_summ.jsp?pims_id=6201" class="text-brand-blue hover:underline" target="_blank" rel="noopener">NSF</a>. <em>Graduate Research Fellowship Program (GRFP) funding page and Program Solicitation.</em></li>
+        <li><a href="https://grants.nih.gov/grants/guide/notice-files/NOT-OD-25-105.html" class="text-brand-blue hover:underline" target="_blank" rel="noopener">NIH</a>. Notice NOT-OD-25-105, <em>"Ruth L. Kirschstein NRSA Stipend Levels for FY 2025"</em> (May 16, 2025).</li>
+        <li><a href="https://us.fulbrightonline.org/about/benefits" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Fulbright U.S. Student Program</a>. <em>Award Benefits.</em></li>
+        <li><a href="https://consumer.ftc.gov/articles/how-avoid-scholarship-financial-aid-scams" class="text-brand-blue hover:underline" target="_blank" rel="noopener">FTC (Consumer Advice)</a>. <em>"How To Avoid Scholarship and Financial Aid Scams."</em></li>
+        <li><a href="https://studentaid.gov/resources/scams" class="text-brand-blue hover:underline" target="_blank" rel="noopener">StudentAid.gov</a>. <em>"Avoiding Student Aid Scams."</em></li>
       </ul>
     </div>
+
+    <!-- Article Rating -->
+
+
+    
+    <ArticleRating slug="scholarships-running-on-software" />
+
+    <!-- Related Articles -->
+    <RelatedArticles currentSlug="scholarships-running-on-software" currentTags={tags} />
+
+    <!-- Browse by Topic -->
+    <BrowseByTopic tags={tags} />
+
+    <!-- Newsletter Signup -->
+    <ArticleNewsletter articleTags={tags} />
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} slug="scholarships-running-on-software" />
+
+
 
     <footer class="mt-16 pt-8 border-t border-gray-200">
       <p class="text-sm text-gray-500 italic">

@@ -1,11 +1,17 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import ArticleRating from '@/components/ArticleRating.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import BrowseByTopic from '@/components/BrowseByTopic.astro';
+import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
 import heroImage from '@/images/USED-kindergarten-separation-anxiety.jpg';
 
 const title = "The Long Goodbye";
 const description = "What parents need to know about kindergarten separation anxiety—in children and in themselves. Understanding the psychology behind drop-off struggles and strategies that actually help.";
-const category = 'Kindergarten';
+const publishDate = "2024-10-21";
+const tags = ['Kindergarten', 'Mental Health'];
 ---
 
 <Layout title={title} description={description}>
@@ -194,22 +200,42 @@ const category = 'Kindergarten';
       <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
 
       <ul class="text-sm text-gray-600 space-y-2 mb-10">
-        <li>American Psychiatric Association. <em>Diagnostic and Statistical Manual of Mental Disorders, Fifth Edition (DSM-5-TR).</em> American Psychiatric Publishing, 2022.</li>
-        <li>Bentley, Barbara, PsyD. "Helping Kids Cope with Separation Anxiety." Stanford Medicine Children's Health Blog, 2022.</li>
-        <li>Children's Hospital of Philadelphia. "Separation Anxiety: What's Normal and When to Worry." CHOP Health Tips, 2024.</li>
-        <li>Children's Hospital of Orange County. "Helping Kids Cope with Separation Anxiety." CHOC Health Hub, 2023.</li>
-        <li>Cleveland Clinic. "Separation Anxiety in Children: A Guide for Parents." Cleveland Clinic Health Essentials, 2022.</li>
-        <li>Ehrenreich, Jill T., et al. "Separation Anxiety Disorder in Youth: Phenomenology, Assessment, and Treatment." <em>Psicologia Conductual</em>, 2008.</li>
-        <li>Estrada, Junabeth, and Narciso Rabara. "Separation Anxiety among Kindergarten Learners." <em>Psychology and Education: A Multidisciplinary Journal</em>, vol. 20, no. 8, 2024, pp. 1078–1094.</li>
-        <li>Frazee, Gianna, MD. "How to Manage Your Child's Separation Anxiety." Stanford Medicine Children's Health Blog, 2025.</li>
-        <li>National Association for the Education of Young Children. "Rocking and Rolling: Difficult Goodbyes." <em>Young Children</em>, 2020.</li>
-        <li>Penn, Audrey. <em>The Kissing Hand.</em> Tanglewood Press, 1993.</li>
-        <li>Poole, Kristie, PhD. "What Is Shyness? How to Support Shy Children Through Back-to-School Transitions." <em>The Conversation</em>, August 2023.</li>
-        <li>Stanford Children's Health. "Separation Anxiety Disorder in Children." Stanford Medicine Children's Health, 2024.</li>
-        <li>WebMD. "Separation Anxiety Disorder in Children." WebMD Parenting, 2024.</li>
-        <li>Zero to Three. "Children with Shy or Slow to Warm Up Temperaments." Zero to Three Resources, 2025.</li>
+        <li><a href="https://www.psychiatry.org/psychiatrists/practice/dsm" class="text-brand-blue hover:underline" target="_blank" rel="noopener">American Psychiatric Association</a>. <em>Diagnostic and Statistical Manual of Mental Disorders, Fifth Edition (DSM-5-TR).</em> American Psychiatric Publishing, 2022.</li>
+        <li><a href="https://healthier.stanfordchildrens.org/en/helping-kids-cope-with-separation-anxiety/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Bentley, Barbara, PsyD.</a> <em>"Helping Kids Cope with Separation Anxiety."</em> Stanford Medicine Children's Health Blog, 2022.</li>
+        <li><a href="https://www.chop.edu/news/health-tip/separation-anxiety-what-s-normal-and-when-worry" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Children's Hospital of Philadelphia</a>. <em>"Separation Anxiety: What's Normal and When to Worry."</em> CHOP Health Tips, 2024.</li>
+        <li><a href="https://health.choc.org/helping-kids-cope-with-separation-anxiety/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Children's Hospital of Orange County</a>. <em>"Helping Kids Cope with Separation Anxiety."</em> CHOC Health Hub, 2023.</li>
+        <li><a href="https://health.clevelandclinic.org/separation-anxiety-in-children" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Cleveland Clinic</a>. <em>"Separation Anxiety in Children: A Guide for Parents."</em> Cleveland Clinic Health Essentials, 2022.</li>
+        <li><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2737497/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Ehrenreich, Jill T., et al.</a> <em>"Separation Anxiety Disorder in Youth: Phenomenology, Assessment, and Treatment."</em> Psicologia Conductual, 2008.</li>
+        <li><a href="https://doi.org/10.5281/zenodo.12730131" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Estrada, Junabeth, and Narciso Rabara, Psychology and Education</a>. <em>"Separation Anxiety among Kindergarten Learners."</em> vol. 20, no. 8, 2024, pp. 1078–1094.</li>
+        <li><a href="https://healthier.stanfordchildrens.org/en/how-to-manage-your-childs-separation-anxiety/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Frazee, Gianna, MD.</a> <em>"How to Manage Your Child's Separation Anxiety."</em> Stanford Medicine Children's Health Blog, 2025.</li>
+        <li><a href="https://www.naeyc.org/resources/pubs/yc/nov2020/rocking-and-rolling-difficult-goodbyes" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Association for the Education of Young Children</a>. <em>"Rocking and Rolling: Difficult Goodbyes."</em> Young Children, 2020.</li>
+        <li><a href="https://www.thekissinghand.com/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Penn, Audrey</a>. <em>The Kissing Hand.</em> Tanglewood Press, 1993.</li>
+        <li><a href="https://theconversation.com/what-is-shyness-how-to-support-shy-children-through-back-to-school-transitions-210992" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Poole, Kristie, PhD.</a> <em>"What Is Shyness? How to Support Shy Children Through Back-to-School Transitions."</em> The Conversation, August 2023.</li>
+        <li><a href="https://www.stanfordchildrens.org/en/topic/default?id=separation-anxiety-disorder-90-P02582" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Stanford Children's Health</a>. <em>"Separation Anxiety Disorder in Children."</em> Stanford Medicine Children's Health, 2024.</li>
+        <li><a href="https://www.webmd.com/parenting/separation-anxiety-disorder-in-children" class="text-brand-blue hover:underline" target="_blank" rel="noopener">WebMD</a>. <em>"Separation Anxiety Disorder in Children."</em> WebMD Parenting, 2024.</li>
+        <li><a href="https://www.zerotothree.org/resource/children-with-shy-or-slow-to-warm-up-temperaments/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Zero to Three</a>. <em>"Children with Shy or Slow to Warm Up Temperaments."</em> Zero to Three Resources, 2025.</li>
       </ul>
     </div>
+
+    <!-- Article Rating -->
+
+
+    
+    <ArticleRating slug="kindergarten-separation-anxiety" />
+
+    <!-- Related Articles -->
+    <RelatedArticles currentSlug="kindergarten-separation-anxiety" currentTags={tags} />
+
+    <!-- Browse by Topic -->
+    <BrowseByTopic tags={tags} />
+
+    <!-- Newsletter Signup -->
+    <ArticleNewsletter articleTags={tags} />
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} slug="kindergarten-separation-anxiety" />
+
+
 
     <!-- Footer -->
     <footer class="mt-16 pt-8 border-t border-gray-200">

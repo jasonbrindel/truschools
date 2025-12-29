@@ -1,11 +1,17 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import ArticleRating from '@/components/ArticleRating.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import BrowseByTopic from '@/components/BrowseByTopic.astro';
+import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
 import heroImage from '@/images/USED-student-carrying-books-school.jpg';
 
 const title = "The Complete Parent's Guide to Magnet School Admissions";
 const description = "Understanding the application process, lottery systems, and what it takes to get into magnet schools across the United States.";
-const category = 'Magnet Schools';
+const publishDate = "2024-10-27";
+const tags = ['Magnet Schools', 'School Choice'];
 ---
 
 <Layout title={title} description={description}>
@@ -377,33 +383,53 @@ const category = 'Magnet Schools';
 
       <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
       <ul class="text-sm text-gray-600 space-y-2 mb-10">
-        <li>Anne Arundel County Public Schools, Programs of Choice Application Guide</li>
-        <li>Baltimore County Public Schools, Division of Curriculum and Instruction, FAQs about Application and Admission Process</li>
-        <li>The Century Foundation, "How to Achieve Socioeconomic Integration in Schools," 2016</li>
-        <li>The Century Foundation, "Recruiting and Enrolling a Diverse Student Body in Public Choice Schools," 2019</li>
-        <li>Chalkbeat Chicago, "How to Apply to Chicago Public Schools: A Guide," 2023-2024</li>
-        <li>Chalkbeat Philadelphia, "Philly Tweaks Admissions Standards for Coveted Magnet Schools," 2023</li>
-        <li>Chicago Public Schools, Admissions Policy for Magnet, Selective Enrollment and Other GoCPS Schools</li>
-        <li>Clark County School District, Magnet Schools Application Information</li>
-        <li>Fairfax County Public Schools, Elementary Magnet School Lottery</li>
-        <li>Garland Independent School District, Choice of School and Magnet Application Process</li>
-        <li>Jefferson County Public Schools (Louisville, KY), Optional & Magnet Lottery Wait List</li>
-        <li>Los Angeles Unified School District, Magnet Programs (eChoices)</li>
-        <li>Magnet Schools of America, "Key Facts About Magnet Schools"</li>
-        <li>Magnet Schools of America, "Snapshot of Magnet Schools Report," University of North Carolina-Charlotte Urban Institute, 2016</li>
-        <li>Metropolitan Nashville Public Schools, Academic Magnet Requirements</li>
-        <li>Miami-Dade County Public Schools, Magnet Application and Eligibility Guide</li>
-        <li>Montgomery County Public Schools, Division of Consortia Choice and Application Program Services</li>
-        <li>National Center for Education Statistics, Digest of Education Statistics</li>
-        <li>New Haven Public Schools, School Choice Placement Process</li>
-        <li>Philadelphia School District, Creative and Performing Arts High School Admissions</li>
-        <li>Pittsburgh Public Schools, Magnet Eligibility Criteria</li>
-        <li>Richmond County School System, Magnet School Application Requirements</li>
-        <li>Statista, "Total Number of Magnet Schools in the United States," 2022</li>
-        <li>Tulsa Public Schools, Policy 2206-R2: Procedures for Admission to Magnet Schools</li>
-        <li>Wake County Public Schools, Application Process for Magnet and Year-Round Schools</li>
+        <li><a href="https://www.aacps.org/magnetprograms" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Anne Arundel County Public Schools</a>. Programs of Choice Application Guide.</li>
+        <li><a href="https://www.bcps.org/academics/magnet-programs" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Baltimore County Public Schools</a>. Division of Curriculum and Instruction, FAQs about Application and Admission Process.</li>
+        <li><a href="https://tcf.org/content/report/how-to-achieve-socioeconomic-integration-in-schools/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">The Century Foundation</a>. <em>"How to Achieve Socioeconomic Integration in Schools."</em> 2016.</li>
+        <li><a href="https://tcf.org/content/report/recruiting-and-enrolling-a-diverse-student-body-in-public-choice-schools/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">The Century Foundation</a>. <em>"Recruiting and Enrolling a Diverse Student Body in Public Choice Schools."</em> 2019.</li>
+        <li><a href="https://www.chalkbeat.org/chicago/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Chalkbeat Chicago</a>. <em>"How to Apply to Chicago Public Schools: A Guide."</em> 2023-2024.</li>
+        <li><a href="https://www.chalkbeat.org/philadelphia/2023/8/16/23834949/philadelphia-magnet-school-admissions-test-scores-attendance-requirements/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Chalkbeat Philadelphia</a>. <em>"Philly Tweaks Admissions Standards for Coveted Magnet Schools."</em> 2023.</li>
+        <li><a href="https://www.cps.edu/gocps/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Chicago Public Schools</a>. Admissions Policy for Magnet, Selective Enrollment and Other GoCPS Schools.</li>
+        <li><a href="https://www.ccsd.net/schools/magnet/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Clark County School District</a>. Magnet Schools Application Information.</li>
+        <li><a href="https://www.fcps.edu/registration/magnet-school-and-specialty-program-admissions" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Fairfax County Public Schools</a>. Elementary Magnet School Lottery.</li>
+        <li><a href="https://www.garlandisd.net/academics/choice-school" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Garland Independent School District</a>. Choice of School and Magnet Application Process.</li>
+        <li><a href="https://www.jefferson.kyschools.us/schools/how-find-school/optional-magnet-programs" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Jefferson County Public Schools (Louisville, KY)</a>. Optional & Magnet Lottery Wait List.</li>
+        <li><a href="https://www.lausd.org/domain/164" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Los Angeles Unified School District</a>. Magnet Programs (eChoices).</li>
+        <li><a href="https://magnet.edu/resources/key-facts/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Magnet Schools of America</a>. <em>"Key Facts About Magnet Schools."</em></li>
+        <li><a href="https://magnet.edu/resources/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Magnet Schools of America</a>. <em>"Snapshot of Magnet Schools Report."</em> University of North Carolina-Charlotte Urban Institute, 2016.</li>
+        <li><a href="https://www.mnps.org/learn/academics/specialty-programs/magnet-schools" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Metropolitan Nashville Public Schools</a>. Academic Magnet Requirements.</li>
+        <li><a href="https://yourchoicemiami.org/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Miami-Dade County Public Schools</a>. Magnet Application and Eligibility Guide.</li>
+        <li><a href="https://www.montgomeryschoolsmd.org/curriculum/specialprograms/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Montgomery County Public Schools</a>. Division of Consortia Choice and Application Program Services.</li>
+        <li><a href="https://nces.ed.gov/programs/digest/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Center for Education Statistics</a>. Digest of Education Statistics.</li>
+        <li><a href="https://www.nhps.net/schoolchoice" class="text-brand-blue hover:underline" target="_blank" rel="noopener">New Haven Public Schools</a>. School Choice Placement Process.</li>
+        <li><a href="https://www.philasd.org/studentplacement/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Philadelphia School District</a>. Creative and Performing Arts High School Admissions.</li>
+        <li><a href="https://www.pghschools.org/magnetprograms" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Pittsburgh Public Schools</a>. Magnet Eligibility Criteria.</li>
+        <li><a href="https://www.rcboe.org/magnet" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Richmond County School System</a>. Magnet School Application Requirements.</li>
+        <li><a href="https://www.statista.com/statistics/797869/number-of-magnet-schools-in-the-us/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Statista</a>. <em>"Total Number of Magnet Schools in the United States."</em> 2022.</li>
+        <li><a href="https://www.tulsaschools.org/academics/magnet" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Tulsa Public Schools</a>. Policy 2206-R2: Procedures for Admission to Magnet Schools.</li>
+        <li><a href="https://www.wcpss.net/magnetschools" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Wake County Public Schools</a>. Application Process for Magnet and Year-Round Schools.</li>
       </ul>
     </div>
+
+    <!-- Article Rating -->
+
+
+    
+    <ArticleRating slug="magnet-school-admissions-guide" />
+
+    <!-- Related Articles -->
+    <RelatedArticles currentSlug="magnet-school-admissions-guide" currentTags={tags} />
+
+    <!-- Browse by Topic -->
+    <BrowseByTopic tags={tags} />
+
+    <!-- Newsletter Signup -->
+    <ArticleNewsletter articleTags={tags} />
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} slug="magnet-school-admissions-guide" />
+
+
 
     <footer class="mt-16 pt-8 border-t border-gray-200">
       <p class="text-sm text-gray-500 italic">

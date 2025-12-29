@@ -1,12 +1,18 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import ArticleRating from '@/components/ArticleRating.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import BrowseByTopic from '@/components/BrowseByTopic.astro';
+import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
 import heroImage from '@/images/USED-students-science-education-hologram.jpg';
 
 const title = "What Is a STEM School?";
 const subtitle = "And Is One Right for Your Child?";
 const description = "A guide for parents on STEM schools, explaining what they are, how they work, and how to determine if one is right for your child.";
-const category = 'School Types';
+const publishDate = "2025-01-04";
+const tags = ['School Types', 'Magnet Schools', 'School Choice'];
 ---
 
 <Layout title={`${title} ${subtitle}`} description={description}>
@@ -198,6 +204,26 @@ const category = 'School Types';
         Her mother sees that as the whole point. "She used to give up if something wasn't perfect the first time," Sarah says. "Now she understands that figuring it out is the actual goal. The robot is almost beside the point." Almost.
       </p>
     </div>
+
+    <!-- Article Rating -->
+
+
+    
+    <ArticleRating slug="what-is-a-stem-school" />
+
+    <!-- Related Articles -->
+    <RelatedArticles currentSlug="what-is-a-stem-school" currentTags={tags} />
+
+    <!-- Browse by Topic -->
+    <BrowseByTopic tags={tags} />
+
+    <!-- Newsletter Signup -->
+    <ArticleNewsletter articleTags={tags} />
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} slug="what-is-a-stem-school" />
+
+
 
     <!-- Footer -->
     <footer class="mt-16 pt-8 border-t border-gray-200">

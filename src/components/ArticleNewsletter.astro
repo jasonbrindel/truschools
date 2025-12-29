@@ -1,0 +1,184 @@
+---
+interface Props {
+  /** Tags from the current article to suggest relevant categories */
+  articleTags?: string[];
+}
+
+const { articleTags = [] } = Astro.props;
+
+// Map article tags to newsletter categories
+const tagToCategory: Record<string, string> = {
+  'Preschool': 'preschool',
+  'Kindergarten': 'kindergarten',
+  'Elementary School': 'elementary',
+  'Middle School': 'middle',
+  'High School': 'high',
+  'Charter Schools': 'charter',
+  'Magnet Schools': 'magnet',
+  'Private Schools': 'private',
+  'College Admissions': 'college',
+  'Graduate School': 'grad-school',
+  'Financial Aid': 'financial-aid',
+  'Vocational Education': 'trade',
+  "Children's Health": 'preschool',
+  'Mental Health': 'middle',
+  'Special Education': 'elementary',
+  'School Choice': 'charter',
+  'School Types': 'charter',
+  'Future of Education': 'college',
+};
+
+// Get suggested categories based on article tags
+const suggestedCategories = articleTags
+  .map(tag => tagToCategory[tag])
+  .filter((cat): cat is string => cat !== undefined);
+---
+
+<div class="article-newsletter mt-10 p-6 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl border border-blue-100">
+  <!-- Form State -->
+  <div class="newsletter-form-inline">
+    <div class="flex items-start gap-3 mb-4">
+      <div class="flex-shrink-0 w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+        </svg>
+      </div>
+      <div>
+        <h3 class="text-lg font-semibold text-gray-900 mb-1">Stay informed</h3>
+        <p class="text-sm text-gray-600">Get articles like this delivered to your inbox.</p>
+      </div>
+    </div>
+
+    <div class="flex flex-col sm:flex-row gap-2">
+      <input
+        type="email"
+        placeholder="Enter your email"
+        class="newsletter-email-inline flex-1 px-4 py-2.5 text-sm border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all"
+        data-suggested-categories={JSON.stringify(suggestedCategories)}
+      />
+      <button
+        type="button"
+        class="newsletter-submit-inline px-5 py-2.5 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors whitespace-nowrap"
+      >
+        Subscribe
+      </button>
+    </div>
+
+    <p class="newsletter-error-inline hidden text-red-600 text-sm mt-2"></p>
+    <p class="text-xs text-gray-500 mt-3">No spam, unsubscribe anytime.</p>
+  </div>
+
+  <!-- Thank You State -->
+  <div class="newsletter-thanks-inline hidden">
+    <div class="flex items-center gap-3">
+      <div class="flex-shrink-0 w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+        <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+        </svg>
+      </div>
+      <div>
+        <h3 class="text-lg font-semibold text-gray-900">You're subscribed!</h3>
+        <p class="text-sm text-gray-600">Check your inbox for a confirmation.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function initArticleNewsletter() {
+    const containers = document.querySelectorAll('.article-newsletter');
+
+    containers.forEach(container => {
+      const form = container.querySelector('.newsletter-form-inline') as HTMLElement;
+      const thanks = container.querySelector('.newsletter-thanks-inline') as HTMLElement;
+      const emailInput = container.querySelector('.newsletter-email-inline') as HTMLInputElement;
+      const submitBtn = container.querySelector('.newsletter-submit-inline') as HTMLButtonElement;
+      const errorMsg = container.querySelector('.newsletter-error-inline') as HTMLElement;
+
+      if (!form || !thanks || !emailInput || !submitBtn || !errorMsg) return;
+
+      // Check if already subscribed
+      if (localStorage.getItem('truschools_newsletter_subscribed') === 'true') {
+        form.classList.add('hidden');
+        thanks.classList.remove('hidden');
+        return;
+      }
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      submitBtn.addEventListener('click', async () => {
+        errorMsg.classList.add('hidden');
+        errorMsg.textContent = '';
+
+        const email = emailInput.value.trim();
+
+        if (!email) {
+          errorMsg.textContent = 'Please enter your email address.';
+          errorMsg.classList.remove('hidden');
+          emailInput.focus();
+          return;
+        }
+
+        if (!emailRegex.test(email)) {
+          errorMsg.textContent = 'Please enter a valid email address.';
+          errorMsg.classList.remove('hidden');
+          emailInput.focus();
+          return;
+        }
+
+        // Get suggested categories from data attribute, default to 'college' if none
+        let categories: string[] = [];
+        try {
+          const suggested = emailInput.dataset.suggestedCategories;
+          categories = suggested ? JSON.parse(suggested) : [];
+        } catch (e) {
+          categories = [];
+        }
+        if (categories.length === 0) {
+          categories = ['college']; // Default category
+        }
+
+        submitBtn.disabled = true;
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = 'Subscribing...';
+
+        try {
+          const response = await fetch('/api/newsletter/subscribe', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, categories })
+          });
+
+          const data = await response.json();
+
+          if (data.success) {
+            form.classList.add('hidden');
+            thanks.classList.remove('hidden');
+            localStorage.setItem('truschools_newsletter_subscribed', 'true');
+          } else {
+            errorMsg.textContent = data.error || 'Something went wrong. Please try again.';
+            errorMsg.classList.remove('hidden');
+          }
+        } catch (error) {
+          console.error('Newsletter signup error:', error);
+          errorMsg.textContent = 'Something went wrong. Please try again.';
+          errorMsg.classList.remove('hidden');
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalText;
+        }
+      });
+
+      emailInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          submitBtn.click();
+        }
+      });
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', initArticleNewsletter);
+  if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    initArticleNewsletter();
+  }
+</script>

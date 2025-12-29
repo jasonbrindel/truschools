@@ -1,12 +1,18 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import ArticleRating from '@/components/ArticleRating.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import BrowseByTopic from '@/components/BrowseByTopic.astro';
+import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
 import heroImage from '@/images/USED-modern-school-building-field.jpg';
 
 const title = "Understanding Magnet Schools";
 const subtitle = "Specialized Public Education That Draws Students In";
 const description = "A comprehensive guide for parents on magnet schools, explaining how they work, the types available, admission processes, and how to find the right fit.";
-const category = 'Magnet Schools';
+const publishDate = "2024-12-23";
+const tags = ['Magnet Schools', 'School Choice'];
 ---
 
 <Layout title={`${title}: ${subtitle}`} description={description}>
@@ -159,6 +165,26 @@ const category = 'Magnet Schools';
         Whether that's right for your child is a question only you can answer. But knowing the option exists is where good decisions begin.
       </p>
     </div>
+
+    <!-- Article Rating -->
+
+
+    
+    <ArticleRating slug="understanding-magnet-schools" />
+
+    <!-- Related Articles -->
+    <RelatedArticles currentSlug="understanding-magnet-schools" currentTags={tags} />
+
+    <!-- Browse by Topic -->
+    <BrowseByTopic tags={tags} />
+
+    <!-- Newsletter Signup -->
+    <ArticleNewsletter articleTags={tags} />
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} slug="understanding-magnet-schools" />
+
+
 
     <!-- Footer -->
     <footer class="mt-16 pt-8 border-t border-gray-200">

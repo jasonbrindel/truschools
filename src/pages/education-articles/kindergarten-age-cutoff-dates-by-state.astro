@@ -1,11 +1,17 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import ArticleRating from '@/components/ArticleRating.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import BrowseByTopic from '@/components/BrowseByTopic.astro';
+import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
 import heroImage from '@/images/USED-kindergarten-age-cutoff-dates.jpg';
 
 const title = "Kindergarten Age Cutoff Dates by State";
 const description = "The complete 2025 guide for parents covering kindergarten entrance age requirements for all 50 states, including recent policy changes, early admission processes, and practical guidance for families.";
-const category = 'Kindergarten';
+const publishDate = "2024-10-18";
+const tags = ['Kindergarten', 'Elementary School'];
 ---
 
 <Layout title={title} description={description}>
@@ -357,14 +363,34 @@ const category = 'Kindergarten';
       <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
 
       <ul class="text-sm text-gray-600 space-y-2 mb-10">
-        <li>National Center for Education Statistics. "Types of state and district requirements for kindergarten entrance and attendance, by state." U.S. Department of Education.</li>
-        <li>Education Commission of the States. "Kindergarten Entrance Ages" and "50-State Comparison: State K-3 Policies."</li>
-        <li>Connecticut State Department of Education. "New Entry Age for Kindergarten." 2023-2024.</li>
-        <li>Bassok, D., & Reardon, S.F. "Academic Redshirting in Kindergarten: Prevalence, Patterns, and Implications." Stanford Center for Education Policy Analysis.</li>
-        <li>Graue, M.E., & DiPerna, J. "Redshirting and early retention: Who gets the 'gift of time' and what are its outcomes?" <em>American Educational Research Journal</em>.</li>
-        <li>Individual state education department websites and regulations.</li>
+        <li><a href="https://nces.ed.gov/programs/statereform/tab1_3-2020.asp" class="text-brand-blue hover:underline" target="_blank" rel="noopener">NCES</a>. <em>"Types of State and District Requirements for Kindergarten Entrance and Attendance, by State."</em></li>
+        <li><a href="https://www.ecs.org/50-state-comparison-kindergarten-entrance-ages/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Education Commission of the States</a>. <em>"Kindergarten Entrance Ages."</em></li>
+        <li><a href="https://portal.ct.gov/sde/education-services/early-learning-and-development/kindergarten" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Connecticut State Department of Education</a>. <em>"New Entry Age for Kindergarten."</em> 2023–2024.</li>
+        <li><a href="https://cepa.stanford.edu/content/academic-redshirting-kindergarten-prevalence-patterns-and-implications" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Bassok & Reardon</a>. <em>"Academic Redshirting in Kindergarten."</em> Stanford CEPA.</li>
+        <li><a href="https://journals.sagepub.com/doi/10.3102/00028312037003509" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Graue & DiPerna, American Educational Research Journal</a>. <em>"Redshirting and Early Retention Outcomes."</em></li>
+        <li>Individual state education department regulations (see individual state .gov sites).</li>
       </ul>
     </div>
+
+    <!-- Article Rating -->
+
+
+    
+    <ArticleRating slug="kindergarten-age-cutoff-dates-by-state" />
+
+    <!-- Related Articles -->
+    <RelatedArticles currentSlug="kindergarten-age-cutoff-dates-by-state" currentTags={tags} />
+
+    <!-- Browse by Topic -->
+    <BrowseByTopic tags={tags} />
+
+    <!-- Newsletter Signup -->
+    <ArticleNewsletter articleTags={tags} />
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} slug="kindergarten-age-cutoff-dates-by-state" />
+
+
 
     <!-- Footer -->
     <footer class="mt-16 pt-8 border-t border-gray-200">

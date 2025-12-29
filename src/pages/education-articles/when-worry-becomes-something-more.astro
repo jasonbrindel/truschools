@@ -1,11 +1,17 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import ArticleRating from '@/components/ArticleRating.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import BrowseByTopic from '@/components/BrowseByTopic.astro';
+import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
 import heroImage from '@/images/USED-teen-mental-health-warning-signs.jpg';
 
 const title = "When Worry Becomes Something More";
 const description = "Understanding the warning signs of teen mental health struggles—and what parents can actually do about them. A guide for families navigating adolescent anxiety and depression.";
-const category = 'Mental Health';
+const publishDate = "2025-01-16";
+const tags = ['Mental Health', 'High School', 'Middle School'];
 ---
 
 <Layout title={title} description={description}>
@@ -168,24 +174,44 @@ const category = 'Mental Health';
       <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
 
       <ul class="text-sm text-gray-600 space-y-2 mb-10">
-        <li>Centers for Disease Control and Prevention. Youth Risk Behavior Survey Data Summary & Trends Report: 2013–2023. CDC, 2024.</li>
-        <li>Annie E. Casey Foundation. Youth Mental Health Statistics in 2024. AECF, 2025.</li>
-        <li>National Survey of Children's Health. Adolescent Mental and Behavioral Health, 2023. Health Resources and Services Administration, October 2024.</li>
-        <li>Pew Research Center. Teens, Social Media, and Mental Health. Pew Research Center, April 2025.</li>
-        <li>World Health Organization Regional Office for Europe. Health Behaviour in School-aged Children (HBSC) Study: Teens, Screens and Mental Health. WHO, September 2024.</li>
-        <li>U.S. Surgeon General. Social Media and Youth Mental Health Advisory. U.S. Department of Health and Human Services, 2023.</li>
-        <li>Murthy, V. Surgeon General's Call for Warning Labels on Social Media. U.S. Department of Health and Human Services, June 2024.</li>
-        <li>American Academy of Pediatrics. Media Use in School-Aged Children and Adolescents. Pediatrics, 2016 (updated guidelines).</li>
-        <li>SchoolSafety.gov. Mental Health Resources for Schools. U.S. Department of Education and Department of Homeland Security.</li>
-        <li>American School Counselor Association. The School Counselor and Student Mental Health Position Statement. ASCA, 2022.</li>
-        <li>SAMHSA. 988 Suicide & Crisis Lifeline. Substance Abuse and Mental Health Services Administration.</li>
-        <li>Children's Hospital of Philadelphia. Tips for Talking to Your Child About Mental Health. CHOP Health Resources.</li>
-        <li>National Alliance on Mental Illness. Mental Health by the Numbers. NAMI, 2024.</li>
-        <li>Boston Children's Hospital. Teens, Anxiety, and Depression: How Worried Should Parents Be? Boston Children's Answers, 2021.</li>
-        <li>The Conversation. Screen Time is Contributing to Chronic Sleep Deprivation in Tweens and Teens. August 2023.</li>
-        <li>Johns Hopkins Medicine. Social Media and Mental Health in Children and Teens. Hopkins Health, 2025.</li>
+        <li><a href="https://www.cdc.gov/yrbs/dstr/index.html" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Centers for Disease Control and Prevention</a>. <em>Youth Risk Behavior Survey Data Summary & Trends Report: 2013–2023.</em> CDC, 2024.</li>
+        <li><a href="https://www.aecf.org/blog/mental-health-statistics-among-us-children" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Annie E. Casey Foundation</a>. <em>Youth Mental Health Statistics in 2024.</em> AECF, 2025.</li>
+        <li><a href="https://mchb.hrsa.gov/data-research/national-survey-childrens-health" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Survey of Children's Health</a>. <em>Adolescent Mental and Behavioral Health, 2023.</em> Health Resources and Services Administration, October 2024.</li>
+        <li><a href="https://www.pewresearch.org/internet/2024/06/17/how-teens-and-parents-approach-screen-time/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Pew Research Center</a>. <em>Teens, Social Media, and Mental Health.</em> Pew Research Center, April 2025.</li>
+        <li><a href="https://www.who.int/europe/publications/i/item/9789289060967" class="text-brand-blue hover:underline" target="_blank" rel="noopener">World Health Organization Regional Office for Europe</a>. <em>Health Behaviour in School-aged Children (HBSC) Study: Teens, Screens and Mental Health.</em> WHO, September 2024.</li>
+        <li><a href="https://www.hhs.gov/surgeongeneral/priorities/youth-mental-health/social-media/index.html" class="text-brand-blue hover:underline" target="_blank" rel="noopener">U.S. Surgeon General</a>. <em>Social Media and Youth Mental Health Advisory.</em> U.S. Department of Health and Human Services, 2023.</li>
+        <li><a href="https://www.hhs.gov/about/news/2024/06/17/surgeon-general-calls-congress-require-warning-label-social-media-platforms.html" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Murthy, V.</a> <em>Surgeon General's Call for Warning Labels on Social Media.</em> U.S. Department of Health and Human Services, June 2024.</li>
+        <li><a href="https://publications.aap.org/pediatrics/article/138/5/e20162592/60503/Media-Use-in-School-Aged-Children-and-Adolescents" class="text-brand-blue hover:underline" target="_blank" rel="noopener">American Academy of Pediatrics</a>. <em>Media Use in School-Aged Children and Adolescents.</em> Pediatrics, 2016 (updated guidelines).</li>
+        <li><a href="https://www.schoolsafety.gov/mental-health" class="text-brand-blue hover:underline" target="_blank" rel="noopener">SchoolSafety.gov</a>. <em>Mental Health Resources for Schools.</em> U.S. Department of Education and Department of Homeland Security.</li>
+        <li><a href="https://www.schoolcounselor.org/Standards-Positions/Position-Statements/ASCA-Position-Statements/The-School-Counselor-and-Student-Mental-Health" class="text-brand-blue hover:underline" target="_blank" rel="noopener">American School Counselor Association</a>. <em>The School Counselor and Student Mental Health Position Statement.</em> ASCA, 2022.</li>
+        <li><a href="https://www.samhsa.gov/find-help/988" class="text-brand-blue hover:underline" target="_blank" rel="noopener">SAMHSA</a>. <em>988 Suicide & Crisis Lifeline.</em> Substance Abuse and Mental Health Services Administration.</li>
+        <li><a href="https://www.chop.edu/news/health-tip/tips-talking-your-child-about-mental-health" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Children's Hospital of Philadelphia</a>. <em>Tips for Talking to Your Child About Mental Health.</em> CHOP Health Resources.</li>
+        <li><a href="https://www.nami.org/about-mental-illness/mental-health-by-the-numbers/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Alliance on Mental Illness</a>. <em>Mental Health by the Numbers.</em> NAMI, 2024.</li>
+        <li><a href="https://answers.childrenshospital.org/teen-anxiety-depression/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Boston Children's Hospital</a>. <em>Teens, Anxiety, and Depression: How Worried Should Parents Be?</em> Boston Children's Answers, 2021.</li>
+        <li><a href="https://theconversation.com/screen-time-is-contributing-to-chronic-sleep-deprivation-in-tweens-and-teens-heres-how-families-can-establish-healthier-habits-211554" class="text-brand-blue hover:underline" target="_blank" rel="noopener">The Conversation</a>. <em>Screen Time is Contributing to Chronic Sleep Deprivation in Tweens and Teens.</em> August 2023.</li>
+        <li><a href="https://www.hopkinsmedicine.org/health/wellness-and-prevention/social-media-and-mental-health-in-children-and-teens" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Johns Hopkins Medicine</a>. <em>Social Media and Mental Health in Children and Teens.</em> Hopkins Health, 2025.</li>
       </ul>
     </div>
+
+    <!-- Article Rating -->
+
+
+    
+    <ArticleRating slug="when-worry-becomes-something-more" />
+
+    <!-- Related Articles -->
+    <RelatedArticles currentSlug="when-worry-becomes-something-more" currentTags={tags} />
+
+    <!-- Browse by Topic -->
+    <BrowseByTopic tags={tags} />
+
+    <!-- Newsletter Signup -->
+    <ArticleNewsletter articleTags={tags} />
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} slug="when-worry-becomes-something-more" />
+
+
 
     <!-- Footer -->
     <footer class="mt-16 pt-8 border-t border-gray-200">

@@ -1,12 +1,18 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import ArticleRating from '@/components/ArticleRating.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import BrowseByTopic from '@/components/BrowseByTopic.astro';
+import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
 import heroImage from '@/images/USED-price-of-admission-financial-aid-2.jpg';
 
 const title = "The Price of Admission";
 const subtitle = "Financial 101 for College-Bound Families";
 const description = "For millions of American families, the path to college has become a labyrinth of forms, formulas, and financial gambles. A guide to navigating the maze.";
-const category = 'Financial Aid';
+const publishDate = "2024-12-14";
+const tags = ['Financial Aid', 'College Admissions'];
 ---
 
 <Layout title={`${title}: ${subtitle}`} description={description}>
@@ -230,38 +236,58 @@ const category = 'Financial Aid';
       <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
 
       <ul class="text-sm text-gray-600 space-y-2 mb-10">
-        <li>College Board, "Trends in College Pricing Highlights," 2025-26</li>
-        <li>Education Data Initiative, "Student Loan Debt Statistics," 2025</li>
-        <li>Education Data Initiative, "Average Cost of College," 2025</li>
-        <li>U.S. News & World Report, "See the Average College Tuition in 2025-2026," September 2025</li>
-        <li>Federal Reserve, "Report on the Economic Well-Being of U.S. Households," May 2025</li>
-        <li>Federal Student Aid, Department of Education, studentaid.gov</li>
-        <li>U.S. Government Accountability Office, "Botched FAFSA Rollout Leaves Uncertainty for Students," September 2024</li>
-        <li>National Association of Student Financial Aid Administrators (NASFAA), FAFSA Simplification Web Center</li>
-        <li>National College Attainment Network (NCAN), "Unclaimed Pell Grants Report," 2024</li>
-        <li>NPR, "Watchdog sheds light on FAFSA fiasco," September 2024</li>
-        <li>PBS NewsHour, "Troubled rollout of FAFSA overhaul causes major delays," March 2024</li>
-        <li>Inside Higher Ed, "After FAFSA issues, a steep drop in first-year enrollment," October 2024</li>
-        <li>Brookings Institution, "FAFSA rollout means fewer students will enroll," May 2024</li>
-        <li>National Student Clearinghouse Research Center, Enrollment Data, Fall 2024</li>
-        <li>CNBC, "Some students are still struggling to access college aid amid ongoing FAFSA 'disaster'," April 2024</li>
-        <li>NerdWallet, "Student Loan Debt: How Much Do Borrowers Owe in 2025?"</li>
-        <li>BestColleges, "Average Student Loan Debt Statistics," 2025</li>
-        <li>LendingTree, "U.S. Student Loan Debt Statistics," September 2025</li>
-        <li>Fastweb, "Billions in Financial Aid Goes Unclaimed Every Year"</li>
-        <li>National Scholarship Providers Association, Scholarship Statistics</li>
-        <li>Internal Revenue Service, "529 Plans: Questions and Answers"</li>
-        <li>Fidelity, "Understanding 529 rollovers to a Roth IRA," May 2025</li>
-        <li>Kitces.com, "SECURE 2.0 Act's New 529-To-Roth Rollover Rules," February 2025</li>
-        <li>Saving for College, "529 to Roth IRA: Rollover Rules, Conversion Guide," November 2025</li>
-        <li>Congressional Research Service, "The FAFSA Simplification Act"</li>
-        <li>Georgetown University Center on Education and the Workforce, "Recovery: Job Growth and Education Requirements Through 2031"</li>
-        <li>National Association of College and University Business Officers, Tuition Discount Study, 2024-25</li>
-        <li>Higher Education Today (ACE), "Troubled FAFSA Rollout Linked to Sharp Decline in First-Year College Enrollment," November 2024</li>
-        <li>Citizens Bank, "Comparing financial aid offers: How to choose the right college"</li>
-        <li>BigFuture (College Board), "How to Review and Compare Your Financial Aid Awards"</li>
+        <li><a href="https://research.collegeboard.org/trends/college-pricing" class="text-brand-blue hover:underline" target="_blank" rel="noopener">College Board</a>. <em>"Trends in College Pricing Highlights."</em> 2025-26.</li>
+        <li><a href="https://educationdata.org/student-loan-debt-statistics" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Education Data Initiative</a>. <em>"Student Loan Debt Statistics."</em> 2025.</li>
+        <li><a href="https://educationdata.org/average-cost-of-college" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Education Data Initiative</a>. <em>"Average Cost of College."</em> 2025.</li>
+        <li><a href="https://www.usnews.com/education/best-colleges/paying-for-college/articles/paying-for-college-infographic" class="text-brand-blue hover:underline" target="_blank" rel="noopener">U.S. News & World Report</a>. <em>"See the Average College Tuition in 2025-2026."</em> September 2025.</li>
+        <li><a href="https://www.federalreserve.gov/publications/report-economic-well-being-us-households.htm" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Federal Reserve</a>. <em>"Report on the Economic Well-Being of U.S. Households."</em> May 2025.</li>
+        <li><a href="https://studentaid.gov/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Federal Student Aid, Department of Education</a>. studentaid.gov.</li>
+        <li><a href="https://www.gao.gov/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">U.S. Government Accountability Office</a>. <em>"Botched FAFSA Rollout Leaves Uncertainty for Students."</em> September 2024.</li>
+        <li><a href="https://www.nasfaa.org/fafsa_simplification" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Association of Student Financial Aid Administrators (NASFAA)</a>. FAFSA Simplification Web Center.</li>
+        <li><a href="https://www.ncan.org/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National College Attainment Network (NCAN)</a>. <em>"Unclaimed Pell Grants Report."</em> 2024.</li>
+        <li><a href="https://www.npr.org/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">NPR</a>. <em>"Watchdog sheds light on FAFSA fiasco."</em> September 2024.</li>
+        <li><a href="https://www.pbs.org/newshour/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">PBS NewsHour</a>. <em>"Troubled rollout of FAFSA overhaul causes major delays."</em> March 2024.</li>
+        <li><a href="https://www.insidehighered.com/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Inside Higher Ed</a>. <em>"After FAFSA issues, a steep drop in first-year enrollment."</em> October 2024.</li>
+        <li><a href="https://www.brookings.edu/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Brookings Institution</a>. <em>"FAFSA rollout means fewer students will enroll."</em> May 2024.</li>
+        <li><a href="https://nscresearchcenter.org/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Student Clearinghouse Research Center</a>. <em>Enrollment Data, Fall 2024.</em></li>
+        <li><a href="https://www.cnbc.com/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">CNBC</a>. <em>"Some students are still struggling to access college aid amid ongoing FAFSA 'disaster'."</em> April 2024.</li>
+        <li><a href="https://www.nerdwallet.com/article/loans/student-loans/student-loan-debt" class="text-brand-blue hover:underline" target="_blank" rel="noopener">NerdWallet</a>. <em>"Student Loan Debt: How Much Do Borrowers Owe in 2025?"</em></li>
+        <li><a href="https://www.bestcolleges.com/research/average-student-loan-debt/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">BestColleges</a>. <em>"Average Student Loan Debt Statistics."</em> 2025.</li>
+        <li><a href="https://www.lendingtree.com/student/student-loan-debt-statistics/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">LendingTree</a>. <em>"U.S. Student Loan Debt Statistics."</em> September 2025.</li>
+        <li><a href="https://www.fastweb.com/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Fastweb</a>. <em>"Billions in Financial Aid Goes Unclaimed Every Year."</em></li>
+        <li><a href="https://scholarshipproviders.org/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Scholarship Providers Association</a>. <em>Scholarship Statistics.</em></li>
+        <li><a href="https://www.irs.gov/newsroom/529-plans-questions-and-answers" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Internal Revenue Service</a>. <em>"529 Plans: Questions and Answers."</em></li>
+        <li><a href="https://www.fidelity.com/learning-center/personal-finance/529-to-roth-ira-rollover" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Fidelity</a>. <em>"Understanding 529 rollovers to a Roth IRA."</em> May 2025.</li>
+        <li><a href="https://www.kitces.com/blog/secure-2-0-529-to-roth-ira-rollover-rules/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Kitces.com</a>. <em>"SECURE 2.0 Act's New 529-To-Roth Rollover Rules."</em> February 2025.</li>
+        <li><a href="https://www.savingforcollege.com/article/529-to-roth-ira-rollovers" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Saving for College</a>. <em>"529 to Roth IRA: Rollover Rules, Conversion Guide."</em> November 2025.</li>
+        <li><a href="https://crsreports.congress.gov/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Congressional Research Service</a>. <em>"The FAFSA Simplification Act."</em></li>
+        <li><a href="https://cew.georgetown.edu/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Georgetown University Center on Education and the Workforce</a>. <em>"Recovery: Job Growth and Education Requirements Through 2031."</em></li>
+        <li><a href="https://www.nacubo.org/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Association of College and University Business Officers</a>. <em>Tuition Discount Study, 2024-25.</em></li>
+        <li><a href="https://www.higheredtoday.org/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Higher Education Today (ACE)</a>. <em>"Troubled FAFSA Rollout Linked to Sharp Decline in First-Year College Enrollment."</em> November 2024.</li>
+        <li><a href="https://www.citizensbank.com/learning/compare-financial-aid-offers.aspx" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Citizens Bank</a>. <em>"Comparing financial aid offers: How to choose the right college."</em></li>
+        <li><a href="https://bigfuture.collegeboard.org/pay-for-college/getting-financial-aid/compare-financial-aid-awards" class="text-brand-blue hover:underline" target="_blank" rel="noopener">BigFuture (College Board)</a>. <em>"How to Review and Compare Your Financial Aid Awards."</em></li>
       </ul>
     </div>
+
+    <!-- Article Rating -->
+
+
+    
+    <ArticleRating slug="the-price-of-admission" />
+
+    <!-- Related Articles -->
+    <RelatedArticles currentSlug="the-price-of-admission" currentTags={tags} />
+
+    <!-- Browse by Topic -->
+    <BrowseByTopic tags={tags} />
+
+    <!-- Newsletter Signup -->
+    <ArticleNewsletter articleTags={tags} />
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} slug="the-price-of-admission" />
+
+
 
     <!-- Footer -->
     <footer class="mt-16 pt-8 border-t border-gray-200">

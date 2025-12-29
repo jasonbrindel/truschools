@@ -1,0 +1,170 @@
+---
+interface Props {
+  slug: string;
+}
+
+const { slug } = Astro.props;
+---
+
+<div class="article-rating" data-slug={slug}>
+  <div class="rating-container bg-gray-50 border border-gray-200 rounded-lg p-6 text-center">
+    <p class="text-gray-700 font-medium mb-4">Was this article helpful?</p>
+
+    <!-- Vote button (shown before voting) -->
+    <div class="vote-section">
+      <button
+        type="button"
+        class="helpful-btn inline-flex items-center gap-2 px-5 py-2.5 bg-brand-blue text-white rounded-lg hover:bg-brand-blue-dark transition-colors font-medium"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"></path>
+        </svg>
+        Yes, this was helpful
+      </button>
+      <p class="helpful-count text-sm text-gray-500 mt-3 hidden">
+        <span class="count-number">0</span> people found this helpful
+      </p>
+    </div>
+
+    <!-- Thank you message (shown after voting) -->
+    <div class="voted-section hidden">
+      <div class="inline-flex items-center gap-2 text-green-600 font-medium">
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"></path>
+        </svg>
+        Thanks for your feedback!
+      </div>
+      <p class="helpful-count-voted text-sm text-gray-500 mt-3 hidden">
+        <span class="count-number-voted">0</span> people found this helpful
+      </p>
+    </div>
+  </div>
+</div>
+
+<script>
+  const RATING_STORAGE_PREFIX = 'truschools_article_rated_';
+  const DISPLAY_THRESHOLD = 5; // Only show count when it reaches this number
+
+  function initArticleRatings() {
+    const ratings = document.querySelectorAll('.article-rating');
+
+    ratings.forEach(rating => {
+      const container = rating as HTMLElement;
+      const slug = container.dataset.slug;
+
+      if (!slug || container.dataset.initialized === 'true') return;
+      container.dataset.initialized = 'true';
+
+      // Check if already voted (localStorage) and fetch current count
+      checkRatingStatus(container, slug);
+
+      // Add click handler
+      const helpfulBtn = container.querySelector('.helpful-btn');
+      helpfulBtn?.addEventListener('click', () => submitRating(container, slug));
+    });
+  }
+
+  async function checkRatingStatus(container: HTMLElement, slug: string) {
+    // Check localStorage first for immediate feedback
+    const hasVotedLocally = localStorage.getItem(RATING_STORAGE_PREFIX + slug) === 'true';
+
+    try {
+      const response = await fetch(`/api/article/rate?slug=${encodeURIComponent(slug)}`);
+      const data = await response.json();
+
+      if (data.success) {
+        updateCount(container, data.helpfulCount);
+
+        // If voted (either from server check or localStorage), show voted state
+        if (data.hasVoted || hasVotedLocally) {
+          showVotedState(container, data.helpfulCount);
+          // Sync localStorage with server
+          localStorage.setItem(RATING_STORAGE_PREFIX + slug, 'true');
+        }
+      }
+    } catch (error) {
+      console.error('Error checking rating status:', error);
+      // If we have local storage vote but can't reach server, still show voted state
+      if (hasVotedLocally) {
+        showVotedState(container, 0);
+      }
+    }
+  }
+
+  async function submitRating(container: HTMLElement, slug: string) {
+    // Prevent double submission
+    if (container.dataset.submitting === 'true') return;
+    container.dataset.submitting = 'true';
+
+    const btn = container.querySelector('.helpful-btn') as HTMLButtonElement;
+    if (btn) {
+      btn.disabled = true;
+      btn.classList.add('opacity-50', 'cursor-not-allowed');
+    }
+
+    try {
+      const response = await fetch('/api/article/rate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ slug })
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        // Save to localStorage
+        localStorage.setItem(RATING_STORAGE_PREFIX + slug, 'true');
+        showVotedState(container, data.helpfulCount);
+      }
+    } catch (error) {
+      console.error('Error submitting rating:', error);
+      // Re-enable button on error
+      container.dataset.submitting = 'false';
+      if (btn) {
+        btn.disabled = false;
+        btn.classList.remove('opacity-50', 'cursor-not-allowed');
+      }
+    }
+  }
+
+  function updateCount(container: HTMLElement, count: number) {
+    const countEl = container.querySelector('.count-number');
+    const countVotedEl = container.querySelector('.count-number-voted');
+    const helpfulCountP = container.querySelector('.helpful-count');
+    const helpfulCountVotedP = container.querySelector('.helpful-count-voted');
+    const formattedCount = count.toLocaleString();
+
+    if (countEl) countEl.textContent = formattedCount;
+    if (countVotedEl) countVotedEl.textContent = formattedCount;
+
+    // Only show count if it meets the threshold
+    if (count >= DISPLAY_THRESHOLD) {
+      helpfulCountP?.classList.remove('hidden');
+      helpfulCountVotedP?.classList.remove('hidden');
+    }
+  }
+
+  function showVotedState(container: HTMLElement, count: number) {
+    const voteSection = container.querySelector('.vote-section');
+    const votedSection = container.querySelector('.voted-section');
+
+    voteSection?.classList.add('hidden');
+    votedSection?.classList.remove('hidden');
+
+    updateCount(container, count);
+  }
+
+  // Initialize on page load
+  document.addEventListener('DOMContentLoaded', initArticleRatings);
+
+  // Also run immediately in case DOM is already loaded
+  if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    initArticleRatings();
+  }
+</script>
+
+<style>
+  .bg-brand-blue-dark {
+    background-color: #1a365d;
+  }
+</style>

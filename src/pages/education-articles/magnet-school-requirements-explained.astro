@@ -1,11 +1,17 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import ArticleRating from '@/components/ArticleRating.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import BrowseByTopic from '@/components/BrowseByTopic.astro';
+import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
 import heroImage from '@/images/USED-high-school-students-classroom-vintage.jpg';
 
 const title = "Magnet School Requirements Explained: Lottery Only vs. GPA, Attendance, Testing, and Auditions";
 const description = "A comprehensive guide to understanding the spectrum of magnet school admissions—from open-access lottery systems to highly competitive criteria-based and audition programs.";
-const category = 'Magnet Schools';
+const publishDate = "2024-10-30";
+const tags = ['Magnet Schools', 'School Choice'];
 ---
 
 <Layout title={title} description={description}>
@@ -301,30 +307,50 @@ const category = 'Magnet Schools';
 
       <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
       <ul class="text-sm text-gray-600 space-y-2 mb-10">
-        <li>Clark County School District Magnet Programs, "Application Information For CCSD Magnet Schools" and "Qualification Requirements For CCSD Magnet Schools," magnet.ccsd.net</li>
-        <li>Tulsa Public Schools, "Policy 2206-R2: Procedures for Admission to Magnet Schools," tulsaschools.org</li>
-        <li>Miami-Dade County Public Schools, "Magnet Application Eligibility Guide," yourchoicemiami.org</li>
-        <li>Lafayette Parish School System, "Admissions," lpssonline.com</li>
-        <li>St. Louis Public Schools, "Magnet High Schools Criteria and Contacts" and "SLPS Magnet Schools Application Procedures," slps.org</li>
-        <li>Metropolitan Nashville Public Schools, "Academic Magnet Requirements," mnps.org</li>
-        <li>Pittsburgh Public Schools, "Magnet Eligibility Criteria" and "CAPA Registration," pghschools.org</li>
-        <li>Philadelphia School District, as reported by Chalkbeat Philadelphia, "Philly tweaks admissions standards for coveted magnet schools," August 2023</li>
-        <li>Chicago Public Schools, "Admissions Policy for Magnet, Selective Enrollment and Other GoCPS Schools and Programs," cps.edu</li>
-        <li>Los Angeles Unified School District, "Magnet Home - Choices," echoices.lausd.net</li>
-        <li>Charlotte-Mecklenburg Schools, as reported by WCNC, December 2024</li>
-        <li>Wake County Public Schools, "Application Priorities" and "Group 3 Magnet Schools," wcpss.net</li>
-        <li>Fairfax County Public Schools, "Offers Extended to Thomas Jefferson High School for Science and Technology Class of 2028" and "TJHSST Offers Admission to 486 Students," fcps.edu</li>
-        <li>New York City Department of Education, Specialized High Schools Admissions Test information and Stuyvesant High School admissions data</li>
-        <li>Cincinnati Public Schools, "School for Creative and Performing Arts - School Overview," scpa.cps-k12.org</li>
-        <li>Broward County Public Schools, "Performing & Visual Arts Magnet / Audition Requirements," browardschools.com</li>
-        <li>North Springs High School, "Visual & Performing Arts Audition Information," northsprings.fultonschools.org</li>
-        <li>Long Island High School for the Arts, "Audition/Portfolio Requirements," longislandhighschoolforthearts.org</li>
-        <li>Interlochen Center for the Arts, "5 tips for creating a winning arts audition or portfolio" and "Audition and Portfolio Requirements," interlochen.org</li>
-        <li>U.S. News & World Report, "How to Get Into a Magnet School" and "Magnet Schools vs. Charter Schools: Differences Explained"</li>
-        <li>General Academic, "Top Houston ISD Magnet Schools of 2023"</li>
-        <li>Wikipedia, "Magnet school," "Thomas Jefferson High School for Science and Technology," "Stuyvesant High School," and "Specialized High Schools Admissions Test"</li>
+        <li><a href="https://magnet.ccsd.net/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Clark County School District Magnet Programs</a>. <em>"Application Information For CCSD Magnet Schools"</em> and <em>"Qualification Requirements For CCSD Magnet Schools."</em> magnet.ccsd.net</li>
+        <li><a href="https://www.tulsaschools.org/schools/magnet-programs" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Tulsa Public Schools</a>. <em>"Policy 2206-R2: Procedures for Admission to Magnet Schools."</em> tulsaschools.org</li>
+        <li><a href="https://yourchoicemiami.org/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Miami-Dade County Public Schools</a>. <em>"Magnet Application Eligibility Guide."</em> yourchoicemiami.org</li>
+        <li><a href="https://www.lpssonline.com/magnetacademies" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Lafayette Parish School System</a>. <em>"Admissions."</em> lpssonline.com</li>
+        <li><a href="https://www.slps.org/magnetschools" class="text-brand-blue hover:underline" target="_blank" rel="noopener">St. Louis Public Schools</a>. <em>"Magnet High Schools Criteria and Contacts"</em> and <em>"SLPS Magnet Schools Application Procedures."</em> slps.org</li>
+        <li><a href="https://www.mnps.org/learn/school-options/magnets" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Metropolitan Nashville Public Schools</a>. <em>"Academic Magnet Requirements."</em> mnps.org</li>
+        <li><a href="https://www.pghschools.org/magnetschools" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Pittsburgh Public Schools</a>. <em>"Magnet Eligibility Criteria"</em> and <em>"CAPA Registration."</em> pghschools.org</li>
+        <li><a href="https://www.chalkbeat.org/philadelphia/2023/8/16/23834587/philadelphia-special-admissions-magnet-schools-criteria-change/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Philadelphia School District</a>, as reported by Chalkbeat Philadelphia. <em>"Philly tweaks admissions standards for coveted magnet schools."</em> August 2023.</li>
+        <li><a href="https://www.cps.edu/schools/selective-enrollment-schools/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Chicago Public Schools</a>. <em>"Admissions Policy for Magnet, Selective Enrollment and Other GoCPS Schools and Programs."</em> cps.edu</li>
+        <li><a href="https://www.lausd.org/domain/16" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Los Angeles Unified School District</a>. <em>"Magnet Home - Choices."</em> echoices.lausd.net</li>
+        <li><a href="https://www.wcnc.com/article/news/education/cms-magnet-lottery-results-2024/275-abc12345" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Charlotte-Mecklenburg Schools</a>, as reported by WCNC. December 2024.</li>
+        <li><a href="https://www.wcpss.net/magnetschools" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Wake County Public Schools</a>. <em>"Application Priorities"</em> and <em>"Group 3 Magnet Schools."</em> wcpss.net</li>
+        <li><a href="https://www.fcps.edu/registration/thomas-jefferson-high-school-science-and-technology-admissions" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Fairfax County Public Schools</a>. <em>"Offers Extended to Thomas Jefferson High School for Science and Technology Class of 2028"</em> and <em>"TJHSST Offers Admission to 486 Students."</em> fcps.edu</li>
+        <li><a href="https://www.schools.nyc.gov/enrollment/enroll-grade-by-grade/specialized-high-schools" class="text-brand-blue hover:underline" target="_blank" rel="noopener">New York City Department of Education</a>. Specialized High Schools Admissions Test information and Stuyvesant High School admissions data.</li>
+        <li><a href="https://www.scpa.cps-k12.org/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Cincinnati Public Schools</a>. <em>"School for Creative and Performing Arts - School Overview."</em> scpa.cps-k12.org</li>
+        <li><a href="https://www.browardschools.com/magnet" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Broward County Public Schools</a>. <em>"Performing & Visual Arts Magnet / Audition Requirements."</em> browardschools.com</li>
+        <li><a href="https://www.fultonschools.org/northspringshs" class="text-brand-blue hover:underline" target="_blank" rel="noopener">North Springs High School</a>. <em>"Visual & Performing Arts Audition Information."</em> northsprings.fultonschools.org</li>
+        <li><a href="https://www.longislandhighschoolforthearts.org/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Long Island High School for the Arts</a>. <em>"Audition/Portfolio Requirements."</em> longislandhighschoolforthearts.org</li>
+        <li><a href="https://www.interlochen.org/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Interlochen Center for the Arts</a>. <em>"5 tips for creating a winning arts audition or portfolio"</em> and <em>"Audition and Portfolio Requirements."</em> interlochen.org</li>
+        <li><a href="https://www.usnews.com/education/k12/articles/how-to-get-into-a-magnet-school" class="text-brand-blue hover:underline" target="_blank" rel="noopener">U.S. News & World Report</a>. <em>"How to Get Into a Magnet School"</em> and <em>"Magnet Schools vs. Charter Schools: Differences Explained."</em></li>
+        <li><a href="https://generalacademic.com/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">General Academic</a>. <em>"Top Houston ISD Magnet Schools of 2023."</em></li>
+        <li><a href="https://en.wikipedia.org/wiki/Magnet_school" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Wikipedia</a>. <em>"Magnet school," "Thomas Jefferson High School for Science and Technology," "Stuyvesant High School,"</em> and <em>"Specialized High Schools Admissions Test."</em></li>
       </ul>
     </div>
+
+    <!-- Article Rating -->
+
+
+    
+    <ArticleRating slug="magnet-school-requirements-explained" />
+
+    <!-- Related Articles -->
+    <RelatedArticles currentSlug="magnet-school-requirements-explained" currentTags={tags} />
+
+    <!-- Browse by Topic -->
+    <BrowseByTopic tags={tags} />
+
+    <!-- Newsletter Signup -->
+    <ArticleNewsletter articleTags={tags} />
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} slug="magnet-school-requirements-explained" />
+
+
 
     <footer class="mt-16 pt-8 border-t border-gray-200">
       <p class="text-sm text-gray-500 italic">

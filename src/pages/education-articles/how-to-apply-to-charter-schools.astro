@@ -1,11 +1,17 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import ArticleRating from '@/components/ArticleRating.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import BrowseByTopic from '@/components/BrowseByTopic.astro';
+import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
 import heroImage from '@/images/USED-students-walking-to-school-illustration.jpg';
 
 const title = "How to Apply to Charter Schools: The Complete Parent Guide";
 const description = "A national map of a process that often feels like a maze, plus the parts you can actually control.";
-const category = 'Charter Schools';
+const publishDate = "2024-09-18";
+const tags = ['Charter Schools', 'School Choice'];
 ---
 
 <Layout title={title} description={description}>
@@ -206,25 +212,45 @@ const category = 'Charter Schools';
       <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
 
       <ul class="text-sm text-gray-600 space-y-2 mb-10">
-        <li>New York City Department of Education. <em>How to Enroll in Charter Schools.</em> NYC Public Schools (webpage), accessed 2025.</li>
-        <li>Chicago Public Schools. <em>GoCPS High School and Elementary School Application Timeline (2025–26 cycle).</em> CPS GoCPS (webpage), 2025.</li>
-        <li>Chicago Public Schools. <em>How to Apply: Choice Programs (including charters) and Priority Preferences.</em> CPS GoCPS (webpage), 2025.</li>
-        <li>Apply Philly Charter. <em>Apply Philly Charter: Application Window and Rank & Match Guidance.</em> ApplyPhillyCharter.org (webpage), 2025.</li>
-        <li>KIPP SoCal Public Schools. <em>Lottery Dates and Enrollment Timeline (2026–27).</em> KIPPSocal.org (webpage), 2025.</li>
-        <li>IDEA Public Schools. <em>Lottery FAQ and Lottery Dates (Texas regions).</em> IDEAPublicSchools.org (webpage), 2025.</li>
-        <li>Great Hearts Arizona. <em>Enrollment Timeline (Arizona campuses).</em> GreatHeartsAmerica.org (webpage), 2025.</li>
-        <li>Doral Academy Preparatory (Miami). <em>Admissions: Application Period and Lottery Dates (2025–26).</em> DoralAcademyPrep.org (webpage), 2025.</li>
-        <li>Coral Springs Charter School (Broward County). <em>Enrollment: Open Enrollment Window, Lottery, and Waitlist Notes.</em> CoralSpringsCharter.org (webpage), 2025.</li>
-        <li>National Center for Homeless Education. <em>From the School Office to the Classroom: Strategies for Enrolling and Supporting Students Experiencing Homelessness.</em> NCHE (PDF), 2019.</li>
-        <li>U.S. Department of Education. <em>Education for Homeless Children and Youths Program Non-Regulatory Guidance.</em> ED.gov (PDF), 2018.</li>
-        <li>Stanford CREDO. <em>National Charter School Study III.</em> CREDO report, 2023.</li>
-        <li>Centers for Disease Control and Prevention Public Health Law Program. <em>State School Immunization Requirements and Vaccine Exemption Laws.</em> CDC (PDF), 2022.</li>
-        <li>Texas Education Agency. <em>Charter Student Admission Application Forms (CSAA) and TEC §12.1173.</em> tea.texas.gov (webpage), accessed 2025.</li>
-        <li>Arizona Legislature. <em>A.R.S. §15-184 Charter schools; admissions requirements.</em> azleg.gov (webpage), accessed 2025.</li>
-        <li>The Florida Senate. <em>Florida Statutes §1002.33 Charter Schools (enrollment and preferences).</em> flsenate.gov (webpage), 2018.</li>
-        <li>California Legislative framework. <em>California Education Code admissions and preferences (including §47605 and §47605.6).</em> California Education Code (web sources), accessed 2025.</li>
+        <li><a href="https://www.schools.nyc.gov/enrollment/enroll-in-charter-schools/how-to-enroll-in-charter-schools" class="text-brand-blue hover:underline" target="_blank" rel="noopener">New York City Department of Education</a>. <em>How to Enroll in Charter Schools.</em> NYC Public Schools (webpage), accessed 2025.</li>
+        <li><a href="https://www.cps.edu/gocps/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Chicago Public Schools</a>. <em>GoCPS High School and Elementary School Application Timeline (2025–26 cycle).</em> CPS GoCPS (webpage), 2025.</li>
+        <li><a href="https://www.cps.edu/gocps/high-school/apply/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Chicago Public Schools</a>. <em>How to Apply: Choice Programs (including charters) and Priority Preferences.</em> CPS GoCPS (webpage), 2025.</li>
+        <li><a href="https://applyphillycharter.org/resources/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Apply Philly Charter</a>. <em>Apply Philly Charter: Application Window and Rank & Match Guidance.</em> ApplyPhillyCharter.org (webpage), 2025.</li>
+        <li><a href="https://www.kippsocal.org/enroll/lottery-dates" class="text-brand-blue hover:underline" target="_blank" rel="noopener">KIPP SoCal Public Schools</a>. <em>Lottery Dates and Enrollment Timeline (2026–27).</em> KIPPSocal.org (webpage), 2025.</li>
+        <li><a href="https://ideapublicschools.org/faqs/lottery/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">IDEA Public Schools</a>. <em>Lottery FAQ and Lottery Dates (Texas regions).</em> IDEAPublicSchools.org (webpage), 2025.</li>
+        <li><a href="https://arizona.greatheartsamerica.org/enroll/enrollment-timeline/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Great Hearts Arizona</a>. <em>Enrollment Timeline (Arizona campuses).</em> GreatHeartsAmerica.org (webpage), 2025.</li>
+        <li><a href="https://www.doralacademyprep.org/admissions/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Doral Academy Preparatory (Miami)</a>. <em>Admissions: Application Period and Lottery Dates (2025–26).</em> DoralAcademyPrep.org (webpage), 2025.</li>
+        <li><a href="https://coralspringscharter.org/m/pages/index.jsp?type=d&uREC_ID=224821" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Coral Springs Charter School (Broward County)</a>. <em>Enrollment: Open Enrollment Window, Lottery, and Waitlist Notes.</em> CoralSpringsCharter.org (webpage), 2025.</li>
+        <li><a href="https://nche.ed.gov/wp-content/uploads/2023/09/From-the-School-Office.pdf" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Center for Homeless Education</a>. <em>From the School Office to the Classroom: Strategies for Enrolling and Supporting Students Experiencing Homelessness.</em> NCHE (PDF), 2019.</li>
+        <li><a href="https://www2.ed.gov/policy/elsec/leg/essa/160240ehcyguidanceupdated082718.pdf" class="text-brand-blue hover:underline" target="_blank" rel="noopener">U.S. Department of Education</a>. <em>Education for Homeless Children and Youths Program Non-Regulatory Guidance.</em> ED.gov (PDF), 2018.</li>
+        <li><a href="https://credo.stanford.edu/reports/item/national-charter-school-study-iii/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Stanford CREDO</a>. <em>National Charter School Study III.</em> CREDO report, 2023.</li>
+        <li><a href="https://www.cdc.gov/phlp/php/resources/state-school-immunization-requirements.html" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Centers for Disease Control and Prevention Public Health Law Program</a>. <em>State School Immunization Requirements and Vaccine Exemption Laws.</em> CDC, 2022.</li>
+        <li><a href="https://tea.texas.gov/texas-schools/texas-schools-charter-schools" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Texas Education Agency</a>. <em>Charter Student Admission Application Forms (CSAA) and TEC §12.1173.</em> tea.texas.gov (webpage), accessed 2025.</li>
+        <li><a href="https://www.azleg.gov/ars/15/00184.htm" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Arizona Legislature</a>. <em>A.R.S. §15-184 Charter schools; admissions requirements.</em> azleg.gov (webpage), accessed 2025.</li>
+        <li><a href="https://www.flsenate.gov/Laws/Statutes/2018/1002.33" class="text-brand-blue hover:underline" target="_blank" rel="noopener">The Florida Senate</a>. <em>Florida Statutes §1002.33 Charter Schools (enrollment and preferences).</em> flsenate.gov (webpage), 2018.</li>
+        <li><a href="https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EDC&sectionNum=47605" class="text-brand-blue hover:underline" target="_blank" rel="noopener">California Legislative framework</a>. <em>California Education Code admissions and preferences (including §47605 and §47605.6).</em> California Education Code, accessed 2025.</li>
       </ul>
     </div>
+
+    <!-- Article Rating -->
+
+
+    
+    <ArticleRating slug="how-to-apply-to-charter-schools" />
+
+    <!-- Related Articles -->
+    <RelatedArticles currentSlug="how-to-apply-to-charter-schools" currentTags={tags} />
+
+    <!-- Browse by Topic -->
+    <BrowseByTopic tags={tags} />
+
+    <!-- Newsletter Signup -->
+    <ArticleNewsletter articleTags={tags} />
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} slug="how-to-apply-to-charter-schools" />
+
+
 
     <!-- Footer -->
     <footer class="mt-16 pt-8 border-t border-gray-200">

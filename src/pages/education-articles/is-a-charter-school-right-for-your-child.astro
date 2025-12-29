@@ -1,11 +1,17 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import ArticleRating from '@/components/ArticleRating.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import BrowseByTopic from '@/components/BrowseByTopic.astro';
+import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
 import heroImage from '@/images/USED-student-thoughtful-classroom-portrait.jpg';
 
 const title = "Is a Charter School Right for Your Child?";
 const description = "The question isn't whether charter schools are good or bad—it's whether one might be the right fit for your particular child and your particular family. Here's how to think it through.";
-const category = 'Charter Schools';
+const publishDate = "2024-10-09";
+const tags = ['Charter Schools', 'School Choice'];
 ---
 
 <Layout title={title} description={description}>
@@ -162,24 +168,44 @@ const category = 'Charter Schools';
       <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
 
       <ul class="text-sm text-gray-600 space-y-2 mb-10">
-        <li>Center for Research on Education Outcomes (CREDO), Stanford University. <em>"As a Matter of Fact: The National Charter School Study III."</em> 2023.</li>
-        <li>National Education Policy Center. <em>"CREDO Report Makes Overstated Claims of Charter School Gains."</em> Review by Joseph J. Ferrare. 2023.</li>
-        <li>Education Next. <em>"How Satisfied are Parents with Their Children's Schools?"</em> by Albert Cheng and Paul E. Peterson. 2024.</li>
-        <li>Harvard Kennedy School. <em>"Surveys find Charter-School Parents More Satisfied than Those with Children in District-Operated Schools."</em> 2017.</li>
-        <li>EdChoice. <em>"Beyond Enrollment: What Parents Really Want from Their Children's Education."</em> 2024.</li>
-        <li>EdChoice. <em>"2024 Schooling in America Survey."</em> 2024.</li>
-        <li>HopSkipDrive. <em>"2024 State of School Transportation Report."</em> 2024.</li>
-        <li>National Association of Charter School Authorizers (NACSA). <em>"Transportation in Charter Schools."</em> Quality Charters. 2021.</li>
-        <li>Center for Learner Equity. <em>"Charter Schools and Students with Disabilities."</em> 2024.</li>
-        <li>K-12 Dive. <em>"Charter schools struggle to meet special education needs."</em> 2024.</li>
-        <li>Network for Public Education and National Center for Charter School Accountability. <em>"Doomed to Fail: An Analysis of Charter School Closures from 1998 to 2022."</em> 2024.</li>
-        <li>Aspen Institute Project Play. <em>"Charter schools struggle the most to grow sports access."</em> State of Play Washington D.C. Report. 2023.</li>
-        <li>National Alliance for Public Charter Schools. <em>"Never Going Back: An Analysis of Parent Sentiment on Education."</em> 2022.</li>
-        <li>Understood.org. <em>"Charter schools and learning and thinking differences."</em> 2025.</li>
-        <li>PLOS ONE. <em>"Parental rights or parental wrongs: Parents' metacognitive knowledge of the factors that influence their school choice decisions."</em> 2024.</li>
-        <li>U.S. News & World Report. <em>"Understanding Charter Schools vs. Public Schools."</em> 2025.</li>
+        <li><a href="https://credo.stanford.edu/reports/item/national-charter-school-study-iii/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Center for Research on Education Outcomes (CREDO), Stanford University</a>. <em>"As a Matter of Fact: The National Charter School Study III."</em> 2023.</li>
+        <li><a href="https://nepc.colorado.edu/review/credo-2023" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Education Policy Center</a>. <em>"CREDO Report Makes Overstated Claims of Charter School Gains."</em> Review by Joseph J. Ferrare. 2023.</li>
+        <li><a href="https://www.educationnext.org/how-satisfied-are-parents-with-their-childrens-schools/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Education Next</a>. <em>"How Satisfied are Parents with Their Children's Schools?"</em> by Albert Cheng and Paul E. Peterson. 2024.</li>
+        <li><a href="https://www.hks.harvard.edu/announcements/surveys-find-charter-school-parents-more-satisfied-those-children-district-operated" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Harvard Kennedy School</a>. <em>"Surveys find Charter-School Parents More Satisfied than Those with Children in District-Operated Schools."</em> 2017.</li>
+        <li><a href="https://www.edchoice.org/research-library/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">EdChoice</a>. <em>"Beyond Enrollment: What Parents Really Want from Their Children's Education."</em> 2024.</li>
+        <li><a href="https://www.edchoice.org/research/2024-schooling-in-america-survey/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">EdChoice</a>. <em>"2024 Schooling in America Survey."</em> 2024.</li>
+        <li><a href="https://www.hopskipdrive.com/state-of-school-transportation-report-2024" class="text-brand-blue hover:underline" target="_blank" rel="noopener">HopSkipDrive</a>. <em>"2024 State of School Transportation Report."</em> 2024.</li>
+        <li><a href="https://qualitycharters.org/research-policies/transportation/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Association of Charter School Authorizers (NACSA)</a>. <em>"Transportation in Charter Schools."</em> Quality Charters. 2021.</li>
+        <li><a href="https://www.centerforlearnerequity.org/research/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Center for Learner Equity</a>. <em>"Charter Schools and Students with Disabilities."</em> 2024.</li>
+        <li><a href="https://www.k12dive.com/news/charter-schools-special-education-challenges/710942/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">K-12 Dive</a>. <em>"Charter schools struggle to meet special education needs."</em> 2024.</li>
+        <li><a href="https://networkforpubliceducation.org/charterschoolclosures/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Network for Public Education and National Center for Charter School Accountability</a>. <em>"Doomed to Fail: An Analysis of Charter School Closures from 1998 to 2022."</em> 2024.</li>
+        <li><a href="https://www.aspenprojectplay.org/state-of-play-2023/dc" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Aspen Institute Project Play</a>. <em>"Charter schools struggle the most to grow sports access."</em> State of Play Washington D.C. Report. 2023.</li>
+        <li><a href="https://publiccharters.org/our-work/publications/never-going-back/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Alliance for Public Charter Schools</a>. <em>"Never Going Back: An Analysis of Parent Sentiment on Education."</em> 2022.</li>
+        <li><a href="https://www.understood.org/en/articles/charter-schools-and-learning-differences-what-you-need-to-know" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Understood.org</a>. <em>"Charter schools and learning and thinking differences."</em> 2025.</li>
+        <li><a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0303207" class="text-brand-blue hover:underline" target="_blank" rel="noopener">PLOS ONE</a>. <em>"Parental rights or parental wrongs: Parents' metacognitive knowledge of the factors that influence their school choice decisions."</em> 2024.</li>
+        <li><a href="https://www.usnews.com/education/k12/articles/charter-schools-vs-public-schools" class="text-brand-blue hover:underline" target="_blank" rel="noopener">U.S. News & World Report</a>. <em>"Understanding Charter Schools vs. Public Schools."</em> 2025.</li>
       </ul>
     </div>
+
+    <!-- Article Rating -->
+
+
+    
+    <ArticleRating slug="is-a-charter-school-right-for-your-child" />
+
+    <!-- Related Articles -->
+    <RelatedArticles currentSlug="is-a-charter-school-right-for-your-child" currentTags={tags} />
+
+    <!-- Browse by Topic -->
+    <BrowseByTopic tags={tags} />
+
+    <!-- Newsletter Signup -->
+    <ArticleNewsletter articleTags={tags} />
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} slug="is-a-charter-school-right-for-your-child" />
+
+
 
     <!-- Footer -->
     <footer class="mt-16 pt-8 border-t border-gray-200">

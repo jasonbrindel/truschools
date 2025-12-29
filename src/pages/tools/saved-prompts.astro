@@ -1,0 +1,566 @@
+---
+import AdminNav from '@/components/AdminNav.astro';
+
+// Server-side auth check
+const cookies = Astro.request.headers.get('cookie') || '';
+const sessionMatch = cookies.match(/session=([^;]+)/);
+const sessionToken = sessionMatch ? sessionMatch[1] : null;
+
+let isAuthenticated = false;
+let savedPrompts: any[] = [];
+
+const db = (Astro.locals as any).runtime?.env?.DB;
+
+if (sessionToken && db) {
+  try {
+    const session = await db.prepare(`
+      SELECT s.*, u.id as user_id, u.email, u.name
+      FROM sessions s
+      JOIN users u ON s.user_id = u.id
+      WHERE s.token = ? AND s.expires_at > datetime('now')
+    `).bind(sessionToken).first();
+
+    if (session) {
+      isAuthenticated = true;
+
+      // Load all saved prompts
+      const promptsResult = await db.prepare(
+        'SELECT * FROM saved_prompts ORDER BY created_at DESC'
+      ).all();
+      savedPrompts = promptsResult.results || [];
+    }
+  } catch (e) {
+    console.error('Session/saved prompts check error:', e);
+  }
+}
+
+// Helper to truncate topic
+function truncateTopic(topic: string, maxLength: number = 80): string {
+  if (topic.length <= maxLength) return topic;
+  return topic.substring(0, maxLength).trim() + '...';
+}
+
+// Helper to format date
+function formatDate(dateStr: string): string {
+  const date = new Date(dateStr + 'Z');
+  return date.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit'
+  });
+}
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saved Prompts - TruSchools</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f8f9fa;
+            color: #1a1a1a;
+            line-height: 1.6;
+        }
+
+        .content-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .auth-required {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .auth-required h1 {
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+        }
+
+        .auth-required p {
+            color: #666;
+            margin-bottom: 24px;
+        }
+
+        .auth-required a {
+            display: inline-block;
+            background: #0066cc;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .header {
+            margin-bottom: 24px;
+        }
+
+        h1 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin: 0 0 4px 0;
+        }
+
+        .subtitle {
+            color: #666;
+            margin: 0;
+        }
+
+        .page-tabs {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 24px;
+        }
+
+        .page-tab {
+            padding: 8px 16px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.15s ease;
+        }
+
+        .page-tab.active {
+            background: #0066cc;
+            color: white;
+        }
+
+        .page-tab:not(.active) {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+        .page-tab:not(.active):hover {
+            background: #d1d5db;
+        }
+
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        .prompt-list {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .prompt-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            border-bottom: 1px solid #e0e0e0;
+            background: white;
+            cursor: pointer;
+            transition: background 0.15s ease;
+        }
+
+        .prompt-item:last-child {
+            border-bottom: none;
+        }
+
+        .prompt-item:hover {
+            background: #f8f9fa;
+        }
+
+        .prompt-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .prompt-topic {
+            font-weight: 500;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .prompt-meta {
+            font-size: 0.8125rem;
+            color: #666;
+        }
+
+        .style-badge {
+            display: inline-block;
+            background: #e9ecef;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin-right: 8px;
+        }
+
+        .prompt-actions {
+            display: flex;
+            gap: 8px;
+            margin-left: 16px;
+            flex-shrink: 0;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+
+        .empty-state p {
+            margin-bottom: 16px;
+        }
+
+        .empty-state a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+
+        .empty-state a:hover {
+            text-decoration: underline;
+        }
+
+        button {
+            font-family: inherit;
+            font-size: 0.875rem;
+            padding: 8px 14px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.15s ease;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .message {
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-bottom: 16px;
+            font-size: 0.875rem;
+        }
+
+        .message-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* Modal styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.visible {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 700px;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .modal-header h2 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .modal-close:hover {
+            color: #333;
+        }
+
+        .modal-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 16px;
+            white-space: pre-wrap;
+            font-size: 0.8125rem;
+            line-height: 1.7;
+            font-family: inherit;
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 12px;
+            padding: 16px 20px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .btn-copy {
+            background: #28a745;
+            color: white;
+            padding: 10px 20px;
+            font-size: 0.9375rem;
+            flex: 1;
+        }
+
+        .btn-copy:hover {
+            background: #218838;
+        }
+
+        .btn-copy.copied {
+            background: #666;
+        }
+
+        .btn-close-modal {
+            background: #6c757d;
+            color: white;
+            padding: 10px 20px;
+            font-size: 0.9375rem;
+        }
+
+        .btn-close-modal:hover {
+            background: #5a6268;
+        }
+    </style>
+</head>
+<body>
+    {!isAuthenticated ? (
+        <div class="auth-required">
+            <h1>Login Required</h1>
+            <p>You need to be logged in to view saved prompts.</p>
+            <a href="/login">Sign In</a>
+        </div>
+    ) : (
+        <>
+            <AdminNav currentPage="saved-prompts" />
+            <div class="content-wrapper">
+                <div class="header">
+                    <h1>Saved Prompts</h1>
+                    <p class="subtitle">Your saved prompts</p>
+                </div>
+
+                <div class="page-tabs">
+                    <a href="/tools/article-prompt-builder" class="page-tab">Prompt Builder</a>
+                    <a href="/tools/saved-prompts" class="page-tab active">Saved Prompts</a>
+                    <a href="/tools/prompts" class="page-tab">Manage Prompts</a>
+                </div>
+
+                <div id="message-container"></div>
+
+                <div class="section">
+                    {savedPrompts.length === 0 ? (
+                        <div class="empty-state">
+                            <p>No saved prompts yet.</p>
+                            <p>Generate prompts in the <a href="/tools/article-prompt-builder">Prompt Builder</a> and click "Save Prompt" to save them here.</p>
+                        </div>
+                    ) : (
+                        <div class="prompt-list">
+                            {savedPrompts.map((prompt: any) => (
+                                <div class="prompt-item" data-id={prompt.id} data-prompt={prompt.full_prompt}>
+                                    <div class="prompt-info">
+                                        <div class="prompt-topic">{truncateTopic(prompt.topic)}</div>
+                                        <div class="prompt-meta">
+                                            <span class="style-badge">{prompt.style_name}</span>
+                                            {formatDate(prompt.created_at)}
+                                        </div>
+                                    </div>
+                                    <div class="prompt-actions">
+                                        <button class="btn-danger delete-btn" data-id={prompt.id} onclick="event.stopPropagation()">Delete</button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+
+                <!-- Modal for viewing prompt -->
+                <div class="modal-overlay" id="modal-overlay">
+                    <div class="modal">
+                        <div class="modal-header">
+                            <h2>Saved Prompt</h2>
+                            <button class="modal-close" id="modal-close">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="modal-content" id="modal-content"></div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn-copy" id="copy-btn">Copy to Clipboard</button>
+                            <button class="btn-close-modal" id="close-btn">Close</button>
+                        </div>
+                    </div>
+                </div>
+
+                <script is:inline>
+                    var messageContainer = document.getElementById('message-container');
+                    var modalOverlay = document.getElementById('modal-overlay');
+                    var modalContent = document.getElementById('modal-content');
+                    var copyBtn = document.getElementById('copy-btn');
+                    var modalClose = document.getElementById('modal-close');
+                    var closeBtn = document.getElementById('close-btn');
+
+                    function showMessage(text, isError) {
+                        messageContainer.innerHTML = '<div class="message ' + (isError ? 'message-error' : 'message-success') + '">' + text + '</div>';
+                        setTimeout(function() {
+                            messageContainer.innerHTML = '';
+                        }, 5000);
+                    }
+
+                    function openModal(promptText) {
+                        modalContent.textContent = promptText;
+                        modalOverlay.classList.add('visible');
+                        document.body.style.overflow = 'hidden';
+                        copyBtn.textContent = 'Copy to Clipboard';
+                        copyBtn.classList.remove('copied');
+                    }
+
+                    function closeModal() {
+                        modalOverlay.classList.remove('visible');
+                        document.body.style.overflow = '';
+                    }
+
+                    // Click on prompt item to view
+                    document.querySelectorAll('.prompt-item').forEach(function(item) {
+                        item.addEventListener('click', function() {
+                            var promptText = this.getAttribute('data-prompt');
+                            openModal(promptText);
+                        });
+                    });
+
+                    // Delete buttons
+                    document.querySelectorAll('.delete-btn').forEach(function(btn) {
+                        btn.addEventListener('click', async function(e) {
+                            e.stopPropagation();
+                            var id = this.getAttribute('data-id');
+                            if (confirm('Are you sure you want to delete this saved prompt?')) {
+                                try {
+                                    var response = await fetch('/api/saved-prompts/' + id, {
+                                        method: 'DELETE',
+                                        credentials: 'same-origin'
+                                    });
+                                    var data = await response.json();
+                                    if (data.success) {
+                                        showMessage('Prompt deleted successfully');
+                                        setTimeout(function() { window.location.reload(); }, 1000);
+                                    } else {
+                                        showMessage(data.error || 'Failed to delete prompt', true);
+                                    }
+                                } catch (err) {
+                                    showMessage('An error occurred', true);
+                                }
+                            }
+                        });
+                    });
+
+                    // Copy button
+                    copyBtn.addEventListener('click', async function() {
+                        try {
+                            await navigator.clipboard.writeText(modalContent.textContent);
+                            copyBtn.textContent = 'Copied!';
+                            copyBtn.classList.add('copied');
+                            setTimeout(function() {
+                                copyBtn.textContent = 'Copy to Clipboard';
+                                copyBtn.classList.remove('copied');
+                            }, 2000);
+                        } catch (err) {
+                            var textarea = document.createElement('textarea');
+                            textarea.value = modalContent.textContent;
+                            document.body.appendChild(textarea);
+                            textarea.select();
+                            document.execCommand('copy');
+                            document.body.removeChild(textarea);
+                            copyBtn.textContent = 'Copied!';
+                            copyBtn.classList.add('copied');
+                        }
+                    });
+
+                    // Close modal handlers
+                    modalClose.addEventListener('click', closeModal);
+                    closeBtn.addEventListener('click', closeModal);
+
+                    modalOverlay.addEventListener('click', function(e) {
+                        if (e.target === modalOverlay) {
+                            closeModal();
+                        }
+                    });
+
+                    document.addEventListener('keydown', function(e) {
+                        if (e.key === 'Escape' && modalOverlay.classList.contains('visible')) {
+                            closeModal();
+                        }
+                    });
+                </script>
+            </div>
+        </>
+    )}
+</body>
+</html>

@@ -1,11 +1,17 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import ArticleRating from '@/components/ArticleRating.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import BrowseByTopic from '@/components/BrowseByTopic.astro';
+import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
 import heroImage from '@/images/USED-architecture-college-funding-grants.jpg';
 
 const title = "The Architecture of College Funding: How Technology Is Reshaping Educational Grants";
 const description = "From FAFSA modernization to AI-powered scholarship matching, the infrastructure of financial aid is undergoing its most significant transformation in decades.";
-const category = 'Financial Aid';
+const publishDate = "2024-08-04";
+const tags = ['Financial Aid', 'College Admissions'];
 ---
 
 <Layout title={title} description={description}>
@@ -199,22 +205,42 @@ const category = 'Financial Aid';
 
       <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
       <ul class="text-sm text-gray-600 space-y-2 mb-10">
-        <li>College Board Research. 'Trends in Student Aid 2024.' October 2024.</li>
-        <li>U.S. Department of Education. '2024-2025 Federal Pell Grant Maximum and Minimum Award Amounts.' Federal Student Aid Partners, 2024.</li>
-        <li>Urban Institute. 'How the New Federal Financial Aid Formula Affected Pell Grants.' Urban Wire, April 2025.</li>
-        <li>Federal Student Aid. 'FAFSA Simplification Act Changes for Implementation in 2024-25.' Dear Colleague Letter GEN-23-11, August 2023.</li>
-        <li>Treasury Inspector General for Tax Administration. 'IRS Data Exchange Issues.' Report to Congress, July 2025.</li>
-        <li>National Association of Student Financial Aid Administrators (NASFAA). Various policy analyses and legislative tracking, 2024-2025.</li>
-        <li>California Student Aid Commission. '2024-25 Cal Grant Handbook.' October 2024.</li>
-        <li>The Century Foundation. 'A Better Hundred Billion: Improving State and Institutional College Financial Aid.' November 2025.</li>
-        <li>Nature Scientific Reports. 'Blockchain ensuring academic integrity with a degree verification prototype.' May 2025.</li>
-        <li>ADP Background Check Analysis. 'Credential Verification Trends.' As cited in Reimagine Education, 2021.</li>
-        <li>Spencer Foundation. 'Initiative on AI and Education.' Research funding announcement, 2024.</li>
-        <li>Federal Student Aid Handbook, Volume 7: 'The Federal Pell Grant Program.' 2024-2025 Edition.</li>
-        <li>Federal Student Aid Handbook, Volume 6: 'The Federal Supplemental Educational Opportunity Grant Program.' 2024-2025 Edition.</li>
-        <li>Federal Student Aid Handbook, Volume 9: 'The TEACH Grant Program.' 2024-2025 Edition.</li>
+        <li><a href="https://research.collegeboard.org/trends/student-aid" class="text-brand-blue hover:underline" target="_blank" rel="noopener">College Board Research</a>. <em>"Trends in Student Aid 2024."</em> October 2024.</li>
+        <li><a href="https://fsapartners.ed.gov/knowledge-center/library/dear-colleague-letters/2024-06-21/2024-2025-federal-pell-grant-payment-and-disbursement-schedules" class="text-brand-blue hover:underline" target="_blank" rel="noopener">U.S. Department of Education</a>. <em>"2024-2025 Federal Pell Grant Maximum and Minimum Award Amounts."</em> Federal Student Aid Partners, 2024.</li>
+        <li><a href="https://www.urban.org/urban-wire/how-new-federal-financial-aid-formula-affected-pell-grants" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Urban Institute</a>. <em>"How the New Federal Financial Aid Formula Affected Pell Grants."</em> Urban Wire, April 2025.</li>
+        <li><a href="https://fsapartners.ed.gov/knowledge-center/library/dear-colleague-letters/2023-08-04/fafsa-simplification-act-changes-implementation-2024-25" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Federal Student Aid</a>. <em>"FAFSA Simplification Act Changes for Implementation in 2024-25."</em> Dear Colleague Letter GEN-23-11, August 2023.</li>
+        <li><a href="https://www.treasury.gov/tigta/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Treasury Inspector General for Tax Administration</a>. <em>"IRS Data Exchange Issues."</em> Report to Congress, July 2025.</li>
+        <li><a href="https://www.nasfaa.org/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Association of Student Financial Aid Administrators (NASFAA)</a>. Various policy analyses and legislative tracking, 2024-2025.</li>
+        <li><a href="https://www.csac.ca.gov/cal-grant-handbook" class="text-brand-blue hover:underline" target="_blank" rel="noopener">California Student Aid Commission</a>. <em>"2024-25 Cal Grant Handbook."</em> October 2024.</li>
+        <li><a href="https://tcf.org/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">The Century Foundation</a>. <em>"A Better Hundred Billion: Improving State and Institutional College Financial Aid."</em> November 2025.</li>
+        <li><a href="https://www.nature.com/srep/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Nature Scientific Reports</a>. <em>"Blockchain ensuring academic integrity with a degree verification prototype."</em> May 2025.</li>
+        <li><a href="https://www.adp.com/resources/articles-and-insights/articles/b/background-check-best-practices.aspx" class="text-brand-blue hover:underline" target="_blank" rel="noopener">ADP</a>. <em>"Credential Verification Trends."</em> Background Check Analysis, 2021.</li>
+        <li><a href="https://www.spencer.org/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Spencer Foundation</a>. <em>"Initiative on AI and Education."</em> Research funding announcement, 2024.</li>
+        <li><a href="https://fsapartners.ed.gov/knowledge-center/fsa-handbook" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Federal Student Aid Handbook</a>, Volume 7: <em>"The Federal Pell Grant Program."</em> 2024-2025 Edition.</li>
+        <li><a href="https://fsapartners.ed.gov/knowledge-center/fsa-handbook" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Federal Student Aid Handbook</a>, Volume 6: <em>"The Federal Supplemental Educational Opportunity Grant Program."</em> 2024-2025 Edition.</li>
+        <li><a href="https://fsapartners.ed.gov/knowledge-center/fsa-handbook" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Federal Student Aid Handbook</a>, Volume 9: <em>"The TEACH Grant Program."</em> 2024-2025 Edition.</li>
       </ul>
     </div>
+
+    <!-- Article Rating -->
+
+
+    
+    <ArticleRating slug="architecture-of-college-funding-grants" />
+
+    <!-- Related Articles -->
+    <RelatedArticles currentSlug="architecture-of-college-funding-grants" currentTags={tags} />
+
+    <!-- Browse by Topic -->
+    <BrowseByTopic tags={tags} />
+
+    <!-- Newsletter Signup -->
+    <ArticleNewsletter articleTags={tags} />
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} slug="architecture-of-college-funding-grants" />
+
+
 
     <footer class="mt-16 pt-8 border-t border-gray-200">
       <p class="text-sm text-gray-500 italic">

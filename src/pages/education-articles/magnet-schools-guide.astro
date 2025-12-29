@@ -1,11 +1,17 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import ArticleRating from '@/components/ArticleRating.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import BrowseByTopic from '@/components/BrowseByTopic.astro';
+import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
 import heroImage from '@/images/USED-school-hallway-students-painting.jpg';
 
 const title = "Magnet Schools: What They Are, How They Work, and How to Apply";
 const description = "A comprehensive guide to magnet schools covering their history, program types, how they differ from charter and private schools, and the application process.";
-const category = 'Magnet Schools';
+const publishDate = "2024-11-05";
+const tags = ['Magnet Schools', 'School Choice'];
 ---
 
 <Layout title={title} description={description}>
@@ -398,20 +404,40 @@ const category = 'Magnet Schools';
 
       <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
       <ul class="text-sm text-gray-600 space-y-2 mb-10">
-        <li>Magnet Schools of America, "What Are Magnet Schools?"</li>
-        <li>National Center for Education Statistics, Digest of Education Statistics, 2022</li>
-        <li>U.S. Department of Education, Magnet Schools Assistance Program</li>
-        <li>Rossell, Christine H., "The Desegregation Efficiency of Magnet Schools," Urban Affairs Review, 2005</li>
-        <li>Bifulco, Robert, et al., "Can Interdistrict Choice Boost Student Achievement?" Journal of Policy Analysis and Management, 2009</li>
-        <li>Abdulkadiroglu, Atila, et al., "The Elite Illusion: Achievement Effects at Boston and New York Exam Schools," Econometrica, 2014</li>
-        <li>Dobbie, Will and Roland G. Fryer Jr., "Exam High Schools and Academic Achievement," American Economic Journal: Applied Economics, 2014</li>
-        <li>The Century Foundation, "The Benefits of Socioeconomically and Racially Integrated Schools and Classrooms," 2019</li>
-        <li>Archbald, Douglas, "Magnet Schools, Voluntary Desegregation, and Public Choice Theory," Education and Urban Society, 2004</li>
-        <li>Parents Involved in Community Schools v. Seattle School District No. 1, 551 U.S. 701 (2007)</li>
-        <li>International Baccalaureate Organization, "IB Programme Standards and Practices"</li>
-        <li>American Montessori Society, "Montessori Schools in the Public Sector"</li>
+        <li><a href="https://magnet.edu/what-are-magnet-schools/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Magnet Schools of America</a>. <em>"What Are Magnet Schools?"</em></li>
+        <li><a href="https://nces.ed.gov/programs/digest/d22/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Center for Education Statistics</a>. Digest of Education Statistics, 2022.</li>
+        <li><a href="https://oese.ed.gov/offices/office-of-discretionary-grants-support-services/school-choice-improvement-programs/magnet-school-assistance-program-msap/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">U.S. Department of Education</a>. Magnet Schools Assistance Program.</li>
+        <li><a href="https://journals.sagepub.com/doi/10.1177/1078087404272875" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Rossell, Christine H.</a> <em>"The Desegregation Efficiency of Magnet Schools."</em> Urban Affairs Review, 2005.</li>
+        <li><a href="https://onlinelibrary.wiley.com/doi/10.1002/pam.20398" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Bifulco, Robert, et al.</a> <em>"Can Interdistrict Choice Boost Student Achievement?"</em> Journal of Policy Analysis and Management, 2009.</li>
+        <li><a href="https://onlinelibrary.wiley.com/doi/10.3982/ECTA10266" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Abdulkadiroglu, Atila, et al.</a> <em>"The Elite Illusion: Achievement Effects at Boston and New York Exam Schools."</em> Econometrica, 2014.</li>
+        <li><a href="https://www.aeaweb.org/articles?id=10.1257/app.6.3.58" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Dobbie, Will and Roland G. Fryer Jr.</a> <em>"Exam High Schools and Academic Achievement."</em> American Economic Journal: Applied Economics, 2014.</li>
+        <li><a href="https://tcf.org/content/facts/the-benefits-of-socioeconomically-and-racially-integrated-schools-and-classrooms/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">The Century Foundation</a>. <em>"The Benefits of Socioeconomically and Racially Integrated Schools and Classrooms."</em> 2019.</li>
+        <li><a href="https://journals.sagepub.com/doi/10.1177/0013124504268070" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Archbald, Douglas</a>. <em>"Magnet Schools, Voluntary Desegregation, and Public Choice Theory."</em> Education and Urban Society, 2004.</li>
+        <li><a href="https://www.supremecourt.gov/opinions/06pdf/05-908.pdf" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Parents Involved in Community Schools v. Seattle School District No. 1</a>, 551 U.S. 701 (2007).</li>
+        <li><a href="https://www.ibo.org/programmes/programme-standards-and-practices/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">International Baccalaureate Organization</a>. <em>"IB Programme Standards and Practices."</em></li>
+        <li><a href="https://amshq.org/About-Montessori/Montessori-in-Public-Schools" class="text-brand-blue hover:underline" target="_blank" rel="noopener">American Montessori Society</a>. <em>"Montessori Schools in the Public Sector."</em></li>
       </ul>
     </div>
+
+    <!-- Article Rating -->
+
+
+    
+    <ArticleRating slug="magnet-schools-guide" />
+
+    <!-- Related Articles -->
+    <RelatedArticles currentSlug="magnet-schools-guide" currentTags={tags} />
+
+    <!-- Browse by Topic -->
+    <BrowseByTopic tags={tags} />
+
+    <!-- Newsletter Signup -->
+    <ArticleNewsletter articleTags={tags} />
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} slug="magnet-schools-guide" />
+
+
 
     <footer class="mt-16 pt-8 border-t border-gray-200">
       <p class="text-sm text-gray-500 italic">

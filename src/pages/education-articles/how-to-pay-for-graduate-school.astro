@@ -1,11 +1,17 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import ArticleRating from '@/components/ArticleRating.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import BrowseByTopic from '@/components/BrowseByTopic.astro';
+import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
 import heroImage from '@/images/USED-how-to-pay-for-graduate-school.jpg';
 
 const title = "How to Pay for Graduate School: The Complete Funding Guide";
 const description = "A comprehensive analysis of fellowships, assistantships, employer benefits, federal loans, and strategic approaches to minimizing graduate school debt.";
-const category = 'Graduate School';
+const publishDate = "2024-10-03";
+const tags = ['Graduate School', 'Financial Aid'];
 ---
 
 <Layout title={title} description={description}>
@@ -421,20 +427,40 @@ const category = 'Graduate School';
 
       <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
       <ul class="text-sm text-gray-600 space-y-2 mb-10">
-        <li>U.S. Department of Education, Federal Student Aid Handbook 2024-2025 and 2025-2026</li>
-        <li>National Science Foundation, Graduate Research Fellowship Program (GRFP) Solicitation NSF 25-547</li>
-        <li>Ford Foundation Fellowships, National Academies of Sciences, Engineering, and Medicine</li>
-        <li>Society for Human Resource Management (SHRM), Employee Benefits Survey 2022-2024</li>
-        <li>Education Data Initiative, Average Graduate Student Loan Debt Statistics 2025</li>
-        <li>National Center for Education Statistics (NCES), Trends in Student Loan Debt</li>
-        <li>Consumer Financial Protection Bureau, Student Loan Interest Rate Analysis 2024</li>
-        <li>International Foundation of Employee Benefit Plans, Educational Benefits Survey</li>
-        <li>Georgetown University Center on Education and the Workforce, Lifetime Earnings by Education Level</li>
-        <li>College Board, Trends in Student Aid 2024</li>
-        <li>Northwestern University, The Graduate School Funding Information 2025-2026</li>
-        <li>Georgia Institute of Technology, Graduate Assistantship Stipend Policy 2024-2025</li>
+        <li><a href="https://fsapartners.ed.gov/knowledge-center/fsa-handbook" class="text-brand-blue hover:underline" target="_blank" rel="noopener">U.S. Department of Education</a>. <em>"Federal Student Aid Handbook (2024–25, 2025–26)."</em></li>
+        <li><a href="https://www.nsf.gov/publications/pub_summ.jsp?ods_key=nsf25547" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Science Foundation</a>. <em>"GRFP Solicitation NSF 25-547."</em></li>
+        <li><a href="https://www.nationalacademies.org/our-work/fellowships" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Ford Foundation Fellowships</a>. National Academies.</li>
+        <li><a href="https://www.shrm.org/topics-tools/research/employee-benefits-survey" class="text-brand-blue hover:underline" target="_blank" rel="noopener">SHRM</a>. <em>"Employee Benefits Survey (2022–2024)."</em></li>
+        <li><a href="https://educationdata.org/average-graduate-student-loan-debt" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Education Data Initiative</a>. <em>"Average Graduate Student Loan Debt Statistics (2025)."</em></li>
+        <li><a href="https://nces.ed.gov/fastfacts/display.asp?id=900" class="text-brand-blue hover:underline" target="_blank" rel="noopener">NCES</a>. <em>"Trends in Student Loan Debt."</em></li>
+        <li><a href="https://www.consumerfinance.gov/data-research/student-loan-borrowers/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">CFPB</a>. <em>"Student Loan Interest Rate Analysis (2024)."</em></li>
+        <li><a href="https://www.ifebp.org/research/employee-benefits-survey" class="text-brand-blue hover:underline" target="_blank" rel="noopener">International Foundation of Employee Benefit Plans</a>. <em>"Educational Benefits Survey."</em></li>
+        <li><a href="https://cew.georgetown.edu/cew-reports/collegepayoff2021/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Georgetown CEW</a>. <em>"Lifetime Earnings by Education Level."</em></li>
+        <li><a href="https://research.collegeboard.org/trends/student-aid" class="text-brand-blue hover:underline" target="_blank" rel="noopener">College Board</a>. <em>"Trends in Student Aid (2024)."</em></li>
+        <li><a href="https://www.tgs.northwestern.edu/funding/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Northwestern University</a>. <em>"The Graduate School Funding Information (2025–26)."</em></li>
+        <li><a href="https://policylibrary.gatech.edu/academic-affairs/stipends-graduate-assistantships" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Georgia Tech</a>. <em>"Graduate Assistantship Stipend Policy (2024–25)."</em></li>
       </ul>
     </div>
+
+    <!-- Article Rating -->
+
+
+    
+    <ArticleRating slug="how-to-pay-for-graduate-school" />
+
+    <!-- Related Articles -->
+    <RelatedArticles currentSlug="how-to-pay-for-graduate-school" currentTags={tags} />
+
+    <!-- Browse by Topic -->
+    <BrowseByTopic tags={tags} />
+
+    <!-- Newsletter Signup -->
+    <ArticleNewsletter articleTags={tags} />
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} slug="how-to-pay-for-graduate-school" />
+
+
 
     <footer class="mt-16 pt-8 border-t border-gray-200">
       <p class="text-sm text-gray-500 italic">

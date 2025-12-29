@@ -1,11 +1,17 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import ArticleRating from '@/components/ArticleRating.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import BrowseByTopic from '@/components/BrowseByTopic.astro';
+import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
 import heroImage from '@/images/USED-student-loan-infrastructure-guide.jpg';
 
 const title = "The $1.8 Trillion Machine: How Student Loan Infrastructure Is Being Rebuilt";
 const description = "Federal policy overhauls, servicer meltdowns, and fintech disruption are forcing a fundamental rethinking of how Americans finance higher education.";
-const category = 'Financial Aid';
+const publishDate = "2024-12-02";
+const tags = ['Financial Aid', 'College Admissions'];
 ---
 
 <Layout title={title} description={description}>
@@ -223,23 +229,43 @@ const category = 'Financial Aid';
 
       <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
       <ul class="text-sm text-gray-600 space-y-2 mb-10">
-        <li>Federal Student Aid, U.S. Department of Education. Interest Rates for Direct Loans (2025-26).</li>
-        <li>Education Data Initiative. Student Loan Debt Statistics (2025).</li>
-        <li>Federal Reserve. Report on the Economic Well-Being of U.S. Households (2024).</li>
-        <li>Institute for College Access & Success. Federal Student Loan Amounts and Terms (2025-26).</li>
-        <li>National Consumer Law Center. New Federal Student Loan Servicing Contracts (February 2024).</li>
-        <li>Federal Student Aid Partners. FAFSA Simplification Act Implementation Guidance.</li>
-        <li>U.S. Department of Education. One Big Beautiful Bill Act Implementation Guidance (2025).</li>
-        <li>Harvard University Student Financial Services. Changes to Federal Student Loans (2025).</li>
-        <li>NASFAA. Federal Student Aid Changes from the OBBBA (July 2025).</li>
-        <li>Student Borrower Protection Center & American Federation of Teachers. The Mohela Papers (2024).</li>
-        <li>Federal Register. Income-Contingent Repayment Plan Options (January 2025).</li>
-        <li>Federal Register. Public Service Loan Forgiveness Final Rule (October 2025).</li>
-        <li>Enterval Analytics. Private Student Loan Report (2024-25).</li>
-        <li>RAND Corporation. Income Share Agreements: Market Structure, Communication, and Equity Implications (2023).</li>
-        <li>Federal Reserve Bank of New York. Quarterly Report on Household Debt and Credit (Q2 2025).</li>
+        <li><a href="https://studentaid.gov/understand-aid/types/loans/interest-rates" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Federal Student Aid, U.S. Department of Education</a>. <em>Interest Rates for Direct Loans (2025-26).</em></li>
+        <li><a href="https://educationdata.org/student-loan-debt-statistics" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Education Data Initiative</a>. <em>Student Loan Debt Statistics (2025).</em></li>
+        <li><a href="https://www.federalreserve.gov/publications/report-economic-well-being-us-households.htm" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Federal Reserve</a>. <em>Report on the Economic Well-Being of U.S. Households (2024).</em></li>
+        <li><a href="https://ticas.org/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Institute for College Access & Success</a>. <em>Federal Student Loan Amounts and Terms (2025-26).</em></li>
+        <li><a href="https://www.nclc.org/resources/new-federal-student-loan-servicing-contracts/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Consumer Law Center</a>. <em>New Federal Student Loan Servicing Contracts</em> (February 2024).</li>
+        <li><a href="https://fsapartners.ed.gov/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Federal Student Aid Partners</a>. <em>FAFSA Simplification Act Implementation Guidance.</em></li>
+        <li><a href="https://www.ed.gov/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">U.S. Department of Education</a>. <em>One Big Beautiful Bill Act Implementation Guidance (2025).</em></li>
+        <li><a href="https://sfs.harvard.edu/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Harvard University Student Financial Services</a>. <em>Changes to Federal Student Loans (2025).</em></li>
+        <li><a href="https://www.nasfaa.org/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">NASFAA</a>. <em>Federal Student Aid Changes from the OBBBA</em> (July 2025).</li>
+        <li><a href="https://protectborrowers.org/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Student Borrower Protection Center & American Federation of Teachers</a>. <em>The Mohela Papers</em> (2024).</li>
+        <li><a href="https://www.federalregister.gov/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Federal Register</a>. <em>Income-Contingent Repayment Plan Options</em> (January 2025).</li>
+        <li><a href="https://www.federalregister.gov/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Federal Register</a>. <em>Public Service Loan Forgiveness Final Rule</em> (October 2025).</li>
+        <li><a href="https://www.enterval.com/student-loan-research" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Enterval Analytics</a>. <em>Private Student Loan Report</em> (2024-25).</li>
+        <li><a href="https://www.rand.org/pubs/research_reports/RRA1315-1.html" class="text-brand-blue hover:underline" target="_blank" rel="noopener">RAND Corporation</a>. <em>Income Share Agreements: Market Structure, Communication, and Equity Implications</em> (2023).</li>
+        <li><a href="https://www.newyorkfed.org/microeconomics/hhdc" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Federal Reserve Bank of New York</a>. <em>Quarterly Report on Household Debt and Credit</em> (Q2 2025).</li>
       </ul>
     </div>
+
+    <!-- Article Rating -->
+
+
+    
+    <ArticleRating slug="student-loan-infrastructure-guide" />
+
+    <!-- Related Articles -->
+    <RelatedArticles currentSlug="student-loan-infrastructure-guide" currentTags={tags} />
+
+    <!-- Browse by Topic -->
+    <BrowseByTopic tags={tags} />
+
+    <!-- Newsletter Signup -->
+    <ArticleNewsletter articleTags={tags} />
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} slug="student-loan-infrastructure-guide" />
+
+
 
     <footer class="mt-16 pt-8 border-t border-gray-200">
       <p class="text-sm text-gray-500 italic">

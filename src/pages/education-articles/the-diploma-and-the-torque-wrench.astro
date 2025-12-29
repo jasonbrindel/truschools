@@ -1,12 +1,18 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import ArticleRating from '@/components/ArticleRating.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import BrowseByTopic from '@/components/BrowseByTopic.astro';
+import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
 import heroImage from '@/images/USED-high-school-students-classroom-vintage.jpg';
 
 const title = "The Diploma and the Torque Wrench";
 const subtitle = "What is high school for now?";
 const description = "How career and technical education is transforming American high schools, giving students real-world skills and clarity about their futures.";
-const category = 'Vocational Education';
+const publishDate = "2024-12-08";
+const tags = ['Vocational Education', 'High School'];
 ---
 
 <Layout title={title} description={description}>
@@ -231,21 +237,41 @@ const category = 'Vocational Education';
       <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
 
       <ul class="text-sm text-gray-600 space-y-2 mb-10">
-        <li>Beaumont Enterprise, "Port Arthur Youth Employment Program offers students paid internships," July 26, 2025</li>
-        <li>National Center for Education Statistics, "Career and Technical Education in the United States" (Condition of Education indicator), accessed December 2025</li>
-        <li>National Center for Education Statistics, "Fast Facts: Career and technical education," accessed December 2025</li>
-        <li>U.S. Chamber of Commerce, "Few Hiring Managers Think High School Graduates Are Ready for the Workforce," September 22, 2025</li>
-        <li>College Board Newsroom, "Business-Backed High School Courses, Credentials, and Skills Launched for Millions of U.S. Students," September 18, 2025</li>
-        <li>Ipsos, "Majority of surveyed hiring managers agree that most high school students are not prepared to enter the workforce," September 19, 2025</li>
-        <li>K-12 Dive, "4 in 5 hiring managers say high schoolers not prepared for workforce," September 22, 2025</li>
-        <li>K-12 Dive, "Career and technical education faces obstacles to meet demand," January 19, 2024</li>
-        <li>Council for Economic Education, "Financial Education Requirements Soar in America's High Schools," February 26, 2024</li>
-        <li>Congressional Research Service, "Career and Technical Education: A Primer," June 21, 2022</li>
-        <li>Education Week, "The State of Career and Technical Education, in Charts," June 3, 2024</li>
-        <li>Plainview Herald, "Plainview students gain real-world skills through CTE programs," February 13, 2025</li>
-        <li>College Board AP Central, "AP Career Kickstart," accessed December 2025</li>
+        <li><a href="https://www.beaumontenterprise.com/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Beaumont Enterprise</a>. <em>"Port Arthur Youth Employment Program offers students paid internships."</em> July 26, 2025.</li>
+        <li><a href="https://nces.ed.gov/programs/coe/indicator/sbc" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Center for Education Statistics</a>. <em>"Career and Technical Education in the United States"</em> (Condition of Education indicator), accessed December 2025.</li>
+        <li><a href="https://nces.ed.gov/fastfacts/display.asp?id=43" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Center for Education Statistics</a>. <em>"Fast Facts: Career and technical education."</em> Accessed December 2025.</li>
+        <li><a href="https://www.uschamber.com/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">U.S. Chamber of Commerce</a>. <em>"Few Hiring Managers Think High School Graduates Are Ready for the Workforce."</em> September 22, 2025.</li>
+        <li><a href="https://newsroom.collegeboard.org/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">College Board Newsroom</a>. <em>"Business-Backed High School Courses, Credentials, and Skills Launched for Millions of U.S. Students."</em> September 18, 2025.</li>
+        <li><a href="https://www.ipsos.com/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Ipsos</a>. <em>"Majority of surveyed hiring managers agree that most high school students are not prepared to enter the workforce."</em> September 19, 2025.</li>
+        <li><a href="https://www.k12dive.com/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">K-12 Dive</a>. <em>"4 in 5 hiring managers say high schoolers not prepared for workforce."</em> September 22, 2025.</li>
+        <li><a href="https://www.k12dive.com/news/career-technical-education-obstacles-demand/704792/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">K-12 Dive</a>. <em>"Career and technical education faces obstacles to meet demand."</em> January 19, 2024.</li>
+        <li><a href="https://www.councilforeconed.org/news/financial-education-requirements-soar/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Council for Economic Education</a>. <em>"Financial Education Requirements Soar in America's High Schools."</em> February 26, 2024.</li>
+        <li><a href="https://crsreports.congress.gov/product/pdf/R/R47174" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Congressional Research Service</a>. <em>"Career and Technical Education: A Primer."</em> June 21, 2022.</li>
+        <li><a href="https://www.edweek.org/leadership/the-state-of-career-and-technical-education-in-charts/2024/06" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Education Week</a>. <em>"The State of Career and Technical Education, in Charts."</em> June 3, 2024.</li>
+        <li><a href="https://www.plainviewherald.com/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Plainview Herald</a>. <em>"Plainview students gain real-world skills through CTE programs."</em> February 13, 2025.</li>
+        <li><a href="https://apcentral.collegeboard.org/about-ap/career-kickstart" class="text-brand-blue hover:underline" target="_blank" rel="noopener">College Board AP Central</a>. <em>"AP Career Kickstart."</em> Accessed December 2025.</li>
       </ul>
     </div>
+
+    <!-- Article Rating -->
+
+
+    
+    <ArticleRating slug="the-diploma-and-the-torque-wrench" />
+
+    <!-- Related Articles -->
+    <RelatedArticles currentSlug="the-diploma-and-the-torque-wrench" currentTags={tags} />
+
+    <!-- Browse by Topic -->
+    <BrowseByTopic tags={tags} />
+
+    <!-- Newsletter Signup -->
+    <ArticleNewsletter articleTags={tags} />
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} slug="the-diploma-and-the-torque-wrench" />
+
+
 
     <!-- Footer -->
     <footer class="mt-16 pt-8 border-t border-gray-200">

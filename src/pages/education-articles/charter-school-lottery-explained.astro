@@ -1,11 +1,17 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import ArticleRating from '@/components/ArticleRating.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import BrowseByTopic from '@/components/BrowseByTopic.astro';
+import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
 import heroImage from '@/images/USED-students-waiting-classroom-colorful.jpg';
 
 const title = "Charter School Lottery Explained: Everything You Need to Know";
 const description = "A comprehensive guide to understanding how charter school lotteries work, from preference categories and unified enrollment systems to waitlists and strategic approaches.";
-const category = 'Charter Schools';
+const publishDate = "2024-08-13";
+const tags = ['Charter Schools', 'School Choice'];
 ---
 
 <Layout title={title} description={description}>
@@ -247,6 +253,26 @@ const category = 'Charter Schools';
       </p>
 
     </div>
+
+    <!-- Article Rating -->
+
+
+    
+    <ArticleRating slug="charter-school-lottery-explained" />
+
+    <!-- Related Articles -->
+    <RelatedArticles currentSlug="charter-school-lottery-explained" currentTags={tags} />
+
+    <!-- Browse by Topic -->
+    <BrowseByTopic tags={tags} />
+
+    <!-- Newsletter Signup -->
+    <ArticleNewsletter articleTags={tags} />
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} slug="charter-school-lottery-explained" />
+
+
 
     <!-- Footer -->
     <footer class="mt-16 pt-8 border-t border-gray-200">

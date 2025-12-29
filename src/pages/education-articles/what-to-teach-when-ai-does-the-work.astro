@@ -1,12 +1,18 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import ArticleRating from '@/components/ArticleRating.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import BrowseByTopic from '@/components/BrowseByTopic.astro';
+import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
 import heroImage from '@/images/USED-ai-laptop-chatgpt.jpg';
 
 const title = "What to Teach When AI Does the Work";
 const subtitle = "How to future-proof your child's education for automation and robotics";
 const description = "A guide for parents on preparing children for a future where AI handles routine tasks, focusing on critical thinking, creativity, and human skills.";
-const category = 'Future of Education';
+const publishDate = "2025-01-13";
+const tags = ['Future of Education', 'High School', 'College Admissions'];
 ---
 
 <Layout title={`${title}`} description={description}>
@@ -244,16 +250,36 @@ const category = 'Future of Education';
       <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
 
       <ul class="text-sm text-gray-600 space-y-2 mb-10">
-        <li>PBS NewsHour, "This high school is teaching students how to use AI—and how to question it," featuring George Goga, Vivian Hoang, and Payce Chu Lustig at Geneva High School, Geneva, New York</li>
-        <li>International Monetary Fund, "AI Will Transform the Global Economy. Let's Make Sure It Benefits Humanity," January 2024</li>
-        <li>McKinsey Global Institute, "A New Future of Work: The Race to Deploy AI and Raise Skills in Europe and Beyond," 2025</li>
-        <li>World Economic Forum, "Future of Jobs Report 2025," January 2025</li>
-        <li>Center for Democracy and Technology, "Navigating AI in Education: 2024–2025 School Year Report," 2025</li>
-        <li>OECD, "OECD Learning Compass 2030: A Series of Concept Notes," 2019</li>
-        <li>U.S. Bureau of Labor Statistics, Occupational Outlook Handbook, projections through 2034</li>
-        <li>Associated Press, reporting on AI-generated deepfakes in schools and state legislation, late 2025</li>
+        <li><a href="https://www.pbs.org/newshour/show/this-high-school-is-teaching-students-how-to-use-ai-and-how-to-question-it" class="text-brand-blue hover:underline" target="_blank" rel="noopener">PBS NewsHour</a>. <em>"This high school is teaching students how to use AI—and how to question it,"</em> featuring George Goga, Vivian Hoang, and Payce Chu Lustig at Geneva High School, Geneva, New York.</li>
+        <li><a href="https://www.imf.org/en/Blogs/Articles/2024/01/14/ai-will-transform-the-global-economy-lets-make-sure-it-benefits-humanity" class="text-brand-blue hover:underline" target="_blank" rel="noopener">International Monetary Fund</a>. <em>"AI Will Transform the Global Economy. Let's Make Sure It Benefits Humanity."</em> January 2024.</li>
+        <li><a href="https://www.mckinsey.com/mgi/our-research/a-new-future-of-work-the-race-to-deploy-ai-and-raise-skills-in-europe-and-beyond" class="text-brand-blue hover:underline" target="_blank" rel="noopener">McKinsey Global Institute</a>. <em>"A New Future of Work: The Race to Deploy AI and Raise Skills in Europe and Beyond."</em> 2025.</li>
+        <li><a href="https://www.weforum.org/publications/the-future-of-jobs-report-2025/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">World Economic Forum</a>. <em>"Future of Jobs Report 2025."</em> January 2025.</li>
+        <li><a href="https://cdt.org/insights/navigating-ai-in-education-findings-from-the-2024-2025-school-year/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Center for Democracy and Technology</a>. <em>"Navigating AI in Education: 2024–2025 School Year Report."</em> 2025.</li>
+        <li><a href="https://www.oecd.org/en/about/projects/future-of-education-and-skills-2030/oecd-learning-compass-2030.html" class="text-brand-blue hover:underline" target="_blank" rel="noopener">OECD</a>. <em>"OECD Learning Compass 2030: A Series of Concept Notes."</em> 2019.</li>
+        <li><a href="https://www.bls.gov/ooh/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">U.S. Bureau of Labor Statistics</a>. <em>Occupational Outlook Handbook,</em> projections through 2034.</li>
+        <li><a href="https://apnews.com/article/deepfakes-schools-explicit-images-ai-laws-10a5c3bf108c03d05e70b19f88b8c2f6" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Associated Press</a>. Reporting on AI-generated deepfakes in schools and state legislation, late 2025.</li>
       </ul>
     </div>
+
+    <!-- Article Rating -->
+
+
+    
+    <ArticleRating slug="what-to-teach-when-ai-does-the-work" />
+
+    <!-- Related Articles -->
+    <RelatedArticles currentSlug="what-to-teach-when-ai-does-the-work" currentTags={tags} />
+
+    <!-- Browse by Topic -->
+    <BrowseByTopic tags={tags} />
+
+    <!-- Newsletter Signup -->
+    <ArticleNewsletter articleTags={tags} />
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} slug="what-to-teach-when-ai-does-the-work" />
+
+
 
     <!-- Footer -->
     <footer class="mt-16 pt-8 border-t border-gray-200">

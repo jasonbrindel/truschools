@@ -187,7 +187,7 @@ const description = "Meta description for SEO.";
 
       <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
       <ul class="text-sm text-gray-600 space-y-2 mb-10">
-        <li>Source citation here.</li>
+        <li><a href="https://nces.ed.gov/..." class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Center for Education Statistics</a>. <em>"Report Title."</em> 2024.</li>
       </ul>
     </div>
 
@@ -204,6 +204,55 @@ const description = "Meta description for SEO.";
   </article>
 </Layout>
 ```
+
+### Source Links in Articles
+
+**All sources in article Sources sections MUST include hyperlinks.** This improves credibility, SEO, and user experience.
+
+#### Link Format
+```html
+<li><a href="https://example.gov/report" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Organization Name</a>. <em>"Report or Article Title."</em> 2024.</li>
+```
+
+**Required attributes:**
+- `class="text-brand-blue hover:underline"` - consistent styling
+- `target="_blank"` - opens in new tab
+- `rel="noopener"` - security best practice
+
+**Link the organization name OR the title, not both.**
+
+#### Source Priority (find URLs in this order)
+
+1. **Tier 1 - Government (.gov)**: Always link these first. Most stable and authoritative.
+   - nces.ed.gov, ed.gov, bls.gov, census.gov, studentaid.gov, state .gov sites
+
+2. **Tier 2 - Academic/Research**: Usually stable and free.
+   - University research centers (Stanford CREDO, Harvard, etc.)
+   - Research organizations (Brookings Institution, RAND, etc.)
+   - Professional associations (NAEYC, AAP, etc.)
+
+3. **Tier 3 - Industry Reports**: May move over time.
+   - EdChoice, Education Commission of the States, McKinsey, Deloitte
+   - Survey results (Resume Builder, Gallup, etc.)
+
+4. **Tier 4 - News/Media**: Most prone to link rot. Use archive.org when needed.
+   - NPR, CBS, WSJ, CNBC, etc.
+
+#### Special Cases
+
+**Paywalled content:**
+```html
+<li><a href="https://wsj.com/article/..." class="text-brand-blue hover:underline" target="_blank" rel="noopener">Wall Street Journal</a>. <em>"Article Title"</em> (subscription required). 2024.</li>
+```
+
+**Archived content (when original is gone):**
+```html
+<li><a href="https://web.archive.org/web/20240101/https://example.com/article" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Publication Name</a>. <em>"Article Title"</em> (archived). 2023.</li>
+```
+
+**Source no longer available online:**
+- Keep as plain text (no link)
+- Add note: `(source no longer available online)`
 
 ## Deployment
 

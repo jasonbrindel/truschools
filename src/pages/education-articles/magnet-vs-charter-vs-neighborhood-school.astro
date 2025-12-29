@@ -1,12 +1,18 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import ArticleRating from '@/components/ArticleRating.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import BrowseByTopic from '@/components/BrowseByTopic.astro';
+import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
 import heroImage from '@/images/USED-modern-school-architecture-illustration.jpg';
 
 const title = "Magnet vs Charter vs Neighborhood School";
 const subtitle = "What's Different, and What That Means for Your Child";
 const description = "A comprehensive comparison of magnet schools, charter schools, and neighborhood schools, covering governance, admissions, transportation, academics, and what matters for your family.";
-const category = 'School Types';
+const publishDate = "2024-11-08";
+const tags = ['School Types', 'Magnet Schools', 'Charter Schools', 'School Choice'];
 ---
 
 <Layout title={`${title}: ${subtitle}`} description={description}>
@@ -257,23 +263,43 @@ const category = 'School Types';
 
       <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
       <ul class="text-sm text-gray-600 space-y-2 mb-10">
-        <li>National Center for Education Statistics. "Public Charter School Enrollment." Condition of Education, U.S. Department of Education, 2023.</li>
-        <li>National Center for Education Statistics. "Press Release: NCES Data Show Public School Enrollment." December 5, 2024.</li>
-        <li>Magnet Schools of America. "Snapshot of Magnet Schools." University of North Carolina-Charlotte Urban Institute, 2016.</li>
-        <li>Pew Research Center. "Facts About Public, Private and Charter Schools in the U.S." June 6, 2024.</li>
-        <li>National Alliance for Public Charter Schools. "Do You Know Where the Children Are? A Five-Year Analysis of Public School Enrollment." 2024.</li>
-        <li>Brookings Institution. "Don't Forget Magnet Schools When Thinking About School Choice." Brown Center on Education Policy, 2017.</li>
-        <li>Stanford University Center for Research on Education Outcomes (CREDO). "As a Matter of Fact: The National Charter School Study III." June 2023.</li>
-        <li>National Center for Charter School Accountability. "Doomed to Fail: An Analysis of Charter School Closures from 1998 to 2022." Network for Public Education, October 2024.</li>
-        <li>UCLA Civil Rights Project. "Segregated Choices: Magnet and Charter Schools." April 2024.</li>
-        <li>National Association of Charter School Authorizers. "Transportation: Access and Equity in Authorizing." Quality Practice Project.</li>
-        <li>OnLabor. "The Promise and Peril of Organizing at Charter Schools." Harvard Law School, 2020.</li>
-        <li>Project Play, Aspen Institute. "Charter Schools Struggle the Most to Grow Sports Access." 2019.</li>
-        <li>Chicago Community Trust. "Four Ways That Neighborhood Schools Strengthen Communities." Generation All Initiative, 2017.</li>
-        <li>Urban Institute. "When Neighbors Are No Longer Classmates, What Happens to the Community?" Urban Wire, 2014.</li>
-        <li>National Association of Realtors Research Group. "Home Buyer and Seller Generational Trends Report." 2019.</li>
+        <li><a href="https://nces.ed.gov/programs/coe/indicator/cgb" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Center for Education Statistics</a>. <em>"Public Charter School Enrollment."</em> Condition of Education, U.S. Department of Education, 2023.</li>
+        <li><a href="https://nces.ed.gov/whatsnew/press_releases/12_5_2024.asp" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Center for Education Statistics</a>. <em>"Press Release: NCES Data Show Public School Enrollment."</em> December 5, 2024.</li>
+        <li><a href="https://magnet.edu/resources/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Magnet Schools of America</a>. <em>"Snapshot of Magnet Schools."</em> University of North Carolina-Charlotte Urban Institute, 2016.</li>
+        <li><a href="https://www.pewresearch.org/short-reads/2024/06/06/facts-about-public-private-and-charter-schools-in-the-us/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Pew Research Center</a>. <em>"Facts About Public, Private and Charter Schools in the U.S."</em> June 6, 2024.</li>
+        <li><a href="https://www.publiccharters.org/our-work/publications" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Alliance for Public Charter Schools</a>. <em>"Do You Know Where the Children Are? A Five-Year Analysis of Public School Enrollment."</em> 2024.</li>
+        <li><a href="https://www.brookings.edu/articles/dont-forget-magnet-schools-when-thinking-about-school-choice/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Brookings Institution</a>. <em>"Don't Forget Magnet Schools When Thinking About School Choice."</em> Brown Center on Education Policy, 2017.</li>
+        <li><a href="https://credo.stanford.edu/reports/item/national-charter-school-study-iii/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Stanford University Center for Research on Education Outcomes (CREDO)</a>. <em>"As a Matter of Fact: The National Charter School Study III."</em> June 2023.</li>
+        <li><a href="https://networkforpubliceducation.org/wp-content/uploads/2024/11/DTM-Final.pdf" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Center for Charter School Accountability</a>. <em>"Doomed to Fail: An Analysis of Charter School Closures from 1998 to 2022."</em> Network for Public Education, October 2024.</li>
+        <li><a href="https://www.civilrightsproject.ucla.edu/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">UCLA Civil Rights Project</a>. <em>"Segregated Choices: Magnet and Charter Schools."</em> April 2024.</li>
+        <li><a href="https://qualitycharters.org/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Association of Charter School Authorizers</a>. <em>"Transportation: Access and Equity in Authorizing."</em> Quality Practice Project.</li>
+        <li><a href="https://onlabor.org/the-promise-and-peril-of-organizing-at-charter-schools/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">OnLabor</a>. <em>"The Promise and Peril of Organizing at Charter Schools."</em> Harvard Law School, 2020.</li>
+        <li><a href="https://www.aspenprojectplay.org/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Project Play, Aspen Institute</a>. <em>"Charter Schools Struggle the Most to Grow Sports Access."</em> 2019.</li>
+        <li><a href="https://www.cct.org/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Chicago Community Trust</a>. <em>"Four Ways That Neighborhood Schools Strengthen Communities."</em> Generation All Initiative, 2017.</li>
+        <li><a href="https://www.urban.org/urban-wire/when-neighbors-are-no-longer-classmates-what-happens-community" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Urban Institute</a>. <em>"When Neighbors Are No Longer Classmates, What Happens to the Community?"</em> Urban Wire, 2014.</li>
+        <li><a href="https://www.nar.realtor/research-and-statistics/research-reports/home-buyer-and-seller-generational-trends" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Association of Realtors Research Group</a>. <em>"Home Buyer and Seller Generational Trends Report."</em> 2019.</li>
       </ul>
     </div>
+
+    <!-- Article Rating -->
+
+
+    
+    <ArticleRating slug="magnet-vs-charter-vs-neighborhood-school" />
+
+    <!-- Related Articles -->
+    <RelatedArticles currentSlug="magnet-vs-charter-vs-neighborhood-school" currentTags={tags} />
+
+    <!-- Browse by Topic -->
+    <BrowseByTopic tags={tags} />
+
+    <!-- Newsletter Signup -->
+    <ArticleNewsletter articleTags={tags} />
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} slug="magnet-vs-charter-vs-neighborhood-school" />
+
+
 
     <footer class="mt-16 pt-8 border-t border-gray-200">
       <p class="text-sm text-gray-500 italic">

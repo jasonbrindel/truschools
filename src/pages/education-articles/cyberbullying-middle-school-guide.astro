@@ -1,11 +1,17 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import ArticleRating from '@/components/ArticleRating.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import BrowseByTopic from '@/components/BrowseByTopic.astro';
+import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
 import heroImage from '@/images/USED-cyberbullying-middle-school-boy.jpg';
 
 const title = "When the Cruelty Follows Them Home";
 const description = "What parents need to know about cyberbullying in middle school and how to help when the harassment never seems to stop.";
-const category = 'Middle School';
+const publishDate = "2024-09-06";
+const tags = ['Middle School', 'Mental Health'];
 ---
 
 <Layout title={title} description={description}>
@@ -144,20 +150,40 @@ const category = 'Middle School';
       <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
 
       <ul class="text-sm text-gray-600 space-y-2 mb-10">
-        <li>Cyberbullying Research Center. <em>Cyberbullying Facts.</em> 2024.</li>
-        <li>National Center for Education Statistics. <em>School Crime and Safety Report.</em> 2024.</li>
-        <li>Pew Research Center. <em>Teens and Cyberbullying Survey.</em> 2024.</li>
-        <li>Patchin, J.W. and Hinduja, S. <em>Bullying Laws Across America.</em> Cyberbullying Research Center. 2023.</li>
-        <li>Chaux, E., et al. <em>Effects of the cyberbullying prevention program Media Heroes on traditional bullying.</em> Aggressive Behavior. 2016.</li>
-        <li>Schultze-Krumbholz, A., Zagorscak, P., and Scheithauer, H. <em>A school-based cyberbullying preventive intervention approach: The Media Heroes program.</em> Academic Press. 2018.</li>
-        <li>Maurya, C., et al. <em>The effects of cyberbullying victimization on depression and suicidal ideation among adolescents.</em> BMC Psychiatry. 2022.</li>
-        <li>Kowalski, R.M. and Limber, S.P. <em>Psychological, Physical, and Academic Correlates of Cyberbullying.</em> Journal of Adolescent Health. 2013.</li>
-        <li>Hinduja, S. and Patchin, J.W. <em>Cultivating youth resilience to prevent bullying and cyberbullying victimization.</em> Child Abuse and Neglect. 2017.</li>
-        <li>StopBullying.gov. <em>Laws, Policies and Regulations.</em> U.S. Department of Health and Human Services. 2024.</li>
-        <li>UNICEF. <em>Cyberbullying: What is it and how to stop it.</em> 2024.</li>
-        <li>Winstone, L., et al. <em>Witnessing cyberbullying and suicidal ideation among middle school students.</em> PMC. 2023.</li>
+        <li><a href="https://cyberbullying.org/facts" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Cyberbullying Research Center</a>. <em>Cyberbullying Facts.</em> 2024.</li>
+        <li><a href="https://nces.ed.gov/pubs2024/2024061.pdf" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Center for Education Statistics</a>. <em>School Crime and Safety Report.</em> 2024.</li>
+        <li><a href="https://www.pewresearch.org/internet/2022/09/27/teens-and-cyberbullying-2022/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Pew Research Center</a>. <em>Teens and Cyberbullying Survey.</em> 2024.</li>
+        <li><a href="https://cyberbullying.org/cyberbullying-laws" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Patchin, J.W. and Hinduja, S.</a> <em>Bullying Laws Across America.</em> Cyberbullying Research Center. 2023.</li>
+        <li><a href="https://onlinelibrary.wiley.com/doi/10.1002/ab.21637" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Chaux, E., et al., Aggressive Behavior</a>. <em>Effects of the cyberbullying prevention program Media Heroes on traditional bullying.</em> 2016.</li>
+        <li><a href="https://www.sciencedirect.com/science/article/pii/B9780128118166000021" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Schultze-Krumbholz, A., et al., Academic Press</a>. <em>A school-based cyberbullying preventive intervention approach: The Media Heroes program.</em> 2018.</li>
+        <li><a href="https://bmcpsychiatry.biomedcentral.com/articles/10.1186/s12888-022-04346-0" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Maurya, C., et al.</a> <em>The effects of cyberbullying victimization on depression and suicidal ideation among adolescents.</em> BMC Psychiatry. 2022.</li>
+        <li><a href="https://doi.org/10.1016/j.jadohealth.2013.03.030" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Kowalski, R.M. and Limber, S.P.</a> <em>Psychological, Physical, and Academic Correlates of Cyberbullying.</em> Journal of Adolescent Health. 2013.</li>
+        <li><a href="https://doi.org/10.1016/j.chiabu.2016.11.030" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Hinduja, S. and Patchin, J.W.</a> <em>Cultivating youth resilience to prevent bullying and cyberbullying victimization.</em> Child Abuse and Neglect. 2017.</li>
+        <li><a href="https://www.stopbullying.gov/resources/laws" class="text-brand-blue hover:underline" target="_blank" rel="noopener">StopBullying.gov</a>. <em>Laws, Policies and Regulations.</em> U.S. Department of Health and Human Services. 2024.</li>
+        <li><a href="https://www.unicef.org/end-violence/how-to-stop-cyberbullying" class="text-brand-blue hover:underline" target="_blank" rel="noopener">UNICEF</a>. <em>Cyberbullying: What is it and how to stop it.</em> 2024.</li>
+        <li><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9857703/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Winstone, L., et al.</a> <em>Witnessing cyberbullying and suicidal ideation among middle school students.</em> PMC. 2023.</li>
       </ul>
     </div>
+
+    <!-- Article Rating -->
+
+
+    
+    <ArticleRating slug="cyberbullying-middle-school-guide" />
+
+    <!-- Related Articles -->
+    <RelatedArticles currentSlug="cyberbullying-middle-school-guide" currentTags={tags} />
+
+    <!-- Browse by Topic -->
+    <BrowseByTopic tags={tags} />
+
+    <!-- Newsletter Signup -->
+    <ArticleNewsletter articleTags={tags} />
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} slug="cyberbullying-middle-school-guide" />
+
+
 
     <!-- Footer -->
     <footer class="mt-16 pt-8 border-t border-gray-200">

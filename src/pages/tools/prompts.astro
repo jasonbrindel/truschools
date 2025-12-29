@@ -5,7 +5,6 @@ const sessionMatch = cookies.match(/session=([^;]+)/);
 const sessionToken = sessionMatch ? sessionMatch[1] : null;
 
 let isAuthenticated = false;
-let user = null;
 let prompts: any[] = [];
 
 const db = (Astro.locals as any).runtime?.env?.DB;
@@ -21,11 +20,6 @@ if (sessionToken && db) {
 
     if (session) {
       isAuthenticated = true;
-      user = {
-        id: session.user_id,
-        email: session.email,
-        name: session.name
-      };
 
       // Load all prompts
       const promptsResult = await db.prepare(
@@ -37,6 +31,7 @@ if (sessionToken && db) {
     console.error('Session/prompts check error:', e);
   }
 }
+import AdminNav from '@/components/AdminNav.astro';
 ---
 
 <!DOCTYPE html>
@@ -52,12 +47,17 @@ if (sessionToken && db) {
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 40px 20px;
+            margin: 0;
+            padding: 0;
             background: #f8f9fa;
             color: #1a1a1a;
             line-height: 1.6;
+        }
+
+        .content-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
         }
 
         .auth-required {
@@ -86,30 +86,47 @@ if (sessionToken && db) {
         }
 
         .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
             margin-bottom: 24px;
         }
 
         h1 {
             font-size: 1.75rem;
             font-weight: 600;
+            margin: 0 0 4px 0;
+        }
+
+        .subtitle {
+            color: #666;
             margin: 0;
         }
 
-        .user-info {
+        .page-tabs {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 24px;
+        }
+
+        .page-tab {
+            padding: 8px 16px;
             font-size: 0.875rem;
-            color: #666;
-        }
-
-        .user-info a {
-            color: #0066cc;
+            font-weight: 500;
             text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.15s ease;
         }
 
-        .user-info a:hover {
-            text-decoration: underline;
+        .page-tab.active {
+            background: #0066cc;
+            color: white;
+        }
+
+        .page-tab:not(.active) {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+        .page-tab:not(.active):hover {
+            background: #d1d5db;
         }
 
         .section {
@@ -353,16 +370,22 @@ if (sessionToken && db) {
         </div>
     ) : (
         <>
-            <div class="header">
-                <h1>Manage Prompts</h1>
-                <div class="user-info">
-                    {user?.name || user?.email} | <a href="/tools/article-prompt-builder">Back to Builder</a>
+            <AdminNav currentPage="prompts" />
+            <div class="content-wrapper">
+                <div class="header">
+                    <h1>Manage Prompts</h1>
+                    <p class="subtitle">Create and edit writing style prompts</p>
                 </div>
-            </div>
 
-            <div id="message-container"></div>
+                <div class="page-tabs">
+                    <a href="/tools/article-prompt-builder" class="page-tab">Prompt Builder</a>
+                    <a href="/tools/saved-prompts" class="page-tab">Saved Prompts</a>
+                    <a href="/tools/prompts" class="page-tab active">Manage Prompts</a>
+                </div>
 
-            <!-- Prompt List -->
+                <div id="message-container"></div>
+
+                <!-- Prompt List -->
             <div class="section" id="list-section">
                 <div class="section-header">
                     <h2>Writing Style Prompts</h2>
@@ -445,9 +468,6 @@ if (sessionToken && db) {
                 </form>
             </div>
 
-            <script is:inline>
-                var prompts = JSON.parse(document.currentScript.getAttribute('data-prompts') || '[]');
-            </script>
             <script is:inline define:vars={{ promptsData: JSON.stringify(prompts) }}>
                 var allPrompts = JSON.parse(promptsData);
                 var listSection = document.getElementById('list-section');
@@ -522,7 +542,7 @@ if (sessionToken && db) {
                                 var data = await response.json();
                                 if (data.success) {
                                     showMessage('Prompt deleted successfully');
-                                    setTimeout(function() { location.reload(); }, 1000);
+                                    setTimeout(function() { window.location.href = window.location.pathname + '?t=' + Date.now(); }, 1000);
                                 } else {
                                     showMessage(data.error || 'Failed to delete prompt', true);
                                 }
@@ -562,7 +582,7 @@ if (sessionToken && db) {
 
                         if (data.success) {
                             showMessage(id ? 'Prompt updated successfully' : 'Prompt created successfully');
-                            setTimeout(function() { location.reload(); }, 1000);
+                            setTimeout(function() { window.location.href = window.location.pathname + '?t=' + Date.now(); }, 1000);
                         } else {
                             showMessage(data.error || 'Failed to save prompt', true);
                         }
@@ -582,6 +602,7 @@ if (sessionToken && db) {
                     }
                 });
             </script>
+            </div>
         </>
     )}
 </body>

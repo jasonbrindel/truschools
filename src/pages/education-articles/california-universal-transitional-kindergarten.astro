@@ -1,11 +1,17 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import ArticleRating from '@/components/ArticleRating.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import BrowseByTopic from '@/components/BrowseByTopic.astro';
+import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
 import heroImage from '@/images/USED-california-tk-classroom.jpg';
 
 const title = "California's Universal Transitional Kindergarten (TK): Everything Parents Need to Know";
 const description = "A comprehensive guide to California's Universal TK program reaching full implementation in 2025-26—eligibility, teacher requirements, how it compares to other options, and whether it's right for your child.";
-const category = 'Kindergarten';
+const publishDate = "2024-08-07";
+const tags = ['Kindergarten', 'Preschool'];
 ---
 
 <Layout title={title} description={description}>
@@ -285,6 +291,26 @@ const category = 'Kindergarten';
         The California Department of Education maintains updated information and resources at its Universal Prekindergarten page, including FAQs, curriculum guidance, and links to local district contacts. Your school district's website and enrollment office are the best sources for program-specific information in your community.
       </p>
     </div>
+
+    <!-- Article Rating -->
+
+
+    
+    <ArticleRating slug="california-universal-transitional-kindergarten" />
+
+    <!-- Related Articles -->
+    <RelatedArticles currentSlug="california-universal-transitional-kindergarten" currentTags={tags} />
+
+    <!-- Browse by Topic -->
+    <BrowseByTopic tags={tags} />
+
+    <!-- Newsletter Signup -->
+    <ArticleNewsletter articleTags={tags} />
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} slug="california-universal-transitional-kindergarten" />
+
+
 
     <!-- Footer -->
     <footer class="mt-16 pt-8 border-t border-gray-200">

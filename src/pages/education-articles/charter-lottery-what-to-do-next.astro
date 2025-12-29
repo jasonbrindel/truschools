@@ -1,11 +1,17 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import ArticleRating from '@/components/ArticleRating.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import BrowseByTopic from '@/components/BrowseByTopic.astro';
+import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
 import heroImage from '@/images/USED-student-looking-up-wonder.jpg';
 
 const title = "What to Do If Your Child Doesn't Win the Charter Lottery";
 const description = "A practical guide for navigating rejection, exploring alternatives, and finding the right path forward for your child.";
-const category = 'Charter Schools';
+const publishDate = "2024-08-10";
+const tags = ['Charter Schools', 'School Choice'];
 ---
 
 <Layout title={title} description={description}>
@@ -234,6 +240,26 @@ const category = 'Charter Schools';
       </p>
 
     </div>
+
+    <!-- Article Rating -->
+
+
+    
+    <ArticleRating slug="charter-lottery-what-to-do-next" />
+
+    <!-- Related Articles -->
+    <RelatedArticles currentSlug="charter-lottery-what-to-do-next" currentTags={tags} />
+
+    <!-- Browse by Topic -->
+    <BrowseByTopic tags={tags} />
+
+    <!-- Newsletter Signup -->
+    <ArticleNewsletter articleTags={tags} />
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} slug="charter-lottery-what-to-do-next" />
+
+
 
     <!-- Footer -->
     <footer class="mt-16 pt-8 border-t border-gray-200">

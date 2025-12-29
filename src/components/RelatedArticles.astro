@@ -1,0 +1,147 @@
+---
+interface Props {
+  currentSlug: string;
+  currentTags: string[];
+  maxArticles?: number;
+}
+
+const { currentSlug, currentTags, maxArticles = 3 } = Astro.props;
+
+// Load all article files as raw text at build time
+const articleModules = import.meta.glob('../pages/education-articles/*.astro', { query: '?raw', import: 'default', eager: true });
+
+// Load all images
+const allImages = import.meta.glob<{ default: ImageMetadata }>('/src/images/*.jpg', { eager: true });
+
+interface Article {
+  slug: string;
+  title: string;
+  description: string;
+  tags: string[];
+  image: ImageMetadata | null;
+}
+
+// Parse article metadata from raw file content
+const allArticles: Article[] = Object.entries(articleModules)
+  .filter(([path]) => !path.includes('index.astro'))
+  .map(([path, content]) => {
+    const slug = path.replace('../pages/education-articles/', '').replace('.astro', '');
+    const rawContent = content as string;
+
+    // Extract metadata from file content using regex
+    const titleMatch = rawContent.match(/const title\s*=\s*["']([^"']+)["']/);
+    const descriptionMatch = rawContent.match(/const description\s*=\s*["']([^"']+)["']/);
+    const imageMatch = rawContent.match(/import heroImage from ['"]@\/images\/([^'"]+)['"]/);
+
+    // Try to extract tags array first, fall back to single category
+    const tagsMatch = rawContent.match(/const tags\s*=\s*\[([^\]]+)\]/);
+    const categoryMatch = rawContent.match(/const category\s*=\s*["']([^"']+)["']/);
+
+    let tags: string[] = [];
+    if (tagsMatch) {
+      tags = tagsMatch[1]
+        .split(',')
+        .map(t => t.trim().replace(/^["']|["']$/g, ''))
+        .filter(t => t.length > 0);
+    } else if (categoryMatch) {
+      tags = [categoryMatch[1]];
+    }
+
+    // Get the image from the glob
+    let image: ImageMetadata | null = null;
+    if (imageMatch) {
+      const imagePath = `/src/images/${imageMatch[1]}`;
+      image = allImages[imagePath]?.default || null;
+    }
+
+    return {
+      slug,
+      title: titleMatch?.[1] || slug,
+      description: descriptionMatch?.[1] || '',
+      tags: tags.length > 0 ? tags : ['Uncategorized'],
+      image,
+    };
+  });
+
+// Find related articles (share at least one tag, exclude current)
+const relatedArticles = allArticles
+  .filter(article => article.slug !== currentSlug)
+  .map(article => {
+    // Count how many tags match
+    const matchingTags = article.tags.filter(tag => currentTags.includes(tag));
+    return { ...article, matchCount: matchingTags.length };
+  })
+  .filter(article => article.matchCount > 0)
+  .sort((a, b) => b.matchCount - a.matchCount) // Sort by most matching tags
+  .slice(0, maxArticles);
+
+// Category colors for badges (same as index page)
+const categoryColors: Record<string, string> = {
+  'Financial Aid': 'bg-green-100 text-green-800',
+  'Graduate School': 'bg-purple-100 text-purple-800',
+  'College Admissions': 'bg-blue-100 text-blue-800',
+  'Kindergarten': 'bg-yellow-100 text-yellow-800',
+  'Preschool': 'bg-pink-100 text-pink-800',
+  'Elementary School': 'bg-orange-100 text-orange-800',
+  'Middle School': 'bg-teal-100 text-teal-800',
+  'High School': 'bg-indigo-100 text-indigo-800',
+  'Charter Schools': 'bg-red-100 text-red-800',
+  'Magnet Schools': 'bg-cyan-100 text-cyan-800',
+  'School Types': 'bg-slate-100 text-slate-800',
+  'School Choice': 'bg-amber-100 text-amber-800',
+  'Special Education': 'bg-violet-100 text-violet-800',
+  'Mental Health': 'bg-rose-100 text-rose-800',
+  'Vocational Education': 'bg-lime-100 text-lime-800',
+  'Future of Education': 'bg-sky-100 text-sky-800',
+  "Children's Health": 'bg-emerald-100 text-emerald-800',
+};
+---
+
+{relatedArticles.length > 0 && (
+  <div class="related-articles mt-12">
+    <h3 class="text-xl font-bold text-gray-900 mb-6">You might also like</h3>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {relatedArticles.map(article => (
+        <a
+          href={`/education-articles/${article.slug}`}
+          class="group block bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-md transition-shadow"
+        >
+          <div class="aspect-[16/9] overflow-hidden bg-gray-100">
+            {article.image ? (
+              <img
+                src={article.image.src}
+                alt={article.title}
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+            ) : (
+              <div class="w-full h-full flex items-center justify-center bg-gray-200">
+                <span class="text-gray-400 text-sm">No image</span>
+              </div>
+            )}
+          </div>
+          <div class="p-3">
+            <div class="flex flex-wrap gap-1 mb-2">
+              {article.tags.slice(0, 2).map(tag => (
+                <span class={`px-1.5 py-0.5 rounded text-xs font-medium ${categoryColors[tag] || 'bg-gray-100 text-gray-800'}`}>
+                  {tag}
+                </span>
+              ))}
+            </div>
+            <h4 class="text-sm font-semibold text-gray-900 leading-snug group-hover:text-brand-blue transition-colors line-clamp-2">
+              {article.title}
+            </h4>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+)}
+
+<style>
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>
