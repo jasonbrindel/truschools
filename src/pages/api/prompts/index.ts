@@ -1,4 +1,5 @@
 import type { APIRoute } from 'astro';
+import { captureException } from '@/lib/error-logger';
 
 // Helper to check if user is authenticated
 async function isAuthenticated(request: Request, db: any): Promise<boolean> {
@@ -24,8 +25,9 @@ async function isAuthenticated(request: Request, db: any): Promise<boolean> {
 
 // GET - List all prompts
 export const GET: APIRoute = async ({ request, locals }) => {
+  const db = (locals as any).runtime?.env?.DB;
+
   try {
-    const db = (locals as any).runtime?.env?.DB;
     if (!db) {
       return new Response(JSON.stringify({ error: 'Database connection failed' }), {
         status: 500,
@@ -54,6 +56,10 @@ export const GET: APIRoute = async ({ request, locals }) => {
 
   } catch (error) {
     console.error('Error fetching prompts:', error);
+    await captureException(db, error, {
+      tags: { endpoint: '/api/prompts', method: 'GET' },
+      request
+    });
     return new Response(JSON.stringify({ error: 'Failed to fetch prompts' }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' }
@@ -63,8 +69,10 @@ export const GET: APIRoute = async ({ request, locals }) => {
 
 // POST - Create new prompt
 export const POST: APIRoute = async ({ request, locals }) => {
+  const db = (locals as any).runtime?.env?.DB;
+  let body: any;
+
   try {
-    const db = (locals as any).runtime?.env?.DB;
     if (!db) {
       return new Response(JSON.stringify({ error: 'Database connection failed' }), {
         status: 500,
@@ -80,7 +88,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
       });
     }
 
-    const body = await request.json();
+    body = await request.json();
     const { slug, name, description, prompt_template, sort_order, is_active } = body;
 
     if (!slug || !name || !prompt_template) {
@@ -118,6 +126,11 @@ export const POST: APIRoute = async ({ request, locals }) => {
         headers: { 'Content-Type': 'application/json' }
       });
     }
+    await captureException(db, error, {
+      tags: { endpoint: '/api/prompts', method: 'POST' },
+      extra: { slug: body?.slug },
+      request
+    });
     return new Response(JSON.stringify({ error: 'Failed to create prompt' }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' }

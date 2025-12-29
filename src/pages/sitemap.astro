@@ -1,0 +1,320 @@
+---
+import Layout from '@/layouts/Layout.astro';
+
+const title = "Sitemap";
+const description = "Complete sitemap of TruSchools. Find every page on our site including school directories, educational articles, financial aid resources, and more.";
+
+// US States for dynamic pages
+const states = [
+  'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware',
+  'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky',
+  'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi',
+  'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico',
+  'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania',
+  'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont',
+  'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming', 'District of Columbia'
+];
+
+function slugify(name: string): string {
+  return name.toLowerCase().replace(/\s+/g, '-');
+}
+---
+
+<Layout title={title} description={description}>
+  <div class="container py-5">
+    <!-- Breadcrumb -->
+    <nav class="text-sm mb-4">
+      <ol class="flex flex-wrap items-center gap-2 text-gray-600">
+        <li><a href="/" class="hover:text-brand-blue">Home</a></li>
+        <li class="text-gray-400">/</li>
+        <li class="text-gray-900 font-medium">Sitemap</li>
+      </ol>
+    </nav>
+
+    <div class="max-w-[1200px] mx-auto">
+      <div class="box-rounded mb-6">
+        <h1 class="text-brand-blue text-3xl mb-2">Sitemap</h1>
+        <p class="text-gray-600 mb-0">Browse all pages on TruSchools organized by category.</p>
+      </div>
+
+      <!-- Main Categories Grid -->
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+
+        <!-- K-12 Schools -->
+        <div class="box-rounded">
+          <h2 class="text-brand-green-text text-xl mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+            K-12 Schools
+          </h2>
+          <ul class="space-y-2 text-gray-700">
+            <li><a href="/schools" class="hover:text-brand-blue hover:underline">All K-12 Schools</a></li>
+            <li><a href="/preschools" class="hover:text-brand-blue hover:underline">Preschools</a></li>
+            <li><a href="/kindergartens" class="hover:text-brand-blue hover:underline">Kindergartens</a></li>
+            <li><a href="/elementary-schools" class="hover:text-brand-blue hover:underline">Elementary Schools</a></li>
+            <li><a href="/middle-schools" class="hover:text-brand-blue hover:underline">Middle Schools</a></li>
+            <li><a href="/high-schools" class="hover:text-brand-blue hover:underline">High Schools</a></li>
+            <li><a href="/charter-schools" class="hover:text-brand-blue hover:underline">Charter Schools</a></li>
+            <li><a href="/magnet-schools" class="hover:text-brand-blue hover:underline">Magnet Schools</a></li>
+            <li><a href="/private-schools" class="hover:text-brand-blue hover:underline">Private Schools</a></li>
+          </ul>
+        </div>
+
+        <!-- Higher Education -->
+        <div class="box-rounded">
+          <h2 class="text-brand-green-text text-xl mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 14l9-5-9-5-9 5 9 5z"></path><path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222"></path></svg>
+            Higher Education
+          </h2>
+          <ul class="space-y-2 text-gray-700">
+            <li><a href="/colleges-universities" class="hover:text-brand-blue hover:underline">All Colleges & Universities</a></li>
+          </ul>
+          <p class="text-sm text-gray-500 mt-3 mb-0">Browse by state to find specific colleges and their detailed profiles including admissions, programs, faculty, and financial aid information.</p>
+        </div>
+
+        <!-- Vocational Schools -->
+        <div class="box-rounded">
+          <h2 class="text-brand-green-text text-xl mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+            Vocational Schools
+          </h2>
+          <ul class="space-y-2 text-gray-700">
+            <li><a href="/vocational-schools" class="hover:text-brand-blue hover:underline">All Vocational Schools</a></li>
+            <li><a href="/beauty-schools" class="hover:text-brand-blue hover:underline">Beauty Schools</a></li>
+            <li><a href="/trade-schools" class="hover:text-brand-blue hover:underline">Trade Schools</a></li>
+            <li><a href="/healthcare-schools" class="hover:text-brand-blue hover:underline">Healthcare Schools</a></li>
+            <li><a href="/technology-schools" class="hover:text-brand-blue hover:underline">Technology Schools</a></li>
+            <li><a href="/culinary-schools" class="hover:text-brand-blue hover:underline">Culinary Schools</a></li>
+          </ul>
+        </div>
+
+        <!-- Financial Aid -->
+        <div class="box-rounded">
+          <h2 class="text-brand-green-text text-xl mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            Financial Aid
+          </h2>
+          <ul class="space-y-2 text-gray-700">
+            <li><a href="/financial-aid" class="hover:text-brand-blue hover:underline">Financial Aid Overview</a></li>
+            <li class="font-semibold mt-3 text-gray-900">FAFSA</li>
+            <li class="pl-3"><a href="/financial-aid/fafsa/application-guide" class="hover:text-brand-blue hover:underline">FAFSA Application Guide</a></li>
+            <li class="pl-3"><a href="/financial-aid/fafsa/common-mistakes" class="hover:text-brand-blue hover:underline">Common FAFSA Mistakes</a></li>
+            <li class="pl-3"><a href="/financial-aid/fafsa/deadlines" class="hover:text-brand-blue hover:underline">FAFSA Deadlines</a></li>
+            <li class="pl-3"><a href="/financial-aid/fafsa/federal-school-codes" class="hover:text-brand-blue hover:underline">Federal School Codes</a></li>
+            <li class="font-semibold mt-3 text-gray-900">Grants & Scholarships</li>
+            <li class="pl-3"><a href="/financial-aid/grants" class="hover:text-brand-blue hover:underline">Federal Grants</a></li>
+            <li class="pl-3"><a href="/financial-aid/scholarships" class="hover:text-brand-blue hover:underline">State Scholarships</a></li>
+          </ul>
+        </div>
+
+        <!-- Free Classes -->
+        <div class="box-rounded">
+          <h2 class="text-brand-green-text text-xl mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+            Free Classes
+          </h2>
+          <ul class="space-y-2 text-gray-700">
+            <li><a href="/classes" class="hover:text-brand-blue hover:underline">All Free Classes</a></li>
+          </ul>
+          <p class="text-sm text-gray-500 mt-3 mb-0">Browse free video courses by department and subject, featuring content from top universities and educational platforms.</p>
+        </div>
+
+        <!-- Company Pages -->
+        <div class="box-rounded">
+          <h2 class="text-brand-green-text text-xl mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            Company
+          </h2>
+          <ul class="space-y-2 text-gray-700">
+            <li><a href="/" class="hover:text-brand-blue hover:underline">Home</a></li>
+            <li><a href="/about" class="hover:text-brand-blue hover:underline">About Us</a></li>
+            <li><a href="/search" class="hover:text-brand-blue hover:underline">Search</a></li>
+            <li><a href="/privacy-policy" class="hover:text-brand-blue hover:underline">Privacy Policy</a></li>
+            <li><a href="/terms-of-use" class="hover:text-brand-blue hover:underline">Terms of Use</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Education Articles Section -->
+      <div class="box-rounded mb-8">
+        <h2 class="text-brand-green-text text-xl mb-4 flex items-center gap-2">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+          Education Articles
+        </h2>
+        <p class="text-gray-600 mb-6">Research-backed guides to help you make informed education decisions.</p>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-2">
+          <!-- Preschool Articles -->
+          <div class="mb-6">
+            <h3 class="font-bold text-gray-900 mb-3 border-b border-gray-200 pb-2">Preschool</h3>
+            <ul class="space-y-2 text-gray-700 text-sm">
+              <li><a href="/education-articles/choosing-a-preschool" class="hover:text-brand-blue hover:underline">Choosing a Preschool</a></li>
+              <li><a href="/education-articles/how-to-choose-a-preschool" class="hover:text-brand-blue hover:underline">How to Choose a Preschool</a></li>
+              <li><a href="/education-articles/is-preschool-worth-it" class="hover:text-brand-blue hover:underline">Is Preschool Worth It?</a></li>
+              <li><a href="/education-articles/montessori-vs-traditional-preschool" class="hover:text-brand-blue hover:underline">Montessori vs Traditional Preschool</a></li>
+              <li><a href="/education-articles/what-actually-matters-in-preschool" class="hover:text-brand-blue hover:underline">What Actually Matters in Preschool</a></li>
+              <li><a href="/education-articles/what-does-a-good-preschool-look-like" class="hover:text-brand-blue hover:underline">What Does a Good Preschool Look Like</a></li>
+              <li><a href="/education-articles/when-your-preschooler-needs-more-help" class="hover:text-brand-blue hover:underline">When Your Preschooler Needs More Help</a></li>
+            </ul>
+          </div>
+
+          <!-- Kindergarten Articles -->
+          <div class="mb-6">
+            <h3 class="font-bold text-gray-900 mb-3 border-b border-gray-200 pb-2">Kindergarten</h3>
+            <ul class="space-y-2 text-gray-700 text-sm">
+              <li><a href="/education-articles/california-universal-transitional-kindergarten" class="hover:text-brand-blue hover:underline">California Universal TK</a></li>
+              <li><a href="/education-articles/how-to-choose-the-right-kindergarten" class="hover:text-brand-blue hover:underline">How to Choose the Right Kindergarten</a></li>
+              <li><a href="/education-articles/is-my-child-ready-for-kindergarten" class="hover:text-brand-blue hover:underline">Is My Child Ready for Kindergarten?</a></li>
+              <li><a href="/education-articles/kindergarten-age-cutoff-dates-by-state" class="hover:text-brand-blue hover:underline">Kindergarten Age Cutoff Dates by State</a></li>
+              <li><a href="/education-articles/kindergarten-separation-anxiety" class="hover:text-brand-blue hover:underline">Kindergarten Separation Anxiety</a></li>
+              <li><a href="/education-articles/should-you-delay-kindergarten" class="hover:text-brand-blue hover:underline">Should You Delay Kindergarten?</a></li>
+              <li><a href="/education-articles/what-kindergarten-really-requires" class="hover:text-brand-blue hover:underline">What Kindergarten Really Requires</a></li>
+            </ul>
+          </div>
+
+          <!-- Elementary & Middle School Articles -->
+          <div class="mb-6">
+            <h3 class="font-bold text-gray-900 mb-3 border-b border-gray-200 pb-2">Elementary & Middle School</h3>
+            <ul class="space-y-2 text-gray-700 text-sm">
+              <li><a href="/education-articles/how-to-choose-the-right-elementary-school" class="hover:text-brand-blue hover:underline">How to Choose the Right Elementary School</a></li>
+              <li><a href="/education-articles/middle-school-transition-guide" class="hover:text-brand-blue hover:underline">Middle School Transition Guide</a></li>
+              <li><a href="/education-articles/cyberbullying-middle-school-guide" class="hover:text-brand-blue hover:underline">Cyberbullying in Middle School Guide</a></li>
+              <li><a href="/education-articles/signs-your-child-is-being-bullied" class="hover:text-brand-blue hover:underline">Signs Your Child Is Being Bullied</a></li>
+              <li><a href="/education-articles/when-worry-becomes-something-more" class="hover:text-brand-blue hover:underline">When Worry Becomes Something More</a></li>
+            </ul>
+          </div>
+
+          <!-- High School Articles -->
+          <div class="mb-6">
+            <h3 class="font-bold text-gray-900 mb-3 border-b border-gray-200 pb-2">High School</h3>
+            <ul class="space-y-2 text-gray-700 text-sm">
+              <li><a href="/education-articles/ap-classes-explained" class="hover:text-brand-blue hover:underline">AP Classes Explained</a></li>
+              <li><a href="/education-articles/high-school-graduation-requirements-by-state" class="hover:text-brand-blue hover:underline">High School Graduation Requirements by State</a></li>
+              <li><a href="/education-articles/weighted-vs-unweighted-gpa" class="hover:text-brand-blue hover:underline">Weighted vs Unweighted GPA</a></li>
+              <li><a href="/education-articles/what-is-a-stem-school" class="hover:text-brand-blue hover:underline">What Is a STEM School?</a></li>
+            </ul>
+          </div>
+
+          <!-- Charter School Articles -->
+          <div class="mb-6">
+            <h3 class="font-bold text-gray-900 mb-3 border-b border-gray-200 pb-2">Charter Schools</h3>
+            <ul class="space-y-2 text-gray-700 text-sm">
+              <li><a href="/education-articles/charter-schools-what-parents-need-to-know" class="hover:text-brand-blue hover:underline">Charter Schools: What Parents Need to Know</a></li>
+              <li><a href="/education-articles/is-a-charter-school-right-for-your-child" class="hover:text-brand-blue hover:underline">Is a Charter School Right for Your Child?</a></li>
+              <li><a href="/education-articles/how-to-apply-to-charter-schools" class="hover:text-brand-blue hover:underline">How to Apply to Charter Schools</a></li>
+              <li><a href="/education-articles/charter-school-lottery-explained" class="hover:text-brand-blue hover:underline">Charter School Lottery Explained</a></li>
+              <li><a href="/education-articles/charter-lottery-what-to-do-next" class="hover:text-brand-blue hover:underline">Charter Lottery: What to Do Next</a></li>
+              <li><a href="/education-articles/charter-school-warning-signs" class="hover:text-brand-blue hover:underline">Charter School Warning Signs</a></li>
+              <li><a href="/education-articles/charter-schools-and-special-education" class="hover:text-brand-blue hover:underline">Charter Schools and Special Education</a></li>
+              <li><a href="/education-articles/what-to-ask-on-a-charter-school-tour" class="hover:text-brand-blue hover:underline">What to Ask on a Charter School Tour</a></li>
+            </ul>
+          </div>
+
+          <!-- Magnet School Articles -->
+          <div class="mb-6">
+            <h3 class="font-bold text-gray-900 mb-3 border-b border-gray-200 pb-2">Magnet Schools</h3>
+            <ul class="space-y-2 text-gray-700 text-sm">
+              <li><a href="/education-articles/understanding-magnet-schools" class="hover:text-brand-blue hover:underline">Understanding Magnet Schools</a></li>
+              <li><a href="/education-articles/magnet-schools-guide" class="hover:text-brand-blue hover:underline">Magnet Schools Guide</a></li>
+              <li><a href="/education-articles/magnet-school-admissions-guide" class="hover:text-brand-blue hover:underline">Magnet School Admissions Guide</a></li>
+              <li><a href="/education-articles/magnet-school-requirements-explained" class="hover:text-brand-blue hover:underline">Magnet School Requirements Explained</a></li>
+              <li><a href="/education-articles/how-magnet-school-lotteries-work" class="hover:text-brand-blue hover:underline">How Magnet School Lotteries Work</a></li>
+              <li><a href="/education-articles/magnet-school-transportation" class="hover:text-brand-blue hover:underline">Magnet School Transportation</a></li>
+              <li><a href="/education-articles/magnet-vs-charter-vs-neighborhood-school" class="hover:text-brand-blue hover:underline">Magnet vs Charter vs Neighborhood School</a></li>
+            </ul>
+          </div>
+
+          <!-- School Choice & General Articles -->
+          <div class="mb-6">
+            <h3 class="font-bold text-gray-900 mb-3 border-b border-gray-200 pb-2">School Choice</h3>
+            <ul class="space-y-2 text-gray-700 text-sm">
+              <li><a href="/education-articles/how-to-find-the-right-school" class="hover:text-brand-blue hover:underline">How to Find the Right School</a></li>
+              <li><a href="/education-articles/public-vs-private-school" class="hover:text-brand-blue hover:underline">Public vs Private School</a></li>
+              <li><a href="/education-articles/the-rise-of-school-choice" class="hover:text-brand-blue hover:underline">The Rise of School Choice</a></li>
+              <li><a href="/education-articles/ieps-vs-504-plans" class="hover:text-brand-blue hover:underline">IEPs vs 504 Plans</a></li>
+            </ul>
+          </div>
+
+          <!-- College Admissions Articles -->
+          <div class="mb-6">
+            <h3 class="font-bold text-gray-900 mb-3 border-b border-gray-200 pb-2">College Admissions</h3>
+            <ul class="space-y-2 text-gray-700 text-sm">
+              <li><a href="/education-articles/college-application-timeline" class="hover:text-brand-blue hover:underline">College Application Timeline</a></li>
+              <li><a href="/education-articles/common-app-essay-guide" class="hover:text-brand-blue hover:underline">Common App Essay Guide</a></li>
+              <li><a href="/education-articles/choosing-a-college-major" class="hover:text-brand-blue hover:underline">Choosing a College Major</a></li>
+              <li><a href="/education-articles/medical-school-mcat-gpa-requirements" class="hover:text-brand-blue hover:underline">Medical School MCAT & GPA Requirements</a></li>
+              <li><a href="/education-articles/law-school-lsat-vs-gre" class="hover:text-brand-blue hover:underline">Law School: LSAT vs GRE</a></li>
+              <li><a href="/education-articles/how-to-pay-for-graduate-school" class="hover:text-brand-blue hover:underline">How to Pay for Graduate School</a></li>
+            </ul>
+          </div>
+
+          <!-- Financial Aid Articles -->
+          <div class="mb-6">
+            <h3 class="font-bold text-gray-900 mb-3 border-b border-gray-200 pb-2">Financial Aid & Cost</h3>
+            <ul class="space-y-2 text-gray-700 text-sm">
+              <li><a href="/education-articles/fafsa-2026-2027-parents-guide" class="hover:text-brand-blue hover:underline">FAFSA 2026-2027 Parent's Guide</a></li>
+              <li><a href="/education-articles/the-price-of-admission" class="hover:text-brand-blue hover:underline">The Price of Admission</a></li>
+              <li><a href="/education-articles/the-numbers-behind-the-promise" class="hover:text-brand-blue hover:underline">The Numbers Behind the Promise</a></li>
+              <li><a href="/education-articles/architecture-of-college-funding-grants" class="hover:text-brand-blue hover:underline">Architecture of College Funding Grants</a></li>
+              <li><a href="/education-articles/scholarships-running-on-software" class="hover:text-brand-blue hover:underline">Scholarships Running on Software</a></li>
+              <li><a href="/education-articles/student-loan-infrastructure-guide" class="hover:text-brand-blue hover:underline">Student Loan Infrastructure Guide</a></li>
+            </ul>
+          </div>
+
+          <!-- Vocational Education Articles -->
+          <div class="mb-6">
+            <h3 class="font-bold text-gray-900 mb-3 border-b border-gray-200 pb-2">Vocational Education</h3>
+            <ul class="space-y-2 text-gray-700 text-sm">
+              <li><a href="/education-articles/the-comeback-of-vocational-schools" class="hover:text-brand-blue hover:underline">The Comeback of Vocational Schools</a></li>
+              <li><a href="/education-articles/the-diploma-and-the-torque-wrench" class="hover:text-brand-blue hover:underline">The Diploma and the Torque Wrench</a></li>
+            </ul>
+          </div>
+
+          <!-- Future of Education Articles -->
+          <div class="mb-6">
+            <h3 class="font-bold text-gray-900 mb-3 border-b border-gray-200 pb-2">Future of Education</h3>
+            <ul class="space-y-2 text-gray-700 text-sm">
+              <li><a href="/education-articles/the-stillness-epidemic" class="hover:text-brand-blue hover:underline">The Stillness Epidemic</a></li>
+              <li><a href="/education-articles/what-to-teach-when-ai-does-the-work" class="hover:text-brand-blue hover:underline">What to Teach When AI Does the Work</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="mt-6 pt-4 border-t border-gray-200">
+          <a href="/education-articles" class="text-brand-blue hover:underline font-medium">View All Education Articles &rarr;</a>
+        </div>
+      </div>
+
+      <!-- Browse Schools by State -->
+      <div class="box-rounded mb-8">
+        <h2 class="text-brand-green-text text-xl mb-4 flex items-center gap-2">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
+          Browse Schools by State
+        </h2>
+        <p class="text-gray-600 mb-6">Find K-12 schools, colleges, and vocational schools in every state.</p>
+
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 text-sm">
+          {states.map(state => (
+            <a href={`/schools/${slugify(state)}`} class="text-gray-700 hover:text-brand-blue hover:underline py-1">{state}</a>
+          ))}
+        </div>
+      </div>
+
+      <!-- Browse Scholarships by State -->
+      <div class="box-rounded mb-8">
+        <h2 class="text-brand-green-text text-xl mb-4 flex items-center gap-2">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          Browse Scholarships by State
+        </h2>
+        <p class="text-gray-600 mb-6">Find state-specific scholarships and financial aid programs.</p>
+
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 text-sm">
+          {states.map(state => (
+            <a href={`/financial-aid/scholarships/${slugify(state)}`} class="text-gray-700 hover:text-brand-blue hover:underline py-1">{state}</a>
+          ))}
+        </div>
+      </div>
+
+    </div>
+  </div>
+</Layout>

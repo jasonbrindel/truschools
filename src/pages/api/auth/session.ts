@@ -1,6 +1,9 @@
 import type { APIRoute } from 'astro';
+import { captureException } from '@/lib/error-logger';
 
 export const GET: APIRoute = async ({ request, locals }) => {
+  const db = (locals as any).runtime?.env?.DB;
+
   try {
     // Get session cookie
     const cookies = request.headers.get('cookie') || '';
@@ -17,7 +20,6 @@ export const GET: APIRoute = async ({ request, locals }) => {
     }
 
     // Get database connection
-    const db = (locals as any).runtime?.env?.DB;
     if (!db) {
       return new Response(JSON.stringify({
         authenticated: false,
@@ -59,6 +61,10 @@ export const GET: APIRoute = async ({ request, locals }) => {
 
   } catch (error) {
     console.error('Session check error:', error);
+    await captureException(db, error, {
+      tags: { endpoint: '/api/auth/session', method: 'GET' },
+      request
+    });
     return new Response(JSON.stringify({
       authenticated: false,
       error: 'An error occurred'

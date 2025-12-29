@@ -93,6 +93,10 @@ const { questionId, pageSlug, question, answers } = Astro.props;
 
   // Submit vote
   async function submitVote(pollContainer: HTMLElement, answerText: string) {
+    // Prevent double submission
+    if (pollContainer.dataset.submitting === 'true') return;
+    pollContainer.dataset.submitting = 'true';
+
     const questionId = pollContainer.dataset.questionId;
     const pageSlug = pollContainer.dataset.pageSlug;
     const questionText = pollContainer.dataset.questionText;
@@ -130,6 +134,7 @@ const { questionId, pageSlug, question, answers } = Astro.props;
     } catch (error) {
       console.error('Error submitting vote:', error);
       // Re-enable buttons on error
+      pollContainer.dataset.submitting = 'false';
       buttons.forEach(btn => {
         (btn as HTMLButtonElement).disabled = false;
         btn.classList.remove('opacity-50', 'cursor-not-allowed');
@@ -187,6 +192,10 @@ const { questionId, pageSlug, question, answers } = Astro.props;
 
     polls.forEach(poll => {
       const pollContainer = poll as HTMLElement;
+
+      // Skip if already initialized
+      if (pollContainer.dataset.initialized === 'true') return;
+      pollContainer.dataset.initialized = 'true';
 
       // Check for existing votes
       checkExistingVote(pollContainer);

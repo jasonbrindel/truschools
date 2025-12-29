@@ -286,8 +286,9 @@ const promptsJson = JSON.stringify(prompts.reduce((acc: any, p: any) => {
   acc[p.slug] = p.prompt_template;
   return acc;
 }, {}));
----
 
+import AdminNav from '@/components/AdminNav.astro';
+---
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -301,12 +302,17 @@ const promptsJson = JSON.stringify(prompts.reduce((acc: any, p: any) => {
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 40px 20px;
+            margin: 0;
+            padding: 0;
             background: #f8f9fa;
             color: #1a1a1a;
             line-height: 1.6;
+        }
+
+        .content-wrapper {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
         }
 
         .auth-required {
@@ -591,10 +597,12 @@ const promptsJson = JSON.stringify(prompts.reduce((acc: any, p: any) => {
         </div>
     ) : (
         <>
+            <AdminNav currentPage="prompt-builder" />
+            <div class="content-wrapper">
             <div class="header">
                 <h1>Article Prompt Builder</h1>
                 <div class="user-info">
-                    {user?.name || user?.email} | <a href="/tools/prompts">Manage Prompts</a> | <a href="/">Back to TruSchools</a>
+                    {user?.name || user?.email} | <a href="/tools/prompts">Manage Prompts</a>
                 </div>
             </div>
             <p class="subtitle">Enter a topic, choose a writing style, and generate your prompt.</p>
@@ -720,6 +728,7 @@ const promptsJson = JSON.stringify(prompts.reduce((acc: any, p: any) => {
                     }
                 });
             </script>
+            </div>
         </>
     )}
 </body>

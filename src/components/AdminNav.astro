@@ -1,0 +1,50 @@
+---
+interface Props {
+  currentPage?: string;
+}
+
+const { currentPage = '' } = Astro.props;
+
+const navItems = [
+  { href: '/tools/article-prompt-builder', label: 'Prompt Builder', id: 'prompt-builder' },
+  { href: '/admin/subscribers', label: 'Subscribers', id: 'subscribers' },
+  { href: '/admin/polls', label: 'Polls', id: 'polls' },
+  { href: '/admin/errors', label: 'Error Log', id: 'errors' },
+];
+---
+
+<nav class="bg-gray-800 text-white mb-6">
+  <div class="container">
+    <div class="flex items-center justify-between py-3">
+      <div class="flex items-center gap-1">
+        <span class="text-gray-400 text-sm mr-3">Admin Tools:</span>
+        {navItems.map((item) => (
+          <a
+            href={item.href}
+            class:list={[
+              "px-3 py-1.5 rounded text-sm font-medium transition-colors",
+              currentPage === item.id
+                ? "bg-gray-900 text-white"
+                : "text-gray-300 hover:bg-gray-700 hover:text-white"
+            ]}
+          >
+            {item.label}
+          </a>
+        ))}
+      </div>
+      <a href="/" class="text-gray-400 hover:text-white text-sm">
+        Back to TruSchools
+      </a>
+    </div>
+  </div>
+</nav>
+
+<style>
+  .container {
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+</style>

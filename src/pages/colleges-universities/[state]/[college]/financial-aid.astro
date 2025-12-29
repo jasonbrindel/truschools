@@ -1,0 +1,5 @@
+---
+// Redirect old /colleges-universities/[state]/[college]/financial-aid URLs to main college page
+const { state, college } = Astro.params;
+return Astro.redirect(`/colleges-universities/${state}/${college}`, 301);
+---

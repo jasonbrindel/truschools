@@ -1,4 +1,5 @@
 import type { APIRoute } from 'astro';
+import { captureException } from '@/lib/error-logger';
 
 // Hash IP address for privacy using Web Crypto API (Cloudflare compatible)
 async function hashIP(ip: string): Promise<string> {
@@ -17,8 +18,10 @@ function generateSessionId(): string {
 
 // POST - Submit a poll vote
 export const POST: APIRoute = async ({ request, locals }) => {
+  const db = (locals as any).runtime?.env?.DB;
+  let body: any;
+
   try {
-    const db = (locals as any).runtime?.env?.DB;
     if (!db) {
       return new Response(JSON.stringify({ error: 'Database connection failed' }), {
         status: 500,
@@ -26,7 +29,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
       });
     }
 
-    const body = await request.json();
+    body = await request.json();
     const { questionId, pageSlug, questionText, answerText, sessionId } = body;
 
     if (!questionId || !pageSlug || !questionText || !answerText) {
@@ -79,10 +82,10 @@ export const POST: APIRoute = async ({ request, locals }) => {
       }
     }
 
-    // Insert the vote
+    // Insert the vote (use INSERT OR IGNORE to prevent duplicates at DB level)
     const finalSessionId = sessionId || generateSessionId();
     await db.prepare(`
-      INSERT INTO qa_responses (question_id, page_slug, question_text, answer_text, session_id, ip_hash, user_agent)
+      INSERT OR IGNORE INTO qa_responses (question_id, page_slug, question_text, answer_text, session_id, ip_hash, user_agent)
       VALUES (?, ?, ?, ?, ?, ?, ?)
     `).bind(
       questionId,
@@ -123,6 +126,11 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
   } catch (error) {
     console.error('Error submitting poll vote:', error);
+    await captureException(db, error, {
+      tags: { endpoint: '/api/poll/vote', method: 'POST' },
+      extra: { questionId: body?.questionId, pageSlug: body?.pageSlug },
+      request
+    });
     return new Response(JSON.stringify({ error: 'Failed to submit vote' }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' }
@@ -132,8 +140,10 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
 // GET - Get poll results without voting
 export const GET: APIRoute = async ({ request, locals }) => {
+  const db = (locals as any).runtime?.env?.DB;
+  const url = new URL(request.url);
+
   try {
-    const db = (locals as any).runtime?.env?.DB;
     if (!db) {
       return new Response(JSON.stringify({ error: 'Database connection failed' }), {
         status: 500,
@@ -141,7 +151,6 @@ export const GET: APIRoute = async ({ request, locals }) => {
       });
     }
 
-    const url = new URL(request.url);
     const questionId = url.searchParams.get('questionId');
     const sessionId = url.searchParams.get('sessionId');
 
@@ -190,6 +199,11 @@ export const GET: APIRoute = async ({ request, locals }) => {
 
   } catch (error) {
     console.error('Error fetching poll results:', error);
+    await captureException(db, error, {
+      tags: { endpoint: '/api/poll/vote', method: 'GET' },
+      extra: { questionId: url.searchParams.get('questionId') },
+      request
+    });
     return new Response(JSON.stringify({ error: 'Failed to fetch results' }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' }

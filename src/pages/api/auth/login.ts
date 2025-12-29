@@ -1,4 +1,5 @@
 import type { APIRoute } from 'astro';
+import { captureException } from '@/lib/error-logger';
 
 // Helper function to verify password using PBKDF2
 async function verifyPassword(password: string, storedHash: string): Promise<boolean> {
@@ -52,8 +53,11 @@ function generateSessionToken(): string {
 }
 
 export const POST: APIRoute = async ({ request, locals }) => {
+  const db = (locals as any).runtime?.env?.DB;
+  let body: any;
+
   try {
-    const body = await request.json();
+    body = await request.json();
     const { email, password, remember } = body;
 
     if (!email || !password) {
@@ -67,7 +71,6 @@ export const POST: APIRoute = async ({ request, locals }) => {
     }
 
     // Get database connection
-    const db = (locals as any).runtime?.env?.DB;
     if (!db) {
       return new Response(JSON.stringify({
         success: false,
@@ -158,6 +161,11 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
   } catch (error) {
     console.error('Login error:', error);
+    await captureException(db, error, {
+      tags: { endpoint: '/api/auth/login', method: 'POST' },
+      extra: { email: body?.email },
+      request
+    });
     return new Response(JSON.stringify({
       success: false,
       error: 'An error occurred during login'

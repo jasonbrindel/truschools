@@ -1,0 +1,602 @@
+---
+import AdminNav from '@/components/AdminNav.astro';
+
+const title = "Newsletter Subscribers - TruSchools";
+
+// Format UTC date to Eastern time
+function formatEastern(utcDate: string, includeTime = false): string {
+  const date = new Date(utcDate + 'Z'); // Append Z to treat as UTC
+  return date.toLocaleString('en-US', {
+    timeZone: 'America/New_York',
+    month: 'numeric',
+    day: 'numeric',
+    year: 'numeric',
+    ...(includeTime && { hour: 'numeric', minute: '2-digit', hour12: true })
+  });
+}
+
+// Get database connection
+const db = (Astro.locals as any).runtime?.env?.DB;
+
+// Check authentication
+const cookies = Astro.request.headers.get('cookie') || '';
+const sessionMatch = cookies.match(/session=([^;]+)/);
+const sessionToken = sessionMatch ? sessionMatch[1] : null;
+
+let isAuthenticated = false;
+if (sessionToken && db) {
+  const session = await db.prepare(`
+    SELECT s.*, u.id as user_id
+    FROM sessions s
+    JOIN users u ON s.user_id = u.id
+    WHERE s.token = ? AND s.expires_at > datetime('now')
+  `).bind(sessionToken).first();
+  isAuthenticated = !!session;
+}
+
+// Redirect if not authenticated
+if (!isAuthenticated) {
+  return Astro.redirect('/login?redirect=/admin/subscribers');
+}
+
+// Get query params
+const url = new URL(Astro.request.url);
+const page = parseInt(url.searchParams.get('page') || '1');
+const statusFilter = url.searchParams.get('status') || 'all';
+const limit = 50;
+const offset = (page - 1) * limit;
+
+// Build query based on filters
+let whereClause = '';
+if (statusFilter === 'active') {
+  whereClause = "WHERE status = 'active'";
+} else if (statusFilter === 'unsubscribed') {
+  whereClause = "WHERE status = 'unsubscribed'";
+}
+
+// Fetch subscribers
+let subscribers: any[] = [];
+let total = 0;
+let stats = {
+  total: 0,
+  active: 0,
+  unsubscribed: 0,
+  today: 0,
+  thisWeek: 0,
+};
+let categoryStats: any[] = [];
+
+if (db) {
+  // Get total count
+  const countResult = await db.prepare(`
+    SELECT COUNT(*) as count FROM newsletter_subscriptions ${whereClause}
+  `).first();
+  total = (countResult as any)?.count || 0;
+
+  // Get subscribers
+  const subscribersResult = await db.prepare(`
+    SELECT * FROM newsletter_subscriptions
+    ${whereClause}
+    ORDER BY created_at DESC
+    LIMIT ? OFFSET ?
+  `).bind(limit, offset).all();
+  subscribers = (subscribersResult as any)?.results || [];
+
+  // Get stats
+  const [totalCount, activeCount, unsubCount, todayCount, weekCount] = await Promise.all([
+    db.prepare('SELECT COUNT(*) as count FROM newsletter_subscriptions').first(),
+    db.prepare("SELECT COUNT(*) as count FROM newsletter_subscriptions WHERE status = 'active'").first(),
+    db.prepare("SELECT COUNT(*) as count FROM newsletter_subscriptions WHERE status = 'unsubscribed'").first(),
+    db.prepare("SELECT COUNT(*) as count FROM newsletter_subscriptions WHERE created_at >= date('now')").first(),
+    db.prepare("SELECT COUNT(*) as count FROM newsletter_subscriptions WHERE created_at >= date('now', '-7 days')").first(),
+  ]);
+
+  stats.total = (totalCount as any)?.count || 0;
+  stats.active = (activeCount as any)?.count || 0;
+  stats.unsubscribed = (unsubCount as any)?.count || 0;
+  stats.today = (todayCount as any)?.count || 0;
+  stats.thisWeek = (weekCount as any)?.count || 0;
+
+  // Get category breakdown
+  const allSubs = await db.prepare("SELECT categories FROM newsletter_subscriptions WHERE status = 'active'").all();
+  const catCounts: Record<string, number> = {};
+  for (const sub of (allSubs as any)?.results || []) {
+    if (sub.categories) {
+      for (const cat of sub.categories.split(',')) {
+        catCounts[cat] = (catCounts[cat] || 0) + 1;
+      }
+    }
+  }
+  categoryStats = Object.entries(catCounts)
+    .map(([category, count]) => ({ category, count }))
+    .sort((a, b) => b.count - a.count);
+}
+
+const totalPages = Math.ceil(total / limit);
+
+// Handle delete action
+if (Astro.request.method === 'POST') {
+  const formData = await Astro.request.formData();
+  const action = formData.get('action');
+  const subscriberId = formData.get('id');
+
+  if (action === 'delete' && subscriberId && db) {
+    await db.prepare('DELETE FROM newsletter_subscriptions WHERE id = ?').bind(subscriberId).run();
+    return Astro.redirect('/admin/subscribers?deleted=1');
+  }
+}
+
+// Category labels
+const categoryLabels: Record<string, string> = {
+  'preschool': 'Preschool',
+  'kindergarten': 'Kindergarten',
+  'elementary': 'K-5 Elementary',
+  'middle': 'Middle School',
+  'high': 'High School',
+  'charter': 'Charter Schools',
+  'magnet': 'Magnet Schools',
+  'private': 'Private Schools',
+  'college': 'College',
+  'university': 'University',
+  'grad-school': 'Grad School',
+  'financial-aid': 'Financial Aid',
+  'trade': 'Trade Schools',
+  'healthcare': 'Healthcare',
+  'technology': 'Tech Schools',
+  'culinary': 'Culinary',
+  'beauty': 'Beauty Schools',
+};
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>{title}</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f8f9fa;
+      color: #1a1a1a;
+      line-height: 1.6;
+    }
+
+    .content-wrapper {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    h1 {
+      font-size: 1.75rem;
+      font-weight: 600;
+      margin: 0 0 8px 0;
+    }
+
+    .subtitle {
+      color: #666;
+      margin-bottom: 32px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .stat-card {
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 16px;
+    }
+
+    .stat-card.highlight {
+      background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+      border-color: #a7f3d0;
+    }
+
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #059669;
+    }
+
+    .stat-label {
+      font-size: 0.875rem;
+      color: #666;
+    }
+
+    .categories-section {
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 32px;
+    }
+
+    .categories-section h2 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin: 0 0 16px 0;
+    }
+
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 8px;
+    }
+
+    .category-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 12px;
+      background: #f9fafb;
+      border-radius: 4px;
+      font-size: 0.875rem;
+    }
+
+    .category-name {
+      color: #374151;
+    }
+
+    .category-count {
+      font-weight: 600;
+      color: #059669;
+    }
+
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .toolbar-info {
+      font-size: 0.875rem;
+      color: #666;
+    }
+
+    .toolbar-filters {
+      display: flex;
+      gap: 8px;
+    }
+
+    .filter-btn {
+      padding: 6px 12px;
+      font-size: 0.875rem;
+      border: 1px solid #d1d5db;
+      border-radius: 4px;
+      background: white;
+      color: #374151;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .filter-btn:hover {
+      background: #f9fafb;
+    }
+
+    .filter-btn.active {
+      background: #059669;
+      border-color: #059669;
+      color: white;
+    }
+
+    .table-container {
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th {
+      background: #f9fafb;
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    td {
+      padding: 12px 16px;
+      border-bottom: 1px solid #f0f0f0;
+      font-size: 0.875rem;
+    }
+
+    tr:hover {
+      background: #f9fafb;
+    }
+
+    .email-cell {
+      font-weight: 500;
+      color: #1a1a1a;
+    }
+
+    .time-cell {
+      white-space: nowrap;
+      color: #6b7280;
+      font-size: 0.8125rem;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .status-active {
+      background: #d1fae5;
+      color: #059669;
+    }
+
+    .status-unsubscribed {
+      background: #fee2e2;
+      color: #dc2626;
+    }
+
+    .categories-cell {
+      max-width: 300px;
+    }
+
+    .category-tag {
+      display: inline-block;
+      padding: 2px 6px;
+      margin: 2px;
+      background: #e0e7ff;
+      color: #3730a3;
+      border-radius: 4px;
+      font-size: 0.75rem;
+    }
+
+    .empty-state {
+      background: #f9fafb;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 48px;
+      text-align: center;
+    }
+
+    .empty-state-title {
+      font-size: 1.125rem;
+      font-weight: 500;
+      color: #374151;
+      margin-bottom: 4px;
+    }
+
+    .empty-state-text {
+      color: #6b7280;
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      margin-top: 24px;
+    }
+
+    .pagination a, .pagination span {
+      padding: 8px 16px;
+      font-size: 0.875rem;
+    }
+
+    .pagination a {
+      background: white;
+      border: 1px solid #d1d5db;
+      border-radius: 4px;
+      color: #374151;
+      text-decoration: none;
+    }
+
+    .pagination a:hover {
+      background: #f9fafb;
+    }
+
+    .pagination span {
+      color: #6b7280;
+    }
+
+    .export-btn {
+      padding: 6px 12px;
+      font-size: 0.875rem;
+      border: 1px solid #059669;
+      border-radius: 4px;
+      background: white;
+      color: #059669;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .export-btn:hover {
+      background: #ecfdf5;
+    }
+
+    .delete-btn {
+      padding: 4px 10px;
+      font-size: 0.75rem;
+      border: 1px solid #fecaca;
+      border-radius: 4px;
+      background: #fef2f2;
+      color: #dc2626;
+      cursor: pointer;
+    }
+
+    .delete-btn:hover {
+      background: #fee2e2;
+      border-color: #fca5a5;
+    }
+
+    .success-banner {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      color: #059669;
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 24px;
+      font-size: 0.875rem;
+    }
+  </style>
+</head>
+<body>
+  <AdminNav currentPage="subscribers" />
+
+  <div class="content-wrapper">
+    {url.searchParams.get('deleted') && (
+      <div class="success-banner">
+        Subscriber deleted successfully.
+      </div>
+    )}
+
+    <h1>Newsletter Subscribers</h1>
+    <p class="subtitle">Manage email newsletter subscriptions and view subscriber analytics.</p>
+
+    <div class="stats-grid">
+      <div class="stat-card highlight">
+        <div class="stat-value">{stats.total}</div>
+        <div class="stat-label">Total Subscribers</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">{stats.active}</div>
+        <div class="stat-label">Active</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" style="color: #dc2626;">{stats.unsubscribed}</div>
+        <div class="stat-label">Unsubscribed</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">{stats.today}</div>
+        <div class="stat-label">Today</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">{stats.thisWeek}</div>
+        <div class="stat-label">This Week</div>
+      </div>
+    </div>
+
+    {categoryStats.length > 0 && (
+      <div class="categories-section">
+        <h2>Subscribers by Category</h2>
+        <div class="category-grid">
+          {categoryStats.map(({ category, count }) => (
+            <div class="category-item">
+              <span class="category-name">{categoryLabels[category] || category}</span>
+              <span class="category-count">{count}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+
+    <div class="toolbar">
+      <div class="toolbar-info">
+        Showing {subscribers.length} of {total.toLocaleString()} subscribers
+        {totalPages > 1 && ` (Page ${page} of ${totalPages})`}
+      </div>
+      <div class="toolbar-filters">
+        <a
+          href="/admin/subscribers"
+          class:list={["filter-btn", { active: statusFilter === 'all' }]}
+        >
+          All
+        </a>
+        <a
+          href="/admin/subscribers?status=active"
+          class:list={["filter-btn", { active: statusFilter === 'active' }]}
+        >
+          Active
+        </a>
+        <a
+          href="/admin/subscribers?status=unsubscribed"
+          class:list={["filter-btn", { active: statusFilter === 'unsubscribed' }]}
+        >
+          Unsubscribed
+        </a>
+      </div>
+    </div>
+
+    {subscribers.length === 0 ? (
+      <div class="empty-state">
+        <div class="empty-state-title">No subscribers yet</div>
+        <div class="empty-state-text">Newsletter subscribers will appear here once people sign up.</div>
+      </div>
+    ) : (
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Email</th>
+              <th>Categories</th>
+              <th>Status</th>
+              <th>Subscribed</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {subscribers.map((sub: any) => (
+              <tr>
+                <td class="email-cell">{sub.email}</td>
+                <td class="categories-cell">
+                  {sub.categories?.split(',').map((cat: string) => (
+                    <span class="category-tag">{categoryLabels[cat] || cat}</span>
+                  ))}
+                </td>
+                <td>
+                  <span class:list={["status-badge", sub.status === 'active' ? 'status-active' : 'status-unsubscribed']}>
+                    {sub.status}
+                  </span>
+                </td>
+                <td class="time-cell">{formatEastern(sub.created_at)}</td>
+                <td>
+                  <form method="POST" style="display: inline;">
+                    <input type="hidden" name="action" value="delete" />
+                    <input type="hidden" name="id" value={sub.id} />
+                    <button type="submit" class="delete-btn" onclick="return confirm('Delete this subscriber?')">
+                      Delete
+                    </button>
+                  </form>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    )}
+
+    {totalPages > 1 && (
+      <div class="pagination">
+        {page > 1 && (
+          <a href={`/admin/subscribers?page=${page - 1}${statusFilter !== 'all' ? `&status=${statusFilter}` : ''}`}>Previous</a>
+        )}
+        <span>Page {page} of {totalPages}</span>
+        {page < totalPages && (
+          <a href={`/admin/subscribers?page=${page + 1}${statusFilter !== 'all' ? `&status=${statusFilter}` : ''}`}>Next</a>
+        )}
+      </div>
+    )}
+  </div>
+</body>
+</html>

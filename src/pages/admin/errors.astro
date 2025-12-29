@@ -1,0 +1,542 @@
+---
+import AdminNav from '@/components/AdminNav.astro';
+import { getRecentErrors, getErrorStats } from '@/lib/error-logger';
+
+const title = "Error Log - TruSchools";
+
+// Format UTC date to Eastern time
+function formatEastern(utcDate: string, includeTime = true): string {
+  const date = new Date(utcDate + 'Z'); // Append Z to treat as UTC
+  return date.toLocaleString('en-US', {
+    timeZone: 'America/New_York',
+    month: 'numeric',
+    day: 'numeric',
+    year: 'numeric',
+    ...(includeTime && { hour: 'numeric', minute: '2-digit', hour12: true })
+  });
+}
+
+// Get database connection
+const db = (Astro.locals as any).runtime?.env?.DB;
+
+// Check authentication
+const cookies = Astro.request.headers.get('cookie') || '';
+const sessionMatch = cookies.match(/session=([^;]+)/);
+const sessionToken = sessionMatch ? sessionMatch[1] : null;
+
+let isAuthenticated = false;
+if (sessionToken && db) {
+  const session = await db.prepare(`
+    SELECT s.*, u.id as user_id
+    FROM sessions s
+    JOIN users u ON s.user_id = u.id
+    WHERE s.token = ? AND s.expires_at > datetime('now')
+  `).bind(sessionToken).first();
+  isAuthenticated = !!session;
+}
+
+// Redirect if not authenticated
+if (!isAuthenticated) {
+  return Astro.redirect('/login?redirect=/admin/errors');
+}
+
+// Get query params
+const url = new URL(Astro.request.url);
+const page = parseInt(url.searchParams.get('page') || '1');
+const limit = 50;
+const offset = (page - 1) * limit;
+
+// Fetch errors and stats
+const { errors, total } = await getRecentErrors(db, limit, offset);
+const stats = await getErrorStats(db);
+const totalPages = Math.ceil(total / limit);
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>{title}</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f8f9fa;
+      color: #1a1a1a;
+      line-height: 1.6;
+    }
+
+    .content-wrapper {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    h1 {
+      font-size: 1.75rem;
+      font-weight: 600;
+      margin: 0 0 8px 0;
+    }
+
+    .subtitle {
+      color: #666;
+      margin-bottom: 32px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .stat-card {
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 16px;
+    }
+
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #dc2626;
+    }
+
+    .stat-label {
+      font-size: 0.875rem;
+      color: #666;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .stat-meta {
+      font-size: 0.75rem;
+      color: #999;
+      margin-top: 4px;
+    }
+
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .toolbar-info {
+      font-size: 0.875rem;
+      color: #666;
+    }
+
+    .toolbar-action {
+      font-size: 0.875rem;
+      color: #dc2626;
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .toolbar-action:hover {
+      text-decoration: underline;
+    }
+
+    .empty-state {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 48px;
+      text-align: center;
+    }
+
+    .empty-state-title {
+      font-size: 1.125rem;
+      font-weight: 500;
+      color: #059669;
+      margin-bottom: 4px;
+    }
+
+    .empty-state-text {
+      color: #10b981;
+    }
+
+    .table-container {
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th {
+      background: #f9fafb;
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    td {
+      padding: 12px 16px;
+      border-bottom: 1px solid #f0f0f0;
+      font-size: 0.875rem;
+    }
+
+    tr:hover {
+      background: #f9fafb;
+    }
+
+    .time-cell {
+      white-space: nowrap;
+      color: #6b7280;
+    }
+
+    .method-badge {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #6b7280;
+      margin-right: 4px;
+    }
+
+    .error-type {
+      font-weight: 500;
+      color: #dc2626;
+    }
+
+    .error-message {
+      color: #374151;
+      max-width: 400px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .view-btn {
+      color: #0066cc;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 0.875rem;
+    }
+
+    .view-btn:hover {
+      text-decoration: underline;
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      margin-top: 24px;
+    }
+
+    .pagination a, .pagination span {
+      padding: 8px 16px;
+      font-size: 0.875rem;
+    }
+
+    .pagination a {
+      background: white;
+      border: 1px solid #d1d5db;
+      border-radius: 4px;
+      color: #374151;
+      text-decoration: none;
+    }
+
+    .pagination a:hover {
+      background: #f9fafb;
+    }
+
+    .pagination span {
+      color: #6b7280;
+    }
+
+    /* Modal styles */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-overlay.visible {
+      display: flex;
+    }
+
+    .modal {
+      background: white;
+      border-radius: 8px;
+      width: 100%;
+      max-width: 700px;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 20px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .modal-header h3 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #666;
+      padding: 0;
+      line-height: 1;
+    }
+
+    .modal-close:hover {
+      color: #333;
+    }
+
+    .modal-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+    .modal-section {
+      margin-bottom: 16px;
+    }
+
+    .modal-label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 4px;
+    }
+
+    .modal-value {
+      font-size: 0.875rem;
+      color: #374151;
+      word-break: break-all;
+    }
+
+    .modal-pre {
+      font-size: 0.8125rem;
+      color: #374151;
+      background: #f9fafb;
+      padding: 12px;
+      border-radius: 4px;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+  </style>
+</head>
+<body>
+  <AdminNav currentPage="errors" />
+
+  <div class="content-wrapper">
+    <h1>Error Log</h1>
+    <p class="subtitle">View and manage application errors. Errors are automatically logged when API routes fail.</p>
+
+    {stats.length > 0 && (
+      <div>
+        <h2 style="font-size: 1rem; font-weight: 600; margin-bottom: 16px;">Errors by Endpoint (Last 7 Days)</h2>
+        <div class="stats-grid">
+          {stats.map((stat: any) => (
+            <div class="stat-card">
+              <div class="stat-value">{stat.error_count}</div>
+              <div class="stat-label" title={stat.endpoint}>{stat.endpoint || 'Unknown'}</div>
+              <div class="stat-meta">Last: {formatEastern(stat.last_error)}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+
+    <div class="toolbar">
+      <div class="toolbar-info">
+        Showing {errors.length} of {total.toLocaleString()} errors
+        {totalPages > 1 && ` (Page ${page} of ${totalPages})`}
+      </div>
+      <form method="POST" action="/api/admin/clear-errors" style="display: inline;">
+        <button type="submit" class="toolbar-action" onclick="return confirm('Clear all errors older than 30 days?')">
+          Clear old errors
+        </button>
+      </form>
+    </div>
+
+    {errors.length === 0 ? (
+      <div class="empty-state">
+        <div class="empty-state-title">No errors logged</div>
+        <div class="empty-state-text">Your application is running smoothly!</div>
+      </div>
+    ) : (
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Endpoint</th>
+              <th>Error</th>
+              <th>Details</th>
+            </tr>
+          </thead>
+          <tbody>
+            {errors.map((error: any) => (
+              <tr>
+                <td class="time-cell">{formatEastern(error.created_at)}</td>
+                <td>
+                  <span class="method-badge">{error.method || 'GET'}</span>
+                  {error.endpoint || 'Unknown'}
+                </td>
+                <td>
+                  <div class="error-type">{error.error_type || 'Error'}</div>
+                  <div class="error-message" title={error.error_message}>{error.error_message}</div>
+                </td>
+                <td>
+                  <button
+                    class="view-btn error-details-btn"
+                    data-error-id={error.id}
+                    data-stack={error.error_stack || ''}
+                    data-extra={error.extra_data || ''}
+                    data-url={error.url || ''}
+                    data-ua={error.user_agent || ''}
+                  >
+                    View
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    )}
+
+    {totalPages > 1 && (
+      <div class="pagination">
+        {page > 1 && (
+          <a href={`/admin/errors?page=${page - 1}`}>Previous</a>
+        )}
+        <span>Page {page} of {totalPages}</span>
+        {page < totalPages && (
+          <a href={`/admin/errors?page=${page + 1}`}>Next</a>
+        )}
+      </div>
+    )}
+  </div>
+
+  <!-- Error Details Modal -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Error Details</h3>
+        <button class="modal-close" id="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-section">
+          <div class="modal-label">URL</div>
+          <div class="modal-value" id="modal-url"></div>
+        </div>
+        <div class="modal-section">
+          <div class="modal-label">User Agent</div>
+          <div class="modal-value" id="modal-ua"></div>
+        </div>
+        <div class="modal-section">
+          <div class="modal-label">Extra Data</div>
+          <pre class="modal-pre" id="modal-extra"></pre>
+        </div>
+        <div class="modal-section">
+          <div class="modal-label">Stack Trace</div>
+          <pre class="modal-pre" id="modal-stack"></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const modal = document.getElementById('modal-overlay');
+    const closeBtn = document.getElementById('modal-close');
+    const modalUrl = document.getElementById('modal-url');
+    const modalUa = document.getElementById('modal-ua');
+    const modalExtra = document.getElementById('modal-extra');
+    const modalStack = document.getElementById('modal-stack');
+
+    function openModal() {
+      modal?.classList.add('visible');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      modal?.classList.remove('visible');
+      document.body.style.overflow = '';
+    }
+
+    document.querySelectorAll('.error-details-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const stack = btn.getAttribute('data-stack') || 'No stack trace available';
+        const extra = btn.getAttribute('data-extra');
+        const url = btn.getAttribute('data-url') || 'N/A';
+        const ua = btn.getAttribute('data-ua') || 'N/A';
+
+        if (modalUrl) modalUrl.textContent = url;
+        if (modalUa) modalUa.textContent = ua;
+        if (modalStack) modalStack.textContent = stack;
+
+        try {
+          if (modalExtra) modalExtra.textContent = extra ? JSON.stringify(JSON.parse(extra), null, 2) : 'No extra data';
+        } catch {
+          if (modalExtra) modalExtra.textContent = extra || 'No extra data';
+        }
+
+        openModal();
+      });
+    });
+
+    closeBtn?.addEventListener('click', closeModal);
+
+    modal?.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        closeModal();
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal?.classList.contains('visible')) {
+        closeModal();
+      }
+    });
+  </script>
+</body>
+</html>

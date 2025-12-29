@@ -1,20 +1,32 @@
 import type { APIRoute } from 'astro';
+import { captureException } from '@/lib/error-logger';
 
 // Simple email validation regex
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-// Valid newsletter categories
+// Valid newsletter categories (must match NewsletterSignup.astro)
 const VALID_CATEGORIES = [
+  // K-12
   'preschool',
   'kindergarten',
   'elementary',
   'middle',
   'high',
+  // School Choice
+  'charter',
+  'magnet',
+  'private',
+  // Higher Ed
   'college',
   'university',
+  'grad-school',
   'financial-aid',
-  'sat-act',
-  'testing',
+  // Vocational
+  'trade',
+  'healthcare',
+  'technology',
+  'culinary',
+  'beauty',
 ];
 
 // Hash IP address for privacy
@@ -28,8 +40,10 @@ async function hashIP(ip: string): Promise<string> {
 }
 
 export const POST: APIRoute = async ({ request, locals }) => {
+  const db = (locals as any).runtime?.env?.DB;
+  let body: any;
+
   try {
-    const db = (locals as any).runtime?.env?.DB;
     if (!db) {
       return new Response(JSON.stringify({ error: 'Database connection failed' }), {
         status: 500,
@@ -37,7 +51,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
       });
     }
 
-    const body = await request.json();
+    body = await request.json();
     const { email, categories } = body;
 
     // Validate email
@@ -81,36 +95,15 @@ export const POST: APIRoute = async ({ request, locals }) => {
     const ipHash = await hashIP(ip);
     const userAgent = request.headers.get('user-agent') || '';
 
-    // Check for existing subscription with this email
-    const existing = await db.prepare(`
-      SELECT id, categories, status FROM newsletter_subscriptions WHERE email = ?
-    `).bind(normalizedEmail).first();
-
-    if (existing) {
-      // Update existing subscription - merge categories and reactivate if needed
-      const existingCategories = existing.categories ? existing.categories.split(',') : [];
-      const mergedCategories = [...new Set([...existingCategories, ...validSelectedCategories])];
-
-      await db.prepare(`
-        UPDATE newsletter_subscriptions
-        SET categories = ?, status = 'active', updated_at = datetime('now')
-        WHERE id = ?
-      `).bind(mergedCategories.join(','), existing.id).run();
-
-      return new Response(JSON.stringify({
-        success: true,
-        message: 'Your subscription has been updated!',
-        updated: true
-      }), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      });
-    }
-
-    // Insert new subscription
+    // Use upsert to handle race conditions atomically
+    // If email exists, update categories; otherwise insert new record
     await db.prepare(`
       INSERT INTO newsletter_subscriptions (email, categories, ip_hash, user_agent, status, created_at, updated_at)
       VALUES (?, ?, ?, ?, 'active', datetime('now'), datetime('now'))
+      ON CONFLICT(email) DO UPDATE SET
+        categories = excluded.categories,
+        status = 'active',
+        updated_at = datetime('now')
     `).bind(
       normalizedEmail,
       validSelectedCategories.join(','),
@@ -120,8 +113,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
     return new Response(JSON.stringify({
       success: true,
-      message: 'Thank you for subscribing!',
-      updated: false
+      message: 'Thank you for subscribing!'
     }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' }
@@ -129,6 +121,11 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
   } catch (error) {
     console.error('Newsletter subscription error:', error);
+    await captureException(db, error, {
+      tags: { endpoint: '/api/newsletter/subscribe', method: 'POST' },
+      extra: { email: body?.email },
+      request
+    });
     return new Response(JSON.stringify({ error: 'Something went wrong. Please try again.' }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' }

@@ -1,0 +1,686 @@
+---
+import AdminNav from '@/components/AdminNav.astro';
+import { pollQuestions, getAnswersForQuestion } from '@/lib/poll-config';
+
+const title = "Poll Responses - TruSchools";
+
+// Format UTC date to Eastern time
+function formatEastern(utcDate: string, includeTime = true): string {
+  const date = new Date(utcDate + 'Z'); // Append Z to treat as UTC
+  return date.toLocaleString('en-US', {
+    timeZone: 'America/New_York',
+    month: 'numeric',
+    day: 'numeric',
+    year: 'numeric',
+    ...(includeTime && { hour: 'numeric', minute: '2-digit', hour12: true })
+  });
+}
+
+// Get current timezone abbreviation (EST or EDT)
+function getEasternTzAbbr(): string {
+  const now = new Date();
+  const tzString = now.toLocaleString('en-US', { timeZone: 'America/New_York', timeZoneName: 'short' });
+  const match = tzString.match(/\b(EST|EDT)\b/);
+  return match ? match[1] : 'ET';
+}
+
+const tzAbbr = getEasternTzAbbr();
+
+// Get database connection
+const db = (Astro.locals as any).runtime?.env?.DB;
+
+// Check authentication
+const cookies = Astro.request.headers.get('cookie') || '';
+const sessionMatch = cookies.match(/session=([^;]+)/);
+const sessionToken = sessionMatch ? sessionMatch[1] : null;
+
+let isAuthenticated = false;
+if (sessionToken && db) {
+  const session = await db.prepare(`
+    SELECT s.*, u.id as user_id
+    FROM sessions s
+    JOIN users u ON s.user_id = u.id
+    WHERE s.token = ? AND s.expires_at > datetime('now')
+  `).bind(sessionToken).first();
+  isAuthenticated = !!session;
+}
+
+// Redirect if not authenticated
+if (!isAuthenticated) {
+  return Astro.redirect('/login?redirect=/admin/polls');
+}
+
+// Handle delete actions
+const url = new URL(Astro.request.url);
+const activeTab = url.searchParams.get('tab') || 'results';
+const page = parseInt(url.searchParams.get('page') || '1');
+const limit = 50;
+const offset = (page - 1) * limit;
+
+if (Astro.request.method === 'POST') {
+  const formData = await Astro.request.formData();
+  const action = formData.get('action');
+
+  if (action === 'clear-all' && db) {
+    await db.prepare('DELETE FROM qa_responses').run();
+    return Astro.redirect('/admin/polls?cleared=1');
+  }
+
+  if (action === 'delete-question' && db) {
+    const questionId = formData.get('question_id');
+    await db.prepare('DELETE FROM qa_responses WHERE question_id = ?').bind(questionId).run();
+    return Astro.redirect('/admin/polls?deleted=1');
+  }
+}
+
+// Fetch stats
+let stats = {
+  total: 0,
+  uniqueQuestions: 0,
+  uniqueSessions: 0,
+  today: 0,
+  thisWeek: 0,
+};
+
+let questionStats: any[] = [];
+let recentResponses: any[] = [];
+let totalResponses = 0;
+let totalPages = 1;
+
+if (db) {
+  // Get overall stats
+  const [totalCount, questionsCount, sessionsCount, todayCount, weekCount] = await Promise.all([
+    db.prepare('SELECT COUNT(*) as count FROM qa_responses').first(),
+    db.prepare('SELECT COUNT(DISTINCT question_id) as count FROM qa_responses').first(),
+    db.prepare('SELECT COUNT(DISTINCT session_id) as count FROM qa_responses').first(),
+    db.prepare("SELECT COUNT(*) as count FROM qa_responses WHERE created_at >= date('now')").first(),
+    db.prepare("SELECT COUNT(*) as count FROM qa_responses WHERE created_at >= date('now', '-7 days')").first(),
+  ]);
+
+  stats.total = (totalCount as any)?.count || 0;
+  stats.uniqueQuestions = (questionsCount as any)?.count || 0;
+  stats.uniqueSessions = (sessionsCount as any)?.count || 0;
+  stats.today = (todayCount as any)?.count || 0;
+  stats.thisWeek = (weekCount as any)?.count || 0;
+
+  // Get question breakdown with answer distribution
+  const questionsResult = await db.prepare(`
+    SELECT
+      question_id,
+      question_text,
+      page_slug,
+      COUNT(*) as response_count,
+      MAX(created_at) as last_response
+    FROM qa_responses
+    GROUP BY question_id
+    ORDER BY response_count DESC
+  `).all();
+
+  for (const q of (questionsResult as any)?.results || []) {
+    // Get answer breakdown for each question
+    const answersResult = await db.prepare(`
+      SELECT answer_text, COUNT(*) as count
+      FROM qa_responses
+      WHERE question_id = ?
+      GROUP BY answer_text
+      ORDER BY count DESC
+    `).bind(q.question_id).all();
+
+    // Get all possible answers from config
+    const configAnswers = getAnswersForQuestion(q.question_id);
+    const votedAnswers = (answersResult as any)?.results || [];
+
+    // Build complete answer list with 0s for unvoted answers
+    const answersMap = new Map(votedAnswers.map((a: any) => [a.answer_text, a.count]));
+    const allAnswers = configAnswers.map(answer => ({
+      answer_text: answer,
+      count: answersMap.get(answer) || 0
+    }));
+
+    // Add any answers from votes that aren't in config (legacy/edge cases)
+    for (const voted of votedAnswers) {
+      if (!configAnswers.includes(voted.answer_text)) {
+        allAnswers.push({ answer_text: voted.answer_text, count: voted.count });
+      }
+    }
+
+    // Sort by count descending
+    allAnswers.sort((a, b) => b.count - a.count);
+
+    questionStats.push({
+      ...q,
+      answers: allAnswers
+    });
+  }
+
+  // Get total count for pagination
+  totalResponses = stats.total;
+  totalPages = Math.ceil(totalResponses / limit);
+
+  // Get recent responses with pagination
+  const recentResult = await db.prepare(`
+    SELECT * FROM qa_responses
+    ORDER BY created_at DESC
+    LIMIT ? OFFSET ?
+  `).bind(limit, offset).all();
+  recentResponses = (recentResult as any)?.results || [];
+}
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>{title}</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f8f9fa;
+      color: #1a1a1a;
+      line-height: 1.6;
+    }
+
+    .content-wrapper {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    h1 {
+      font-size: 1.75rem;
+      font-weight: 600;
+      margin: 0 0 8px 0;
+    }
+
+    .subtitle {
+      color: #666;
+      margin-bottom: 32px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .stat-card {
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 16px;
+    }
+
+    .stat-card.highlight {
+      background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+      border-color: #93c5fd;
+    }
+
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #2563eb;
+    }
+
+    .stat-label {
+      font-size: 0.875rem;
+      color: #666;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .question-card {
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+
+    .question-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+
+    .question-text {
+      font-weight: 500;
+      color: #1a1a1a;
+      margin: 0 0 4px 0;
+    }
+
+    .question-meta {
+      font-size: 0.8125rem;
+      color: #6b7280;
+    }
+
+    .question-meta span {
+      margin-right: 12px;
+    }
+
+    .answer-bar-container {
+      margin-top: 12px;
+    }
+
+    .answer-row {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .answer-label {
+      width: 150px;
+      font-size: 0.875rem;
+      color: #374151;
+      flex-shrink: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .answer-bar-wrapper {
+      flex: 1;
+      height: 24px;
+      background: #f3f4f6;
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 0 12px;
+    }
+
+    .answer-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #3b82f6 0%, #60a5fa 100%);
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+
+    .answer-count {
+      width: 60px;
+      font-size: 0.875rem;
+      color: #6b7280;
+      text-align: right;
+    }
+
+    .delete-btn {
+      padding: 4px 10px;
+      font-size: 0.75rem;
+      border: 1px solid #fecaca;
+      border-radius: 4px;
+      background: #fef2f2;
+      color: #dc2626;
+      cursor: pointer;
+    }
+
+    .delete-btn:hover {
+      background: #fee2e2;
+      border-color: #fca5a5;
+    }
+
+    .clear-btn {
+      padding: 6px 12px;
+      font-size: 0.875rem;
+      border: 1px solid #fecaca;
+      border-radius: 4px;
+      background: white;
+      color: #dc2626;
+      cursor: pointer;
+    }
+
+    .clear-btn:hover {
+      background: #fef2f2;
+    }
+
+    .success-banner {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      color: #059669;
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 24px;
+      font-size: 0.875rem;
+    }
+
+    .empty-state {
+      background: #f9fafb;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 48px;
+      text-align: center;
+    }
+
+    .empty-state-title {
+      font-size: 1.125rem;
+      font-weight: 500;
+      color: #374151;
+      margin-bottom: 4px;
+    }
+
+    .empty-state-text {
+      color: #6b7280;
+    }
+
+    .recent-section {
+      margin-top: 40px;
+    }
+
+    .table-container {
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th {
+      background: #f9fafb;
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    td {
+      padding: 12px 16px;
+      border-bottom: 1px solid #f0f0f0;
+      font-size: 0.875rem;
+    }
+
+    tr:hover {
+      background: #f9fafb;
+    }
+
+    .time-cell {
+      white-space: nowrap;
+      color: #6b7280;
+      font-size: 0.8125rem;
+    }
+
+    .page-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      background: #f3f4f6;
+      color: #374151;
+      border-radius: 4px;
+      font-size: 0.75rem;
+    }
+
+    .answer-cell {
+      font-weight: 500;
+      color: #2563eb;
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      margin-top: 24px;
+    }
+
+    .pagination a, .pagination span {
+      padding: 8px 16px;
+      font-size: 0.875rem;
+    }
+
+    .pagination a {
+      background: white;
+      border: 1px solid #d1d5db;
+      border-radius: 4px;
+      color: #374151;
+      text-decoration: none;
+    }
+
+    .pagination a:hover {
+      background: #f9fafb;
+    }
+
+    .pagination span {
+      color: #6b7280;
+    }
+
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .toolbar-info {
+      font-size: 0.875rem;
+      color: #666;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 0;
+      border-bottom: 1px solid #e0e0e0;
+      margin-bottom: 24px;
+    }
+
+    .tab {
+      padding: 12px 24px;
+      font-size: 0.9375rem;
+      font-weight: 500;
+      color: #6b7280;
+      text-decoration: none;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: all 0.15s ease;
+    }
+
+    .tab:hover {
+      color: #374151;
+    }
+
+    .tab.active {
+      color: #2563eb;
+      border-bottom-color: #2563eb;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <AdminNav currentPage="polls" />
+
+  <div class="content-wrapper">
+    {url.searchParams.get('cleared') && (
+      <div class="success-banner">
+        All poll responses cleared successfully.
+      </div>
+    )}
+    {url.searchParams.get('deleted') && (
+      <div class="success-banner">
+        Question responses deleted successfully.
+      </div>
+    )}
+
+    <h1>Poll Responses</h1>
+    <p class="subtitle">View Q&A poll results and user engagement from across the site.</p>
+
+    <div class="stats-grid">
+      <div class="stat-card highlight">
+        <div class="stat-value">{stats.total}</div>
+        <div class="stat-label">Total Responses</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">{stats.uniqueQuestions}</div>
+        <div class="stat-label">Questions</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">{stats.uniqueSessions}</div>
+        <div class="stat-label">Unique Visitors</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">{stats.today}</div>
+        <div class="stat-label">Today</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">{stats.thisWeek}</div>
+        <div class="stat-label">This Week</div>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <a href="/admin/polls?tab=results" class:list={["tab", { active: activeTab === 'results' }]}>
+        Results by Question
+      </a>
+      <a href="/admin/polls?tab=responses" class:list={["tab", { active: activeTab === 'responses' }]}>
+        Recent Responses
+      </a>
+    </div>
+
+    <!-- Results by Question Tab -->
+    <div class:list={["tab-content", { active: activeTab === 'results' }]}>
+      <div class="section-header">
+        <div></div>
+        {stats.total > 0 && (
+          <form method="POST" style="display: inline;">
+            <input type="hidden" name="action" value="clear-all" />
+            <button type="submit" class="clear-btn" onclick="return confirm('Clear ALL poll responses? This cannot be undone.')">
+              Clear All Data
+            </button>
+          </form>
+        )}
+      </div>
+
+      {questionStats.length === 0 ? (
+        <div class="empty-state">
+          <div class="empty-state-title">No poll responses yet</div>
+          <div class="empty-state-text">Responses will appear here when visitors answer Q&A polls on your site.</div>
+        </div>
+      ) : (
+        questionStats.map((question) => {
+          const totalResponsesForQuestion = question.answers.reduce((sum: number, a: any) => sum + a.count, 0);
+          return (
+            <div class="question-card">
+              <div class="question-header">
+                <div>
+                  <p class="question-text">{question.question_text}</p>
+                  <div class="question-meta">
+                    <span class="page-badge">{question.page_slug}</span>
+                    <span>{question.response_count} responses</span>
+                    <span>Last: {formatEastern(question.last_response, false)}</span>
+                  </div>
+                </div>
+                <form method="POST" style="display: inline;">
+                  <input type="hidden" name="action" value="delete-question" />
+                  <input type="hidden" name="question_id" value={question.question_id} />
+                  <button type="submit" class="delete-btn" onclick="return confirm('Delete all responses for this question?')">
+                    Delete
+                  </button>
+                </form>
+              </div>
+              <div class="answer-bar-container">
+                {question.answers.map((answer: any) => {
+                  const percentage = totalResponsesForQuestion > 0 ? (answer.count / totalResponsesForQuestion * 100) : 0;
+                  return (
+                    <div class="answer-row">
+                      <span class="answer-label" title={answer.answer_text}>{answer.answer_text}</span>
+                      <div class="answer-bar-wrapper">
+                        <div class="answer-bar" style={`width: ${percentage}%`}></div>
+                      </div>
+                      <span class="answer-count">{answer.count} ({Math.round(percentage)}%)</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })
+      )}
+    </div>
+
+    <!-- Recent Responses Tab -->
+    <div class:list={["tab-content", { active: activeTab === 'responses' }]}>
+      {stats.total === 0 ? (
+        <div class="empty-state">
+          <div class="empty-state-title">No poll responses yet</div>
+          <div class="empty-state-text">Responses will appear here when visitors answer Q&A polls on your site.</div>
+        </div>
+      ) : (
+        <>
+          <p style="font-size: 0.75rem; color: #9ca3af; margin-bottom: 16px;">Times shown in {tzAbbr}</p>
+          <div class="toolbar">
+            <div class="toolbar-info">
+              Showing {recentResponses.length} of {totalResponses.toLocaleString()} responses
+              {totalPages > 1 && ` (Page ${page} of ${totalPages})`}
+            </div>
+          </div>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Time</th>
+                  <th>Page</th>
+                  <th>Question</th>
+                  <th>Answer</th>
+                </tr>
+              </thead>
+              <tbody>
+                {recentResponses.map((response: any) => (
+                  <tr>
+                    <td class="time-cell">{formatEastern(response.created_at)}</td>
+                    <td><span class="page-badge">{response.page_slug}</span></td>
+                    <td style="max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title={response.question_text}>
+                      {response.question_text}
+                    </td>
+                    <td class="answer-cell">{response.answer_text}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {totalPages > 1 && (
+            <div class="pagination">
+              {page > 1 && (
+                <a href={`/admin/polls?tab=responses&page=${page - 1}`}>Previous</a>
+              )}
+              <span>Page {page} of {totalPages}</span>
+              {page < totalPages && (
+                <a href={`/admin/polls?tab=responses&page=${page + 1}`}>Next</a>
+              )}
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  </div>
+</body>
+</html>

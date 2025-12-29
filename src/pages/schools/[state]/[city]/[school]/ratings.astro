@@ -1,0 +1,5 @@
+---
+// Redirect old /schools/[state]/[city]/[school]/ratings URLs to main school page
+const { state, city, school } = Astro.params;
+return Astro.redirect(`/schools/${state}/${city}/${school}`, 301);
+---

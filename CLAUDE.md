@@ -46,14 +46,13 @@ When importing data or building pages:
 
 ## CRITICAL: Deployment
 
-**The project and domain name is `truschools` (without an 'e').**
+**The brand name is "TruSchools" and the domain is "truschools.com" (without an 'e').**
 
-When deploying to Cloudflare Pages, ALWAYS use:
-```
---project-name=truschools
-```
+There are TWO Cloudflare Pages projects:
+- **truschools-preview** - For staging/testing (truschools-preview.pages.dev)
+- **truschools** - For production (truschools.com)
 
-The brand name is "TruSchools" and the domain is "truschools.com".
+**By default, ALWAYS deploy to preview.** Only deploy to production when the user explicitly says "deploy to production", "go live", or similar.
 
 ## Articles
 
@@ -124,10 +123,21 @@ If an article is linked from multiple school category pages:
    ```
 3. The article's `defaultParent` handles the primary category; `?from=` handles secondary categories
 
-#### Step 5: Build and Deploy
+#### Step 5: Add Article to XML Sitemap
+
+Add the new article slug to `src/pages/sitemap-main.xml.ts` in the `articles` array:
+
+```typescript
+const articles = [
+  // ... existing articles ...
+  'your-new-article-slug',  // Add new article here
+];
+```
+
+#### Step 6: Build and Deploy
 
 ```bash
-npm run build && CLOUDFLARE_ACCOUNT_ID=db05e74e773d91c84692ba064111c43c npx wrangler pages deploy dist --project-name=truschools
+npm run build && CLOUDFLARE_ACCOUNT_ID=db05e74e773d91c84692ba064111c43c npx wrangler pages deploy dist --project-name=truschools-preview
 ```
 
 ### Article Page Structure Reference
@@ -190,19 +200,77 @@ const description = "Meta description for SEO.";
 
 **ALWAYS deploy after making changes. NO EXCEPTIONS. Deploy immediately after ANY code change - do not wait for the user to ask.**
 
-**CRITICAL: This is a DEVELOPMENT environment. NEVER deploy to production (truschools.com).**
+### Preview Deployment (DEFAULT)
 
-After any code changes:
-1. Run `npm run build`
-2. Run `CLOUDFLARE_ACCOUNT_ID=db05e74e773d91c84692ba064111c43c npx wrangler pages deploy dist --project-name=truschools`
+After any code changes, deploy to **preview** by default:
 
-**IMPORTANT:**
-- The preview URL is ALWAYS https://truschools.pages.dev - use this URL when telling the user where to view changes
-- NEVER add `--branch=main` or `--branch=production` flags - this would deploy to the live site
-- NEVER add any branch flags at all - just use the exact command above
-- NEVER modify the deploy command in any way
+```bash
+npm run build && CLOUDFLARE_ACCOUNT_ID=db05e74e773d91c84692ba064111c43c npx wrangler pages deploy dist --project-name=truschools-preview
+```
 
-This is non-negotiable. Every edit = immediate deploy to preview only.
+**Preview URL:** https://truschools-preview.pages.dev
+
+### Production Deployment (ONLY WHEN EXPLICITLY REQUESTED)
+
+**ONLY deploy to production when the user explicitly says "deploy to production", "go live", "push to prod", or similar.**
+
+```bash
+npm run build && CLOUDFLARE_ACCOUNT_ID=db05e74e773d91c84692ba064111c43c npx wrangler pages deploy dist --project-name=truschools
+```
+
+**Production URL:** https://truschools.com
+
+### Important Rules
+
+- **Default = Preview.** When in doubt, deploy to preview.
+- NEVER add `--branch=main` or `--branch=production` flags
+- NEVER add any branch flags at all
+- Both preview and production share the same D1 database (truschools-db)
+- Tell the user which environment you deployed to and provide the appropriate URL
+
+## XML Sitemaps
+
+The site has dynamically generated XML sitemaps at `https://trueschools.com/sitemap.xml`.
+
+### Sitemap Structure
+- **sitemap.xml** - Index file pointing to all sub-sitemaps
+- **sitemap-main.xml** - Static pages, articles, state/category pages
+- **sitemap-schools-1/2/3.xml** - K-12 schools (auto-generated from DB)
+- **sitemap-colleges.xml** - Colleges & universities (auto-generated from DB)
+- **sitemap-vocational.xml** - Vocational schools (auto-generated from DB)
+
+### When to Update Sitemaps
+
+**Database content (schools, colleges, vocational):**
+- NO action needed - sitemaps auto-update from D1 database
+- 24-hour cache, so changes appear within a day
+
+**Static pages (articles, new sections):**
+- MUST manually add to `src/pages/sitemap-main.xml.ts`
+
+### Adding New Articles to Sitemap
+Add the article slug to the `articles` array in `sitemap-main.xml.ts`:
+```typescript
+const articles = [
+  // ... existing ...
+  'new-article-slug',
+];
+```
+
+### Adding New Category/Section Pages to Sitemap
+Add to the `mainPages` array in `sitemap-main.xml.ts`:
+```typescript
+{ path: '/new-section', priority: '0.7' },
+```
+
+### Adding New State-Level Pages
+If adding a new school type with state pages, add to the appropriate loop in `sitemap-main.xml.ts`:
+```typescript
+const schoolTypes = [
+  // ... existing ...
+  'new-school-type',
+];
+```
 
 ## Formatting Standards
 

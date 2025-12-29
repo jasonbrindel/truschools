@@ -1,6 +1,26 @@
 /free-classes /classes 301
 /free-classes/* /classes/:splat 301
 
+# Redirect category-specific school URLs to unified /schools/ path
+/elementary-schools/:state/:city/:school /schools/:state/:city/:school 301
+/elementary-schools/:state/:city/:school/ /schools/:state/:city/:school 301
+/middle-schools/:state/:city/:school /schools/:state/:city/:school 301
+/middle-schools/:state/:city/:school/ /schools/:state/:city/:school 301
+/high-schools/:state/:city/:school /schools/:state/:city/:school 301
+/high-schools/:state/:city/:school/ /schools/:state/:city/:school 301
+/preschools/:state/:city/:school /schools/:state/:city/:school 301
+/preschools/:state/:city/:school/ /schools/:state/:city/:school 301
+/kindergartens/:state/:city/:school /schools/:state/:city/:school 301
+/kindergartens/:state/:city/:school/ /schools/:state/:city/:school 301
+
+# Old site school sub-pages redirect to main school page
+/schools/:state/:city/:school/map /schools/:state/:city/:school 301
+/schools/:state/:city/:school/map/ /schools/:state/:city/:school 301
+/schools/:state/:city/:school/ratings /schools/:state/:city/:school 301
+/schools/:state/:city/:school/ratings/ /schools/:state/:city/:school 301
+/schools/:state/:city/:school/stats /schools/:state/:city/:school 301
+/schools/:state/:city/:school/stats/ /schools/:state/:city/:school 301
+
 # College sub-pages redirect to main college page
 /colleges-universities/:state/:college/programs /colleges-universities/:state/:college 301
 /colleges-universities/:state/:college/programs/ /colleges-universities/:state/:college 301
