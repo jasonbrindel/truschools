@@ -1,13 +1,19 @@
 import type { APIRoute } from 'astro';
 
-export const GET: APIRoute = async ({ request, locals }) => {
-  const url = new URL(request.url);
-  const site = url.searchParams.get('site');
-  const days = parseInt(url.searchParams.get('days') || '7');
+// Use POST to bypass Cloudflare edge caching (GET requests are cached by default)
+export const POST: APIRoute = async ({ request, locals }) => {
+  const body = await request.json().catch(() => ({}));
+  const site = body.site;
+  const days = parseInt(body.days || '7');
 
   const corsHeaders = {
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*',
+    'Cache-Control': 'private, no-store, no-cache, must-revalidate, max-age=0',
+    'CDN-Cache-Control': 'no-store',
+    'Cloudflare-CDN-Cache-Control': 'no-store',
+    'Pragma': 'no-cache',
+    'Expires': '0',
   };
 
   if (!site) {

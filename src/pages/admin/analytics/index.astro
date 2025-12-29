@@ -26,6 +26,11 @@ if (sessionToken && db) {
 if (!isAuthenticated) {
   return Astro.redirect('/login?redirect=/admin/analytics');
 }
+
+// Set no-cache headers for admin page
+Astro.response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate');
+Astro.response.headers.set('CDN-Cache-Control', 'no-store');
+Astro.response.headers.set('Cloudflare-CDN-Cache-Control', 'no-store');
 ---
 
 <!DOCTYPE html>
@@ -349,7 +354,11 @@ if (!isAuthenticated) {
       content.innerHTML = '<div class="analytics-loading"><div class="analytics-loading-spinner"></div>Loading analytics...</div>';
 
       try {
-        const res = await fetch('/api/analytics/stats?site=trueschools&days=' + days);
+        const res = await fetch('/api/analytics/stats', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ site: 'trueschools', days: days })
+        });
         const data = await res.json();
 
         if (data.error) {
