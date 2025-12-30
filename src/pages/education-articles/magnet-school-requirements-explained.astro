@@ -6,12 +6,14 @@ import RelatedArticles from '@/components/RelatedArticles.astro';
 import BrowseByTopic from '@/components/BrowseByTopic.astro';
 import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
 import ShareButtons from '@/components/ShareButtons.astro';
+import HeroImage from '@/components/HeroImage.astro';
 import heroImage from '@/images/USED-high-school-students-classroom-vintage.jpg';
 
 const title = "Magnet School Requirements Explained: Lottery Only vs. GPA, Attendance, Testing, and Auditions";
 const description = "A comprehensive guide to understanding the spectrum of magnet school admissions—from open-access lottery systems to highly competitive criteria-based and audition programs.";
 const publishDate = "2024-10-30";
 const tags = ['Magnet Schools', 'School Choice'];
+export const prerender = true;
 ---
 
 <Layout title={title} description={description}>
@@ -23,9 +25,7 @@ const tags = ['Magnet Schools', 'School Choice'];
     <p class="text-base text-gray-500 mb-10">By TruSchools Staff</p>
   </header>
 
-  <div class="container">
-    <img src={heroImage.src} alt="High school students in a classroom setting" class="w-full h-[400px] md:h-[500px] object-cover" />
-  </div>
+  <HeroImage src={heroImage} alt="High school students in a classroom setting" />
 
   <article class="max-w-[680px] mx-auto px-5 py-10 md:py-16">
     <div class="article-body text-lg leading-relaxed text-gray-800">

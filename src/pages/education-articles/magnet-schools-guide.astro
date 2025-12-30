@@ -6,12 +6,14 @@ import RelatedArticles from '@/components/RelatedArticles.astro';
 import BrowseByTopic from '@/components/BrowseByTopic.astro';
 import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
 import ShareButtons from '@/components/ShareButtons.astro';
+import HeroImage from '@/components/HeroImage.astro';
 import heroImage from '@/images/USED-school-hallway-students-painting.jpg';
 
 const title = "Magnet Schools: What They Are, How They Work, and How to Apply";
 const description = "A comprehensive guide to magnet schools covering their history, program types, how they differ from charter and private schools, and the application process.";
 const publishDate = "2024-11-05";
 const tags = ['Magnet Schools', 'School Choice'];
+export const prerender = true;
 ---
 
 <Layout title={title} description={description}>
@@ -23,9 +25,7 @@ const tags = ['Magnet Schools', 'School Choice'];
     <p class="text-base text-gray-500 mb-10">By TruSchools Staff</p>
   </header>
 
-  <div class="container">
-    <img src={heroImage.src} alt="School hallway with students and colorful artwork" class="w-full h-[400px] md:h-[500px] object-cover" />
-  </div>
+  <HeroImage src={heroImage} alt="School hallway with students and colorful artwork" />
 
   <article class="max-w-[680px] mx-auto px-5 py-10 md:py-16">
     <div class="article-body text-lg leading-relaxed text-gray-800">

@@ -6,6 +6,7 @@ import RelatedArticles from '@/components/RelatedArticles.astro';
 import BrowseByTopic from '@/components/BrowseByTopic.astro';
 import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
 import ShareButtons from '@/components/ShareButtons.astro';
+import HeroImage from '@/components/HeroImage.astro';
 import heroImage from '@/images/USED-high-school-students-classroom-vintage.jpg';
 
 const title = "The Diploma and the Torque Wrench";
@@ -13,6 +14,7 @@ const subtitle = "What is high school for now?";
 const description = "How career and technical education is transforming American high schools, giving students real-world skills and clarity about their futures.";
 const publishDate = "2024-12-08";
 const tags = ['Vocational Education', 'High School'];
+export const prerender = true;
 ---
 
 <Layout title={title} description={description}>
@@ -31,13 +33,7 @@ const tags = ['Vocational Education', 'High School'];
   </header>
 
   <!-- Hero Image - Container Width -->
-  <div class="container">
-    <img
-      src={heroImage.src}
-      alt="Students in career and technical education"
-      class="w-full h-[400px] md:h-[500px] object-cover"
-    />
-  </div>
+  <HeroImage src={heroImage} alt="Students in career and technical education" />
 
   <!-- Article Container - Centered, Narrow -->
   <article class="max-w-[680px] mx-auto px-5 py-10 md:py-16">

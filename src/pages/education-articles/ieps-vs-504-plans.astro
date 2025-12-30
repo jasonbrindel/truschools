@@ -6,12 +6,14 @@ import RelatedArticles from '@/components/RelatedArticles.astro';
 import BrowseByTopic from '@/components/BrowseByTopic.astro';
 import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
 import ShareButtons from '@/components/ShareButtons.astro';
+import HeroImage from '@/components/HeroImage.astro';
 import heroImage from '@/images/USED-classroom-teacher-students-illustration.jpg';
 
 const title = "IEPs vs. 504 Plans: What Every Elementary School Parent Needs to Understand";
 const description = "A definitive guide to the two federal frameworks that provide support for children with learning differences—how they work, what they provide, and how parents can navigate each system effectively.";
 const publishDate = "2024-10-06";
 const tags = ['Special Education', 'Elementary School'];
+export const prerender = true;
 ---
 
 <Layout title={title} description={description}>
@@ -29,13 +31,7 @@ const tags = ['Special Education', 'Elementary School'];
   </header>
 
   <!-- Hero Image - Container Width -->
-  <div class="container">
-    <img
-      src={heroImage.src}
-      alt="Teacher working with students in classroom"
-      class="w-full h-[400px] md:h-[500px] object-cover"
-    />
-  </div>
+  <HeroImage src={heroImage} alt="Teacher working with students in classroom" />
 
   <!-- Article Container - Centered, Narrow -->
   <article class="max-w-[680px] mx-auto px-5 py-10 md:py-16">

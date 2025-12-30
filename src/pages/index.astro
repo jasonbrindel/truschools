@@ -22,7 +22,9 @@ import articleKindergartenImage from '@/images/USED-kindergarten-readiness-joyfu
 import articleHighSchoolImage from '@/images/USED-high-school-graduation-requirements.jpg';
 import articleCollegeMajorImage from '@/images/USED-choosing-college-major.jpg';
 
-const db = Astro.locals.runtime?.env?.DB;
+// Prerender the homepage for better LCP performance
+// Stats are hardcoded - update these values after data imports
+export const prerender = true;
 
 // Rotating questions for Q&A section (changes weekly)
 const weeklyQuestions = [
@@ -42,69 +44,27 @@ const startOfYear = new Date(now.getFullYear(), 0, 1);
 const weekNumber = Math.floor((now.getTime() - startOfYear.getTime()) / (7 * 24 * 60 * 60 * 1000));
 const currentQuestion = weeklyQuestions[weekNumber % weeklyQuestions.length];
 
-// Get stats for homepage
-let stats = {
-  totalSchools: 0,
-  totalColleges: 0,
-  publicSchools: 0,
-  privateSchools: 0,
-  charterSchools: 0,
-  magnetSchools: 0,
-  highSchools: 0,
-  middleSchools: 0,
-  elementarySchools: 0,
-  preschools: 0,
-  totalStates: 0,
-  vocationalTotal: 0,
-  beautySchools: 0,
-  culinarySchools: 0,
-  healthcareSchools: 0,
-  technologySchools: 0,
-  tradeSchools: 0,
+// Hardcoded stats for prerendering - update after data imports
+// Last updated: 2024-12-30
+const stats = {
+  totalSchools: 121166,
+  totalColleges: 7974,
+  publicSchools: 90375,
+  privateSchools: 30791,
+  charterSchools: 7662,
+  magnetSchools: 3451,
+  highSchools: 46667,
+  middleSchools: 34049,
+  elementarySchools: 63466,
+  preschools: 32586,
+  totalStates: 52,
+  vocationalTotal: 7012,
+  beautySchools: 2725,
+  culinarySchools: 360,
+  healthcareSchools: 1546,
+  technologySchools: 1296,
+  tradeSchools: 1020,
 };
-
-if (db) {
-  try {
-    const [schoolCount, collegeCount, publicCount, privateCount, charterCount, magnetCount, highCount, middleCount, elemCount, preCount, stateCount, vocationalCount, beautyCount, culinaryCount, healthcareCount, technologyCount, tradeCount] = await Promise.all([
-      db.prepare('SELECT COUNT(*) as count FROM schools WHERE active = 1').first(),
-      db.prepare('SELECT COUNT(*) as count FROM colleges WHERE active = 1').first(),
-      db.prepare('SELECT COUNT(*) as count FROM schools WHERE is_public = 1 AND active = 1').first(),
-      db.prepare('SELECT COUNT(*) as count FROM schools WHERE is_public = 0 AND active = 1').first(),
-      db.prepare('SELECT COUNT(*) as count FROM schools WHERE is_charter = 1 AND active = 1').first(),
-      db.prepare('SELECT COUNT(*) as count FROM schools WHERE is_magnet = 1 AND active = 1').first(),
-      db.prepare('SELECT COUNT(*) as count FROM schools WHERE is_high_school = 1 AND active = 1').first(),
-      db.prepare('SELECT COUNT(*) as count FROM schools WHERE is_middle_school = 1 AND active = 1').first(),
-      db.prepare('SELECT COUNT(*) as count FROM schools WHERE is_elementary = 1 AND active = 1').first(),
-      db.prepare('SELECT COUNT(*) as count FROM schools WHERE is_preschool = 1 AND active = 1').first(),
-      db.prepare('SELECT COUNT(DISTINCT state) as count FROM schools WHERE active = 1').first(),
-      db.prepare("SELECT COUNT(*) as count FROM colleges WHERE vocational_type IS NOT NULL AND active = 1").first(),
-      db.prepare("SELECT COUNT(*) as count FROM colleges WHERE vocational_type = 'beauty' AND active = 1").first(),
-      db.prepare("SELECT COUNT(*) as count FROM colleges WHERE vocational_type = 'culinary' AND active = 1").first(),
-      db.prepare("SELECT COUNT(*) as count FROM colleges WHERE vocational_type = 'healthcare' AND active = 1").first(),
-      db.prepare("SELECT COUNT(*) as count FROM colleges WHERE vocational_type = 'technology' AND active = 1").first(),
-      db.prepare("SELECT COUNT(*) as count FROM colleges WHERE vocational_type = 'trade' AND active = 1").first(),
-    ]);
-    stats.totalSchools = (schoolCount as any)?.count || 0;
-    stats.totalColleges = (collegeCount as any)?.count || 0;
-    stats.publicSchools = (publicCount as any)?.count || 0;
-    stats.privateSchools = (privateCount as any)?.count || 0;
-    stats.charterSchools = (charterCount as any)?.count || 0;
-    stats.magnetSchools = (magnetCount as any)?.count || 0;
-    stats.highSchools = (highCount as any)?.count || 0;
-    stats.middleSchools = (middleCount as any)?.count || 0;
-    stats.elementarySchools = (elemCount as any)?.count || 0;
-    stats.preschools = (preCount as any)?.count || 0;
-    stats.totalStates = (stateCount as any)?.count || 0;
-    stats.vocationalTotal = (vocationalCount as any)?.count || 0;
-    stats.beautySchools = (beautyCount as any)?.count || 0;
-    stats.culinarySchools = (culinaryCount as any)?.count || 0;
-    stats.healthcareSchools = (healthcareCount as any)?.count || 0;
-    stats.technologySchools = (technologyCount as any)?.count || 0;
-    stats.tradeSchools = (tradeCount as any)?.count || 0;
-  } catch (e) {
-    // Database not yet set up
-  }
-}
 
 // School types - matching original site layout
 const schoolTypes = [
@@ -618,15 +578,15 @@ const states = [
           <!-- Primary Stats - Large Numbers -->
           <div class="grid grid-cols-3 gap-2 mb-4">
             <div class="bg-white rounded-lg p-2.5 text-center shadow-sm border border-slate-100">
-              <div class="text-xl font-bold text-brand-blue">{stats.totalSchools > 0 ? stats.totalSchools.toLocaleString() : '121K+'}</div>
+              <div class="text-xl font-bold text-brand-blue">{stats.totalSchools.toLocaleString()}</div>
               <div class="text-[10px] text-gray-500 uppercase tracking-wide">K-12 Schools</div>
             </div>
             <div class="bg-white rounded-lg p-2.5 text-center shadow-sm border border-slate-100">
-              <div class="text-xl font-bold text-brand-blue">{stats.totalColleges > 0 ? stats.totalColleges.toLocaleString() : '7,900+'}</div>
+              <div class="text-xl font-bold text-brand-blue">{stats.totalColleges.toLocaleString()}</div>
               <div class="text-[10px] text-gray-500 uppercase tracking-wide">Colleges</div>
             </div>
             <div class="bg-white rounded-lg p-2.5 text-center shadow-sm border border-slate-100">
-              <div class="text-xl font-bold text-brand-blue">{stats.vocationalTotal > 0 ? stats.vocationalTotal.toLocaleString() : '2,400+'}</div>
+              <div class="text-xl font-bold text-brand-blue">{stats.vocationalTotal.toLocaleString()}</div>
               <div class="text-[10px] text-gray-500 uppercase tracking-wide">Vocational</div>
             </div>
           </div>
@@ -635,19 +595,19 @@ const states = [
           <div class="space-y-2 mb-4">
             <div class="flex items-center justify-between py-1.5 border-b border-slate-200">
               <span class="text-gray-600 fs-12">Public Schools</span>
-              <span class="font-semibold text-gray-800 fs-12">{stats.publicSchools > 0 ? stats.publicSchools.toLocaleString() : '90,000+'}</span>
+              <span class="font-semibold text-gray-800 fs-12">{stats.publicSchools.toLocaleString()}</span>
             </div>
             <div class="flex items-center justify-between py-1.5 border-b border-slate-200">
               <span class="text-gray-600 fs-12">Private Schools</span>
-              <span class="font-semibold text-gray-800 fs-12">{stats.privateSchools > 0 ? stats.privateSchools.toLocaleString() : '30,000+'}</span>
+              <span class="font-semibold text-gray-800 fs-12">{stats.privateSchools.toLocaleString()}</span>
             </div>
             <div class="flex items-center justify-between py-1.5 border-b border-slate-200">
               <span class="text-gray-600 fs-12">Charter Schools</span>
-              <span class="font-semibold text-gray-800 fs-12">{stats.charterSchools > 0 ? stats.charterSchools.toLocaleString() : '7,600+'}</span>
+              <span class="font-semibold text-gray-800 fs-12">{stats.charterSchools.toLocaleString()}</span>
             </div>
             <div class="flex items-center justify-between py-1.5 border-b border-slate-200">
               <span class="text-gray-600 fs-12">Magnet Schools</span>
-              <span class="font-semibold text-gray-800 fs-12">{stats.magnetSchools > 0 ? stats.magnetSchools.toLocaleString() : '3,400+'}</span>
+              <span class="font-semibold text-gray-800 fs-12">{stats.magnetSchools.toLocaleString()}</span>
             </div>
           </div>
 
@@ -657,19 +617,19 @@ const states = [
             <div class="grid grid-cols-2 gap-x-4 gap-y-1 fs-12">
               <div class="flex justify-between">
                 <span class="text-gray-600">Preschools</span>
-                <span class="font-medium text-gray-800">{stats.preschools > 0 ? stats.preschools.toLocaleString() : '32K+'}</span>
+                <span class="font-medium text-gray-800">{stats.preschools.toLocaleString()}</span>
               </div>
               <div class="flex justify-between">
                 <span class="text-gray-600">Elementary</span>
-                <span class="font-medium text-gray-800">{stats.elementarySchools > 0 ? stats.elementarySchools.toLocaleString() : '63K+'}</span>
+                <span class="font-medium text-gray-800">{stats.elementarySchools.toLocaleString()}</span>
               </div>
               <div class="flex justify-between">
                 <span class="text-gray-600">Middle</span>
-                <span class="font-medium text-gray-800">{stats.middleSchools > 0 ? stats.middleSchools.toLocaleString() : '34K+'}</span>
+                <span class="font-medium text-gray-800">{stats.middleSchools.toLocaleString()}</span>
               </div>
               <div class="flex justify-between">
                 <span class="text-gray-600">High School</span>
-                <span class="font-medium text-gray-800">{stats.highSchools > 0 ? stats.highSchools.toLocaleString() : '46K+'}</span>
+                <span class="font-medium text-gray-800">{stats.highSchools.toLocaleString()}</span>
               </div>
             </div>
           </div>
@@ -680,23 +640,23 @@ const states = [
             <div class="grid grid-cols-2 gap-x-4 gap-y-1 fs-12">
               <div class="flex justify-between">
                 <span class="text-gray-600">Beauty</span>
-                <span class="font-medium text-gray-800">{stats.beautySchools > 0 ? stats.beautySchools.toLocaleString() : '949'}</span>
+                <span class="font-medium text-gray-800">{stats.beautySchools.toLocaleString()}</span>
               </div>
               <div class="flex justify-between">
                 <span class="text-gray-600">Culinary</span>
-                <span class="font-medium text-gray-800">{stats.culinarySchools > 0 ? stats.culinarySchools.toLocaleString() : '637'}</span>
+                <span class="font-medium text-gray-800">{stats.culinarySchools.toLocaleString()}</span>
               </div>
               <div class="flex justify-between">
                 <span class="text-gray-600">Healthcare</span>
-                <span class="font-medium text-gray-800">{stats.healthcareSchools > 0 ? stats.healthcareSchools.toLocaleString() : '125'}</span>
+                <span class="font-medium text-gray-800">{stats.healthcareSchools.toLocaleString()}</span>
               </div>
               <div class="flex justify-between">
                 <span class="text-gray-600">Technology</span>
-                <span class="font-medium text-gray-800">{stats.technologySchools > 0 ? stats.technologySchools.toLocaleString() : '74'}</span>
+                <span class="font-medium text-gray-800">{stats.technologySchools.toLocaleString()}</span>
               </div>
               <div class="flex justify-between">
                 <span class="text-gray-600">Trade</span>
-                <span class="font-medium text-gray-800">{stats.tradeSchools > 0 ? stats.tradeSchools.toLocaleString() : '40'}</span>
+                <span class="font-medium text-gray-800">{stats.tradeSchools.toLocaleString()}</span>
               </div>
             </div>
           </div>
@@ -706,7 +666,7 @@ const states = [
             <svg class="w-4 h-4 text-brand-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            <span class="text-brand-green-dark font-medium fs-12">{stats.totalStates > 0 ? stats.totalStates : '50+'} States & Territories Covered</span>
+            <span class="text-brand-green-dark font-medium fs-12">{stats.totalStates} States & Territories Covered</span>
           </div>
         </div>
 

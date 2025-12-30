@@ -6,12 +6,14 @@ import RelatedArticles from '@/components/RelatedArticles.astro';
 import BrowseByTopic from '@/components/BrowseByTopic.astro';
 import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
 import ShareButtons from '@/components/ShareButtons.astro';
+import HeroImage from '@/components/HeroImage.astro';
 import heroImage from '@/images/USED-what-kindergarten-really-requires.jpg';
 
 const title = "What Kindergarten Really Requires";
 const description = "Your child probably doesn't need to read yet. But they do need something else. Research reveals the skills that truly predict kindergarten success.";
 const publishDate = "2025-01-07";
 const tags = ['Kindergarten', 'Preschool'];
+export const prerender = true;
 ---
 
 <Layout title={title} description={description}>
@@ -29,13 +31,7 @@ const tags = ['Kindergarten', 'Preschool'];
   </header>
 
   <!-- Hero Image - Container Width -->
-  <div class="container">
-    <img
-      src={heroImage.src}
-      alt="Young children ready for kindergarten"
-      class="w-full h-[400px] md:h-[500px] object-cover"
-    />
-  </div>
+  <HeroImage src={heroImage} alt="Young children ready for kindergarten" />
 
   <!-- Article Container - Centered, Narrow -->
   <article class="max-w-[680px] mx-auto px-5 py-10 md:py-16">

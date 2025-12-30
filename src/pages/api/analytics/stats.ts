@@ -4,7 +4,6 @@ import type { APIRoute } from 'astro';
 export const POST: APIRoute = async ({ request, locals }) => {
   const body = await request.json().catch(() => ({}));
   const site = body.site;
-  const days = parseInt(body.days || '7');
 
   const corsHeaders = {
     'Content-Type': 'application/json',
@@ -23,7 +22,31 @@ export const POST: APIRoute = async ({ request, locals }) => {
     });
   }
 
-  const since = Date.now() - (days * 24 * 60 * 60 * 1000);
+  // Calculate time range based on input
+  let since: number;
+  let until: number | null = null;
+
+  if (body.days === 'yesterday') {
+    // Yesterday: from start of yesterday to end of yesterday
+    const now = new Date();
+    const yesterdayEnd = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
+    const yesterdayStart = new Date(yesterdayEnd);
+    yesterdayStart.setDate(yesterdayStart.getDate() - 1);
+    since = yesterdayStart.getTime();
+    until = yesterdayEnd.getTime();
+  } else if (body.startDate && body.endDate) {
+    // Custom date range
+    since = new Date(body.startDate).getTime();
+    // End date should include the entire day
+    const endDate = new Date(body.endDate);
+    endDate.setDate(endDate.getDate() + 1);
+    until = endDate.getTime();
+  } else {
+    // Default: last N days
+    const days = parseInt(body.days || '7');
+    since = Date.now() - (days * 24 * 60 * 60 * 1000);
+  }
+
   const db = (locals as any).runtime?.env?.DB;
 
   if (!db) {
@@ -33,65 +56,90 @@ export const POST: APIRoute = async ({ request, locals }) => {
     });
   }
 
+  // Build WHERE clause based on whether we have an end date
+  const timeCondition = until
+    ? 'created_at >= ? AND created_at < ?'
+    : 'created_at > ?';
+  const timeParams = until ? [since, until] : [since];
+
+  // Exclude sessions that:
+  // 1. Have visited /login or /admin/* (admin users)
+  // 2. Have 10+ pageviews (likely internal testing/admin browsing)
+  const adminSessionFilter = `
+    AND session_id NOT IN (
+      SELECT DISTINCT session_id FROM analytics_events
+      WHERE site_id = ? AND (path LIKE '/admin/%' OR path = '/login')
+    )
+    AND session_id NOT IN (
+      SELECT session_id FROM analytics_events
+      WHERE site_id = ?
+      GROUP BY session_id
+      HAVING COUNT(*) >= 10
+    )
+  `;
+  // Also exclude admin/login pages from results
+  const excludeAdminPaths = `AND path NOT LIKE '/admin/%' AND path != '/login'`;
+
   try {
     const pageviews = await db.prepare(`
       SELECT COUNT(*) as count FROM analytics_events
-      WHERE site_id = ? AND created_at > ?
-    `).bind(site, since).first();
+      WHERE site_id = ? AND ${timeCondition} ${excludeAdminPaths} ${adminSessionFilter}
+    `).bind(site, ...timeParams, site, site).first();
 
     const sessions = await db.prepare(`
       SELECT COUNT(DISTINCT session_id) as count FROM analytics_events
-      WHERE site_id = ? AND created_at > ?
-    `).bind(site, since).first();
+      WHERE site_id = ? AND ${timeCondition} ${excludeAdminPaths} ${adminSessionFilter}
+    `).bind(site, ...timeParams, site, site).first();
 
     const duration = await db.prepare(`
       SELECT AVG(duration) as avg FROM analytics_events
-      WHERE site_id = ? AND duration > 0 AND duration < 3600 AND created_at > ?
-    `).bind(site, since).first();
+      WHERE site_id = ? AND duration > 0 AND duration < 3600 AND ${timeCondition} ${excludeAdminPaths} ${adminSessionFilter}
+    `).bind(site, ...timeParams, site, site).first();
 
     const pagesPerSession = await db.prepare(`
       SELECT AVG(page_count) as avg FROM (
         SELECT session_id, COUNT(*) as page_count FROM analytics_events
-        WHERE site_id = ? AND created_at > ?
+        WHERE site_id = ? AND ${timeCondition} ${excludeAdminPaths} ${adminSessionFilter}
         GROUP BY session_id
       )
-    `).bind(site, since).first();
+    `).bind(site, ...timeParams, site, site).first();
 
     // Get average session duration from the last pageview of each session
     const avgSessionDuration = await db.prepare(`
       SELECT AVG(session_duration) as avg FROM (
         SELECT session_id, MAX(session_duration) as session_duration FROM analytics_events
-        WHERE site_id = ? AND session_duration > 0 AND session_duration < 7200 AND created_at > ?
+        WHERE site_id = ? AND session_duration > 0 AND session_duration < 7200 AND ${timeCondition} ${excludeAdminPaths} ${adminSessionFilter}
         GROUP BY session_id
       )
-    `).bind(site, since).first();
+    `).bind(site, ...timeParams, site, site).first();
 
     const topPages = await db.prepare(`
-      SELECT path, COUNT(*) as views FROM analytics_events
-      WHERE site_id = ? AND created_at > ?
-      GROUP BY path ORDER BY views DESC LIMIT 20
-    `).bind(site, since).all();
+      SELECT path, COUNT(*) as views, AVG(CASE WHEN duration > 0 AND duration < 3600 THEN duration ELSE NULL END) as avg_duration
+      FROM analytics_events
+      WHERE site_id = ? AND ${timeCondition} ${excludeAdminPaths} ${adminSessionFilter}
+      GROUP BY path ORDER BY views DESC LIMIT 100
+    `).bind(site, ...timeParams, site, site).all();
 
     const topReferrers = await db.prepare(`
       SELECT referrer, COUNT(*) as count FROM analytics_events
-      WHERE site_id = ? AND referrer IS NOT NULL AND referrer != '' AND created_at > ?
+      WHERE site_id = ? AND referrer IS NOT NULL AND referrer != '' AND ${timeCondition} ${excludeAdminPaths} ${adminSessionFilter}
       GROUP BY referrer ORDER BY count DESC LIMIT 10
-    `).bind(site, since).all();
+    `).bind(site, ...timeParams, site, site).all();
 
     const byDay = await db.prepare(`
       SELECT
         DATE(created_at / 1000, 'unixepoch') as date,
         COUNT(*) as views
       FROM analytics_events
-      WHERE site_id = ? AND created_at > ?
+      WHERE site_id = ? AND ${timeCondition} ${excludeAdminPaths} ${adminSessionFilter}
       GROUP BY date ORDER BY date
-    `).bind(site, since).all();
+    `).bind(site, ...timeParams, site, site).all();
 
     const countries = await db.prepare(`
       SELECT country, COUNT(*) as count FROM analytics_events
-      WHERE site_id = ? AND country IS NOT NULL AND created_at > ?
+      WHERE site_id = ? AND country IS NOT NULL AND ${timeCondition} ${excludeAdminPaths} ${adminSessionFilter}
       GROUP BY country ORDER BY count DESC LIMIT 10
-    `).bind(site, since).all();
+    `).bind(site, ...timeParams, site, site).all();
 
     return new Response(JSON.stringify({
       pageviews: pageviews?.count || 0,

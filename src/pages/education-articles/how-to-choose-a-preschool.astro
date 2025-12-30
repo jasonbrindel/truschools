@@ -6,12 +6,14 @@ import RelatedArticles from '@/components/RelatedArticles.astro';
 import BrowseByTopic from '@/components/BrowseByTopic.astro';
 import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
 import ShareButtons from '@/components/ShareButtons.astro';
+import HeroImage from '@/components/HeroImage.astro';
 import heroImage from '@/images/USED-preschool-1.jpg';
 
 const title = "The First Classroom";
 const description = "What really matters when choosing a preschool—and how to find it. A comprehensive guide for parents on evaluating early childhood programs.";
 const publishDate = "2024-09-21";
 const tags = ['Preschool', 'School Choice'];
+export const prerender = true;
 ---
 
 <Layout title={title} description={description}>
@@ -23,9 +25,7 @@ const tags = ['Preschool', 'School Choice'];
     <p class="text-base text-gray-500 mb-10">By TruSchools Staff</p>
   </header>
 
-  <div class="container">
-    <img src={heroImage.src} alt="Young students smiling in a classroom" class="w-full h-[400px] md:h-[500px] object-cover" />
-  </div>
+  <HeroImage src={heroImage} alt="Young students smiling in a classroom" />
 
   <article class="max-w-[680px] mx-auto px-5 py-10 md:py-16">
     <div class="article-body text-lg leading-relaxed text-gray-800">

@@ -6,12 +6,14 @@ import RelatedArticles from '@/components/RelatedArticles.astro';
 import BrowseByTopic from '@/components/BrowseByTopic.astro';
 import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
 import ShareButtons from '@/components/ShareButtons.astro';
+import HeroImage from '@/components/HeroImage.astro';
 import heroImage from '@/images/USED-california-tk-classroom.jpg';
 
 const title = "California's Universal Transitional Kindergarten (TK): Everything Parents Need to Know";
 const description = "A comprehensive guide to California's Universal TK program reaching full implementation in 2025-26—eligibility, teacher requirements, how it compares to other options, and whether it's right for your child.";
 const publishDate = "2024-08-07";
 const tags = ['Kindergarten', 'Preschool'];
+export const prerender = true;
 ---
 
 <Layout title={title} description={description}>
@@ -29,13 +31,7 @@ const tags = ['Kindergarten', 'Preschool'];
   </header>
 
   <!-- Hero Image - Container Width -->
-  <div class="container">
-    <img
-      src={heroImage.src}
-      alt="Colorful transitional kindergarten classroom with small chairs and learning materials"
-      class="w-full h-[400px] md:h-[500px] object-cover"
-    />
-  </div>
+  <HeroImage src={heroImage} alt="Colorful transitional kindergarten classroom with small chairs and learning materials" />
 
   <!-- Article Container - Centered, Narrow -->
   <article class="max-w-[680px] mx-auto px-5 py-10 md:py-16">

@@ -39,6 +39,9 @@ Astro.response.headers.set('Cloudflare-CDN-Cache-Control', 'no-store');
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex, nofollow">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <title>{title}</title>
   <style is:global>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -80,7 +83,8 @@ Astro.response.headers.set('Cloudflare-CDN-Cache-Control', 'no-store');
       align-items: center;
     }
 
-    .analytics-controls select {
+    .analytics-controls select,
+    .analytics-controls input[type="date"] {
       padding: 10px 14px;
       border: 1px solid #d1d5db;
       border-radius: 8px;
@@ -88,17 +92,48 @@ Astro.response.headers.set('Cloudflare-CDN-Cache-Control', 'no-store');
       background: #fff;
       cursor: pointer;
       min-width: 140px;
+      height: 42px;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M3 5l3 3 3-3'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 32px;
     }
 
-    .analytics-controls select:focus {
+    .analytics-controls input[type="date"] {
+      background-image: none;
+      padding-right: 14px;
+      min-width: 130px;
+    }
+
+    .analytics-controls select:focus,
+    .analytics-controls input[type="date"]:focus {
       outline: none;
       border-color: #3b82f6;
       box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
     }
 
+    .date-range-wrapper {
+      display: none;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .date-range-wrapper.visible {
+      display: flex;
+    }
+
+    .date-range-wrapper span {
+      color: #6b7280;
+      font-size: 0.85rem;
+    }
+
     .analytics-controls button {
       padding: 10px 20px;
       background: #1f2937;
+      height: 42px;
       color: #fff;
       border: none;
       border-radius: 8px;
@@ -222,13 +257,27 @@ Astro.response.headers.set('Cloudflare-CDN-Cache-Control', 'no-store');
     }
 
     .analytics-tables {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      display: flex;
+      flex-direction: column;
       gap: 20px;
     }
 
-    @media (max-width: 1000px) {
-      .analytics-tables { grid-template-columns: 1fr; }
+    .analytics-tables-row {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 800px) {
+      .analytics-tables-row { grid-template-columns: 1fr; }
+    }
+
+    .analytics-table-card.full-width {
+      width: 100%;
+    }
+
+    .analytics-table-card.full-width td:first-child {
+      max-width: none;
     }
 
     .analytics-table-card {
@@ -274,11 +323,30 @@ Astro.response.headers.set('Cloudflare-CDN-Cache-Control', 'no-store');
       white-space: nowrap;
     }
 
-    .analytics-table-card td:last-child {
+    .analytics-table-card td:not(:first-child) {
       text-align: right;
       color: #6b7280;
       font-weight: 500;
       font-variant-numeric: tabular-nums;
+    }
+
+    .analytics-table-card th {
+      padding: 10px 20px;
+      text-align: left;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #9ca3af;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .analytics-table-card th:not(:first-child) {
+      text-align: right;
+    }
+
+    .analytics-table-card thead tr:hover {
+      background: transparent;
     }
 
     .analytics-empty {
@@ -316,6 +384,57 @@ Astro.response.headers.set('Cloudflare-CDN-Cache-Control', 'no-store');
       border-radius: 12px;
       border: 1px solid #fecaca;
     }
+
+    .analytics-pagination {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 20px;
+      border-top: 1px solid #f3f4f6;
+      background: #fafafa;
+    }
+
+    .analytics-pagination-info {
+      font-size: 0.8rem;
+      color: #6b7280;
+    }
+
+    .analytics-pagination-btns {
+      display: flex;
+      gap: 8px;
+    }
+
+    .analytics-pagination-btns button {
+      padding: 6px 12px;
+      font-size: 0.8rem;
+      background: #fff;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      cursor: pointer;
+      color: #374151;
+      transition: all 0.15s;
+    }
+
+    .analytics-pagination-btns button:hover:not(:disabled) {
+      background: #f3f4f6;
+      border-color: #9ca3af;
+    }
+
+    .analytics-pagination-btns button:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .analytics-pagination select {
+      padding: 4px 8px;
+      font-size: 0.8rem;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      background: #fff;
+      color: #374151;
+      cursor: pointer;
+      margin-left: 12px;
+    }
   </style>
 </head>
 <body>
@@ -328,12 +447,19 @@ Astro.response.headers.set('Cloudflare-CDN-Cache-Control', 'no-store');
     </div>
 
     <div class="analytics-controls">
-      <select id="days">
+      <select id="days" name="days_x" autocomplete="off">
         <option value="1">Today</option>
-        <option value="7" selected>Last 7 days</option>
+        <option value="yesterday">Yesterday</option>
+        <option value="7">Last 7 days</option>
         <option value="30">Last 30 days</option>
         <option value="90">Last 90 days</option>
+        <option value="custom">Custom Range</option>
       </select>
+      <div id="date-range" class="date-range-wrapper">
+        <input type="date" id="start-date" />
+        <span>to</span>
+        <input type="date" id="end-date" />
+      </div>
       <button type="button" id="refresh-btn">Refresh</button>
       <button type="button" id="notrack-btn" class="analytics-notrack-btn"></button>
     </div>
@@ -347,17 +473,47 @@ Astro.response.headers.set('Cloudflare-CDN-Cache-Control', 'no-store');
   </div>
 
   <script is:inline>
+    const dateRangeEl = document.getElementById('date-range');
+    const startDateEl = document.getElementById('start-date');
+    const endDateEl = document.getElementById('end-date');
+
+    // Pagination state
+    let currentPageData = null;
+    let topPagesPage = 0;
+    let topPagesPerPage = 20;
+
+    // Set default date range values
+    const today = new Date();
+    const weekAgo = new Date(today);
+    weekAgo.setDate(weekAgo.getDate() - 7);
+    startDateEl.value = weekAgo.toISOString().split('T')[0];
+    endDateEl.value = today.toISOString().split('T')[0];
+    startDateEl.max = today.toISOString().split('T')[0];
+    endDateEl.max = today.toISOString().split('T')[0];
+
     async function loadAnalytics() {
-      const days = document.getElementById('days').value;
+      const daysValue = document.getElementById('days').value;
       const content = document.getElementById('content');
 
       content.innerHTML = '<div class="analytics-loading"><div class="analytics-loading-spinner"></div>Loading analytics...</div>';
 
+      // Build request body based on selection
+      let requestBody = { site: 'trueschools' };
+
+      if (daysValue === 'yesterday') {
+        requestBody.days = 'yesterday';
+      } else if (daysValue === 'custom') {
+        requestBody.startDate = startDateEl.value;
+        requestBody.endDate = endDateEl.value;
+      } else {
+        requestBody.days = daysValue;
+      }
+
       try {
-        const res = await fetch('/api/analytics/stats', {
+        const res = await fetch('/api/analytics/stats?_=' + Date.now(), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ site: 'trueschools', days: days })
+          body: JSON.stringify(requestBody)
         });
         const data = await res.json();
 
@@ -365,10 +521,62 @@ Astro.response.headers.set('Cloudflare-CDN-Cache-Control', 'no-store');
           throw new Error(data.error);
         }
 
+        currentPageData = data;
+        topPagesPage = 0;
         renderAnalytics(data);
       } catch (err) {
         content.innerHTML = '<div class="analytics-error">Error loading analytics: ' + err.message + '</div>';
       }
+    }
+
+    function renderTopPagesTable() {
+      if (!currentPageData || !currentPageData.topPages) return;
+
+      const pages = currentPageData.topPages;
+      const totalPages = Math.ceil(pages.length / topPagesPerPage);
+      const start = topPagesPage * topPagesPerPage;
+      const end = start + topPagesPerPage;
+      const pageSlice = pages.slice(start, end);
+
+      let html = '<table>';
+      html += '<thead><tr><th>Page</th><th>Views</th><th>Avg Time</th></tr></thead>';
+      html += '<tbody>';
+      pageSlice.forEach(page => {
+        const avgTime = page.avg_duration ? formatDuration(Math.round(page.avg_duration)) : '-';
+        html += '<tr><td>' + page.path + '</td><td>' + page.views.toLocaleString() + '</td><td>' + avgTime + '</td></tr>';
+      });
+      html += '</tbody></table>';
+
+      // Pagination controls
+      if (pages.length > 10) {
+        html += '<div class="analytics-pagination">';
+        html += '<span class="analytics-pagination-info">Showing ' + (start + 1) + '-' + Math.min(end, pages.length) + ' of ' + pages.length;
+        html += '<select id="pages-per-page">';
+        [10, 20, 50, 100].forEach(n => {
+          if (n <= pages.length || n === 10) {
+            html += '<option value="' + n + '"' + (topPagesPerPage === n ? ' selected' : '') + '>' + n + ' per page</option>';
+          }
+        });
+        html += '</select></span>';
+        html += '<div class="analytics-pagination-btns">';
+        html += '<button id="pages-prev"' + (topPagesPage === 0 ? ' disabled' : '') + '>Prev</button>';
+        html += '<button id="pages-next"' + (topPagesPage >= totalPages - 1 ? ' disabled' : '') + '>Next</button>';
+        html += '</div></div>';
+      }
+
+      document.getElementById('top-pages-content').innerHTML = html;
+
+      // Attach pagination handlers
+      const prevBtn = document.getElementById('pages-prev');
+      const nextBtn = document.getElementById('pages-next');
+      const perPageSelect = document.getElementById('pages-per-page');
+      if (prevBtn) prevBtn.onclick = function() { topPagesPage--; renderTopPagesTable(); };
+      if (nextBtn) nextBtn.onclick = function() { topPagesPage++; renderTopPagesTable(); };
+      if (perPageSelect) perPageSelect.onchange = function() {
+        topPagesPerPage = parseInt(this.value);
+        topPagesPage = 0;
+        renderTopPagesTable();
+      };
     }
 
     function formatDuration(seconds) {
@@ -377,6 +585,74 @@ Astro.response.headers.set('Cloudflare-CDN-Cache-Control', 'no-store');
       const mins = Math.floor(seconds / 60);
       const secs = seconds % 60;
       return mins + 'm' + (secs ? ' ' + secs + 's' : '');
+    }
+
+    function getCategoryAggregates(topPages) {
+      // Define categories with display names and minimum path depth for "detail" pages
+      const categoryConfig = {
+        'schools': { label: 'Public Schools', detailDepth: 4 },
+        'private-schools': { label: 'Private Schools', detailDepth: 4 },
+        'charter-schools': { label: 'Charter Schools', detailDepth: 4 },
+        'magnet-schools': { label: 'Magnet Schools', detailDepth: 4 },
+        'colleges-universities': { label: 'Colleges & Universities', detailDepth: 3 },
+        'elementary-schools': { label: 'Elementary Schools', detailDepth: 2 },
+        'middle-schools': { label: 'Middle Schools', detailDepth: 2 },
+        'high-schools': { label: 'High Schools', detailDepth: 2 },
+        'preschools': { label: 'Preschools', detailDepth: 2 },
+        'beauty-schools': { label: 'Beauty Schools', detailDepth: 3 },
+        'culinary-schools': { label: 'Culinary Schools', detailDepth: 3 },
+        'healthcare-schools': { label: 'Healthcare Schools', detailDepth: 3 },
+        'technology-schools': { label: 'Technology Schools', detailDepth: 3 },
+        'trade-schools': { label: 'Trade Schools', detailDepth: 3 },
+        'education-articles': { label: 'Articles', detailDepth: 2 },
+        'sat-prep': { label: 'SAT Prep', detailDepth: 2 },
+        'classes': { label: 'Classes', detailDepth: 4 },
+        'admin': { label: 'Admin', detailDepth: 2 },
+      };
+
+      const categories = {};
+
+      topPages.forEach(page => {
+        // Extract category from path (e.g., /schools/... -> schools)
+        const match = page.path.match(/^\/([^\/]+)/);
+        const category = match ? match[1] : 'home';
+
+        // Count path segments (e.g., /schools/ga/atlanta/school-name = 4)
+        const pathSegments = page.path.split('/').filter(s => s.length > 0).length;
+        const config = categoryConfig[category] || { label: null, detailDepth: 99 };
+        const isDetailPage = pathSegments >= config.detailDepth;
+
+        if (!categories[category]) {
+          categories[category] = {
+            views: 0, totalDuration: 0, durationCount: 0, pages: 0,
+            detailTotalDuration: 0, detailDurationCount: 0
+          };
+        }
+        categories[category].views += page.views;
+        categories[category].pages += 1;
+        if (page.avg_duration && page.avg_duration > 0) {
+          categories[category].totalDuration += page.avg_duration * page.views;
+          categories[category].durationCount += page.views;
+
+          // Track detail pages separately
+          if (isDetailPage) {
+            categories[category].detailTotalDuration += page.avg_duration * page.views;
+            categories[category].detailDurationCount += page.views;
+          }
+        }
+      });
+
+      // Convert to array and calculate avg duration
+      return Object.entries(categories)
+        .map(([key, data]) => ({
+          category: key,
+          label: (categoryConfig[key]?.label) || key.charAt(0).toUpperCase() + key.slice(1).replace(/-/g, ' '),
+          views: data.views,
+          pages: data.pages,
+          avgDuration: data.durationCount > 0 ? Math.round(data.totalDuration / data.durationCount) : 0,
+          detailAvgDuration: data.detailDurationCount > 0 ? Math.round(data.detailTotalDuration / data.detailDurationCount) : 0
+        }))
+        .sort((a, b) => b.views - a.views);
     }
 
     function getCountryFlag(code) {
@@ -415,19 +691,33 @@ Astro.response.headers.set('Cloudflare-CDN-Cache-Control', 'no-store');
       // Tables
       html += '<div class="analytics-tables">';
 
-      // Top Pages
-      html += '<div class="analytics-table-card"><h3>Top Pages</h3>';
+      // Category Breakdown (full width)
       if (data.topPages && data.topPages.length > 0) {
+        const categories = getCategoryAggregates(data.topPages);
+        html += '<div class="analytics-table-card full-width"><h3>Traffic by Section</h3>';
         html += '<table>';
-        data.topPages.slice(0, 10).forEach(page => {
-          const displayPath = page.path.length > 35 ? page.path.slice(0, 35) + '...' : page.path;
-          html += '<tr><td title="' + page.path + '">' + displayPath + '</td><td>' + page.views.toLocaleString() + '</td></tr>';
+        html += '<thead><tr><th>Section</th><th>Pages</th><th>Views</th><th>Avg Time</th><th>Avg Time (Detail Pages)</th></tr></thead>';
+        html += '<tbody>';
+        categories.forEach(cat => {
+          const avgTime = cat.avgDuration ? formatDuration(cat.avgDuration) : '-';
+          const detailAvgTime = cat.detailAvgDuration ? formatDuration(cat.detailAvgDuration) : '-';
+          html += '<tr><td>' + cat.label + '</td><td>' + cat.pages.toLocaleString() + '</td><td>' + cat.views.toLocaleString() + '</td><td>' + avgTime + '</td><td>' + detailAvgTime + '</td></tr>';
         });
-        html += '</table>';
+        html += '</tbody></table></div>';
+      }
+
+      // Top Pages (full width) - content rendered separately for pagination
+      html += '<div class="analytics-table-card full-width"><h3>Top Pages</h3>';
+      html += '<div id="top-pages-content">';
+      if (data.topPages && data.topPages.length > 0) {
+        html += '<div class="analytics-loading" style="padding: 20px;">Loading...</div>';
       } else {
         html += '<div class="analytics-empty">No page data yet</div>';
       }
-      html += '</div>';
+      html += '</div></div>';
+
+      // Row with Referrers and Countries side by side
+      html += '<div class="analytics-tables-row">';
 
       // Referrers
       html += '<div class="analytics-table-card"><h3>Top Referrers</h3>';
@@ -463,17 +753,51 @@ Astro.response.headers.set('Cloudflare-CDN-Cache-Control', 'no-store');
       }
       html += '</div>';
 
-      html += '</div>';
+      html += '</div>'; // Close analytics-tables-row
+
+      html += '</div>'; // Close analytics-tables
 
       document.getElementById('content').innerHTML = html;
+
+      // Render paginated Top Pages table
+      if (data.topPages && data.topPages.length > 0) {
+        renderTopPagesTable();
+      }
     }
 
-    // Load on page load
-    loadAnalytics();
+    // Set default to Today
+    // Using pageshow event to handle Safari's bfcache form restoration
+    const daysSelect = document.getElementById('days');
+
+    function initAnalytics() {
+      daysSelect.value = '1';
+      loadAnalytics();
+    }
+
+    // pageshow fires AFTER Safari restores form state from bfcache
+    window.addEventListener('pageshow', function(event) {
+      // event.persisted is true if page was restored from bfcache
+      if (event.persisted) {
+        initAnalytics();
+      }
+    });
+
+    // Initial load
+    initAnalytics();
 
     // Event listeners
-    document.getElementById('days').addEventListener('change', loadAnalytics);
+    daysSelect.addEventListener('change', function() {
+      // Show/hide date range inputs
+      if (daysSelect.value === 'custom') {
+        dateRangeEl.classList.add('visible');
+      } else {
+        dateRangeEl.classList.remove('visible');
+      }
+      loadAnalytics();
+    });
     document.getElementById('refresh-btn').addEventListener('click', loadAnalytics);
+    startDateEl.addEventListener('change', loadAnalytics);
+    endDateEl.addEventListener('change', loadAnalytics);
 
     // No-track toggle
     const notrackBtn = document.getElementById('notrack-btn');

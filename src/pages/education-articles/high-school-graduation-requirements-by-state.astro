@@ -6,12 +6,14 @@ import RelatedArticles from '@/components/RelatedArticles.astro';
 import BrowseByTopic from '@/components/BrowseByTopic.astro';
 import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
 import ShareButtons from '@/components/ShareButtons.astro';
+import HeroImage from '@/components/HeroImage.astro';
 import heroImage from '@/images/USED-high-school-graduation-requirements.jpg';
 
 const title = "High School Graduation Requirements by State: What Your Teen Actually Needs to Graduate";
 const description = "From 13 credits in Wyoming to 26 in Texas, the requirements for a high school diploma vary dramatically across the country. Understanding your state's specific rules—and how local districts may add their own—is essential for planning your student's path to graduation and beyond.";
 const publishDate = "2024-09-12";
 const tags = ['High School', 'College Admissions'];
+export const prerender = true;
 ---
 
 <Layout title={title} description={description}>
@@ -29,13 +31,7 @@ const tags = ['High School', 'College Admissions'];
   </header>
 
   <!-- Hero Image - Container Width -->
-  <div class="container">
-    <img
-      src={heroImage.src}
-      alt="High school students in graduation caps"
-      class="w-full h-[400px] md:h-[500px] object-cover"
-    />
-  </div>
+  <HeroImage src={heroImage} alt="High school students in graduation caps" />
 
   <!-- Article Container - Centered, Narrow -->
   <article class="max-w-[680px] mx-auto px-5 py-10 md:py-16">

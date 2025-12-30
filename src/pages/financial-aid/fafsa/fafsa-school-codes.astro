@@ -170,6 +170,9 @@ const description = "Complete list of FAFSA school codes for all colleges and un
         const schools = schoolsByState[stateCode];
         const stateName = stateNames[stateCode] || stateCode;
         return (
+          <>
+          {/* Lowercase anchor for redirects from old site */}
+          <span id={`state-${stateCode.toLowerCase()}`} class="sr-only"></span>
           <div class="border border-gray-200 rounded-lg overflow-hidden" id={`state-${stateCode}`}>
             <button
               class="accordion-trigger w-full flex items-center justify-between p-4 bg-gray-50 hover:bg-gray-100 transition-colors text-left"
@@ -206,6 +209,7 @@ const description = "Complete list of FAFSA school codes for all colleges and un
               </div>
             </div>
           </div>
+          </>
         );
       })}
 

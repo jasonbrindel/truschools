@@ -6,12 +6,14 @@ import RelatedArticles from '@/components/RelatedArticles.astro';
 import BrowseByTopic from '@/components/BrowseByTopic.astro';
 import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
 import ShareButtons from '@/components/ShareButtons.astro';
+import HeroImage from '@/components/HeroImage.astro';
 import heroImage from '@/images/USED-preschool-teacher-reading.jpg';
 
 const title = "Choosing a Preschool When Everything Feels Like It Matters";
 const description = "The research on what actually matters in early childhood education—and how to find it during a 30-minute tour.";
 const publishDate = "2024-08-28";
 const tags = ['Preschool', 'School Choice'];
+export const prerender = true;
 ---
 
 <Layout title={title} description={description}>
@@ -23,9 +25,7 @@ const tags = ['Preschool', 'School Choice'];
     <p class="text-base text-gray-500 mb-10">By TruSchools Staff</p>
   </header>
 
-  <div class="container">
-    <img src={heroImage.src} alt="Peaceful morning classroom with natural light" class="w-full h-[400px] md:h-[500px] object-cover" />
-  </div>
+  <HeroImage src={heroImage} alt="Peaceful morning classroom with natural light" />
 
   <article class="max-w-[680px] mx-auto px-5 py-10 md:py-16">
     <div class="article-body text-lg leading-relaxed text-gray-800">

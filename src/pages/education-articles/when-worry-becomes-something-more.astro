@@ -6,12 +6,14 @@ import RelatedArticles from '@/components/RelatedArticles.astro';
 import BrowseByTopic from '@/components/BrowseByTopic.astro';
 import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
 import ShareButtons from '@/components/ShareButtons.astro';
+import HeroImage from '@/components/HeroImage.astro';
 import heroImage from '@/images/USED-teen-mental-health-warning-signs.jpg';
 
 const title = "When Worry Becomes Something More";
 const description = "Understanding the warning signs of teen mental health struggles—and what parents can actually do about them. A guide for families navigating adolescent anxiety and depression.";
 const publishDate = "2025-01-16";
 const tags = ['Mental Health', 'High School', 'Middle School'];
+export const prerender = true;
 ---
 
 <Layout title={title} description={description}>
@@ -29,13 +31,7 @@ const tags = ['Mental Health', 'High School', 'Middle School'];
   </header>
 
   <!-- Hero Image - Container Width -->
-  <div class="container">
-    <img
-      src={heroImage.src}
-      alt="Teenager contemplating mental health challenges"
-      class="w-full h-[400px] md:h-[500px] object-cover"
-    />
-  </div>
+  <HeroImage src={heroImage} alt="Teenager contemplating mental health challenges" />
 
   <!-- Article Container - Centered, Narrow -->
   <article class="max-w-[680px] mx-auto px-5 py-10 md:py-16">

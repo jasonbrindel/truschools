@@ -6,12 +6,14 @@ import RelatedArticles from '@/components/RelatedArticles.astro';
 import BrowseByTopic from '@/components/BrowseByTopic.astro';
 import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
 import ShareButtons from '@/components/ShareButtons.astro';
+import HeroImage from '@/components/HeroImage.astro';
 import heroImage from '@/images/USED-student-carrying-books-school.jpg';
 
 const title = "The Complete Parent's Guide to Magnet School Admissions";
 const description = "Understanding the application process, lottery systems, and what it takes to get into magnet schools across the United States.";
 const publishDate = "2024-10-27";
 const tags = ['Magnet Schools', 'School Choice'];
+export const prerender = true;
 ---
 
 <Layout title={title} description={description}>
@@ -23,9 +25,7 @@ const tags = ['Magnet Schools', 'School Choice'];
     <p class="text-base text-gray-500 mb-10">By TruSchools Staff</p>
   </header>
 
-  <div class="container">
-    <img src={heroImage.src} alt="Student carrying books walking to school" class="w-full h-[400px] md:h-[500px] object-cover" />
-  </div>
+  <HeroImage src={heroImage} alt="Student carrying books walking to school" />
 
   <article class="max-w-[680px] mx-auto px-5 py-10 md:py-16">
     <div class="article-body text-lg leading-relaxed text-gray-800">

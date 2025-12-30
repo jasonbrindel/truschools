@@ -6,12 +6,14 @@ import RelatedArticles from '@/components/RelatedArticles.astro';
 import BrowseByTopic from '@/components/BrowseByTopic.astro';
 import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
 import ShareButtons from '@/components/ShareButtons.astro';
+import HeroImage from '@/components/HeroImage.astro';
 import heroImage from '@/images/USED-common-app-essay-guide.jpg';
 
 const title = "The Examined Life at Seventeen: Self-Knowledge, Authenticity, and the Art of the College Essay";
 const description = "A guide to writing authentic college application essays that reveal genuine self-knowledge in an age of AI.";
 const publishDate = "2024-09-03";
 const tags = ['College Admissions', 'High School'];
+export const prerender = true;
 ---
 
 <Layout title={title} description={description}>
@@ -30,13 +32,7 @@ const tags = ['College Admissions', 'High School'];
   </header>
 
   <!-- Hero Image - Container Width -->
-  <div class="container">
-    <img
-      src={heroImage.src}
-      alt="Student reflecting on personal essay writing"
-      class="w-full h-[400px] md:h-[500px] object-cover"
-    />
-  </div>
+  <HeroImage src={heroImage} alt="Student reflecting on personal essay writing" />
 
   <!-- Article Container - Centered, Narrow -->
   <article class="max-w-[680px] mx-auto px-5 py-10 md:py-16">

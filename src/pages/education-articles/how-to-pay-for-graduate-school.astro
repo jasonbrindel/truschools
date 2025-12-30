@@ -6,12 +6,14 @@ import RelatedArticles from '@/components/RelatedArticles.astro';
 import BrowseByTopic from '@/components/BrowseByTopic.astro';
 import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
 import ShareButtons from '@/components/ShareButtons.astro';
+import HeroImage from '@/components/HeroImage.astro';
 import heroImage from '@/images/USED-how-to-pay-for-graduate-school.jpg';
 
 const title = "How to Pay for Graduate School: The Complete Funding Guide";
 const description = "A comprehensive analysis of fellowships, assistantships, employer benefits, federal loans, and strategic approaches to minimizing graduate school debt.";
 const publishDate = "2024-10-03";
 const tags = ['Graduate School', 'Financial Aid'];
+export const prerender = true;
 ---
 
 <Layout title={title} description={description}>
@@ -30,13 +32,7 @@ const tags = ['Graduate School', 'Financial Aid'];
   </header>
 
   <!-- Hero Image - Container Width -->
-  <div class="container">
-    <img
-      src={heroImage.src}
-      alt="Graduate students on campus"
-      class="w-full h-[400px] md:h-[500px] object-cover"
-    />
-  </div>
+  <HeroImage src={heroImage} alt="Graduate students on campus" />
 
   <!-- Article Container - Centered, Narrow -->
   <article class="max-w-[680px] mx-auto px-5 py-10 md:py-16">

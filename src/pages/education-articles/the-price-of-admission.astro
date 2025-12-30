@@ -6,6 +6,7 @@ import RelatedArticles from '@/components/RelatedArticles.astro';
 import BrowseByTopic from '@/components/BrowseByTopic.astro';
 import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
 import ShareButtons from '@/components/ShareButtons.astro';
+import HeroImage from '@/components/HeroImage.astro';
 import heroImage from '@/images/USED-price-of-admission-financial-aid-2.jpg';
 
 const title = "The Price of Admission";
@@ -13,6 +14,7 @@ const subtitle = "Financial 101 for College-Bound Families";
 const description = "For millions of American families, the path to college has become a labyrinth of forms, formulas, and financial gambles. A guide to navigating the maze.";
 const publishDate = "2024-12-14";
 const tags = ['Financial Aid', 'College Admissions'];
+export const prerender = true;
 ---
 
 <Layout title={`${title}: ${subtitle}`} description={description}>
@@ -31,13 +33,7 @@ const tags = ['Financial Aid', 'College Admissions'];
   </header>
 
   <!-- Hero Image - Container Width -->
-  <div class="container">
-    <img
-      src={heroImage.src}
-      alt="College campus"
-      class="w-full h-[400px] md:h-[500px] object-cover"
-    />
-  </div>
+  <HeroImage src={heroImage} alt="College campus" />
 
   <!-- Article Container - Centered, Narrow -->
   <article class="max-w-[680px] mx-auto px-5 py-10 md:py-16">

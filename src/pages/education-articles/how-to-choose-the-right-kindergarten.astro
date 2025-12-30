@@ -6,12 +6,14 @@ import RelatedArticles from '@/components/RelatedArticles.astro';
 import BrowseByTopic from '@/components/BrowseByTopic.astro';
 import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
 import ShareButtons from '@/components/ShareButtons.astro';
+import HeroImage from '@/components/HeroImage.astro';
 import heroImage from '@/images/USED-how-to-choose-kindergarten.jpg';
 
 const title = "How to Choose the Right Kindergarten: 25 Essential Questions to Ask During School Visits";
 const description = "A warm, research-informed field guide for school tours. Learn what questions to ask, what to look for, and how to evaluate whether a kindergarten is right for your child.";
 const publishDate = "2024-09-27";
 const tags = ['Kindergarten', 'School Choice'];
+export const prerender = true;
 ---
 
 <Layout title={title} description={description}>
@@ -29,13 +31,7 @@ const tags = ['Kindergarten', 'School Choice'];
   </header>
 
   <!-- Hero Image - Container Width -->
-  <div class="container">
-    <img
-      src={heroImage.src}
-      alt="Kindergarten classroom with morning light"
-      class="w-full h-[400px] md:h-[500px] object-cover"
-    />
-  </div>
+  <HeroImage src={heroImage} alt="Kindergarten classroom with morning light" />
 
   <!-- Article Container - Centered, Narrow -->
   <article class="max-w-[680px] mx-auto px-5 py-10 md:py-16">

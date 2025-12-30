@@ -6,12 +6,14 @@ import RelatedArticles from '@/components/RelatedArticles.astro';
 import BrowseByTopic from '@/components/BrowseByTopic.astro';
 import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
 import ShareButtons from '@/components/ShareButtons.astro';
+import HeroImage from '@/components/HeroImage.astro';
 import heroImage from '@/images/USED-college-application-timeline.jpg';
 
 const title = "The College Application System: A Technical Guide to the Modern Admissions Timeline";
 const description = "How strategic timing, algorithmic matching, and data-driven decisions have transformed the path from high school junior to college freshman.";
 const publishDate = "2024-08-31";
 const tags = ['College Admissions', 'High School'];
+export const prerender = true;
 ---
 
 <Layout title={title} description={description}>
@@ -30,13 +32,7 @@ const tags = ['College Admissions', 'High School'];
   </header>
 
   <!-- Hero Image - Container Width -->
-  <div class="container">
-    <img
-      src={heroImage.src}
-      alt="Students navigating college admissions process"
-      class="w-full h-[400px] md:h-[500px] object-cover"
-    />
-  </div>
+  <HeroImage src={heroImage} alt="Students navigating college admissions process" />
 
   <!-- Article Container - Centered, Narrow -->
   <article class="max-w-[680px] mx-auto px-5 py-10 md:py-16">

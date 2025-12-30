@@ -1,6 +1,16 @@
 /free-classes /classes 301
 /free-classes/* /classes/:splat 301
 
+# Redirect /public-schools/ to /schools/
+/public-schools /schools 301
+/public-schools/ /schools 301
+/public-schools/:state /schools/:state 301
+/public-schools/:state/ /schools/:state 301
+/public-schools/:state/:city /schools/:state/:city 301
+/public-schools/:state/:city/ /schools/:state/:city 301
+/public-schools/:state/:city/:school /schools/:state/:city/:school 301
+/public-schools/:state/:city/:school/ /schools/:state/:city/:school 301
+
 # Redirect category-specific school URLs to unified /schools/ path
 /elementary-schools/:state/:city/:school /schools/:state/:city/:school 301
 /elementary-schools/:state/:city/:school/ /schools/:state/:city/:school 301
@@ -43,3 +53,9 @@
 /classes/sat-prep/math /classes/sat-prep 301
 /classes/sat-prep/math/ /classes/sat-prep 301
 /classes/sat-prep/math/* /classes/sat-prep 301
+
+# Old FAFSA school code pages redirect to consolidated page with state anchor
+/financial-aid/fafsa/federal-school-codes/:state/schools/* /financial-aid/fafsa/fafsa-school-codes#state-:state 301
+/financial-aid/fafsa/federal-school-codes/:state/schools /financial-aid/fafsa/fafsa-school-codes#state-:state 301
+/financial-aid/fafsa/federal-school-codes/:state /financial-aid/fafsa/fafsa-school-codes#state-:state 301
+/financial-aid/fafsa/federal-school-codes /financial-aid/fafsa/fafsa-school-codes 301

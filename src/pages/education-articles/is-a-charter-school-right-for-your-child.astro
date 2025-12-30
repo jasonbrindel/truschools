@@ -6,7 +6,10 @@ import RelatedArticles from '@/components/RelatedArticles.astro';
 import BrowseByTopic from '@/components/BrowseByTopic.astro';
 import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
 import ShareButtons from '@/components/ShareButtons.astro';
+import HeroImage from '@/components/HeroImage.astro';
 import heroImage from '@/images/USED-student-thoughtful-classroom-portrait.jpg';
+
+export const prerender = true;
 
 const title = "Is a Charter School Right for Your Child?";
 const description = "The question isn't whether charter schools are good or bad—it's whether one might be the right fit for your particular child and your particular family. Here's how to think it through.";
@@ -29,13 +32,7 @@ const tags = ['Charter Schools', 'School Choice'];
   </header>
 
   <!-- Hero Image - Container Width -->
-  <div class="container">
-    <img
-      src={heroImage.src}
-      alt="Thoughtful student in classroom"
-      class="w-full h-[400px] md:h-[500px] object-cover"
-    />
-  </div>
+  <HeroImage src={heroImage} alt="Thoughtful student in classroom" />
 
   <!-- Article Container - Centered, Narrow -->
   <article class="max-w-[680px] mx-auto px-5 py-10 md:py-16">

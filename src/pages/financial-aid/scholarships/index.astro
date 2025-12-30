@@ -1,4 +1,5 @@
 ---
+export const prerender = true;
 import Layout from '@/layouts/Layout.astro';
 import NewsletterSignup from '@/components/NewsletterSignup.astro';
 
@@ -59,6 +60,7 @@ const states: { slug: string; name: string; abbr: string; agency: string; websit
 // Featured programs (ones with good flagship scholarships)
 const featuredStates = states.filter(s => s.flagship);
 ---
+export const prerender = true;
 
 <Layout title="State Scholarships & Grant Programs - All 50 States" description="Find state-funded scholarship and grant programs for every U.S. state. Links to official state financial aid agencies and flagship programs like HOPE, Bright Futures, and Tennessee Promise.">
   <div class="container py-5">

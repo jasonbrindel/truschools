@@ -6,6 +6,7 @@ import RelatedArticles from '@/components/RelatedArticles.astro';
 import BrowseByTopic from '@/components/BrowseByTopic.astro';
 import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
 import ShareButtons from '@/components/ShareButtons.astro';
+import HeroImage from '@/components/HeroImage.astro';
 import heroImage from '@/images/USED-ai-laptop-chatgpt.jpg';
 
 const title = "What to Teach When AI Does the Work";
@@ -13,6 +14,7 @@ const subtitle = "How to future-proof your child's education for automation and 
 const description = "A guide for parents on preparing children for a future where AI handles routine tasks, focusing on critical thinking, creativity, and human skills.";
 const publishDate = "2025-01-13";
 const tags = ['Future of Education', 'High School', 'College Admissions'];
+export const prerender = true;
 ---
 
 <Layout title={`${title}`} description={description}>
@@ -31,13 +33,7 @@ const tags = ['Future of Education', 'High School', 'College Admissions'];
   </header>
 
   <!-- Hero Image - Container Width -->
-  <div class="container">
-    <img
-      src={heroImage.src}
-      alt="Students in a classroom"
-      class="w-full h-[400px] md:h-[500px] object-cover"
-    />
-  </div>
+  <HeroImage src={heroImage} alt="Students in a classroom" />
 
   <!-- Article Container - Centered, Narrow -->
   <article class="max-w-[680px] mx-auto px-5 py-10 md:py-16">

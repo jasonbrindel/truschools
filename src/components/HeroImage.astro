@@ -1,0 +1,24 @@
+---
+import { Image } from 'astro:assets';
+
+interface Props {
+  src: ImageMetadata;
+  alt: string;
+}
+
+const { src, alt } = Astro.props;
+---
+
+<div class="container">
+  <Image
+    src={src}
+    alt={alt}
+    class="w-full h-[400px] md:h-[500px] object-cover"
+    widths={[640, 960, 1280, 1920]}
+    sizes="100vw"
+    format="webp"
+    quality={80}
+    loading="eager"
+    fetchpriority="high"
+  />
+</div>

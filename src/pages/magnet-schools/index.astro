@@ -1,4 +1,5 @@
 ---
+export const prerender = true;
 import Layout from '@/layouts/Layout.astro';
 import QAPoll from '@/components/QAPoll.astro';
 import NewsletterSignup from '@/components/NewsletterSignup.astro';
@@ -202,6 +203,7 @@ const featuredArticles = [
   },
 ];
 ---
+export const prerender = true;
 
 <Layout title="Magnet Schools in the United States" description="Find magnet schools across the United States. Browse comprehensive listings of public magnet schools by state, offering specialized curricula and theme-based educational programs.">
   <div class="container py-5">
