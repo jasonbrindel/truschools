@@ -453,6 +453,8 @@ Astro.response.headers.set('Cloudflare-CDN-Cache-Control', 'no-store');
         <option value="7">Last 7 days</option>
         <option value="30">Last 30 days</option>
         <option value="90">Last 90 days</option>
+        <option value="this_month">This Month</option>
+        <option value="last_month">Last Month</option>
         <option value="custom">Custom Range</option>
       </select>
       <div id="date-range" class="date-range-wrapper">
@@ -502,6 +504,8 @@ Astro.response.headers.set('Cloudflare-CDN-Cache-Control', 'no-store');
 
       if (daysValue === 'yesterday') {
         requestBody.days = 'yesterday';
+      } else if (daysValue === 'this_month' || daysValue === 'last_month') {
+        requestBody.days = daysValue;
       } else if (daysValue === 'custom') {
         requestBody.startDate = startDateEl.value;
         requestBody.endDate = endDateEl.value;

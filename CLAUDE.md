@@ -9,6 +9,17 @@ When importing data or building pages:
 - Display as much relevant information as possible on each page
 - More data is better - users come here for depth, not brevity
 
+## Code Change Rules
+
+**CRITICAL: Make minimal changes only.**
+
+- Make ONLY the exact change needed to solve the specific problem
+- Do NOT add extra code, CSS rules, refactoring, or "improvements" beyond what was asked
+- Do NOT assume what code exists - READ the file first before editing
+- If a fix requires changing `<style>` to `<style is:inline>`, change ONLY that - don't add new CSS rules
+- If unsure about the scope of a change, ASK before proceeding
+- One problem = one minimal fix
+
 ## Data Sources
 
 ### K-12 Schools

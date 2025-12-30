@@ -23,17 +23,31 @@ export const POST: APIRoute = async ({ request, locals }) => {
   }
 
   // Calculate time range based on input
+  // All times are calculated at midnight UTC for consistency
   let since: number;
   let until: number | null = null;
 
+  // Get current date at midnight UTC
+  const now = new Date();
+  const todayMidnightUTC = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
+
   if (body.days === 'yesterday') {
-    // Yesterday: from start of yesterday to end of yesterday
-    const now = new Date();
-    const yesterdayEnd = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
-    const yesterdayStart = new Date(yesterdayEnd);
-    yesterdayStart.setDate(yesterdayStart.getDate() - 1);
-    since = yesterdayStart.getTime();
-    until = yesterdayEnd.getTime();
+    // Yesterday: from midnight yesterday UTC to midnight today UTC
+    since = todayMidnightUTC - (24 * 60 * 60 * 1000); // midnight yesterday
+    until = todayMidnightUTC; // midnight today
+  } else if (body.days === '1' || body.days === 1) {
+    // Today: from midnight today UTC to now
+    since = todayMidnightUTC;
+    // No until - includes all events up to now
+  } else if (body.days === 'this_month') {
+    // This month: from 1st of current month at midnight UTC to now
+    since = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1);
+    // No until - includes all events up to now
+  } else if (body.days === 'last_month') {
+    // Last month: from 1st of last month to 1st of current month
+    const lastMonthStart = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - 1, 1));
+    since = lastMonthStart.getTime();
+    until = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1); // 1st of current month
   } else if (body.startDate && body.endDate) {
     // Custom date range
     since = new Date(body.startDate).getTime();
@@ -42,9 +56,9 @@ export const POST: APIRoute = async ({ request, locals }) => {
     endDate.setDate(endDate.getDate() + 1);
     until = endDate.getTime();
   } else {
-    // Default: last N days
+    // Last N days: from midnight N days ago UTC to now
     const days = parseInt(body.days || '7');
-    since = Date.now() - (days * 24 * 60 * 60 * 1000);
+    since = todayMidnightUTC - ((days - 1) * 24 * 60 * 60 * 1000); // Include today as day 1
   }
 
   const db = (locals as any).runtime?.env?.DB;
