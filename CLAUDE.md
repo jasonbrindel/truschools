@@ -44,6 +44,114 @@ When importing data or building pages:
 - **Database**: Cloudflare D1 (SQLite)
 - **Styling**: Tailwind CSS
 
+## Prerendering & Performance
+
+### Understanding SSR vs Prerendering
+
+The site uses **hybrid rendering**:
+- **Prerendered (static)**: Generated at build time, served instantly from CDN
+- **SSR (dynamic)**: Generated on each request, can query the database
+
+**CRITICAL LIMITATION**: The D1 database is NOT available at build time. Any page that needs database queries CANNOT be prerendered.
+
+### What's Prerendered vs SSR
+
+| Page Type | Rendering | Reason |
+|-----------|-----------|--------|
+| Homepage (`/`) | Prerendered | Stats are hardcoded |
+| Articles (`/education-articles/*`) | Prerendered | Static content |
+| Category indexes (`/schools`, `/charter-schools`, etc.) | Prerendered | Static content with hardcoded article cards |
+| State pages (`/schools/[state]`) | SSR | Requires DB queries for school counts |
+| City pages (`/schools/[state]/[city]`) | SSR | Requires DB queries |
+| School detail pages | SSR | Requires DB queries |
+| College/vocational pages | SSR | Requires DB queries |
+
+### Homepage Stats - MUST UPDATE AFTER DATA IMPORTS
+
+The homepage displays school/college counts in the "Our Database" section. These are **hardcoded** to enable prerendering.
+
+**Location**: `src/pages/index.astro` (lines ~47-65)
+
+```javascript
+const stats = {
+  totalSchools: 121166,
+  totalColleges: 7974,
+  publicSchools: 90375,
+  privateSchools: 30791,
+  charterSchools: 7662,
+  magnetSchools: 3451,
+  // ... etc
+};
+```
+
+**WHEN TO UPDATE**: After ANY data import that changes school/college counts:
+- NCES public school data imports
+- NCES private school data imports
+- College Scorecard imports
+- Vocational school classification updates
+
+**HOW TO GET CURRENT COUNTS**: Run these D1 queries:
+```bash
+# Total K-12 schools
+CLOUDFLARE_ACCOUNT_ID=db05e74e773d91c84692ba064111c43c npx wrangler d1 execute truschools-db --remote --command="SELECT COUNT(*) FROM schools WHERE active = 1"
+
+# Public schools
+CLOUDFLARE_ACCOUNT_ID=db05e74e773d91c84692ba064111c43c npx wrangler d1 execute truschools-db --remote --command="SELECT COUNT(*) FROM schools WHERE active = 1 AND is_private = 0 AND is_charter = 0"
+
+# Charter schools
+CLOUDFLARE_ACCOUNT_ID=db05e74e773d91c84692ba064111c43c npx wrangler d1 execute truschools-db --remote --command="SELECT COUNT(*) FROM schools WHERE active = 1 AND is_charter = 1"
+
+# Magnet schools
+CLOUDFLARE_ACCOUNT_ID=db05e74e773d91c84692ba064111c43c npx wrangler d1 execute truschools-db --remote --command="SELECT COUNT(*) FROM schools WHERE active = 1 AND is_magnet = 1"
+
+# Private schools
+CLOUDFLARE_ACCOUNT_ID=db05e74e773d91c84692ba064111c43c npx wrangler d1 execute truschools-db --remote --command="SELECT COUNT(*) FROM schools WHERE active = 1 AND is_private = 1"
+
+# Colleges
+CLOUDFLARE_ACCOUNT_ID=db05e74e773d91c84692ba064111c43c npx wrangler d1 execute truschools-db --remote --command="SELECT COUNT(*) FROM colleges WHERE active = 1"
+
+# Vocational by type
+CLOUDFLARE_ACCOUNT_ID=db05e74e773d91c84692ba064111c43c npx wrangler d1 execute truschools-db --remote --command="SELECT vocational_type, COUNT(*) FROM colleges WHERE active = 1 AND vocational_type IS NOT NULL GROUP BY vocational_type"
+```
+
+### Image Optimization
+
+Images are optimized at **build time** using Sharp (not at runtime on Cloudflare).
+
+**For article hero images**, use the `HeroImage` component:
+
+```astro
+---
+import HeroImage from '@/components/HeroImage.astro';
+import heroImage from '@/images/USED-image-name.jpg';
+---
+
+<HeroImage src={heroImage} alt="Descriptive alt text" />
+```
+
+**Benefits**:
+- Generates responsive WebP images at multiple sizes (640, 960, 1280, 1920px)
+- Sets `loading="eager"` and `fetchpriority="high"` for LCP optimization
+- Configured in `astro.config.mjs` with Sharp service
+
+**For non-hero images** (smaller images in content), use standard `<img>` tags or Astro's `<Image>` component directly.
+
+### Adding Prerendering to New Pages
+
+To prerender a page that doesn't need database access:
+
+```astro
+---
+export const prerender = true;
+// ... rest of frontmatter
+---
+```
+
+**DO NOT** add prerendering to pages that:
+- Query `Astro.locals.runtime.env.DB`
+- Use `getStaticPaths()` with database queries
+- Need dynamic data that changes frequently
+
 ## CRITICAL: Deployment
 
 **READ THIS CAREFULLY:**
