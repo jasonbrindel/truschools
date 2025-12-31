@@ -455,6 +455,134 @@ const schoolTypes = [
 - All phone numbers should be formatted as (123) 456-7890
 - Currency should use `$X,XXX` format
 
+## Admin Dashboard
+
+The site has a custom admin dashboard at `/admin/*` for managing content and viewing analytics. All admin pages require authentication via `/login`.
+
+### Admin Pages
+
+| Page | URL | Purpose |
+|------|-----|---------|
+| Site Analytics | `/admin/analytics` | Pageviews, sessions, top pages, referrers, countries |
+| Subscribers | `/admin/subscribers` | Newsletter subscription management |
+| Polls | `/admin/polls` | Q&A poll responses from articles/school pages |
+| Article Likes | `/admin/article-likes` | "Was this helpful?" votes on articles |
+| Error Log | `/admin/errors` | Application error tracking |
+| Prompt Builder | `/admin/content/prompt-builder` | AI prompt templates for content generation |
+| Notes | `/admin/content/notes` | Internal notes/documentation |
+
+### Navigation
+
+The admin nav is in `src/components/AdminNav.astro`. To add a new admin page:
+1. Create the page in `src/pages/admin/`
+2. Add it to the `navCategories` array in `AdminNav.astro`
+
+## Analytics System
+
+The site has a custom, privacy-focused analytics system (no third-party services).
+
+### How It Works
+
+1. **Client-side tracking** (`src/layouts/Layout.astro`, lines ~414-476):
+   - Lightweight JavaScript tracker (~1KB)
+   - Tracks pageviews with engagement detection (scroll, click, keydown, etc.)
+   - Creates session IDs stored in `sessionStorage`
+   - Sends data via `navigator.sendBeacon()` on page hide
+   - Bot detection: skips `navigator.webdriver`, missing cookies/languages, Phantom/Selenium
+
+2. **Server-side collection** (`src/pages/api/analytics/collect.ts`):
+   - Validates requests (rejects bots via user-agent patterns and Cloudflare bot score)
+   - Stores events in `analytics_events` table with country from Cloudflare headers
+
+3. **Stats API** (`src/pages/api/analytics/stats.ts`):
+   - Aggregates data for the dashboard
+   - Supports time ranges: today, yesterday, last N days, this month, last month, custom
+   - Auto-excludes admin sessions and sessions with 10+ pageviews (internal testing)
+
+### Database Tables
+
+#### `analytics_events` (created dynamically, no migration file)
+```sql
+CREATE TABLE analytics_events (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  site_id TEXT NOT NULL,           -- 'trueschools'
+  session_id TEXT NOT NULL,        -- Random ID per browser session
+  path TEXT NOT NULL,              -- Page URL path
+  referrer TEXT,                   -- External referrer (null if internal)
+  duration INTEGER,                -- Time on page in seconds
+  session_duration INTEGER,        -- Total session time in seconds
+  page_count INTEGER,              -- Pages viewed in session
+  country TEXT,                    -- Country code from Cloudflare
+  created_at INTEGER               -- Unix timestamp in milliseconds
+);
+```
+
+#### `newsletter_subscriptions` (migration: `0007_newsletter_subscriptions.sql`)
+- `email` (unique), `categories` (comma-separated), `status` ('active'/'unsubscribed')
+- `ip_hash`, `user_agent` for spam prevention
+
+#### `qa_responses` (migration: `0006_qa_responses.sql`)
+- Poll votes: `question_id`, `page_slug`, `question_text`, `answer_text`
+- `session_id` prevents duplicate votes
+
+#### `article_ratings` + `article_rating_votes`
+- Article "helpful" counts with IP-based duplicate prevention
+- Created dynamically in `src/pages/api/article/rate.ts`
+
+#### `error_log` (migration: `0012_error_log.sql`)
+- `endpoint`, `method`, `error_message`, `error_stack`, `error_type`
+- Used by `src/lib/error-logger.ts`
+
+### Querying Analytics Data
+
+```bash
+# Count total analytics events
+CLOUDFLARE_ACCOUNT_ID=db05e74e773d91c84692ba064111c43c npx wrangler d1 execute trueschools-db --remote --command="SELECT COUNT(*) FROM analytics_events"
+
+# Top pages last 24 hours
+CLOUDFLARE_ACCOUNT_ID=db05e74e773d91c84692ba064111c43c npx wrangler d1 execute trueschools-db --remote --command="SELECT path, COUNT(*) as hits FROM analytics_events WHERE created_at > (strftime('%s', 'now') - 86400) * 1000 GROUP BY path ORDER BY hits DESC LIMIT 20"
+
+# 404 traffic analysis
+CLOUDFLARE_ACCOUNT_ID=db05e74e773d91c84692ba064111c43c npx wrangler d1 execute trueschools-db --remote --command="SELECT country, COUNT(*) as hits FROM analytics_events WHERE path = '/404' GROUP BY country ORDER BY hits DESC"
+
+# Delete bot traffic (sessions that only hit /404)
+CLOUDFLARE_ACCOUNT_ID=db05e74e773d91c84692ba064111c43c npx wrangler d1 execute truschools-db --remote --command="DELETE FROM analytics_events WHERE session_id IN (SELECT session_id FROM analytics_events GROUP BY session_id HAVING COUNT(DISTINCT path) = 1 AND MAX(path) = '/404')"
+```
+
+### Bot Traffic Patterns
+
+When investigating suspicious traffic spikes, look for:
+- **Null referrers** with unusual geographic distribution (bots use proxies)
+- **Sessions with only `/404` visits** - real users who hit 404s usually navigate elsewhere
+- **High volume from non-US countries** for a US education site
+- **Uniform session patterns** (1 pageview per session)
+
+To clean bot traffic, identify a signature (like "only visited /404") and delete those records.
+
+### Self-Tracking Toggle
+
+The analytics dashboard has a "Track my visits" toggle. When disabled, it sets `localStorage._notrack = '1'`, and the tracker script checks for this before sending data.
+
+## Error Logging
+
+Errors are logged to D1 instead of external services. Use `captureException()` from `src/lib/error-logger.ts`:
+
+```typescript
+import { captureException } from '@/lib/error-logger';
+
+try {
+  // ... code that might fail
+} catch (error) {
+  await captureException(db, error, {
+    tags: { endpoint: '/api/example', method: 'POST' },
+    extra: { userId: user.id },
+    request
+  });
+}
+```
+
+View errors at `/admin/errors`. Old errors can be cleared (30+ days).
+
 ## Current Data Gap
 
 The colleges table currently only has 82 columns. This needs to be expanded significantly to include all available College Scorecard data fields.

@@ -208,45 +208,51 @@ const featuredArticles = [
       <!-- Main Content -->
       <div class="lg:w-2/3">
         <!-- Featured Article -->
-        <div class="box-rounded mb-5">
-          <a href="/education-articles/high-school-graduation-requirements-by-state">
-            <img
-              src={featuredImage.src}
-              alt="High school students preparing for graduation"
-              class="w-full aspect-video object-cover rounded mb-4"
-            />
+        <article class="box-rounded mb-5 group">
+          <a href="/education-articles/high-school-graduation-requirements-by-state" class="block">
+            <div class="aspect-[16/9] overflow-hidden bg-gray-100 rounded mb-4">
+              <img
+                src={featuredImage.src}
+                alt="High school students preparing for graduation"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+            </div>
+            <h2 class="text-lg font-bold text-gray-900 mb-2 leading-tight group-hover:text-brand-blue transition-colors">
+              High School Graduation Requirements by State: What Your Teen Actually Needs to Graduate
+            </h2>
+            <p class="text-sm text-gray-600 mb-3">
+              From 13 credits in Wyoming to 26 in Texas, the requirements for a high school diploma vary dramatically across the country. Understanding your state's specific rules—and how local districts may add their own—is essential for planning your student's path to graduation and beyond.
+            </p>
+            <span class="text-brand-blue group-hover:underline text-sm font-medium">Read article &rarr;</span>
           </a>
-          <h2 class="text-brand-blue text-xl mb-2">
-            <a href="/education-articles/high-school-graduation-requirements-by-state" class="hover:underline">High School Graduation Requirements by State: What Your Teen Actually Needs to Graduate</a>
-          </h2>
-          <p class="text-gray-600 fs-14">
-            From 13 credits in Wyoming to 26 in Texas, the requirements for a high school diploma vary dramatically across the country. Understanding your state's specific rules—and how local districts may add their own—is essential for planning your student's path to graduation and beyond. <a href="/education-articles/high-school-graduation-requirements-by-state" class="text-brand-blue hover:underline">Read article &rarr;</a>
-          </p>
-        </div>
+        </article>
 
         <!-- Articles & Guides -->
         <div class="box-rounded mb-5">
           <h2 class="text-brand-blue text-xl mb-2">Articles & Guides for Parents & Students</h2>
           <p class="text-gray-600 fs-14 mb-4">Explore our collection of articles covering everything from graduation requirements and AP courses to college prep, extracurriculars, and the social side of high school. Whether you're planning ahead or navigating challenges right now, we're here to help.</p>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {/* Featured Article Cards */}
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {featuredArticles.map((article) => (
-              <div class="border border-gray-200 rounded overflow-hidden p-4">
-                <a href={article.url}>
-                  <img
-                    src={article.image.src}
-                    alt={article.title}
-                    class="w-full aspect-square object-cover rounded"
-                  />
+              <article class="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow group">
+                <a href={article.url} class="block">
+                  <div class="aspect-[16/9] overflow-hidden bg-gray-100">
+                    <img
+                      src={article.image.src}
+                      alt={article.title}
+                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                  <div class="p-4">
+                    <h3 class="text-lg font-bold text-gray-900 mb-2 leading-tight group-hover:text-brand-blue transition-colors">
+                      {article.title}
+                    </h3>
+                    <p class="text-sm text-gray-600 mb-3">
+                      {article.description}
+                    </p>
+                    <span class="text-brand-blue group-hover:underline text-sm font-medium">Read article &rarr;</span>
+                  </div>
                 </a>
-                <div class="pt-4">
-                  <h3 class="text-brand-green-text font-bold mb-1 fs-14">
-                    <a href={article.url} class="hover:underline">{article.title}</a>
-                  </h3>
-                  <p class="text-gray-600 fs-12 mb-2 leading-snug">{article.description}</p>
-                  <a href={article.url} class="text-brand-blue hover:underline fs-13">Read article &rarr;</a>
-                </div>
-              </div>
+              </article>
             ))}
           </div>
         </div>

@@ -217,6 +217,10 @@ export const ALL: APIRoute = async ({ request, locals }) => {
 
   } catch (error) {
     console.error('Error fetching all article ratings:', error);
+    await captureException(db, error, {
+      tags: { endpoint: '/api/article/rate', method: 'ALL' },
+      request
+    });
     return new Response(JSON.stringify({ error: 'Failed to fetch ratings' }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' }

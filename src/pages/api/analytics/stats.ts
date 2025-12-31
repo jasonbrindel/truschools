@@ -1,4 +1,5 @@
 import type { APIRoute } from 'astro';
+import { captureException } from '@/lib/error-logger';
 
 // Use POST to bypass Cloudflare edge caching (GET requests are cached by default)
 export const POST: APIRoute = async ({ request, locals }) => {
@@ -169,6 +170,10 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
   } catch (e) {
     console.error('Stats error:', e);
+    await captureException(db, e, {
+      tags: { endpoint: '/api/analytics/stats', method: 'POST' },
+      request
+    });
     return new Response(JSON.stringify({ error: 'query failed', details: String(e) }), {
       status: 500,
       headers: corsHeaders,

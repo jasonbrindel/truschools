@@ -204,44 +204,51 @@ const universityArticles = [
       <!-- Main Content -->
       <div class="lg:w-2/3">
         <!-- Featured Article -->
-        <div class="box-rounded mb-5">
-          <a href="/education-articles/fafsa-2026-2027-parents-guide">
-            <img
-              src={featuredImage.src}
-              alt="College campus with financial considerations"
-              class="w-full aspect-video object-cover rounded mb-4"
-            />
+        <article class="box-rounded mb-5 group">
+          <a href="/education-articles/fafsa-2026-2027-parents-guide" class="block">
+            <div class="aspect-[16/9] overflow-hidden bg-gray-100 rounded mb-4">
+              <img
+                src={featuredImage.src}
+                alt="College campus with financial considerations"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+            </div>
+            <h2 class="text-lg font-bold text-gray-900 mb-2 leading-tight group-hover:text-brand-blue transition-colors">
+              FAFSA 2026-2027: Complete Parent's Guide to the New Rules and How to Maximize Financial Aid
+            </h2>
+            <p class="text-sm text-gray-600 mb-3">
+              Major changes under the One Big Beautiful Bill Act reshape federal aid. From new Parent PLUS loan limits and the end of Grad PLUS to the grandparent 529 loophole, understanding these changes can mean thousands of dollars in additional aid for your student.
+            </p>
+            <span class="text-brand-blue group-hover:underline text-sm font-medium">Read article &rarr;</span>
           </a>
-          <h2 class="text-brand-blue text-xl mb-2">
-            <a href="/education-articles/fafsa-2026-2027-parents-guide" class="hover:underline">FAFSA 2026-2027: Complete Parent's Guide to the New Rules and How to Maximize Financial Aid</a>
-          </h2>
-          <p class="text-gray-600 fs-14">
-            Major changes under the One Big Beautiful Bill Act reshape federal aid. From new Parent PLUS loan limits and the end of Grad PLUS to the grandparent 529 loophole, understanding these changes can mean thousands of dollars in additional aid for your student. <a href="/education-articles/fafsa-2026-2027-parents-guide" class="text-brand-blue hover:underline">Read article &rarr;</a>
-          </p>
-        </div>
+        </article>
 
         <!-- College Articles & Guides -->
         <div class="box-rounded mb-5">
           <h2 class="text-brand-blue text-xl mb-2">College Resources</h2>
           <p class="text-gray-600 fs-14 mb-4">Essential guides for navigating the college experience, from applications and financial aid to campus life and making the most of your undergraduate years.</p>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {collegeArticles.map((article) => (
-              <div class="border border-gray-200 rounded overflow-hidden p-4">
-                <a href={article.url}>
-                  <img
-                    src={article.image.src}
-                    alt={article.title}
-                    class="w-full aspect-square object-cover rounded"
-                  />
+              <article class="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow group">
+                <a href={article.url} class="block">
+                  <div class="aspect-[16/9] overflow-hidden bg-gray-100">
+                    <img
+                      src={article.image.src}
+                      alt={article.title}
+                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                  <div class="p-4">
+                    <h3 class="text-lg font-bold text-gray-900 mb-2 leading-tight group-hover:text-brand-blue transition-colors">
+                      {article.title}
+                    </h3>
+                    <p class="text-sm text-gray-600 mb-3">
+                      {article.description}
+                    </p>
+                    <span class="text-brand-blue group-hover:underline text-sm font-medium">Learn more &rarr;</span>
+                  </div>
                 </a>
-                <div class="pt-4">
-                  <h3 class="text-brand-green-text font-bold mb-1 fs-14">
-                    <a href={article.url} class="hover:underline">{article.title}</a>
-                  </h3>
-                  <p class="text-gray-600 fs-12 mb-2 leading-snug">{article.description}</p>
-                  <a href={article.url} class="text-brand-blue hover:underline fs-13">Learn more &rarr;</a>
-                </div>
-              </div>
+              </article>
             ))}
           </div>
         </div>
@@ -250,24 +257,28 @@ const universityArticles = [
         <div class="box-rounded mb-5">
           <h2 class="text-brand-blue text-xl mb-2">University Resources</h2>
           <p class="text-gray-600 fs-14 mb-4">Resources for students at research universities, including graduate school preparation, research opportunities, and advanced academic programs.</p>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {universityArticles.map((article) => (
-              <div class="border border-gray-200 rounded overflow-hidden p-4">
-                <a href={article.url}>
-                  <img
-                    src={article.image.src}
-                    alt={article.title}
-                    class="w-full aspect-square object-cover rounded"
-                  />
+              <article class="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow group">
+                <a href={article.url} class="block">
+                  <div class="aspect-[16/9] overflow-hidden bg-gray-100">
+                    <img
+                      src={article.image.src}
+                      alt={article.title}
+                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                  <div class="p-4">
+                    <h3 class="text-lg font-bold text-gray-900 mb-2 leading-tight group-hover:text-brand-blue transition-colors">
+                      {article.title}
+                    </h3>
+                    <p class="text-sm text-gray-600 mb-3">
+                      {article.description}
+                    </p>
+                    <span class="text-brand-blue group-hover:underline text-sm font-medium">Learn more &rarr;</span>
+                  </div>
                 </a>
-                <div class="pt-4">
-                  <h3 class="text-brand-green-text font-bold mb-1 fs-14">
-                    <a href={article.url} class="hover:underline">{article.title}</a>
-                  </h3>
-                  <p class="text-gray-600 fs-12 mb-2 leading-snug">{article.description}</p>
-                  <a href={article.url} class="text-brand-blue hover:underline fs-13">Learn more &rarr;</a>
-                </div>
-              </div>
+              </article>
             ))}
           </div>
         </div>

@@ -1,4 +1,5 @@
 import type { APIRoute } from 'astro';
+import { captureException } from '@/lib/error-logger';
 
 const BOT_PATTERNS = /bot|crawl|spider|slurp|facebook|twitter|linkedin|preview|fetch|curl|wget|python|go-http|headless|phantom|selenium/i;
 
@@ -54,6 +55,11 @@ export const POST: APIRoute = async ({ request, locals }) => {
     return new Response('ok', { headers: corsHeaders });
   } catch (e) {
     console.error('Collect error:', e);
+    const db = (locals as any).runtime?.env?.DB;
+    await captureException(db, e, {
+      tags: { endpoint: '/api/analytics/collect', method: 'POST' },
+      request
+    });
     return new Response('ok', { headers: corsHeaders });
   }
 };
