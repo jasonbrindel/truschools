@@ -407,42 +407,57 @@ npm run build && CLOUDFLARE_ACCOUNT_ID=db05e74e773d91c84692ba064111c43c npx wran
 
 ## XML Sitemaps
 
-The site has dynamically generated XML sitemaps at `https://trueschools.com/sitemap.xml`.
+The site has **dynamically generated XML sitemaps** at `https://trueschools.com/sitemap.xml`. All sitemaps are SSR (generated on each request) and always show today's date as `lastmod` - this signals freshness to search engines.
 
 ### Sitemap Structure
-- **sitemap.xml** - Index file pointing to all sub-sitemaps
-- **sitemap-main.xml** - Static pages, articles, state/category pages
-- **sitemap-schools-1/2/3.xml** - K-12 schools (auto-generated from DB)
-- **sitemap-colleges.xml** - Colleges & universities (auto-generated from DB)
-- **sitemap-vocational.xml** - Vocational schools (auto-generated from DB)
+- **sitemap.xml** - Index file pointing to all sub-sitemaps (1-hour cache)
+- **sitemap-main.xml** - Static pages, articles, state/category pages (24-hour cache)
+- **sitemap-schools-1/2/3.xml** - K-12 schools from DB (24-hour cache)
+- **sitemap-colleges.xml** - Colleges & universities from DB (24-hour cache)
+- **sitemap-vocational.xml** - Vocational schools from DB (24-hour cache)
+- **sitemap-classes.xml** - SAT/ACT prep classes (24-hour cache)
+
+### How It Works
+
+All sitemaps are **SSR endpoints** that:
+1. Query the D1 database (for school/college URLs)
+2. Use hardcoded arrays (for articles and static pages)
+3. Set `lastmod` to today's date on every request
+4. Return fresh XML with appropriate cache headers
+
+This means search engines see "updated today" for all URLs, signaling active content.
 
 ### When to Update Sitemaps
 
-**Database content (schools, colleges, vocational):**
-- NO action needed - sitemaps auto-update from D1 database
-- 24-hour cache, so changes appear within a day
+**New articles**: MUST add slug to `articles` array in `sitemap-main.xml.ts`
 
-**Static pages (articles, new sections):**
-- MUST manually add to `src/pages/sitemap-main.xml.ts`
+**New static pages/sections**: MUST add to `mainPages` array in `sitemap-main.xml.ts`
+
+**New school types with state pages**: Add to `schoolTypes` array in `sitemap-main.xml.ts`
+
+**Database content (schools, colleges, vocational)**: NO action needed - auto-generated from DB
 
 ### Adding New Articles to Sitemap
-Add the article slug to the `articles` array in `sitemap-main.xml.ts`:
 ```typescript
+// In sitemap-main.xml.ts
 const articles = [
   // ... existing ...
-  'new-article-slug',
+  'new-article-slug',  // Add new article here
 ];
 ```
 
-### Adding New Category/Section Pages to Sitemap
-Add to the `mainPages` array in `sitemap-main.xml.ts`:
+### Adding New Category/Section Pages
 ```typescript
-{ path: '/new-section', priority: '0.7' },
+// In sitemap-main.xml.ts
+const mainPages = [
+  // ... existing ...
+  { path: '/new-section', priority: '0.7' },
+];
 ```
 
 ### Adding New State-Level Pages
-If adding a new school type with state pages, add to the appropriate loop in `sitemap-main.xml.ts`:
 ```typescript
+// In sitemap-main.xml.ts
 const schoolTypes = [
   // ... existing ...
   'new-school-type',
