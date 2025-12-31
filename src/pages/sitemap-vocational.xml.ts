@@ -46,6 +46,7 @@ interface VocationalSchool {
   page_name: string;
   state: string;
   vocational_type: string | null;
+  updated_at: string | null;
 }
 
 export const GET: APIRoute = async ({ locals }) => {
@@ -56,11 +57,10 @@ export const GET: APIRoute = async ({ locals }) => {
     return new Response('Database not available', { status: 500 });
   }
 
-  const today = formatDate(new Date());
-
   try {
+    // Include updated_at to use real modification dates in sitemap
     const result = await db.prepare(`
-      SELECT id, institution_name, page_name, state, vocational_type
+      SELECT id, institution_name, page_name, state, vocational_type, updated_at
       FROM colleges
       WHERE active = 1 AND vocational_type IS NOT NULL
       ORDER BY id
@@ -82,9 +82,15 @@ export const GET: APIRoute = async ({ locals }) => {
 
       const url = `${SITE_URL}/${typeSlug}/${stateSlug}/${schoolSlug}`;
 
+      // Use real updated_at from database, format as YYYY-MM-DD
+      // If no updated_at, omit lastmod entirely (Google will use crawl date)
+      const lastmod = school.updated_at ? formatDate(new Date(school.updated_at)) : null;
+
       xml += '  <url>\n';
       xml += `    <loc>${escapeXml(url)}</loc>\n`;
-      xml += `    <lastmod>${today}</lastmod>\n`;
+      if (lastmod) {
+        xml += `    <lastmod>${lastmod}</lastmod>\n`;
+      }
       xml += '    <changefreq>monthly</changefreq>\n';
       xml += '    <priority>0.5</priority>\n';
       xml += '  </url>\n';

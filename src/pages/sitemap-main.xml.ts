@@ -1,6 +1,10 @@
 import type { APIRoute } from 'astro';
+import { BUILD_DATE } from '@/lib/build-timestamp';
 
 const SITE_URL = 'https://trueschools.com';
+
+// BUILD_DATE is set at build time - represents when static/prerendered pages were last updated
+// This ensures lastmod only changes when we actually deploy new content
 
 const states = [
   'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware',
@@ -24,10 +28,6 @@ function escapeXml(str: string): string {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&apos;');
-}
-
-function formatDate(date: Date): string {
-  return date.toISOString().split('T')[0];
 }
 
 interface UrlEntry {
@@ -61,11 +61,13 @@ function generateSitemapXml(urls: UrlEntry[]): string {
 }
 
 export const GET: APIRoute = async () => {
-  const today = formatDate(new Date());
+  // Use BUILD_DATE for all static/prerendered content
+  // This date only changes when we actually deploy new code
+  const staticLastmod = BUILD_DATE;
   const urls: UrlEntry[] = [];
 
   // Homepage
-  urls.push({ loc: SITE_URL, lastmod: today, changefreq: 'daily', priority: '1.0' });
+  urls.push({ loc: SITE_URL, lastmod: staticLastmod, changefreq: 'daily', priority: '1.0' });
 
   // Main category pages
   const mainPages = [
@@ -104,7 +106,7 @@ export const GET: APIRoute = async () => {
   for (const page of mainPages) {
     urls.push({
       loc: `${SITE_URL}${page.path}`,
-      lastmod: today,
+      lastmod: staticLastmod,
       changefreq: 'weekly',
       priority: page.priority
     });
@@ -116,11 +118,14 @@ export const GET: APIRoute = async () => {
     'middle-schools', 'high-schools', 'charter-schools', 'magnet-schools', 'private-schools'
   ];
 
+  // Note: State pages are SSR (they query DB for counts), but the page template
+  // only changes when we deploy. We use staticLastmod here.
+  // The actual school data updates are reflected in the school-specific sitemaps.
   for (const type of schoolTypes) {
     for (const state of states) {
       urls.push({
         loc: `${SITE_URL}/${type}/${slugify(state)}`,
-        lastmod: today,
+        lastmod: staticLastmod,
         changefreq: 'weekly',
         priority: '0.6'
       });
@@ -131,7 +136,7 @@ export const GET: APIRoute = async () => {
   for (const state of states) {
     urls.push({
       loc: `${SITE_URL}/colleges-universities/${slugify(state)}`,
-      lastmod: today,
+      lastmod: staticLastmod,
       changefreq: 'weekly',
       priority: '0.6'
     });
@@ -143,7 +148,7 @@ export const GET: APIRoute = async () => {
     for (const state of states) {
       urls.push({
         loc: `${SITE_URL}/${type}/${slugify(state)}`,
-        lastmod: today,
+        lastmod: staticLastmod,
         changefreq: 'weekly',
         priority: '0.5'
       });
@@ -154,7 +159,7 @@ export const GET: APIRoute = async () => {
   for (const state of states) {
     urls.push({
       loc: `${SITE_URL}/financial-aid/scholarships/${slugify(state)}`,
-      lastmod: today,
+      lastmod: staticLastmod,
       changefreq: 'monthly',
       priority: '0.5'
     });
@@ -191,10 +196,11 @@ export const GET: APIRoute = async () => {
     'what-to-teach-when-ai-does-the-work',
   ];
 
+  // Articles use build date since they're prerendered static content
   for (const slug of articles) {
     urls.push({
       loc: `${SITE_URL}/education-articles/${slug}`,
-      lastmod: today,
+      lastmod: staticLastmod,
       changefreq: 'monthly',
       priority: '0.7'
     });

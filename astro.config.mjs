@@ -2,6 +2,9 @@ import { defineConfig } from 'astro/config';
 import cloudflare from '@astrojs/cloudflare';
 import tailwind from '@astrojs/tailwind';
 
+// Build date is set at build time and injected via Vite's define
+const BUILD_DATE = new Date().toISOString().split('T')[0];
+
 export default defineConfig({
   output: 'server',
   adapter: cloudflare({
@@ -19,5 +22,11 @@ export default defineConfig({
     }
   },
   integrations: [tailwind()],
-  site: 'https://truschools.com'
+  site: 'https://truschools.com',
+  vite: {
+    define: {
+      // Inject build date at build time for sitemaps
+      '__BUILD_DATE__': JSON.stringify(BUILD_DATE)
+    }
+  }
 });

@@ -56,6 +56,7 @@ interface School {
   is_elementary: number;
   is_kindergarten: number;
   is_preschool: number;
+  updated_at: string | null;
 }
 
 export const GET: APIRoute = async ({ locals }) => {
@@ -66,13 +67,14 @@ export const GET: APIRoute = async ({ locals }) => {
     return new Response('Database not available', { status: 500 });
   }
 
-  const today = formatDate(new Date());
   const offset = (BATCH_NUMBER - 1) * BATCH_SIZE;
 
   try {
+    // Include updated_at to use real modification dates in sitemap
     const result = await db.prepare(`
       SELECT id, school_name, page_name, state, city, is_public, is_charter, is_magnet,
-             is_high_school, is_middle_school, is_elementary, is_kindergarten, is_preschool
+             is_high_school, is_middle_school, is_elementary, is_kindergarten, is_preschool,
+             updated_at
       FROM schools
       ORDER BY id
       LIMIT ? OFFSET ?
@@ -89,9 +91,15 @@ export const GET: APIRoute = async ({ locals }) => {
 
       const url = `${SITE_URL}/${typeSlug}/${stateSlug}/${citySlug}/${schoolSlug}`;
 
+      // Use real updated_at from database, format as YYYY-MM-DD
+      // If no updated_at, omit lastmod entirely (Google will use crawl date)
+      const lastmod = school.updated_at ? formatDate(new Date(school.updated_at)) : null;
+
       xml += '  <url>\n';
       xml += `    <loc>${escapeXml(url)}</loc>\n`;
-      xml += `    <lastmod>${today}</lastmod>\n`;
+      if (lastmod) {
+        xml += `    <lastmod>${lastmod}</lastmod>\n`;
+      }
       xml += '    <changefreq>monthly</changefreq>\n';
       xml += '    <priority>0.5</priority>\n';
       xml += '  </url>\n';

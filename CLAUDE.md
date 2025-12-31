@@ -407,7 +407,7 @@ npm run build && CLOUDFLARE_ACCOUNT_ID=db05e74e773d91c84692ba064111c43c npx wran
 
 ## XML Sitemaps
 
-The site has **dynamically generated XML sitemaps** at `https://trueschools.com/sitemap.xml`. All sitemaps are SSR (generated on each request) and always show today's date as `lastmod` - this signals freshness to search engines.
+The site has **dynamically generated XML sitemaps** at `https://trueschools.com/sitemap.xml`. The `lastmod` dates are **accurate** - they only change when content actually changes.
 
 ### Sitemap Structure
 - **sitemap.xml** - Index file pointing to all sub-sitemaps (1-hour cache)
@@ -417,17 +417,33 @@ The site has **dynamically generated XML sitemaps** at `https://trueschools.com/
 - **sitemap-vocational.xml** - Vocational schools from DB (24-hour cache)
 - **sitemap-classes.xml** - SAT/ACT prep classes (24-hour cache)
 
-### How It Works
+### How lastmod Works (IMPORTANT)
 
-All sitemaps are **SSR endpoints** that:
-1. Query the D1 database (for school/college URLs)
-2. Use hardcoded arrays (for articles and static pages)
-3. Set `lastmod` to today's date on every request
-4. Return fresh XML with appropriate cache headers
+**We use ACCURATE lastmod dates** - not fake "today" dates. This is critical for Google trust.
 
-This means search engines see "updated today" for all URLs, signaling active content.
+| Content Type | lastmod Source | When It Updates |
+|--------------|----------------|-----------------|
+| Static pages, articles | `BUILD_DATE` from `src/lib/build-timestamp.ts` | Every deployment |
+| Schools (K-12) | `schools.updated_at` column | When school data is imported/updated |
+| Colleges | `colleges.updated_at` column | When college data is imported/updated |
+| Vocational schools | `colleges.updated_at` column | When vocational data is imported/updated |
+| Classes | `BUILD_DATE` | Every deployment |
 
-### When to Update Sitemaps
+### CRITICAL: Updating lastmod for Data Imports
+
+When running data imports that update school/college records, you MUST update the `updated_at` column:
+
+```sql
+-- After importing/updating school data
+UPDATE schools SET updated_at = datetime('now') WHERE [conditions for updated records];
+
+-- After importing/updating college data
+UPDATE colleges SET updated_at = datetime('now') WHERE [conditions for updated records];
+```
+
+If you forget this step, the sitemap will show old dates and Google won't know to recrawl.
+
+### When to Update Sitemaps Manually
 
 **New articles**: MUST add slug to `articles` array in `sitemap-main.xml.ts`
 
@@ -435,7 +451,7 @@ This means search engines see "updated today" for all URLs, signaling active con
 
 **New school types with state pages**: Add to `schoolTypes` array in `sitemap-main.xml.ts`
 
-**Database content (schools, colleges, vocational)**: NO action needed - auto-generated from DB
+**Database content (schools, colleges, vocational)**: URLs auto-generated from DB, but remember to update `updated_at`!
 
 ### Adding New Articles to Sitemap
 ```typescript

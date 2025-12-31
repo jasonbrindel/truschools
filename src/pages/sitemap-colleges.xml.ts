@@ -32,6 +32,7 @@ interface College {
   institution_name: string;
   page_name: string;
   state: string;
+  updated_at: string | null;
 }
 
 export const GET: APIRoute = async ({ locals }) => {
@@ -42,11 +43,10 @@ export const GET: APIRoute = async ({ locals }) => {
     return new Response('Database not available', { status: 500 });
   }
 
-  const today = formatDate(new Date());
-
   try {
+    // Include updated_at to use real modification dates in sitemap
     const result = await db.prepare(`
-      SELECT id, institution_name, page_name, state
+      SELECT id, institution_name, page_name, state, updated_at
       FROM colleges
       WHERE active = 1
       ORDER BY id
@@ -65,22 +65,30 @@ export const GET: APIRoute = async ({ locals }) => {
       // Skip if slugs are empty
       if (!stateSlug || !collegeSlug) continue;
 
+      // Use real updated_at from database, format as YYYY-MM-DD
+      // If no updated_at, omit lastmod entirely (Google will use crawl date)
+      const lastmod = college.updated_at ? formatDate(new Date(college.updated_at)) : null;
+
       // Main college page
       const mainUrl = `${SITE_URL}/colleges-universities/${stateSlug}/${collegeSlug}`;
       xml += '  <url>\n';
       xml += `    <loc>${escapeXml(mainUrl)}</loc>\n`;
-      xml += `    <lastmod>${today}</lastmod>\n`;
+      if (lastmod) {
+        xml += `    <lastmod>${lastmod}</lastmod>\n`;
+      }
       xml += '    <changefreq>monthly</changefreq>\n';
       xml += '    <priority>0.6</priority>\n';
       xml += '  </url>\n';
 
-      // Subpages
+      // Subpages - use same lastmod as main page
       const subpages = ['admissions', 'programs', 'faculty', 'financial-aid'];
       for (const subpage of subpages) {
         const subUrl = `${SITE_URL}/colleges-universities/${stateSlug}/${collegeSlug}/${subpage}`;
         xml += '  <url>\n';
         xml += `    <loc>${escapeXml(subUrl)}</loc>\n`;
-        xml += `    <lastmod>${today}</lastmod>\n`;
+        if (lastmod) {
+          xml += `    <lastmod>${lastmod}</lastmod>\n`;
+        }
         xml += '    <changefreq>monthly</changefreq>\n';
         xml += '    <priority>0.5</priority>\n';
         xml += '  </url>\n';

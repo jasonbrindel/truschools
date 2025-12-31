@@ -1,7 +1,11 @@
 import type { APIRoute } from 'astro';
 import type { D1Database } from '@cloudflare/workers-types';
+import { BUILD_DATE } from '@/lib/build-timestamp';
 
 const SITE_URL = 'https://trueschools.com';
+
+// Classes use BUILD_DATE since class_videos table doesn't have updated_at
+// This means lastmod only changes when we deploy new content
 
 function escapeXml(str: string): string {
   if (!str) return '';
@@ -11,10 +15,6 @@ function escapeXml(str: string): string {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&apos;');
-}
-
-function formatDate(date: Date): string {
-  return date.toISOString().split('T')[0];
 }
 
 interface ClassVideo {
@@ -31,7 +31,8 @@ export const GET: APIRoute = async ({ locals }) => {
     return new Response('Database not available', { status: 500 });
   }
 
-  const today = formatDate(new Date());
+  // Use BUILD_DATE since class_videos doesn't track updated_at
+  const lastmod = BUILD_DATE;
 
   try {
     // Get all unique department pages
@@ -59,7 +60,7 @@ export const GET: APIRoute = async ({ locals }) => {
       const url = `${SITE_URL}/classes/${dept.dept_page}`;
       xml += '  <url>\n';
       xml += `    <loc>${escapeXml(url)}</loc>\n`;
-      xml += `    <lastmod>${today}</lastmod>\n`;
+      xml += `    <lastmod>${lastmod}</lastmod>\n`;
       xml += '    <changefreq>weekly</changefreq>\n';
       xml += '    <priority>0.6</priority>\n';
       xml += '  </url>\n';
@@ -72,7 +73,7 @@ export const GET: APIRoute = async ({ locals }) => {
       const url = `${SITE_URL}/classes/${course.dept_page}/${course.course_page}`;
       xml += '  <url>\n';
       xml += `    <loc>${escapeXml(url)}</loc>\n`;
-      xml += `    <lastmod>${today}</lastmod>\n`;
+      xml += `    <lastmod>${lastmod}</lastmod>\n`;
       xml += '    <changefreq>weekly</changefreq>\n';
       xml += '    <priority>0.5</priority>\n';
       xml += '  </url>\n';
@@ -85,7 +86,7 @@ export const GET: APIRoute = async ({ locals }) => {
       const url = `${SITE_URL}/classes/${cls.dept_page}/${cls.course_page}/${cls.class_page}`;
       xml += '  <url>\n';
       xml += `    <loc>${escapeXml(url)}</loc>\n`;
-      xml += `    <lastmod>${today}</lastmod>\n`;
+      xml += `    <lastmod>${lastmod}</lastmod>\n`;
       xml += '    <changefreq>monthly</changefreq>\n';
       xml += '    <priority>0.4</priority>\n';
       xml += '  </url>\n';
