@@ -32,6 +32,11 @@ export const POST: APIRoute = async ({ request, locals }) => {
       return new Response('ok', { headers: corsHeaders });
     }
 
+    // Filter out 404 pages - these are mostly bot traffic hitting old URLs
+    if (body.p === '/404') {
+      return new Response('ok', { headers: corsHeaders });
+    }
+
     const country = cf?.country || null;
     const db = (locals as any).runtime?.env?.DB;
 

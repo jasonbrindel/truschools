@@ -1,0 +1,186 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
+import ArticleRating from '@/components/ArticleRating.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import BrowseByTopic from '@/components/BrowseByTopic.astro';
+import ArticleNewsletter from '@/components/ArticleNewsletter.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
+import HeroImage from '@/components/HeroImage.astro';
+import heroImage from '@/images/USED-elementary-classroom-students-learning.jpg';
+
+const title = "How to Tell if Your School Uses the Science of Reading";
+const description = "What the research shows about how children learn to read, why 'three cueing' has become a flashpoint, and what parents can look and listen for when they talk with their child's school.";
+const publishDate = "2025-12-31T12:05:00-05:00";
+const tags = ['Elementary School', 'School Choice'];
+export const prerender = true;
+---
+
+<Layout title={title} description={description}>
+  <ArticleBreadcrumb title={title} defaultParent={{ label: 'Elementary Schools', url: '/elementary-schools' }} />
+
+  <header class="max-w-[680px] mx-auto px-5 pt-4 md:pt-8">
+    <h1 class="text-4xl md:text-5xl font-bold text-gray-900 leading-tight mb-5">{title}</h1>
+    <p class="text-xl md:text-2xl text-gray-600 italic mb-6">Many states now require "evidence based" reading instruction, but policy language does not automatically translate into daily classroom practice</p>
+    <p class="text-base text-gray-500 mb-10">By TruSchools Staff</p>
+  </header>
+
+  <HeroImage src={heroImage} alt="Elementary school students learning to read in a classroom" />
+
+  <article class="max-w-[680px] mx-auto px-5 py-10 md:py-16">
+    <div class="article-body text-lg leading-relaxed text-gray-800">
+      <p class="first-letter:text-6xl first-letter:font-bold first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:text-gray-900 mb-6">
+        Many states now require "evidence based" reading instruction, often described as the science of reading. But policy language does not automatically translate into daily classroom practice. This explainer summarizes what the research shows about how children learn to read, why "three cueing" has become a flashpoint, and what parents can look and listen for when they talk with their child's school.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">What the research means by "science of reading"</h2>
+
+      <p class="mb-6">
+        "Science of reading" is shorthand for a large body of research on how children learn to read and what instruction helps most students get there. The evidence spans cognitive psychology, linguistics, education research, and neuroscience, and it converges on a few stable findings about early reading development.
+      </p>
+
+      <p class="mb-6">
+        One widely used summary is the "Simple View of Reading," proposed by psychologists Philip Gough and William Tunmer. It argues that reading comprehension depends on two necessary components: word recognition (decoding) and language comprehension. Weakness in either component limits comprehension, even if the other component is strong.
+      </p>
+
+      <p class="mb-6">
+        This helps clarify what phonics is, and what it is not. Phonics instruction targets word recognition by teaching how letters represent sounds and how to blend those sounds to read words. It does not replace vocabulary, knowledge, or comprehension instruction. It enables them by freeing attention from slow word solving.
+      </p>
+
+      <p class="mb-6">
+        The strength of evidence is clearest for early foundational skills. The National Reading Panel's meta-analyses and a later peer-reviewed meta-analysis in Review of Educational Research found that systematic phonics improves early word reading and spelling compared with approaches that teach little or no phonics. The Institute of Education Sciences practice guide for K to 3 emphasizes explicit teaching, cumulative practice, and frequent assessment to catch reading difficulties early.
+      </p>
+
+      <p class="mb-6">
+        Researcher Linnea Ehri's theory of "orthographic mapping" explains why this works: children learn to recognize many words quickly when they form durable links among letters, sounds, and word meanings. Instruction that keeps children focused on the spelling of the word, not the picture or a guess, supports that mapping process.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">What "three cueing" is, and why researchers object to it</h2>
+
+      <p class="mb-6">
+        Three cueing refers to prompts that encourage children to identify unknown words using meaning (Does it make sense?), syntax (Does it sound right?), and visual information (Does it look right?, often reduced to first letter and picture support). In many classrooms this becomes: look at the picture, guess a word that would fit, and move on.
+      </p>
+
+      <p class="mb-6">
+        Researchers' objection is not to using context for comprehension. Context matters for understanding and for confirming meaning. The concern is using context as the primary tool for word identification. Reviews of skilled reading show that accurate word recognition relies largely on information in the word itself, especially its letter sequence, rather than on guessing from meaning or grammar.
+      </p>
+
+      <p class="mb-6">
+        A 2020 review in Reading Research Quarterly argues that cueing as a word reading strategy conflicts with decades of evidence about how words are stored in memory. The authors note that cueing can pull attention away from letter-sound connections that support orthographic mapping, especially for children who already find decoding difficult.
+      </p>
+
+      <p class="mb-6">
+        Policy is now reflecting this research debate. Education Week has reported that roughly 40 states plus Washington, D.C. have adopted early literacy laws or policies referencing evidence-based reading instruction. Some states have also moved to exclude three cueing from guidance or curricula, which is one reason parents are hearing the term more often.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Classroom signs that instruction is aligned with evidence</h2>
+
+      <p class="mb-6">
+        Look for instruction that is systematic, explicit, and cumulative: skills are taught in a planned sequence, teachers model and guide practice, and students keep rehearsing earlier skills as new ones are added.
+      </p>
+
+      <p class="mb-6">
+        Materials can offer clues. In K and first grade, many evidence-aligned programs use decodable texts, books designed so children can read using the letter-sound patterns they have been taught. Decodables are a temporary scaffold to build accurate decoding and early fluency, not a substitute for rich literature.
+      </p>
+
+      <p class="mb-6">
+        Teacher prompts are often the clearest signal. Evidence-aligned prompts push children back to print: look at the letters, say the sounds, blend, reread. Context is used after decoding as a meaning check. A red flag is when the first response to difficulty is "look at the picture" or "what would make sense here?"
+      </p>
+
+      <p class="mb-6">
+        Finally, ask how the school monitors progress. Many schools use brief measures of phonemic awareness and oral reading fluency, such as DIBELS 8th Edition or Acadience Reading, to identify who needs extra support early and to track whether interventions are working.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">What to ask your school, and what to do with the answers</h2>
+
+      <p class="mb-6">
+        Parents get the most useful information by asking about routines and materials, not labels. Ask what the school teaches children to do when they do not know a word, what curriculum guides that instruction, and how quickly extra support begins when a child is not progressing. State mandates have increased training, but implementation still varies across districts and buildings.
+      </p>
+
+      <ul class="list-disc pl-6 mb-6 space-y-3">
+        <li>Which K to 2 curriculum do you use, and does it include a published phonics scope and sequence?</li>
+        <li>When a child gets stuck on a word, what prompts do teachers use first: decoding from letters and sounds, or guessing from pictures and context?</li>
+        <li>Do early grade students use decodable texts? If so, how do you match them to what has been taught?</li>
+        <li>What assessments do you use for phonemic awareness, decoding, and fluency, and how often are they given?</li>
+        <li>What does intervention look like for a struggling reader: minutes per week, group size, and skill focus?</li>
+        <li>What training have early grade teachers received on foundational skills and reading difficulties such as dyslexia?</li>
+      </ul>
+
+      <p class="mb-6">
+        If the answers are concrete, that is usually a good sign. If answers are vague, ask for documents: the curriculum name, the scope and sequence, and the school or district literacy plan. Those materials often reveal whether decoding is treated as an explicit skill or an implicit byproduct of "lots of reading."
+      </p>
+
+      <p class="mb-6">
+        If you hear frequent cueing prompts, focus on the behavior: "I want my child to use letters and sounds first. Can you show me how that is taught and practiced?" That keeps the conversation aligned with what research says about building accurate word recognition.
+      </p>
+
+      <p class="mb-6">
+        Remember that evidence-aligned reading instruction is broader than phonics. Schools also need to build oral language, vocabulary, and knowledge so that once children can read the words, they can understand them. Scarborough's "Reading Rope" is one widely used way of visualizing that interdependence.
+      </p>
+
+      <p class="text-center text-2xl text-gray-400 my-10">• • •</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Practical takeaways</h2>
+
+      <p class="mb-6">
+        Science-aligned reading instruction is visible in routines: explicit teaching of letter-sound relationships, opportunities to practice and apply those relationships in reading and spelling, and frequent checks so struggling readers get timely support.
+      </p>
+
+      <p class="mb-6">
+        For parents, the most diagnostic listening test is simple. When a child is stuck, does the teacher direct attention to the word, or away from it? Over time, consistent attention to letters and sounds is what helps children build the automatic word recognition that supports fluent, confident reading.
+      </p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Sources</h2>
+      <ul class="text-sm text-gray-600 space-y-2 mb-10">
+        <li><a href="https://ies.ed.gov/ncee/wwc/Docs/PracticeGuide/wwc_foundationalreading_040717.pdf" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Institute of Education Sciences, What Works Clearinghouse</a>. <em>"Foundational Skills to Support Reading for Understanding in Kindergarten Through 3rd Grade."</em> 2017.</li>
+        <li><a href="https://www.nichd.nih.gov/sites/default/files/publications/pubs/nrp/Documents/report.pdf" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Reading Panel</a>. <em>"Teaching Children to Read: An Evidence-Based Assessment."</em> 2000.</li>
+        <li><a href="https://pubmed.ncbi.nlm.nih.gov/29890888/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Castles, Rastle & Nation</a>. <em>"Ending the Reading Wars: Reading Acquisition From Novice to Expert."</em> Psychological Science in the Public Interest, 2018.</li>
+        <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8128160/" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Petscher et al.</a> <em>"How the Science of Reading Informs 21st-Century Education."</em> Reading Research Quarterly, 2020.</li>
+        <li><a href="https://eric.ed.gov/?id=EJ1027413" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Ehri, L. C.</a> <em>"Orthographic Mapping in the Acquisition of Sight Word Reading."</em> Scientific Studies of Reading, 2014.</li>
+        <li><a href="https://journals.sagepub.com/doi/10.1177/074193258600700104" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Gough & Tunmer</a>. <em>"Decoding, Reading, and Reading Disability."</em> Remedial and Special Education, 1986. (subscription required)</li>
+        <li><a href="https://portal.ct.gov/sde/academic-office/center-for-literacy-research-and-reading-success/for-educators/explore-the-center/instruction-aligned-to-evidence/components-of-evidence-aligned-instruction/scarborough-reading-rope" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Connecticut State Department of Education</a>. <em>"Scarborough Reading Rope."</em> Center for Literacy Research and Reading Success.</li>
+        <li><a href="https://dibels.uoregon.edu/sites/default/files/DIBELS8-TechnicalManual_04152020.pdf" class="text-brand-blue hover:underline" target="_blank" rel="noopener">University of Oregon</a>. <em>"DIBELS 8th Edition Technical Manual."</em> 2020.</li>
+        <li><a href="https://acadiencelearning.org/wp-content/uploads/2020/01/Acadience_Reading_K-6_Technical_Manual.pdf" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Acadience Learning Inc.</a> <em>"Acadience Reading K-6 Technical Manual."</em> 2013.</li>
+        <li><a href="https://www.edweek.org/teaching-learning/which-states-have-passed-science-of-reading-laws-whats-in-them/2022/07" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Education Week</a>. <em>"Which States Have Passed 'Science of Reading' Laws?"</em> 2022. (subscription required)</li>
+        <li><a href="https://www.edweek.org/teaching-learning/are-early-reading-laws-changing-teaching-practices/2025/04" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Education Week</a>. <em>"Are Early-Reading Laws Changing Teaching Practices?"</em> 2025. (subscription required)</li>
+        <li><a href="https://learning.ccsso.org/science-of-reading-legislation-and-implementation-state-scan" class="text-brand-blue hover:underline" target="_blank" rel="noopener">Council of Chief State School Officers</a>. <em>"Science of Reading Legislation and Implementation: State Scan."</em></li>
+        <li><a href="https://www.nctq.org/wp-content/uploads/2024/01/NCTQ__State_of_the_States_Reading_Policies_Executive_Summary_FINAL_1_16_24.pdf" class="text-brand-blue hover:underline" target="_blank" rel="noopener">National Council on Teacher Quality</a>. <em>"Five Policy Actions to Strengthen Implementation of the Science of Reading."</em> 2024.</li>
+        <li><a href="https://www.apmreports.org/episode/2019/08/22/whats-wrong-how-schools-teach-reading" class="text-brand-blue hover:underline" target="_blank" rel="noopener">APM Reports</a>. <em>"What's Wrong with How Schools Teach Reading."</em> 2019.</li>
+      </ul>
+    </div>
+
+    <!-- Article Rating -->
+    <ArticleRating slug="how-to-tell-if-your-school-uses-the-science-of-reading" />
+
+    <!-- Related Articles -->
+    <RelatedArticles currentSlug="how-to-tell-if-your-school-uses-the-science-of-reading" currentTags={tags} />
+
+    <!-- Browse by Topic -->
+    <BrowseByTopic tags={tags} />
+
+    <!-- Newsletter Signup -->
+    <ArticleNewsletter articleTags={tags} />
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} slug="how-to-tell-if-your-school-uses-the-science-of-reading" />
+
+    <footer class="mt-16 pt-8 border-t border-gray-200">
+      <p class="text-sm text-gray-500 italic">
+        This article is provided by TruSchools as an educational resource for families navigating early literacy instruction.
+      </p>
+      <div class="mt-6">
+        <a href="/elementary-schools" class="text-brand-blue hover:underline font-medium">
+          Back to Elementary Schools &rarr;
+        </a>
+      </div>
+    </footer>
+  </article>
+</Layout>

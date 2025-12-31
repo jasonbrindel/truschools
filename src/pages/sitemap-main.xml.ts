@@ -194,6 +194,7 @@ export const GET: APIRoute = async () => {
     'student-loan-infrastructure-guide', 'the-comeback-of-vocational-schools',
     'the-diploma-and-the-torque-wrench', 'the-stillness-epidemic',
     'what-to-teach-when-ai-does-the-work',
+    'how-to-tell-if-your-school-uses-the-science-of-reading',
   ];
 
   // Articles use build date since they're prerendered static content

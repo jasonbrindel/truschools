@@ -84,6 +84,13 @@ const articles: Article[] = Object.entries(articleModules)
       helpfulCount: ratingsMap[slug] || 0,
     };
   })
+  // Filter out articles with future publish dates
+  .filter(article => {
+    if (!article.publishDate) return true; // No date = always show
+    const now = new Date();
+    const publishDateTime = new Date(article.publishDate);
+    return publishDateTime <= now;
+  })
   // Default sort: newest first (articles with dates), then alphabetical for undated
   .sort((a, b) => {
     // If both have dates, sort by date (newest first)

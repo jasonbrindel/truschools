@@ -64,6 +64,7 @@ import magnetVsCharterImage from '@/images/USED-modern-school-architecture-illus
 // Featured topic articles
 import aiEducationImage from '@/images/USED-ai-laptop-chatgpt.jpg';
 import stillnessEpidemicImage from '@/images/USED-school-playground-pink-sunset-illustration.jpg';
+import scienceOfReadingImage from '@/images/USED-elementary-classroom-students-learning.jpg';
 
 // All US states
 const states = [
@@ -182,6 +183,12 @@ function slugify(text: string): string {
 // Featured articles for the topic cards - mixed across all K-12 topics
 const featuredArticles = [
   // Featured topic articles
+  {
+    title: 'How to Tell if Your School Uses the Science of Reading',
+    url: '/education-articles/how-to-tell-if-your-school-uses-the-science-of-reading?from=schools',
+    image: scienceOfReadingImage,
+    description: 'What the research shows about how children learn to read, why "three cueing" has become a flashpoint, and what parents can look and listen for.',
+  },
   {
     title: 'What to Teach When AI Does the Work',
     url: '/education-articles/what-to-teach-when-ai-does-the-work?from=schools',
@@ -454,7 +461,7 @@ const featuredArticles = [
     image: charterSpecialEdImage,
     description: 'What parents of kids with IEPs need to know about their rights, essential questions to ask, and recourse when problems arise.',
   },
-];
+  ];
 
 // School types for browse section
 const schoolTypes = [

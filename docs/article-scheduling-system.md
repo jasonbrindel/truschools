@@ -156,22 +156,223 @@ export function onRequest({ request, redirect }, next) {
 }
 ```
 
-### Component 4: Category Page Integration
+### Component 4: Article Card Display on Category Pages
 
-Update category pages to use the registry instead of hardcoded arrays:
+Article cards need to be displayed on **19 pages** across the site. These pages currently use hardcoded `featuredArticles` arrays with manual image imports.
 
-**Example:** `src/pages/charter-schools/index.astro`
+#### Pages That Display Article Cards
+
+**Currently displaying articles (13 pages):**
+
+| Page | File | Category Slug |
+|------|------|---------------|
+| Homepage | `src/pages/index.astro` | `homepage` |
+| Education Articles | `src/pages/education-articles/index.astro` | (all - uses glob) |
+| Schools | `src/pages/schools/index.astro` | `schools` |
+| Preschools | `src/pages/preschools/index.astro` | `preschools` |
+| Kindergartens | `src/pages/kindergartens/index.astro` | `kindergartens` |
+| Elementary Schools | `src/pages/elementary-schools/index.astro` | `elementary-schools` |
+| Middle Schools | `src/pages/middle-schools/index.astro` | `middle-schools` |
+| High Schools | `src/pages/high-schools/index.astro` | `high-schools` |
+| Charter Schools | `src/pages/charter-schools/index.astro` | `charter-schools` |
+| Magnet Schools | `src/pages/magnet-schools/index.astro` | `magnet-schools` |
+| Private Schools | `src/pages/private-schools/index.astro` | `private-schools` |
+| Financial Aid | `src/pages/financial-aid/index.astro` | `financial-aid` |
+| 404 Page | `src/pages/404.astro` | (fallback articles) |
+
+**Will display articles (6 vocational pages):**
+
+| Page | File | Category Slug |
+|------|------|---------------|
+| Vocational Schools | `src/pages/vocational-schools/index.astro` | `vocational-schools` |
+| Beauty Schools | `src/pages/beauty-schools/index.astro` | `beauty-schools` |
+| Culinary Schools | `src/pages/culinary-schools/index.astro` | `culinary-schools` |
+| Healthcare Schools | `src/pages/healthcare-schools/index.astro` | `healthcare-schools` |
+| Technology Schools | `src/pages/technology-schools/index.astro` | `technology-schools` |
+| Trade Schools | `src/pages/trade-schools/index.astro` | `trade-schools` |
+
+#### Current Implementation (Hardcoded)
+
+Each category page currently has:
+1. Manual image imports at the top of the file
+2. A hardcoded `featuredArticles` array
+3. Inline card rendering in the template
 
 ```astro
 ---
-import { getPublishedArticlesByCategory } from '@/utils/article-utils';
+// Current approach - lots of manual imports
+import charterImage from '@/images/USED-charter-school-classroom.jpg';
+import lotteryImage from '@/images/USED-students-waiting-classroom.jpg';
+// ... 20+ more imports
 
-// Get published articles for this category
-const featuredArticles = getPublishedArticlesByCategory('charter-schools');
+const featuredArticles = [
+  {
+    title: 'Is a Charter School Right for Your Child?',
+    url: '/education-articles/is-a-charter-school-right-for-your-child',
+    image: charterImage,
+    description: 'A comprehensive guide...',
+  },
+  // ... more articles
+];
 ---
 ```
 
-This replaces the current hardcoded `featuredArticles` array.
+#### New Implementation (Registry-Based)
+
+Replace hardcoded arrays with registry lookups and dynamic image loading:
+
+```astro
+---
+import { getPublishedArticlesByCategory, getArticleImage } from '@/utils/article-utils';
+
+// Get published articles for this category
+const featuredArticles = await getPublishedArticlesByCategory('charter-schools');
+---
+```
+
+#### Dynamic Image Loading
+
+Since images need to be loaded dynamically from the registry, add an image loader utility:
+
+**Add to `src/utils/article-utils.ts`:**
+
+```typescript
+// Pre-load all article images at build time
+const allImages = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/images/USED-*.jpg',
+  { eager: true }
+);
+
+/**
+ * Get the image for an article from its filename
+ */
+export function getArticleImage(imageFilename: string): ImageMetadata | null {
+  const imagePath = `/src/images/USED-${imageFilename}`;
+  return allImages[imagePath]?.default || null;
+}
+
+/**
+ * Get published articles with resolved images for a category
+ */
+export function getPublishedArticlesWithImages(category: string): Array<ArticleEntry & { resolvedImage: ImageMetadata | null }> {
+  return getPublishedArticlesByCategory(category).map(article => ({
+    ...article,
+    resolvedImage: getArticleImage(article.image),
+  }));
+}
+```
+
+#### Article Card Component (Optional)
+
+For consistency across all 19 pages, consider creating a shared component:
+
+**File:** `src/components/ArticleCard.astro`
+
+```astro
+---
+interface Props {
+  title: string;
+  url: string;
+  image: ImageMetadata | null;
+  description: string;
+  fromCategory?: string; // For breadcrumb ?from= parameter
+}
+
+const { title, url, image, description, fromCategory } = Astro.props;
+const href = fromCategory ? `${url}?from=${fromCategory}` : url;
+---
+
+<article class="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow group">
+  <a href={href} class="block">
+    <div class="aspect-[16/9] overflow-hidden bg-gray-100">
+      {image ? (
+        <img
+          src={image.src}
+          alt={title}
+          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          loading="lazy"
+        />
+      ) : (
+        <div class="w-full h-full flex items-center justify-center bg-gray-200">
+          <span class="text-gray-400 text-sm">No image</span>
+        </div>
+      )}
+    </div>
+    <div class="p-4">
+      <h3 class="text-lg font-bold text-gray-900 mb-2 leading-tight group-hover:text-brand-blue transition-colors">
+        {title}
+      </h3>
+      <p class="text-sm text-gray-600">{description}</p>
+    </div>
+  </a>
+</article>
+```
+
+**Usage in category pages:**
+
+```astro
+---
+import ArticleCard from '@/components/ArticleCard.astro';
+import { getPublishedArticlesWithImages } from '@/utils/article-utils';
+
+const articles = getPublishedArticlesWithImages('charter-schools');
+---
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  {articles.map(article => (
+    <ArticleCard
+      title={article.title}
+      url={`/education-articles/${article.slug}`}
+      image={article.resolvedImage}
+      description={article.description}
+      fromCategory="charter-schools"
+    />
+  ))}
+</div>
+```
+
+#### Special Cases
+
+**`/education-articles` index page:**
+- Already uses `import.meta.glob` to dynamically load articles
+- Parses metadata from file content using regex
+- Should be updated to use the registry instead for consistency
+- Has filtering by tag and sorting - these features should be preserved
+
+**Homepage (`/`):**
+- May want curated "featured" articles rather than all articles for a category
+- Consider adding a `featured: true` flag to ArticleEntry
+- Or maintain a separate `homepageArticles` array in the registry
+
+**404 page:**
+- Shows a few helpful articles as suggestions
+- Could use `getPublishedArticles().slice(0, 3)` or a curated list
+
+#### Breadcrumb `?from=` Parameter
+
+When an article appears on multiple category pages, use the `?from=` parameter so breadcrumbs show the correct parent:
+
+```typescript
+// In registry - article belongs to multiple categories
+{
+  slug: 'is-preschool-worth-it',
+  category: 'preschools',  // Primary category
+  secondaryCategories: ['schools', 'kindergartens'],  // Also shown on these pages
+}
+```
+
+```astro
+<!-- On /schools page, link with ?from=schools -->
+<ArticleCard
+  url={`/education-articles/${article.slug}`}
+  fromCategory="schools"
+/>
+
+<!-- On /preschools page (primary), no ?from= needed -->
+<ArticleCard
+  url={`/education-articles/${article.slug}`}
+/>
+```
 
 ### Component 5: Articles Sitemap
 
@@ -218,31 +419,61 @@ ${urls}
 1. [ ] Create `src/data/article-registry.ts` with ArticleEntry interface
 2. [ ] Migrate existing articles into the registry with their metadata
 3. [ ] Create `src/utils/article-utils.ts` with filter functions
+4. [ ] Add dynamic image loading with `import.meta.glob`
 
-### Phase 2: Update Category Pages
+### Phase 2: Create Article Card Component
 
-4. [ ] Update each category index page to use `getPublishedArticlesByCategory()`
-5. [ ] Update ArticleBreadcrumb component if needed
-6. [ ] Handle image imports dynamically (may need adjustments)
+5. [ ] Create `src/components/ArticleCard.astro` component
+6. [ ] Test component with existing article data
 
-### Phase 3: Add 404 Protection
+### Phase 3: Update Category Pages (19 total)
 
-7. [ ] Add middleware or per-page checks to return 404 for unpublished articles
-8. [ ] Test that future-dated articles return 404
+Update each page to use registry + ArticleCard component:
 
-### Phase 4: Sitemap Integration
+**K-12 School Pages (9 pages):**
+7. [ ] `/schools/index.astro`
+8. [ ] `/preschools/index.astro`
+9. [ ] `/kindergartens/index.astro`
+10. [ ] `/elementary-schools/index.astro`
+11. [ ] `/middle-schools/index.astro`
+12. [ ] `/high-schools/index.astro`
+13. [ ] `/charter-schools/index.astro`
+14. [ ] `/magnet-schools/index.astro`
+15. [ ] `/private-schools/index.astro`
 
-9. [ ] Create `sitemap-articles.xml.ts`
-10. [ ] Update `sitemap.xml` index to include articles sitemap
-11. [ ] Remove articles from `sitemap-main.xml.ts` (they'll be in dedicated sitemap)
-12. [ ] Set appropriate cache headers (6 hours recommended)
+**Vocational Pages (6 pages):**
+16. [ ] `/vocational-schools/index.astro`
+17. [ ] `/beauty-schools/index.astro`
+18. [ ] `/culinary-schools/index.astro`
+19. [ ] `/healthcare-schools/index.astro`
+20. [ ] `/technology-schools/index.astro`
+21. [ ] `/trade-schools/index.astro`
 
-### Phase 5: Testing & Refinement
+**Other Pages (4 pages):**
+22. [ ] `/financial-aid/index.astro`
+23. [ ] `/index.astro` (homepage - may need special handling)
+24. [ ] `/404.astro`
+25. [ ] `/education-articles/index.astro` (replace glob-based system)
 
-13. [ ] Test with a mix of past and future dates
-14. [ ] Verify sitemap only shows published articles
-15. [ ] Verify category pages only show published articles
-16. [ ] Verify direct URLs to future articles return 404
+### Phase 4: Add 404 Protection
+
+26. [ ] Add middleware to return 404 for unpublished articles
+27. [ ] Test that future-dated articles return 404
+
+### Phase 5: Sitemap Integration
+
+28. [ ] Create `sitemap-articles.xml.ts`
+29. [ ] Update `sitemap.xml` index to include articles sitemap
+30. [ ] Remove articles from `sitemap-main.xml.ts` (they'll be in dedicated sitemap)
+31. [ ] Set appropriate cache headers (6 hours recommended)
+
+### Phase 6: Testing & Refinement
+
+32. [ ] Test with a mix of past and future dates
+33. [ ] Verify sitemap only shows published articles
+34. [ ] Verify category pages only show published articles
+35. [ ] Verify direct URLs to future articles return 404
+36. [ ] Test all 19 category pages display correct articles
 
 ---
 
